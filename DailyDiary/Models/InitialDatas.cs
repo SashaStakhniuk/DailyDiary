@@ -12,9 +12,9 @@ namespace DailyDiary.Models
             if (!db.Students.Any())
             {
                 db.Students.AddRange(
-                    new Student { Name = "student1", LastName = "LastName", Age = 14, StudyYear = 9, Group = "9-B" },
-                    new Student { Name = "student2", LastName = "LastName", Age = 13, StudyYear = 8, Group = "8-A" },
-                    new Student { Name = "student3", LastName = "LastName", Age = 12, StudyYear = 7, Group = "7-C" }
+                    new Student { Name = "student1", LastName = "LastName", Age = 14, StudyYear = 9/*, Group = "9-B"*/ },
+                    new Student { Name = "student2", LastName = "LastName", Age = 13, StudyYear = 8/*, Group = "8-A"*/ },
+                    new Student { Name = "student3", LastName = "LastName", Age = 12, StudyYear = 7/*, Group = "7-C"*/ }
                 );
                 db.SaveChanges();
             }

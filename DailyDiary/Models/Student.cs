@@ -9,6 +9,10 @@ namespace DailyDiary.Models
     {
         public int StudentId { get; set; }
         public int StudyYear { get; set; } //year of study
-        public string Group { get; set; }
+        //public string Group { get; set; }
+        public int? GroupId { get; set; }
+        public Group Group { get; set; }
+        public ICollection<StudentSubgroup> StudentSubgroups { get; set; }
+
     }
 }
