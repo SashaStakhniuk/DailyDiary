@@ -1,0 +1,16 @@
+.all-container{
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin:0px;
+    height: auto;
+    padding-left: 100px;
+	font-family: "Open Sans", arial;
+    background-color: rgb(231, 237, 241);
+    z-index: 10;
+    background-repeat: no-repeat;
+    background-size: cover;
+	color:#000;
+	font-weight:300;
+}

@@ -1,0 +1,94 @@
+
+*, 
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+a{
+    text-decoration: none;
+}
+ul, ol, li{
+    list-style: none;
+}
+img{
+    vertical-align: top;
+}
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6{
+    font-weight: inherit;
+    font-size: inherit;
+}
+html,
+body{
+    height: 100%;
+    line-height: 1;
+    font-size: 16px;
+    background-color: rgb(231, 237, 241);
+    color: black;
+    font-family:  Arial, Helvetica, sans-serif
+}
+
+
+.wraper{
+    min-height: 100%;
+}
+
+.page{
+    padding: 90px 0px 30px 0px;
+}
+.page__section{
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0px auto;
+}
+.page__section_1{
+    border: 0.2px solid gray;
+    background-color: #d1b4df
+}
+.page__title{
+    font-size: 40px;
+    margin: 0px 0px 20px 0px;
+}
+.page__sub-title{
+    font-size: 30px;
+}
+.page__text{
+    font-size: 16px;
+    line-height: 150%;
+}
+.page__text p {
+    margin: 0px 0px 20px 0px;
+}
+.page__section_2{
+    background-color: #81a9ca
+
+}
+.page__section_3{
+    background-color: #aaaee4
+}
+.page__section_4{
+    background-color: #aaaee4;
+}
+.mg__not-found{
+    width: 500%;
+}
+.not-found__text{
+    color: #000;
+    font-size: 30px;
+    font-family: 'Gt super text book', Georgia, sans-serif;
+}
+.text__center{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+

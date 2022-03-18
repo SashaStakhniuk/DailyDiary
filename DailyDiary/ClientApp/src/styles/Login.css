@@ -1,0 +1,161 @@
+.img-container{
+    top: 100px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    flex-direction: row;
+    position: absolute;
+    z-index: 30;
+}
+.password-wrapper{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.eye{
+    position: absolute;
+    transition: all 0.3s;
+    cursor: pointer;
+    right: 13px;
+    width: 19px;
+    height: 50px;
+    z-index: 1000;
+    font-size: 73px;
+    z-index: 200;
+    background: url('https://mystat.itstep.org/assets/resources/eye-regular-grey.svg?v=2e4d4257ead50d95ffcf4682176d89be') no-repeat 50% 50%;
+    opacity: 0.7;
+}
+.eye:hover{
+    opacity: 1;
+}
+.img-logo{
+    margin-right: 1px;
+}
+.login__container > .img-logo{
+    position: inherit;
+    top: 90px;
+}
+.login__container{
+    display: flex;
+    position: absolute;
+    justify-content: space-between;
+    z-index: 20;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('https://commons.bcit.ca/news/files/2020/11/Hanna-Sudom-How-to-stay-motivated-while-studying-online-rotated.jpg');
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+h2{
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.span-text{
+    margin-top: 10px;
+    
+}
+.span-text a{
+    color: rgb(165, 165, 165);
+    text-decoration: none;
+    font-size: 17px;
+    font-family:  Arial, Helvetica, sans-serif;
+    transition: all 0.3s ease 0s;
+}
+.span-text a:hover{
+    transition: all 0.3s ease 0s;
+    color: #fff;
+}
+.btn-login{ 
+    transition: all 1s ease 0s;
+    height: 50px;
+    width: 250px;
+    min-width: 400px;
+    min-height: 57px;
+    color: #fff;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:rgb(18, 235, 235);
+    border-radius: 30px;
+}
+.btn-login:hover{
+    transition: all 1s ease 0s;
+    background-color:rgb(54, 179, 179);
+}
+[type='password'], [type='username'] {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-width: calc(var(--border-width) * 1px);
+    border-style: solid;
+    border-color: var(--accent);
+    border-radius: calc(var(--border-radius) * 1px);
+    text-align: center;
+    outline: transparent;
+    width: 100%;
+    min-width: 400px;
+    min-height: 57px;
+    border-radius: 30px;
+    transition: border-color calc(var(--transition, 0.2) * 1s) ease;
+  }
+.login-button {
+    --size: 52;
+    --lightness: 45;
+    align-items: center;
+    background: hsl(100, 80%, calc(var(--lightness) * 1%));
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    height: calc(var(--size) * 1px);
+    justify-content: center;
+    padding: 12px 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #fff;
+    width: 100%;
+    transition: background calc(var(--transition, 0.2) * 1s) ease;
+}
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, .col, .col-auto, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm, .col-sm-auto, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-md, .col-md-auto, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg, .col-lg-auto, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl, .col-xl-auto {
+    color: #a6acb9;
+    list-style-type: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .5s ease;
+    margin-bottom: 10px;
+    z-index: 50;
+}
+.col-2:hover{
+    color: #fff;
+}
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+.row{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    padding: 10px;
+}
+.languages{
+    padding: 0 5px;
+
+    margin-top: 50px;
+    display: flex;
+    widtH: 300px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

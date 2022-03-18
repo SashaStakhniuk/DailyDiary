@@ -1,0 +1,125 @@
+.stud-text{
+    cursor: pointer;
+    font-size: 22px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.all-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin:0px;
+    height: auto;
+    padding-left: 100px;
+	font-family: "Open Sans", arial;
+    background-color: rgb(231, 237, 241);
+    z-index: 10;
+    background-repeat: no-repeat;
+    background-size: cover;
+	color:#000;
+	font-weight:300;
+}
+.cart-student{
+    display: flex;
+    width: auto;
+    min-width: 600px;
+    min-height: 230px;
+    height: auto;
+    padding: 17px;
+    border: 0.7px solid gray;
+    margin-bottom: 7px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.img-fluid{
+    margin-top: -5px;
+    padding: 10px;
+}
+
+
+/* Edit form student */
+
+.title-edit{
+    margin-left: 50px;
+    font-size: 26px;
+    font-family: "Arial, Helvetica, sans-serif";
+}
+.new-student__Container{
+    background-repeat: no-repeat;
+    background-size: 200px;
+    background-color: #7647ED;
+    background-position: 20px 50px;
+	background-image: url('../images/gears2.png');
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 960px;
+}
+.edit__container{
+    color: #fff;
+    background-repeat: no-repeat;
+    background-size: 200px;
+    background-color: #7647ED;
+    background-position: 20px 50px;
+	background-image: url('../images/gears2.png');
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 960px;
+}
+.form-edit{
+    margin-top: 150px;
+    height: 550px;
+    width: 870px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+}
+.container1{
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.container2{
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.span-text{
+    font-size: 26px;
+    font-family: "Arial, Helvetica, sans-serif";
+}
+.btn__edit{
+    position: absolute;
+    bottom: -100px;
+    transition: all 1s ease 0s;
+    height: 50px;
+    left: 39%;
+    width: 250px;
+    color: #fff;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:#A836D6;
+    border-radius: 30px;
+}
+
+.btn__edit:hover{
+    background-color:#b83ce9;
+}

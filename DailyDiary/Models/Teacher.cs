@@ -8,10 +8,13 @@ namespace DailyDiary.Models
 {
     public class Teacher : Person
     {
-        //public Teacher()
-        //{
-        //    Subjects = new HashSet<Subject>();
-        //}
+        public Teacher()
+        {
+            GroupClassworks = new HashSet<GroupClasswork>();
+            GroupHomeworks = new HashSet<GroupHomework>();
+            TeacherGroups = new HashSet<TeacherGroup>();
+            TeacherSubjects = new HashSet<TeacherSubject>();
+        }
         //[Key]
         public int TeacherId { get; set; }
         public string Specialty { get; set; } // вчителі початкових класів, вчителі-дефектологи,вихователі-методисти і т.п
@@ -21,8 +24,13 @@ namespace DailyDiary.Models
         public string Education { get; set; }// професійно-технічна, повна середня, вища і т.п
         public int Experience { get; set; }
         public float Salary { get; set; }
-        //public ICollection<Subject> Subjects { get; set; }
+        public string Base64URL { get; set; }
+        public int Rate { get; set; }
+        public ICollection<GroupClasswork> GroupClassworks { get; set; }
+        public ICollection<GroupHomework> GroupHomeworks { get; set; }
         public ICollection<TeacherSubject> TeacherSubjects { get; set; }
+        public ICollection<TeacherGroup> TeacherGroups { get; set; }
+
 
         //public string Percent { get; set; } // ставка зарплати
     }
