@@ -13,6 +13,9 @@
     display: flex;
     align-items: center;
 }
+.form__container{
+    margin-top: 100px;
+}
 .eye{
     position: absolute;
     transition: all 0.3s;
