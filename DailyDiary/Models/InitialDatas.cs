@@ -81,11 +81,12 @@ namespace DailyDiary.Models
                 );
                 db.SaveChanges();
             }
-           
+
             if (!db.Teachers.Any())
             {
+
                 db.Teachers.AddRange(
-                    new Teacher { Name = "Teacher1", LastName = "Jonson", Age = 28, Specialty = "Teacher", Category="Specialist", Degree ="Master",Education= "Higher", Experience = 2,Salary = 10000 },
+                    new Teacher { Name = "Teacher1", LastName = "Jonson", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 },
                     new Teacher { Name = "Teacher2", LastName = "Alor", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree ="Master", Education = "Higher", Experience = 0,Salary=12000},
                     new Teacher { Name = "Teacher3", LastName = "Kilons", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree ="Professor, PHD", Education = "Higher", Experience = 18,Salary=16000},
                     new Teacher { Name = "Teacher4", LastName = "Paul", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 },
@@ -108,9 +109,10 @@ namespace DailyDiary.Models
             }
             if (!db.TeacherGroups.Any())
             {
+
                 db.TeacherGroups.AddRange(
-                   new TeacherGroup { TeacherId = 1, GroupId = 2 },
-                   new TeacherGroup { TeacherId = 1, GroupId = 3 },
+                   /*new TeacherGroup { TeacherId = 1, GroupId = 2 },
+                   new TeacherGroup { TeacherId = 1, GroupId = 3 },*/
                    new TeacherGroup { TeacherId = 2, GroupId = 3 },                  
                    new TeacherGroup { TeacherId = 2, GroupId = 2 }                  
                );

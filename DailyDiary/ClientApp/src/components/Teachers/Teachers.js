@@ -96,7 +96,7 @@ function Teachers(){
                 <div className=" p-3 d-flex flex-column">
                     <NavigationBar />
                     <div style={{ marginBottom: '10px' }}>
-                            <input onChange={onChangeHendler} id="lastName" type="username" placeholder="Enter teacher lastNamr" required="required" title="Enter lastName" />
+                            <input onChange={onChangeHendler} id="lastName" type="username" placeholder="Enter teacher lastName" required="required" title="Enter lastName" />
                         </div>
                     {teachers.map((teacher, i) => 
                         <CartTeacher key={i} infoTeacher={teacher} />

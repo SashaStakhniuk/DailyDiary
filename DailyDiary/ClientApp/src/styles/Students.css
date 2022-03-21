@@ -1,15 +1,103 @@
 .stud-text{
     cursor: pointer;
-    font-size: 22px;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: "Times New Roman", Georgia, Serif;
 }
-
+.info-container{
+    height: auto;
+    min-width: 600px;
+    min-height: 30px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 0;
+    padding: 30px 50px;
+}
+.card-body{
+    margin-right: 20px;
+}
+.header-title-block {
+    display: flex;
+    min-width: 600px;
+    min-height: 30px;
+    justify-content: space-between;
+    padding: 0 0;
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: none;
+    border-bottom: 1px solid #e5ebf2;
+    color: #29313f;
+}
+.subject-title-box{
+    margin-bottom: 10px;
+    font-size: 19px;
+    font-family: "Arial, Helvetica, sans-serif";
+}
+.block-info{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    min-width: 600px;
+    min-height: 30px;
+    padding: 10px 10px;
+    text-transform: none;
+    font-size: 19px;
+}
+.cart-info-student{
+    box-shadow: 0 6px 15px rgb(0 0 0 / 20%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: auto;
+    min-width: 600px;
+    min-height: 30px;
+    height: auto;
+    padding: 17px 40px;
+    border: none;
+    margin-bottom: 7px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+.cart-info-teacer{
+    box-shadow: 0 6px 15px rgb(0 0 0 / 20%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: auto;
+    min-width: 600px;
+    min-height: 30px;
+    height: auto;
+    padding: 17px 40px;
+    border: none;
+    margin-bottom: 7px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+.title-block-text{
+    font-size: 30px;
+}
+.title-block {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: none;
+    color: #29313f;
+}
+.image-cart-teacher{
+    width: 270px;
+    border-radius: 25%;
+    z-index: 0;
+    padding: 30px 50px;
+}
 .all-container{
+    overflow-x: hidden;
     width: 100%;
     display: flex;
     justify-content: center;
     margin:0px;
-    height: auto;
+    height: 100%;
     padding-left: 100px;
 	font-family: "Open Sans", arial;
     background-color: rgb(231, 237, 241);
@@ -19,6 +107,18 @@
 	color:#000;
 	font-weight:300;
 }
+.cart-teacher{
+    display: flex;
+    width: auto;
+    min-width: 600px;
+    min-height: 30px;
+    height: auto;
+    padding: 17px;
+    box-shadow: 0 6px 15px rgb(0 0 0 / 20%);
+    margin-bottom: 7px;
+    border-radius: 10px;
+    background-color: #fff;
+}
 .cart-student{
     display: flex;
     width: auto;
@@ -26,7 +126,7 @@
     min-height: 230px;
     height: auto;
     padding: 17px;
-    border: 0.7px solid gray;
+    box-shadow: 0 6px 15px rgb(0 0 0 / 20%);
     margin-bottom: 7px;
     border-radius: 10px;
     background-color: #fff;
