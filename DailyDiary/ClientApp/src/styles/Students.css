@@ -143,12 +143,13 @@
 .title-edit{
     margin-left: 50px;
     font-size: 26px;
+    color:#29313f;
     font-family: "Arial, Helvetica, sans-serif";
 }
 .new-student__Container{
     background-repeat: no-repeat;
     background-size: 200px;
-    background-color: #7647ED;
+    background-color: rgb(231, 237, 241);
     background-position: 20px 50px;
 	background-image: url('../images/gears2.png');
     overflow-x: hidden;
@@ -165,7 +166,7 @@
     color: #fff;
     background-repeat: no-repeat;
     background-size: 200px;
-    background-color: #7647ED;
+    background-color: rgb(231, 237, 241);
     background-position: 20px 50px;
 	background-image: url('../images/gears2.png');
     overflow-x: hidden;
@@ -178,16 +179,7 @@
     width: 100%;
     height: 960px;
 }
-.form-edit{
-    margin-top: 150px;
-    height: 550px;
-    width: 870px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
 
-}
 .container1{
     margin-left: 10px;
     display: flex;
@@ -207,19 +199,126 @@
     font-family: "Arial, Helvetica, sans-serif";
 }
 .btn__edit{
+    transition: all 1s ease 0s;
     position: absolute;
     bottom: -100px;
     transition: all 1s ease 0s;
     height: 50px;
     left: 39%;
     width: 250px;
-    color: #fff;
+    font-size: 19px;
+    font-family: "Arial, Helvetica, sans-serif";
     font-size: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color:#A836D6;
+    font-family: "Arial, Helvetica, sans-serif";
+    background-color:rgb(18, 235, 235);
     border-radius: 30px;
 }
 
 .btn__edit:hover{
-    background-color:#b83ce9;
+    transition: all 1s ease 0s;
+    background-color:rgb(54, 179, 179);
 }
+.button-edit{
+    margin-bottom: 7px;
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    background-color:rgb(18, 235, 235);
+    border: 1px solid #fff;
+    padding: 10px;
+    width: 70px;
+    height: 50px;
+    transition: all 0.5s ease 0s;
+}
+
+.button-edit:hover{
+    background-color:rgb(18, 235, 235);
+    transition: all 0.5s ease 0s;
+}
+
+.form-edit{
+    position: relative;
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 6px 15px rgb(0 0 0 / 20%);
+    border-radius: 10px;
+    margin-bottom: 7px;
+    margin-top: 150px;
+    padding: 17px;
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+/* ______________________________ */
+
+/* Customize the label (the container) */
+.container {
+    color: #000;
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Hide the browser's default checkbox */
+  .container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .container:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
+  /* When the checkbox is checked, add a blue background */
+  .container input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+  
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the checkmark when checked */
+  .container input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Style the checkmark/indicator */
+  .container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid rgb(172, 241, 163);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }

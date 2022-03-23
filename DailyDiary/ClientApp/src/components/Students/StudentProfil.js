@@ -29,6 +29,7 @@ function StudentProfil(props){
             }
         catch{}
     }
+
     async function getGroups() {
         try{
             const response= await fetch("https://localhost:44364/api/group/get")
@@ -38,13 +39,14 @@ function StudentProfil(props){
              if (response.ok === true) {
 
                 setGroups(data)
-                
+
              } else {
                  console.log("error",data)
              }
             }
         catch{}
     }
+
     async function Delete() {
         try{
             const response= await fetch(`https://localhost:44364/api/student/Delete/${id}`, {method: "delete"})
@@ -64,6 +66,7 @@ function StudentProfil(props){
     function onClickEditButton(){
         window.location = `/edit-student/${id}`
     }
+    
     function onClickDelete(){
         Delete()
         window.location = `/students/`
@@ -98,7 +101,7 @@ function StudentProfil(props){
                                         )} 
                                 </div>
                                 <div className="d-flex flex-row">
-                                    <button style={{ marginRight: '7px', color: '#000', borderRadius: '10%' }} onClick={onClickEditButton} className="button-edit">Edit</button>
+                                    <button style={{ marginRight: '7px', color: '#fff', borderRadius: '10%' }} onClick={onClickEditButton} className="button-edit">Edit</button>
                                     <button style={{ borderRadius: '10%', color: '#fff', backgroundColor: '#7d4852' }} onClick={onClickDelete} className="btn">Delete</button>
                                 </div>
                             </div>                     

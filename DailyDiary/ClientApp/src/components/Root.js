@@ -12,21 +12,28 @@ import CreateNewStudent from './Students/CreateNewStudent'
 import StudentImage from './Students/StudentImage'
 import Teachers from './Teachers/Teachers'
 import TeacherProfil from './Teachers/TeacherProfil'
-
+import EdmitFromTeaher from './Teachers/EdmitFromTeaher'
+import TeacheImage from './Teachers/TeacheImage'
 const Root = ({ store }) => (
     <Provider store={store}>
         <Router>
             <Switch>
                 <Route exact path="/"><Login/></Route>
-                <Route exact path="/admin/new-student"><CreateNewStudent/></Route>
-                <Route exact path="/admin/edit-student/:id"><EditFromStudent/></Route>
                 <Route exact path="/children-login"><LoginChildrens/></Route>
-                <Route exact path="/admin/student-profil/:id"><StudentProfil/></Route>
+
+                <Route exact path="/admin/new-student"><CreateNewStudent/></Route>
                 <Route exact path="/admin/students"><Students/></Route>
+                <Route exact path="/admin/student-profil/:id"><StudentProfil/></Route>
+                <Route exact path="/admin/edit-student/:id"><EditFromStudent/></Route>
+
                 <Route exact path="/admin"><Admin/></Route>
-                <Route exact path="/admin/add-image/:id"><StudentImage/></Route>
+
+                <Route exact path="/admin/add-image-student/:id"><StudentImage/></Route>
+
                 <Route exact path="/admin/teachers"><Teachers/></Route>
                 <Route exact path="/admin/teacher-profil/:id"><TeacherProfil/></Route>
+                <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
+                <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
                 <Route path='*' exact={true}><NotFound/></Route>
             </Switch>
         </Router>

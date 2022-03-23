@@ -61,6 +61,23 @@ function TeacherProfil(){
         }catch{}
     }
 
+    async function onClickDelete(e){
+        e.preventDefault()
+        try{
+            const response = await fetch(`https://localhost:44364/api/Teacher/Delete/${id}`)
+            const data = await response.json()
+            if(response.ok === true){
+                window.location = '/admin/teachers'
+            }else{
+                console.log('Error ', data)
+            }
+        }catch{}
+    }
+
+    function onClickEditButton(){
+        window.location = `/admin/edit-teacher/${id}`
+    }
+
     return(
         <>
             <div id="all-container" className="all-container">
@@ -148,6 +165,10 @@ function TeacherProfil(){
                                     })}
                                 </div>
                             </div>
+                        </div>
+                        <div className="w-100 m-2 container d-flex justify-content-center">
+                        <button style={{ marginRight: '7px', color: '#fff', borderRadius: '10%' }} onClick={onClickEditButton} className="button-edit">Edit</button>
+                            <button style={{ borderRadius: '10%', color: '#fff', backgroundColor: '#7d4852' }} onClick={e => onClickDelete(e)} className="btn">Delete</button>
                         </div>
                     </div>
                 </div>
