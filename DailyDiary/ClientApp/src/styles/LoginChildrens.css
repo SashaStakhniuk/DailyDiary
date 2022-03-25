@@ -48,7 +48,9 @@ form {
 }
 
 
-[type='password'], [type='username'], [type='number'], [type='date'], [type="text"], [type="email"] {
+[type='password'], [type='username'], 
+  [type='number'], [type='date'], 
+  [type="text"], [type="email"]  {
   padding: 12px 20px;
   font-size: 1rem;
   border-width: calc(var(--border-width) * 1px);
