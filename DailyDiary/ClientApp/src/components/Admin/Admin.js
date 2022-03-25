@@ -37,7 +37,7 @@ class Admin extends Component{
     }
 
     onClickhendlerNewStudent(){
-        window.location = '/new-student'
+        window.location = '/admin/new-student'
     }
 
     render(){
@@ -49,8 +49,8 @@ class Admin extends Component{
                         <div className="wrapper">
                             <div style={{ cursor: 'pointer' }} onClick={this.onClickhendlerNewStudent} className="effect2 container">
                                 <div className="Image"></div>
-                                <div className="caption">New Student</div>
-                            </div>
+                                <div className="caption-student">New student</div>
+                        </div>
                         </div>
                         
                     </div>

@@ -31,7 +31,6 @@ namespace DailyDiary.Models
         public ICollection<TeacherSubject> TeacherSubjects { get; set; }
         public ICollection<TeacherGroup> TeacherGroups { get; set; }
 
-
         //public string Percent { get; set; } // ставка зарплати
     }
 }

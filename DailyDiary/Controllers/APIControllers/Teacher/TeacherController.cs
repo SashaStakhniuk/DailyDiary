@@ -50,68 +50,44 @@ namespace DailyDiary.Controllers.APIControllers
             return Ok(teacher);
         }
 
-        /*[HttpPut]
-        [Authorize(Roles = "MainAdmin,Admin")]*/
-        public async Task<IActionResult> CreateOrUpdateTeacherAsync(TeacherViewModel model)
+        public async Task<IActionResult> Edit(TeacherViewModel model)
         {
             if(ModelState.IsValid)
             {
                 if (model != null)
                 {
 
-                    // тут зробити перевірку моделі
-                    //if (model.Salary <= 0)
-                    //{
-                    //    ModelState.AddModelError("SalaryError", "Salary must be bigger than 0");
-                    //}
-                    //if (!ModelState.IsValid)
-                    //{
-                    //    //ModelState.AddModelError("DatasModelError", "Please,enter all required datas correctly");
-                    //    return BadRequest(ModelState);
-                    //}
-
-
-                    var teacherToEdit = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.TeacherId);
-                    if (teacherToEdit == null)
+                    var teacer = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.TeacherId);
+                    if (teacer != null)
                     {
-                        teacherToEdit = new Teacher
-                        {
-                            Name = model.Name,
-                            LastName = model.LastName,
-                            Birthday = model.Birthday,
-                            Age = model.Age,
-                            Specialty = model.Specialty,
-                            Category = model.Category,
-                            Degree = model.Degree,
-                            Education = model.Education,
-                            Experience = model.Experience,
-                            Salary = model.Salary
-                        };
+
+                        teacer.Name = model.Name;
+                        teacer.LastName = model.LastName;
+                        teacer.Birthday = model.Birthday;
+                        teacer.Age = model.Age;
+                        teacer.Specialty = model.Specialty;
+                        teacer.Category = model.Category;
+                        teacer.Degree = model.Degree;
+                        teacer.Education = model.Education;
+                        teacer.Experience = model.Experience;
+                        teacer.Salary = model.Salary;
+
+                        db.Teachers.Update(teacer);
+                        await db.SaveChangesAsync();
+                        return Ok(teacer);
                     }
                     else
                     {
-                        //teacherToEdit.TeacherId = model.TeacherId;
-                        teacherToEdit.Name = model.Name;
-                        teacherToEdit.LastName = model.LastName;
-                        teacherToEdit.Birthday = model.Birthday;
-                        teacherToEdit.Age = model.Age;
-                        teacherToEdit.Specialty = model.Specialty;
-                        teacherToEdit.Category = model.Category;
-                        teacherToEdit.Degree = model.Degree;
-                        teacherToEdit.Education = model.Education;
-                        teacherToEdit.Experience = model.Experience;
-                        teacherToEdit.Salary = model.Salary;
+                        return BadRequest();
                     }
-                    db.Teachers.Update(teacherToEdit);
-                    await db.SaveChangesAsync();
-                    return Ok(teacherToEdit);
                 }
             }
             
             return BadRequest(ModelState);
         }
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "MainAdmin,Admin")]
+
+        /*[HttpDelete("{id}")]
+        [Authorize(Roles = "MainAdmin,Admin")]*/
         public async Task<ActionResult<Teacher>> Delete(int id)
         {
             Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == id);
@@ -139,30 +115,31 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(subjects);
             }
             return NotFound(new {error = "Teacher's subjects not found" });
-            //IEnumerable<int> teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).ToListAsync(); // можливі повтори!!!
-            //if (teacherSubjectsId != null)
-            //{
-            //    teacherSubjectsId = teacherSubjectsId.Distinct();
-            //    var subjects = new List<Subject>();
-            //    foreach (var subjectId in teacherSubjectsId)
-            //    {
-            //        subjects.Add(await db.Subjects.FirstOrDefaultAsync(x => x.Id == subjectId));
-            //    }
-            //    return Ok(subjects);
-            //}
-            //return NotFound(new { error = "Teacher's subjects not found" });
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Group>>> GetTeacherGroupsById(int id)
         {
+<<<<<<< HEAD
             var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).Select(x => x.Group).ToListAsync(); // можливі повтори? !!!
             if (teacherGroups != null)
             {
                 return Ok(teacherGroups);
+=======
+            List<Group> groups = new List<Group>();
+            var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).Select(x => x.GroupId).ToListAsync(); // можливі повтори!!!
+            if (teacherGroups.Count != 0)
+            {
+                foreach (var teacherGroup in teacherGroups)
+                {
+                    groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == teacherGroup));
+                }
+                return Ok(groups);
+>>>>>>> ecd71480669503514892726ce84bed31585f47ac
             }
             return NotFound(new { error = "Teacher's groups not found" });
 
+<<<<<<< HEAD
             //var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).ToListAsync(); // можливі повтори!!!
             //if (teacherGroups != null)
             //{
@@ -174,6 +151,24 @@ namespace DailyDiary.Controllers.APIControllers
             //    return Ok(groups);
             //}
             //return NotFound(new { error = "Teacher's groups not found" });
+=======
+
+        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups()
+        {
+            return await db.Groups.ToListAsync();
+        }
+
+        public async Task<ActionResult<IEnumerable<Subject>>> GetAllSubjects()
+        {
+            return await db.Subjects.ToListAsync();
+        }
+
+        [HttpPost("{id}/{groupId}")]
+        public async Task<ActionResult<bool>> GroupEzist(int id, int groupId)
+        {
+
+            return Ok(false);
+>>>>>>> ecd71480669503514892726ce84bed31585f47ac
         }
 
         //[HttpGet]

@@ -25,6 +25,7 @@ namespace DailyDiary.Models
         public ICollection<GroupHomework> GroupHomeworks { get; set; }
         public ICollection<GroupClasswork> GroupClassworks { get; set; }
         public ICollection<TeacherGroup> TeacherGroups { get; set; }
+
         //public ICollection<GroupSubject> GroupSubjects { get; set; }
     }
 }

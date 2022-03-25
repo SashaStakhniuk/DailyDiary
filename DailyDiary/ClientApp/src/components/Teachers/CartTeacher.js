@@ -7,7 +7,7 @@ function CartTeacher(props){
     return(
         <>
             <div onClick={() => onClick(props.infoTeacher.teacherId)} style={{  height: '150px', cursor: 'pointer' }}  className="cart-student">
-                <div className="col-md-4">
+                <div style={{ zIndex: '0' }} className="col-md-4">
                     {props.infoTeacher.base64URL ? <img 
                         style={{ width: '120px', borderRadius: '25%', height: 'auto' }}
                         className="img-fluid " 

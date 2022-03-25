@@ -13,6 +13,9 @@
     display: flex;
     align-items: center;
 }
+.form__container{
+    margin-top: 100px;
+}
 .eye{
     position: absolute;
     transition: all 0.3s;
@@ -87,7 +90,7 @@ h2{
 }
 .btn-login:hover{
     transition: all 1s ease 0s;
-    background-color:rgb(54, 179, 179);
+    background-color:rgb(18, 235, 235);
 }
 [type='password'], [type='username'] {
     padding: 12px 20px;

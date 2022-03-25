@@ -106,6 +106,8 @@ namespace DailyDiary.Controllers.APIControllers
             return BadRequest(ModelState);
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> CreateNew(NewStudentViewModel model)
         {

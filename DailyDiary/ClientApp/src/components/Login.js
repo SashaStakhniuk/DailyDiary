@@ -19,19 +19,22 @@ function Login(){
                 <div className='backgr'></div>
                 <img  className='img-logo' src="https://mystat.itstep.org/assets/images/logo.png?v=cce222be7d237f6d95418ecb8c5529b8" />
 
-                <form className='d-flec flex-column justify-content-center align-items-center'>
-                    <div class="mb-3">
-                        <input id="username" type="username" placeholder="Enter your usrname" required="required" title="Your username" />
-                    </div>
-                    <div class="mb-3">
-                        <div className="password-wrapper">
-                            <input id="password" type="password"  placeholder="Enter your password" required="required" title="Your password" />
-                            <div onClick={e => onClickPasswordVisible(e)} className="eye"></div>
+                <div className="form__container">
+                    <form className='d-flec flex-column justify-content-center align-items-center'>
+                        <div class="mb-3">
+                            <input id="username" type="username" placeholder="Enter your usrname" required="required" title="Your username" />
                         </div>
-                    </div>
-                    <button type="submit" class="btn-login">Submit</button>
-                    <span className="span-text"><a href='/'>Forgot your password?</a></span>
-                </form>
+                        <div class="mb-3">
+                            <div className="password-wrapper">
+                                <input id="password" type="password"  placeholder="Enter your password" required="required" title="Your password" />
+                                <div onClick={e => onClickPasswordVisible(e)} className="eye"></div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-login">Submit</button>
+                        <span className="span-text"><a href='/'>Forgot your password?</a></span>
+                    </form>
+                </div>
+                
                 <div className="languages">
                     <ul className="row">
                         <li className="col-2">ru</li>
