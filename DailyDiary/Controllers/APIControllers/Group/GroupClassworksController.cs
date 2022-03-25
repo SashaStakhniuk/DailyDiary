@@ -12,7 +12,7 @@ namespace DailyDiary.Controllers.APIControllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [Authorize(Roles = "MainAdmin,Admin,Teacher")]
+    //[Authorize(Roles = "MainAdmin,Admin,Teacher")]
     public class GroupClassworksController : Controller
     {              
          private readonly DailyDiaryDatasContext db;
@@ -116,7 +116,14 @@ namespace DailyDiary.Controllers.APIControllers
                 return NotFound();
             return Ok(classworks);
         }
-        
+        [HttpGet("details")]
+        public async Task<ActionResult<IEnumerable<GroupClasswork>>> GetByGroupIdAndTeacherId(int groupId, int teacherId)
+        {
+            var classworks = await db.GroupClassworks.Where(x => x.GroupId == groupId && x.TeacherId == teacherId).ToListAsync();
+            if (classworks == null)
+                return NotFound();
+            return Ok(classworks);
+        }
         [HttpGet("id")]
         public async Task<ActionResult<IEnumerable<GroupClasswork>>> GetByGroupId(int id)
         {

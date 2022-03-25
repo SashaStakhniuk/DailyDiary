@@ -87,10 +87,10 @@ function TeacherProfil(){
                             {teacher.base64URL ? <img 
                                 style={{ width: '120px', borderRadius: '25%', height: 'auto' }}
                                 className="img-fluid " 
-                                src={teacher.base64URL} /> : <img 
+                                src={teacher.base64URL} alt="..."/> : <img 
                                 style={{ width: '120px', borderRadius: '25%' }}
                                 className="img-fluid rounded-start"
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png" />
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png" alt="..."/>
                             }
                         </div>
                         <div style={{ marginLeft: '-10px', padding: '10px' }} className="col-md-8 d-flex flex-column  align-items-center justify-content-center">

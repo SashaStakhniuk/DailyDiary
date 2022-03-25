@@ -43,7 +43,7 @@ namespace DailyDiary
 
                 });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddSession();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
