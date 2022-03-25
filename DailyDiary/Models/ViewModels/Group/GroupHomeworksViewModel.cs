@@ -13,7 +13,7 @@ namespace DailyDiary.Models.ViewModels
         public int SubjectId { get; set; }
         public string Theme { get; set; }
         //[Required]
-        public byte[] Homework { get; set; }//base64
+        public string Homework { get; set; }//base64
         public int TeacherId { get; set; }
 
         [DataType(DataType.Date)]

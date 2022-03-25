@@ -152,26 +152,34 @@ namespace DailyDiary.Controllers.APIControllers
             //}
             //return NotFound(new { error = "Teacher's subjects not found" });
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Subject>>> GetTeacherGroupsById(int id)
+        public async Task<ActionResult<IEnumerable<Group>>> GetTeacherGroupsById(int id)
         {
-            var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).ToListAsync(); // можливі повтори!!!
+            var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).Select(x => x.Group).ToListAsync(); // можливі повтори? !!!
             if (teacherGroups != null)
             {
-                var groups = new List<Group>();
-                foreach (var teacherGroup in teacherGroups)
-                {
-                    groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == teacherGroup.GroupId));
-                }
-                return Ok(groups);
+                return Ok(teacherGroups);
             }
             return NotFound(new { error = "Teacher's groups not found" });
+
+            //var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).ToListAsync(); // можливі повтори!!!
+            //if (teacherGroups != null)
+            //{
+            //    var groups = new List<Group>();
+            //    foreach (var teacherGroup in teacherGroups)
+            //    {
+            //        groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == teacherGroup.GroupId));
+            //    }
+            //    return Ok(groups);
+            //}
+            //return NotFound(new { error = "Teacher's groups not found" });
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeacherGroup>>> GetTeacherGroups(int teacherId)
-        {
-            return null;
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<TeacherGroup>>> GetTeacherGroups(int teacherId)
+        //{
+        //    return null;
+        //}
     }
 }

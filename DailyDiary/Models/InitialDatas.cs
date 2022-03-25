@@ -27,20 +27,20 @@ namespace DailyDiary.Models
                 db.SaveChanges();
             }
 
-            //Group group1 = new Group { Title = "1-A"};
-            //Group group2 = new Group { Title = "1-B"};
-            //Group group3 = new Group { Title = "2-A"};
-            //Group group4 = new Group { Title = "2-B"};
-            //Group group5 = new Group { Title = "9-B"};
+            Group group1 = new Group { Title = "1-A" };
+            Group group2 = new Group { Title = "1-B" };
+            Group group3 = new Group { Title = "2-A" };
+            Group group4 = new Group { Title = "2-B" };
+            Group group5 = new Group { Title = "9-B" };
             if (!db.Groups.Any())
             {
                 db.Groups.AddRange(
-                    //group5, group4, group3, group2,group1
-                    new Group { Title = "1-A" },
-                    new Group { Title = "1-B" },
-                    new Group { Title = "2-A" },
-                    new Group { Title = "2-B" },
-                    new Group { Title = "9-B" }
+                    group5, group4, group3, group2,group1
+                    //new Group { Title = "1-A" },
+                    //new Group { Title = "1-B" },
+                    //new Group { Title = "2-A" },
+                    //new Group { Title = "2-B" },
+                    //new Group { Title = "9-B" }
                 );
                 db.SaveChanges();
             }
@@ -109,10 +109,10 @@ namespace DailyDiary.Models
             if (!db.TeacherGroups.Any())
             {
                 db.TeacherGroups.AddRange(
-                   new TeacherGroup { TeacherId = 1, GroupId = 2 },
-                   new TeacherGroup { TeacherId = 1, GroupId = 3 },
-                   new TeacherGroup { TeacherId = 2, GroupId = 3 },                  
-                   new TeacherGroup { TeacherId = 2, GroupId = 2 }                  
+                   new TeacherGroup { TeacherId = 1, Group = group2 },
+                   new TeacherGroup { TeacherId = 1, Group = group3 },
+                   new TeacherGroup { TeacherId = 2, Group = group3 },                  
+                   new TeacherGroup { TeacherId = 2, Group = group2 }                  
                );
                 db.SaveChanges();
             }
