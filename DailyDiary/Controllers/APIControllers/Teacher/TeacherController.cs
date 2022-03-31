@@ -1,5 +1,6 @@
 ﻿using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
+using DailyDiary.Models.ViewModels.Teacher;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,41 @@ namespace DailyDiary.Controllers.APIControllers
             return Ok(teacher);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateNew(NewTeacherViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model != null)
+                {
+                    Teacher teacher = new Teacher();
+                    string Passsword = Services.GeneratorService.GenerateNewPassword();
+                    string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
+
+                    teacher.Name = model.Name;
+                    teacher.LastName = model.LastName;
+                    teacher.Birthday = model.Birthday;
+                    teacher.Age = model.Age;
+                    teacher.Specialty = model.Specialty;
+                    teacher.Category = model.Category;
+                    teacher.Degree = model.Degree;
+                    teacher.Education = model.Education;
+                    teacher.Experience = model.Experience;
+                    teacher.Salary = model.Salary;
+                    teacher.Rate = model.Rate;
+                    teacher.Login = Login;
+                    teacher.Passsword = Passsword;
+                    teacher.Email = model.Email;
+
+                    db.Teachers.Add(teacher);
+                    await db.SaveChangesAsync();
+                    return Ok(teacher);
+                }
+                return BadRequest();
+            }
+
+            return BadRequest(ModelState);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Edit(TeacherViewModel model)
@@ -91,7 +127,7 @@ namespace DailyDiary.Controllers.APIControllers
             return BadRequest(ModelState);
         }
 
-        /*[HttpDelete("{id}")]
+        [HttpDelete("{id}")]/*
         [Authorize(Roles = "MainAdmin,Admin")]*/
         public async Task<ActionResult<Teacher>> Delete(int id)
         {

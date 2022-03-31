@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DailyDiary.Models.ViewModels
+namespace DailyDiary.Models.ViewModels.Teacher
 {
-    public class TeacherViewModel
+    public class NewTeacherViewModel
     {
         public int TeacherId { get; set; }
         /*[Required(ErrorMessage = "Name is required")]
@@ -40,9 +40,7 @@ namespace DailyDiary.Models.ViewModels
         public int Experience { get; set; }
         /*[Range(0.0, Double.MaxValue)]*/
         public float Salary { get; set; }
-
         public int Rate { get; set; }
-        public string Login { get; set; }
         public string Email { get; set; }
     }
 }
