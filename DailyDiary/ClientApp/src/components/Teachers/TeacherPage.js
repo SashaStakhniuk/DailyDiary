@@ -43,26 +43,26 @@ render()
                 <div className=" p-3 d-flex flex-column">
                     <h1>My groups:</h1>
                     <ul className="list-group">
-                    {this.state.groups.map(group =>
+                        {this.state.groups.map(group =>
                         
-                        <a key={group.id} href={"/teacher/group-editing/"+group.id} className="list-group-item">
-                            <h3>{group.title}</h3>
-                        </a>
-                        // <GroupEditing key={group.id} id={group.id}>
-                        //     <h3>{group.title}</h3>
-                        // </GroupEditing>
-                        // <NavLink
-                        // key={group.id} className="list-group-item"
-                        // to={{
-                        //     pathname:"/teacher/group-editing/"+group.id,
-                        //     // aboutProps:{
-                        //     //       groupId:group.id
-                        //     //     }
-                        // }}exact >
-                        //       <h3>{group.title}</h3>
-                        // </NavLink>       
-                        
-                    )}
+                            <a key={group.id} href={"/teacher/group-editing/"+group.id} className="list-group-item">
+                                <h3>{group.title}</h3>
+                            </a>
+                            // <GroupEditing key={group.id} id={group.id}>
+                            //     <h3>{group.title}</h3>
+                            // </GroupEditing>
+                            // <NavLink
+                            // key={group.id} className="list-group-item"
+                            // to={{
+                            //     pathname:"/teacher/group-editing/"+group.id,
+                            //     // aboutProps:{
+                            //     //       groupId:group.id
+                            //     //     }
+                            // }}exact >
+                            //       <h3>{group.title}</h3>
+                            // </NavLink>       
+                            
+                        )}
                          
                     </ul>
                 </div>

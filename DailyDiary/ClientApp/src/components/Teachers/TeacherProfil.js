@@ -23,7 +23,6 @@ function TeacherProfil(){
             const response = await fetch(`https://localhost:44364/api/Teacher/GetTeacherGroupsById/${id}`)
             const data = await response.json()
             if(response.ok === true){
-                console.log('Secsesfuly')
                 setGroups(data)
             }else{
                 console.log('Error ', data)

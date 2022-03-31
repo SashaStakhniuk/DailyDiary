@@ -25,6 +25,8 @@ namespace DailyDiary.Models
         public int Experience { get; set; }
         public float Salary { get; set; }
         public string Base64URL { get; set; }
+        public string Login { get; set; }
+        public string Email { get; set; }
         public int Rate { get; set; }
         public ICollection<GroupClasswork> GroupClassworks { get; set; }
         public ICollection<GroupHomework> GroupHomeworks { get; set; }

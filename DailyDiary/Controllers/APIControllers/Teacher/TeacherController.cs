@@ -50,6 +50,8 @@ namespace DailyDiary.Controllers.APIControllers
             return Ok(teacher);
         }
 
+
+        [HttpPost]
         public async Task<IActionResult> Edit(TeacherViewModel model)
         {
             if(ModelState.IsValid)
@@ -71,6 +73,9 @@ namespace DailyDiary.Controllers.APIControllers
                         teacer.Education = model.Education;
                         teacer.Experience = model.Experience;
                         teacer.Salary = model.Salary;
+                        teacer.Rate = model.Rate;
+                        teacer.Login = model.Login;
+                        teacer.Email = model.Email;
 
                         db.Teachers.Update(teacer);
                         await db.SaveChangesAsync();
@@ -103,53 +108,22 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Subject>>> GetTeacherSubjectsById(int id)
         {
-            var teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).ToListAsync(); // можливі повтори!!!
-            if(teacherSubjectsId != null)
+            var teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).Distinct().ToListAsync(); // можливі повтори!!!
+            if (teacherSubjectsId != null)
             {
-<<<<<<< HEAD
-<<<<<<< HEAD
-                return Ok(teacherSubjects);
-            }
-            return NotFound(new { error = "Teacher's subjects not found" });
-            //var teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).ToListAsync(); // можливі повтори!!!
-            //if(teacherSubjectsId != null)
-            //{
-            //    //teacherSubjectsId = teacherSubjectsId.Distinct();
-            //    var subjects = new List<Subject>();
-            //    foreach (var subjectId in teacherSubjectsId)
-            //    {
-            //        subjects.Add(await db.Subjects.FirstOrDefaultAsync(x=> x.Id == subjectId));
-            //    }
-            //    return Ok(subjects);
-            //}
-            //return NotFound(new {error = "Teacher's subjects not found" });
-=======
-=======
->>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
-                //teacherSubjectsId = teacherSubjectsId.Distinct();
                 var subjects = new List<Subject>();
                 foreach (var subjectId in teacherSubjectsId)
                 {
-                    subjects.Add(await db.Subjects.FirstOrDefaultAsync(x=> x.Id == subjectId));
+                    subjects.Add(await db.Subjects.FirstOrDefaultAsync(x => x.Id == subjectId));
                 }
                 return Ok(subjects);
             }
-            return NotFound(new {error = "Teacher's subjects not found" });
-<<<<<<< HEAD
->>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
-=======
->>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
+            return NotFound();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Group>>> GetTeacherGroupsById(int id)
         {
-<<<<<<< HEAD
-            var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).Select(x => x.Group).ToListAsync(); // можливі повтори? !!!
-            if (teacherGroups != null)
-            {
-                return Ok(teacherGroups);
-=======
             List<Group> groups = new List<Group>();
             var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).Select(x => x.GroupId).ToListAsync(); // можливі повтори!!!
             if (teacherGroups.Count != 0)
@@ -159,46 +133,12 @@ namespace DailyDiary.Controllers.APIControllers
                     groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == teacherGroup));
                 }
                 return Ok(groups);
->>>>>>> ecd71480669503514892726ce84bed31585f47ac
             }
             return NotFound(new { error = "Teacher's groups not found" });
-
-<<<<<<< HEAD
-        [HttpGet]
-=======
-<<<<<<< HEAD
-            //var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).ToListAsync(); // можливі повтори!!!
-            //if (teacherGroups != null)
-            //{
-            //    var groups = new List<Group>();
-            //    foreach (var teacherGroup in teacherGroups)
-            //    {
-            //        groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == teacherGroup.GroupId));
-            //    }
-            //    return Ok(groups);
-            //}
-            //return NotFound(new { error = "Teacher's groups not found" });
-=======
-
->>>>>>> 08c9e97a6aa69a3aa8e94512cd89557652cb23df
-        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups()
         }
-            //var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).ToListAsync(); // можливі повтори!!!
-            //if (teacherGroups != null)
-            //{
-            //    var groups = new List<Group>();
-            //    foreach (var teacherGroup in teacherGroups)
-            //    {
-            //        groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == teacherGroup.GroupId));
-            //    }
-            //    return Ok(groups);
-            //}
-            //return NotFound(new { error = "Teacher's groups not found" });
-        
-    [HttpGet]
 
-    public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups()
-        {
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups() {
             return await db.Groups.ToListAsync();
         }
 
@@ -223,33 +163,5 @@ namespace DailyDiary.Controllers.APIControllers
                 return NotFound();
             }
         }
-
-        [HttpPost("{id}/{groupId}")]
-<<<<<<< HEAD
-<<<<<<< HEAD
-        public ActionResult<bool> GroupExist(int id, int groupId)
-        {
-            return Ok(false);
-=======
-        public async Task<ActionResult<bool>> GroupEzist(int id, int groupId)
-        {
-
-            return Ok(false);
->>>>>>> ecd71480669503514892726ce84bed31585f47ac
->>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
-=======
-        public async Task<ActionResult<bool>> GroupEzist(int id, int groupId)
-        {
-
-            return Ok(false);
->>>>>>> ecd71480669503514892726ce84bed31585f47ac
->>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
-        }
-
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<TeacherGroup>>> GetTeacherGroups(int teacherId)
-        //{
-        //    return null;
-        //}
     }
 }
