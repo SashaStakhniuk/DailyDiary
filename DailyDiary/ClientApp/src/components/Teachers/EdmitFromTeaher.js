@@ -6,11 +6,6 @@ import $ from 'jquery'
 function EdmitFromTeaher(){
 
     let { id } = useParams()
-
-    const [categoryArr, setCategoryArr] = useState(["First category specialist", "Specialist"])
-    const [specialtyArr, setSpecialtyArr] = useState(["Teacher"])
-    const [degreeArr, setDegreeArr] = useState(["Master, PHP", "Master"])
-    const [educationArr, setEducationArr] = useState(["Higher"])
     
     const[teacher, setTeacher] = useState({})
 
@@ -25,6 +20,7 @@ function EdmitFromTeaher(){
     const [education, setEducation] = useState("")
     const [experience, setExperience] = useState(null)
     const [salary, setSalary] = useState(null)
+    const [base64URL, setBase64Url] = useState(null)
     const [rate, setRate] = useState(null)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -59,6 +55,7 @@ function EdmitFromTeaher(){
                 setEducation(data.education)
                 setExperience(data.experience)
                 setSalary(data.salary)
+                setBase64Url(data.base64URL)
                 setRate(data.rate)
                 setLogin(data.login)
                 setPassword(data.password)
@@ -99,49 +96,8 @@ function EdmitFromTeaher(){
     }
 
     async function edit(){
-
-        var teacherId = Number(id)
-        var TeacherId = Number(teacherId)
-        console.log("teacerId " + teacherId + " " + typeof(teacherId))
-        console.log("name " + name + " " + typeof(name))
-        console.log("lastName " + lastName + " " + typeof(lastName))
-        console.log("Age " + age + " " + typeof(age))
-        console.log("birthday " + birthday + " " + typeof(birthday))
-        console.log("specialty " + specialty + " " + typeof(specialty))
-        console.log("category " + category + " " + typeof(category))
-        console.log("degree " + degree + " " + typeof(degree))
-        console.log("education " + education + " " + typeof(education))
-        console.log("salary " + salary + " " + typeof(salary))
-        console.log("experience " + experience + " " + typeof(experience))
-        console.log("email " + email + " " + typeof(email))
-        console.log("rate " + rate + " " + typeof(rate))
-        console.log("password " + password + " " + typeof(password))
-
-        const request = await fetch('https://localhost:44364/api/teacher/Edit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                TeacherId,
-                name,
-                lastName, 
-                birthday,
-                age, 
-                specialty,
-                category, 
-                degree,
-                education,
-                experience,
-                salary,
-                rate,
-                login,
-                email
-            })
-        })
-        if(request.ok === true){
-            window.location = '/admin'
-        }
+        var teacerId = Number(id)
+        
     }
 
     async function onSubmit(e){
@@ -150,66 +106,25 @@ function EdmitFromTeaher(){
     }
 
     async function StateGroup(groypId){
+        const request = await fetch(`https://localhost:44364/api/Teacher/GroupEzist/${id}/${groypId}`, {
+            method: 'POST'
+        })
+        if(request.ok === true){
+            const data = request.json()
+            console.log("data: " + data)
+            return false
+        }else{
+        }
     }
 
-    async function StateSubject(subjectId){
-        //var subjectId = e.target.value
-        const response = fetch(`https://localhost:44364/api/Teacher/SubjectsExizst/${id}/${subjectId}`, { method: "POST" })
-        const data  = response.JSON()
-        if(response.ok === true){
-            console.log("response ok \n json: " + data + " " + subjectId)
-            return data
-        }
+    async function StateSubgect(subgectId){
+
     }
 
     function onChangeName(e){
         setName(e.target.value)
     }
-    function onChangeLastName(e){
-        setLastName(e.target.value)
-    }
-    function onChangeAge(e){
-        setAge(e.target.value)
-    }
-    function onChangeBirthday(e){
-        setBirthday(e.target.value)
-    }
-    function onChangeEmail(e){
-        setEmail(e.target.value)
-    }
-    function onChangeRate(e){
-        setRate(e.target.value)
-    }
-    function onChangeSpecialty(e){
-        var element = document.getElementById('specialty') 
-        if(element.value == "Specialty"){
-            console.log('Not choosed value')
-        }else{
-            setSpecialty(element.value)
-        }
-    }
-    function onChangeCategory(e){
-        setCategory(e.target.value)
-    }
-    function onChangeDegree(e){
-        setDegree(e.target.value)
-    }
-    function onChangEeducation(e){
-        setEducation(e.target.value)
-    }
-    function onChangeExperience(e){
-        setExperience(e.target.value)
-    }
-    function onChangeSalary(e){
-        setSalary(e.target.value)
-    }
-    function onChangeRate(e){
-        setRate(e.target.value)
-    }
-    function onChangeLogin(e){
-        setLogin(e.target.value)
-    }
-
+    
     return(
         <>
             <div className="edit__container">
@@ -222,96 +137,8 @@ function EdmitFromTeaher(){
                             <input id="username" value={name} onChange={e => onChangeName(e)} type="text" placeholder="Enter student usrname" required="required" title="Your username" />
                         </div>
 
-                        <span className="span-text">Login</span>
-                        <div class="mb-3">
-                            <input id="username" value={login} onChange={e => onChangeLogin(e)} type="text" placeholder="Enter student usrname" required="required" title="Your username" />
-                        </div>
-
-                        <span className="span-text">Last name</span>
-                        <div class="mb-3">
-                            <input id="username" value={lastName} onChange={e => onChangeLastName(e)} type="text" placeholder="Enter teacer lastname" required="required" title="Your teacher lastname" />
-                        </div>
-
-                        <span className="span-text">Birthday</span>
-                        <div class="mb-3">
-                            <span class="datepicker-toggle">
-                                <input required type="date" id="admissionDate"  data-date-format="DD MMMM YYYY" value={birthday} onChange={e => onChangeBirthday(e)} />
-                            </span>
-                        </div>
-
-                        <span className="span-text">Age</span>
-                        <div class="mb-3">
-                            <input id="age" type="number" value={age} onChange={e => onChangeAge(e)}/>
-                        </div>
-
-                        <span className="span-text">Email</span>
-                        <div class="mb-3">
-                            <input id="username" value={email} onChange={e => onChangeEmail(e)} type="email" placeholder="Enter teacer lastname" required="required" title="Your teacher lastname" />
-                        </div>
-
-                        <span className="span-text">Experience</span>
-                        <div class="mb-3">
-                            <input id="age" type="number" value={experience} onChange={e => onChangeExperience(e)}/>
-                        </div>
-
-                        <span className="span-text">Salary</span>
-                        <div class="mb-3">
-                            <input id="age" type="number" value={salary} onChange={e => onChangeSalary(e)}/>
-                        </div>
-
-                        <span className="span-text">Rate</span>
-                        <div class="mb-3">
-                            <input id="age" type="number" value={rate} onChange={e => onChangeRate(e)}/>
-                        </div>
-
                     </div>
                     <div className="container2">
-
-                        <span className="span-text">Rate</span>
-                        <div class="mb-3">
-                            <input id="age" type="number" value={rate} onChange={e => onChangeRate(e)}/>
-                        </div>
-
-                        <select type="select" id="specialty" onChange={e => onChangeSpecialty(e)}>
-                            {specialtyArr.map((element, i) => {
-                                return(
-                                    <>
-                                        <option key={i} selected={specialty == element ? "selected": ""} value={element}>{element}</option>
-                                    </>
-                                )
-                            })}
-                        </select>
-
-                        <select type="select" id="category" onChange={e => onChangeCategory(e)}>
-                            {categoryArr.map((element, i) => {
-                                return(
-                                    <>
-                                        <option key={i} selected={category == element ? "selected": ""} value={element}>{element}</option>
-                                    </>
-                                )
-                            })} 
-                        </select>
-
-                        <select type="select" id="degree" onChange={e => onChangeDegree(e)}>
-                            {degreeArr.map((element, i) => {
-                                return(
-                                    <>
-                                        <option key={i} selected={degree == element ? "selected": ""} value={element}>{element}</option>
-                                    </>
-                                )
-                            })} 
-                        </select>
-
-                        <select type="select" id="education" onChange={e => onChangEeducation(e)}>
-                            {educationArr.map((element, i) => {
-                                return(
-                                    <>
-                                        <option key={i} selected={education == element ? "selected": ""} value={element}>{element}</option>
-                                    </>
-                                )
-                            })}
-                        </select>
-
                         <div class="mb-3">
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="flush-headingOne">
@@ -325,10 +152,9 @@ function EdmitFromTeaher(){
                                         {subjecs.map((subject, i) => {
                                             return(
                                                 <>
-                                                    <label key={i} class="container">
+                                                    <label class="container">
                                                         {subject.title}
-                                                        <input type="checkbox"
-                                                        checked={StateSubject(subject.id)} 
+                                                        <input defaultChecked={ StateSubgect(subject.id) ? "checked" : "" } type="checkbox"
                                                         value={subject.id}/>
                                                         <span class="checkmark"></span>
                                                     </label>
@@ -364,12 +190,11 @@ function EdmitFromTeaher(){
                                         })}
                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
                       
-                        <button onClick={onClickAddImage} className="btn__edit">Edit imgage</button>
-                        <button style={{ marginTop: '10px' }} type="submit" className="btn__edit">Edit</button>
+                        <button onClick={onClickAddImage} className="btn btn-primary">Edit imgage</button>
+                        <button type="submit" className="btn__edit align-self-end">Edit</button>
                     </div>
                 </form>
             </div>

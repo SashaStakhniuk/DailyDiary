@@ -38,5 +38,7 @@ namespace DailyDiary.Models.ViewModels
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
         public string Email { get; set; }
+
+        public string PrevName { get; set; }
     }
 }

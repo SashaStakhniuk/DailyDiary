@@ -50,8 +50,7 @@ form {
 
 [type='password'], [type='username'], 
   [type='number'], [type='date'], 
-  [type="text"], [type="email"],
-  [type='select'] {
+  [type="text"], [type="email"]  {
   padding: 12px 20px;
   font-size: 1rem;
   border-width: calc(var(--border-width) * 1px);
@@ -64,7 +63,7 @@ form {
   border-radius: 30px;
   transition: border-color calc(var(--transition, 0.2) * 1s) ease;
 }
-[type='number']:valid, [type="text"]:valid, [type="email"]:valid,  [type='select']:valid{
+[type='number']:valid, [type="text"]:valid, [type="email"]:valid{
   --accent: #5f0;
 } 
 [type='date']:valid{
@@ -78,14 +77,12 @@ form {
 }
 [type='password']:invalid, [type='username']:invalid, 
       [type='date']:invalid, [type="number"]:invalid, 
-      [type="text"]:invalid, [type="email"]:invalid, 
-      [type='select']:invalid{
+      [type="text"]:invalid, [type="email"]:invalid{
   --accent: rgba(255,43,0,0.5);
 }
 [type='password']:-moz-placeholder-shown, [type='username']:-moz-placeholder-shown, 
       [type='date']:-moz-placeholder-shown, [type="number"]:-moz-placeholder-shown,
-      [type="text"]:-moz-placeholder-shown, [type="email"]:-moz-placeholder-shown,
-      [type='select']:-moz-placeholder-shown{
+      [type="text"]:-moz-placeholder-shown, [type="email"]:-moz-placeholder-shown{
   --accent: #fff;
 }
 [type='password']:-ms-input-placeholder, [type='username']:-ms-input-placeholder,  
@@ -95,8 +92,7 @@ form {
 }
 [type='password']:placeholder-shown, [type='username']:placeholder-shown, 
       [type="date"]:placeholder-shown , [type="number"]:placeholder-shown, 
-      [type="text"]:placeholder-shown, [type="email"]:placeholder-shown,
-      [type="text"]:placeholder-shown {
+      [type="text"]:placeholder-shown, [type="email"]:placeholder-shown {
   --accent: #fff;
 }
 .app {

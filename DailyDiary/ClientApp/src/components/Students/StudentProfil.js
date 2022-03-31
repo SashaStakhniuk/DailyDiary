@@ -78,6 +78,10 @@ function StudentProfil(props){
                 <div className="card-group p-3 d-flex justify-content-center">
                     <NavigationBar/>
                     <div className="cart-student">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
                             <div className="col-md-4">
                             {student.base64URL ? <img 
                                 style={{ width: '120px', borderRadius: '25%', height: 'auto' }}
@@ -87,7 +91,21 @@ function StudentProfil(props){
                                 className="img-fluid rounded-start"
                                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png" alt="..."/>
                             }
+<<<<<<< HEAD
                             
+=======
+=======
+                            <div style={{ zIndex: '0' }} className="col-md-4">
+                                {student.base64URL ? <img 
+                                    style={{ width: '120px', borderRadius: '25%', height: 'auto' }}
+                                    className="img-fluid " 
+                                    src={student.base64URL} /> : <img 
+                                    style={{ width: '120px', borderRadius: '25%' }}
+                                    className="img-fluid rounded-start"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png" />
+                                }
+>>>>>>> ecd71480669503514892726ce84bed31585f47ac
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
                             </div>
                             <div className="col-md-8 d-flex flex-column  align-items-center justify-content-center">
                                 <div className="card-body">

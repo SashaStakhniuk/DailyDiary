@@ -12,24 +12,14 @@ function Students(){
     const [studentsSkip, setStudentsSkip] = useState(0)
 
     useEffect(() => {    
+        console.log("fatch data")
         if(loading){
-            var loader_container = document.getElementById('loader-container')
-            loader_container.style.visibility = 'visible'
-            loader_container.style.opacity = 1
-            loader_container.style.height = "300px"
-            setTimeout(() => {
-                axios.get(`https://localhost:44364/api/student/GetRangStudents/${studentsSkip}`)
+            axios.get(`https://localhost:44364/api/student/GetRangStudents/${studentsSkip}`)
                 .then(response => {
                     setStudents([...students, ...response.data])
                     setStudentsSkip(prevCourBlogs => prevCourBlogs +5)
                 }).finally(() => setLoading(false))
             setLoading(false)
-            var loader_container = document.getElementById('loader-container')
-            loader_container.style.visibility = 'hidden'
-            loader_container.style.opacity = 0
-            loader_container.style.height = 0
-            }, 1000)
-           
         }
         
     }, [loading])
@@ -136,9 +126,6 @@ function Students(){
                     {students.map((student, i) => 
                         <CartStudent key={i} infoStudent={student} dataGroups={groups} />
                     )}
-                </div>
-                <div id="loader-container" className="loader-container">
-                    <div className="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                 </div>
             </div>
         </>

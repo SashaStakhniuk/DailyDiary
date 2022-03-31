@@ -75,7 +75,7 @@ namespace DailyDiary.Controllers.APIControllers
             {
                 if (model != null)
                 {
-                    var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.StudentId);
+                    var student = await db.Students.FirstOrDefaultAsync(x => x.Name == model.PrevName);
                     if (student != null)
                     {
                         Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
@@ -97,12 +97,10 @@ namespace DailyDiary.Controllers.APIControllers
 
                         db.Students.Update(student);
                         await db.SaveChangesAsync();
-                        return Ok(student);
+                        return Ok();
+
                     }
-                    else
-                    {
-                        //return NotFound();
-                    }
+                    return Ok(student);
                 }
             }
             return BadRequest(ModelState);

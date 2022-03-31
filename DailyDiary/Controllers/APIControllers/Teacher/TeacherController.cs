@@ -1,6 +1,5 @@
 ﻿using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
-using DailyDiary.Models.ViewModels.Teacher;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,42 +50,6 @@ namespace DailyDiary.Controllers.APIControllers
             return Ok(teacher);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateNew(CreateNewTeacherViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                Teacher teacher = new Teacher();
-
-                string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
-                string Password = Services.GeneratorService.GenerateNewPassword();
-
-                teacher = new Teacher
-                {
-                    Name = model.Name,
-                    LastName = model.LastName,
-                    Birthday = model.Birthday,
-                    Age = model.Age,
-                    Specialty = model.Specialty,
-                    Category = model.Category,
-                    Degree = model.Degree,
-                    Education = model.Education,
-                    Experience = model.Experience,
-                    Salary = model.Salary,
-                    Rate = model.Rate,
-                    Email = model.Email,
-                    Login = Login,
-                    Password = Password
-                };
-                Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
-                db.Teachers.Add(teacher);
-                await db.SaveChangesAsync();
-                return Ok();                
-            }
-            return BadRequest();
-        }
-
-        [HttpPost]
         public async Task<IActionResult> Edit(TeacherViewModel model)
         {
             if(ModelState.IsValid)
@@ -108,9 +71,6 @@ namespace DailyDiary.Controllers.APIControllers
                         teacer.Education = model.Education;
                         teacer.Experience = model.Experience;
                         teacer.Salary = model.Salary;
-                        teacer.Rate = model.Rate;
-                        teacer.Login = model.Login;
-                        teacer.Email = model.Email;
 
                         db.Teachers.Update(teacer);
                         await db.SaveChangesAsync();
@@ -146,6 +106,7 @@ namespace DailyDiary.Controllers.APIControllers
             var teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).ToListAsync(); // можливі повтори!!!
             if(teacherSubjectsId != null)
             {
+<<<<<<< HEAD
                 return Ok(teacherSubjects);
             }
             return NotFound(new { error = "Teacher's subjects not found" });
@@ -161,6 +122,17 @@ namespace DailyDiary.Controllers.APIControllers
             //    return Ok(subjects);
             //}
             //return NotFound(new {error = "Teacher's subjects not found" });
+=======
+                //teacherSubjectsId = teacherSubjectsId.Distinct();
+                var subjects = new List<Subject>();
+                foreach (var subjectId in teacherSubjectsId)
+                {
+                    subjects.Add(await db.Subjects.FirstOrDefaultAsync(x=> x.Id == subjectId));
+                }
+                return Ok(subjects);
+            }
+            return NotFound(new {error = "Teacher's subjects not found" });
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
         }
 
         [HttpGet("{id}")]
@@ -184,9 +156,25 @@ namespace DailyDiary.Controllers.APIControllers
 >>>>>>> ecd71480669503514892726ce84bed31585f47ac
             }
             return NotFound(new { error = "Teacher's groups not found" });
-        }
 
+<<<<<<< HEAD
         [HttpGet]
+=======
+<<<<<<< HEAD
+            //var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).ToListAsync(); // можливі повтори!!!
+            //if (teacherGroups != null)
+            //{
+            //    var groups = new List<Group>();
+            //    foreach (var teacherGroup in teacherGroups)
+            //    {
+            //        groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == teacherGroup.GroupId));
+            //    }
+            //    return Ok(groups);
+            //}
+            //return NotFound(new { error = "Teacher's groups not found" });
+=======
+
+>>>>>>> 08c9e97a6aa69a3aa8e94512cd89557652cb23df
         public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups()
         }
             //var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).ToListAsync(); // можливі повтори!!!
@@ -231,15 +219,23 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpPost("{id}/{groupId}")]
+<<<<<<< HEAD
         public ActionResult<bool> GroupExist(int id, int groupId)
         {
             return Ok(false);
+=======
+        public async Task<ActionResult<bool>> GroupEzist(int id, int groupId)
+        {
+
+            return Ok(false);
+>>>>>>> ecd71480669503514892726ce84bed31585f47ac
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
         }
 
-        [HttpPost]
-        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            return Ok();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<TeacherGroup>>> GetTeacherGroups(int teacherId)
+        //{
+        //    return null;
+        //}
     }
 }
