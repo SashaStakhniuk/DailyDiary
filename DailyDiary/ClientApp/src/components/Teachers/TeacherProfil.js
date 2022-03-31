@@ -23,7 +23,6 @@ function TeacherProfil(){
             const response = await fetch(`https://localhost:44364/api/Teacher/GetTeacherGroupsById/${id}`)
             const data = await response.json()
             if(response.ok === true){
-                console.log('Secsesfuly')
                 setGroups(data)
             }else{
                 console.log('Error ', data)
@@ -48,7 +47,6 @@ function TeacherProfil(){
     }
     
     async function getTeacher(){
-        
         try
         {
             const response = await fetch(`https://localhost:44364/api/Teacher/Get/${id}`)
@@ -88,10 +86,10 @@ function TeacherProfil(){
                             {teacher.base64URL ? <img 
                                 style={{ width: '120px', borderRadius: '25%', height: 'auto' }}
                                 className="img-fluid " 
-                                src={teacher.base64URL} /> : <img 
+                                src={teacher.base64URL} alt="..."/> : <img 
                                 style={{ width: '120px', borderRadius: '25%' }}
                                 className="img-fluid rounded-start"
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png" />
+                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png" alt="..."/>
                             }
                         </div>
                         <div style={{ marginLeft: '-10px', padding: '10px' }} className="col-md-8 d-flex flex-column  align-items-center justify-content-center">

@@ -1,5 +1,6 @@
 ﻿using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
+using DailyDiary.Models.ViewModels.Teacher;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,43 @@ namespace DailyDiary.Controllers.APIControllers
             return Ok(teacher);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateNew(NewTeacherViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model != null)
+                {
+                    Teacher teacher = new Teacher();
+                    string Passsword = Services.GeneratorService.GenerateNewPassword();
+                    string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
+
+                    teacher.Name = model.Name;
+                    teacher.LastName = model.LastName;
+                    teacher.Birthday = model.Birthday;
+                    teacher.Age = model.Age;
+                    teacher.Specialty = model.Specialty;
+                    teacher.Category = model.Category;
+                    teacher.Degree = model.Degree;
+                    teacher.Education = model.Education;
+                    teacher.Experience = model.Experience;
+                    teacher.Salary = model.Salary;
+                    teacher.Rate = model.Rate;
+                    teacher.Login = Login;
+                    teacher.Passsword = Passsword;
+                    teacher.Email = model.Email;
+
+                    db.Teachers.Add(teacher);
+                    await db.SaveChangesAsync();
+                    return Ok(teacher);
+                }
+                return BadRequest();
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Edit(TeacherViewModel model)
         {
             if(ModelState.IsValid)
@@ -71,6 +109,9 @@ namespace DailyDiary.Controllers.APIControllers
                         teacer.Education = model.Education;
                         teacer.Experience = model.Experience;
                         teacer.Salary = model.Salary;
+                        teacer.Rate = model.Rate;
+                        teacer.Login = model.Login;
+                        teacer.Email = model.Email;
 
                         db.Teachers.Update(teacer);
                         await db.SaveChangesAsync();
@@ -86,7 +127,7 @@ namespace DailyDiary.Controllers.APIControllers
             return BadRequest(ModelState);
         }
 
-        /*[HttpDelete("{id}")]
+        [HttpDelete("{id}")]/*
         [Authorize(Roles = "MainAdmin,Admin")]*/
         public async Task<ActionResult<Teacher>> Delete(int id)
         {
@@ -103,18 +144,17 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Subject>>> GetTeacherSubjectsById(int id)
         {
-            var teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).ToListAsync(); // можливі повтори!!!
-            if(teacherSubjectsId != null)
+            var teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).Distinct().ToListAsync(); // можливі повтори!!!
+            if (teacherSubjectsId != null)
             {
-                //teacherSubjectsId = teacherSubjectsId.Distinct();
                 var subjects = new List<Subject>();
                 foreach (var subjectId in teacherSubjectsId)
                 {
-                    subjects.Add(await db.Subjects.FirstOrDefaultAsync(x=> x.Id == subjectId));
+                    subjects.Add(await db.Subjects.FirstOrDefaultAsync(x => x.Id == subjectId));
                 }
                 return Ok(subjects);
             }
-            return NotFound(new {error = "Teacher's subjects not found" });
+            return NotFound();
         }
 
         [HttpGet("{id}")]
@@ -133,22 +173,31 @@ namespace DailyDiary.Controllers.APIControllers
             return NotFound(new { error = "Teacher's groups not found" });
         }
 
-
-        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups()
-        {
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups() {
             return await db.Groups.ToListAsync();
         }
 
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Subject>>> GetAllSubjects()
         {
             return await db.Subjects.ToListAsync();
         }
 
-        [HttpPost("{id}/{groupId}")]
-        public async Task<ActionResult<bool>> GroupEzist(int id, int groupId)
+        [HttpPost]
+        public async Task<ActionResult> AddBase64(Base64ViewModel model)
         {
-
-            return Ok(false);
+            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.Id);
+            if (teacher != null)
+            {
+                teacher.Base64URL = model.Base64URL;
+                await db.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

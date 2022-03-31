@@ -11,14 +11,20 @@ namespace DailyDiary.Models
         public int GroupClassworkId { get; set; }
         public int SubjectId { get; set; }
         public Subject Subject { get; set; }
-        public string Theme { get; set; }
-        public int TeacherId { get; set; }
-        public Teacher Teacher { get; set; }
         public int GroupId { get; set; }
         public Group Group { get; set; }
+        public string Theme { get; set; }
+        public string Classwork { get; set; }
+        public int TeacherId { get; set; }
+        public Teacher Teacher { get; set; }
+
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime Date { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Published { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Deadline { get; set; }
         public ICollection<StudentClasswork> StudentClassworks { get; set; }
 
 

@@ -90,7 +90,7 @@ function CreateNewStudent(){
                         <div class="mb-3">
                             <input id="username" value={name} onChange={e => onChangeUserName(e)} type="text" placeholder="Enter student usrname" title="Your username" />
                         </div>
-
+                        
                         <span className="span-text">lastName</span>
                         <div class="mb-3">
                             <input type="text" id="lastName" value={lastName} onChange={e => onChangeLastName(e)}  placeholder="Enter student lastName" title="Your username" />

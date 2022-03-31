@@ -12,8 +12,14 @@ import CreateNewStudent from './Students/CreateNewStudent'
 import StudentImage from './Students/StudentImage'
 import Teachers from './Teachers/Teachers'
 import TeacherProfil from './Teachers/TeacherProfil'
+
+import TeacherPage from './Teachers/TeacherPage.js';
+import GroupEditing from './Teachers/GroupEditing.js';
+import CreateNewTeacher from './Teachers/CreateNewTeacher.js';
+
 import EdmitFromTeaher from './Teachers/EdmitFromTeaher'
 import TeacheImage from './Teachers/TeacheImage'
+
 const Root = ({ store }) => (
     <Provider store={store}>
         <Router>
@@ -32,8 +38,16 @@ const Root = ({ store }) => (
 
                 <Route exact path="/admin/teachers"><Teachers/></Route>
                 <Route exact path="/admin/teacher-profil/:id"><TeacherProfil/></Route>
+
+                <Route exact path="/teacher-page"><TeacherPage/></Route>
+                <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
+
+                {/* <Route exact path="/teacher/group-editing/:id"><GroupEditing/></Route> */}
+
                 <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
                 <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
+                <Route exact path="/admin/new-teacher"><CreateNewTeacher/></Route>
+
                 <Route path='*' exact={true}><NotFound/></Route>
             </Switch>
         </Router>

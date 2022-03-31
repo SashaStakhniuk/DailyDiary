@@ -12,7 +12,9 @@ namespace DailyDiary.Models
         public int GroupId { get; set; }
         public int SubjectId { get; set; }
         public string Theme { get; set; }
-        public byte[] Homework { get; set; }//base64
+        public byte[] HomeworkInBytes { get; set; }
+        public string Homework { get; set; }//base64    
+
         public int TeacherId { get; set; }
 
         [DataType(DataType.Date)]
@@ -20,7 +22,7 @@ namespace DailyDiary.Models
         public DateTime Published { get; set; }
 
         [DataType(DataType.Date)]
-        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Deadline { get; set; }
         public Subject Subject { get; set; }
 

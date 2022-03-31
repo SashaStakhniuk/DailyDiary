@@ -107,8 +107,8 @@ function StudentProfil(props){
                             </div>                     
                     </div>
                 </div>
-            </div>
-        </>
+                </div>
+            </>
     )
 }
 

@@ -75,7 +75,7 @@ namespace DailyDiary.Controllers.APIControllers
             {
                 if (model != null)
                 {
-                    var student = await db.Students.FirstOrDefaultAsync(x => x.Name == model.PrevName);
+                    var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.StudentId);
                     if (student != null)
                     {
                         Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
@@ -136,6 +136,7 @@ namespace DailyDiary.Controllers.APIControllers
                         StudyYear = model.StudyYear,
                         Group = group,
                         Subgroup = subgroup
+                        
                     };
                     Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
                     db.Students.Add(student);
