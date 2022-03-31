@@ -26,6 +26,10 @@ namespace DailyDiary.Models
         public float Salary { get; set; }
         public string Base64URL { get; set; }
         public int Rate { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+
         public ICollection<GroupClasswork> GroupClassworks { get; set; }
         public ICollection<GroupHomework> GroupHomeworks { get; set; }
         public ICollection<TeacherSubject> TeacherSubjects { get; set; }

@@ -18,7 +18,7 @@ namespace DailyDiary.Models
         public int StudyYear { get; set; } //year of study
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public Nullable<DateTime> AdmissionDate{ get; set; } //Date of learning start
+        public DateTime AdmissionDate{ get; set; } //Date of learning start
         //public string Group { get; set; }
         public int? GroupId { get; set; }
         public Group Group { get; set; }

@@ -111,17 +111,14 @@ namespace DailyDiary.Models
             {
 
                 db.TeacherGroups.AddRange(
-<<<<<<< HEAD
                    new TeacherGroup { TeacherId = 1, Group = group2 },
                    new TeacherGroup { TeacherId = 1, Group = group3 },
                    new TeacherGroup { TeacherId = 2, Group = group3 },                  
-                   new TeacherGroup { TeacherId = 2, Group = group2 }                  
-=======
+                   new TeacherGroup { TeacherId = 2, Group = group2 },                  
                    /*new TeacherGroup { TeacherId = 1, GroupId = 2 },
                    new TeacherGroup { TeacherId = 1, GroupId = 3 },*/
                    new TeacherGroup { TeacherId = 2, GroupId = 3 },                  
                    new TeacherGroup { TeacherId = 2, GroupId = 2 }                  
->>>>>>> ecd71480669503514892726ce84bed31585f47ac
                );
                 db.SaveChanges();
             }

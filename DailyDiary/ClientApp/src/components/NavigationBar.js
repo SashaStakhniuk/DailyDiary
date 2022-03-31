@@ -3,8 +3,6 @@ import "../styles/Navigation.css"
 import { useEffect } from 'react'
 function NavigationBar()
 {
-
-
     function onMouseEnterHendler(){
 
       var font_all_page = document.getElementById('font_all_page')
@@ -38,18 +36,19 @@ function NavigationBar()
     function defaultStules(){
 
       var font_all_page = document.getElementById('font_all_page')
-      var all_students__container = document.getElementById('all-container')
+      var all_students__container = document.querySelector('body')
+      //var all_students__container = document.getElementById('all-container')
       var login_img = document.getElementById('login-img')
       if(all_students__container){
-        all_students__container.style.height = `900px`
+        //all_students__container.style.height = `900px`
         // получаю высоту главного контейнера 
         var HeightAllContainer = all_students__container.offsetHeight
         //высота затемняющего контейнера
         var Heightfont_all_page =  font_all_page.offsetHeight
         if(HeightAllContainer < 500){
-          console.log("Belove 500")
+         
           //all_students__container.style.height = `855px`
-          font_all_page.style.height = `855px`
+          //font_all_page.style.height = `855px`
         }
         // узнаю разницу между ними 
         var remainder = HeightAllContainer - Heightfont_all_page

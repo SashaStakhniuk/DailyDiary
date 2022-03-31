@@ -17,7 +17,7 @@ namespace DailyDiary.Services
             mail_message.From = new MailAddress("itsteo@gmail.com", "Ваш новый логин и пароль");
             mail_message.To.Add(StudentEmail);
             //mail_message.Attachments.Add(new Attachment(@"C:\Users\Denis\Pictures\porshcke.jpg"));
-            mail_message.Body = $"<h1>Ваш логин и пароль для входа в личный кабинет:</h1>\n<h2>Login - {Login}\nPassword - {Password}</h2>";
+            mail_message.Body = $"<h1>Вас приведствует ItStep</h1>\n<h1>Ваш логин и пароль для входа в личный кабинет:</h1>\n<h2>Login - {Login}\nPassword - {Password}</h2>";
             using (SmtpClient client = new SmtpClient("smtp.gmail.com"))
             {
                 client.Credentials = new NetworkCredential("denisdrokson@gmail.com", "tolik050103SAND");

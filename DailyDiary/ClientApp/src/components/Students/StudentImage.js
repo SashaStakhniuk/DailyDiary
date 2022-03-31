@@ -47,7 +47,7 @@ function StudentImage(){
             })
         })
         if(result.ok === true){
-            window.location = '/admin/teacers'
+            window.location = '/admin/students'
         }
         else{
             console.log("Error")

@@ -9,17 +9,17 @@ function EditFromStudent(props){
 
     const[userName, setUserName] = useState()
     const[lastName_, setlastName] = useState()
-    const[Password, setPassword] = useState()
-    const[Birthday, setBirthday] = useState()
-    const[Login, setLogin] = useState()
-    const[Email, setEmail] = useState()
-    const[AdmissionDate, setAdmissionDate] = useState()
+    const[password, setPassword] = useState()
+    const[birthday, setBirthday] = useState()
+    const[login, setLogin] = useState()
+    const[email, setEmail] = useState()
+    const[admissionDate, setAdmissionDate] = useState()
     const[Age, setAge] = useState(0)
     const[StudyYear, setStudyYear] = useState()
     const[GroupId, setGroupId] = useState()
     const[SubgroupId, setSubgroupId] = useState()
-    const[PrevName, setPrevName] = useState()
-    const[ConfirmPassword, setConfirmPassword] = useState()
+    const[prevName, setPrevName] = useState()
+    const[confirmPassword, setConfirmPassword] = useState()
     
     useEffect(() => {
         getStudent()
@@ -28,7 +28,7 @@ function EditFromStudent(props){
     let { id } = useParams();
 
     async function edit(){
-        var StudentId = id
+        var studentId = Number(id) 
         var age = Number(Age)
         var groupId = Number(GroupId)
         var studyYear = Number(StudyYear)
@@ -36,26 +36,41 @@ function EditFromStudent(props){
         console.log(typeof(Age)) 
         var name = userName
         var lastName = lastName_
-        setConfirmPassword(Password) 
+        setConfirmPassword(password) 
+        console.log(studentId + typeof(studentId))
+        console.log(name + typeof(name))
+        console.log(lastName + typeof(lastName))
+        console.log(birthday+ typeof(birthday))
+        console.log(admissionDate + typeof(admissionDate))
+        console.log("age: "+age + typeof(age))
+        console.log("studyYear: "+studyYear + typeof(studyYear))
+        console.log("groupId: "+groupId + typeof(groupId))
+        console.log("subgroupId: "+subgroupId + typeof(subgroupId))
+        console.log("login: "+login + typeof(login))
+        console.log("password: "+password + typeof(password))
+        console.log("email: "+email + typeof(email))
+        console.log("prevName: "+prevName + typeof(prevName))
+        console.log("confirmPassword: "+confirmPassword + typeof(confirmPassword))
+
         const request = await fetch('https://localhost:44364/api/student/Edit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                studentId,
                 name,
                 lastName, 
-                Birthday,
+                birthday,
+                admissionDate,
                 age, 
                 studyYear, 
-                AdmissionDate, 
                 groupId, 
                 subgroupId, 
-                Login, 
-                Password, 
-                Email, 
-                PrevName,
-                ConfirmPassword
+                login, 
+                password, 
+                email, 
+                confirmPassword
             })
         })
         if(request.ok === true){
@@ -84,7 +99,7 @@ function EditFromStudent(props){
                setStudyYear(data.studyYear)
                setGroupId(data.groupId)
                setSubgroupId(data.subgroupId)
-
+               setConfirmPassword(data.password)
              } else {
                  console.log("error",data)
              }
@@ -155,23 +170,23 @@ function EditFromStudent(props){
 
                         <span className="span-text">Password</span>
                         <div class="mb-3">
-                            <input id="password" value={Password} onChange={e => onChangePassword(e)} type="password"  placeholder="Enter student password" required="required" title="Your password" />
+                            <input id="password" value={password} onChange={e => onChangePassword(e)} type="password"  placeholder="Enter student password" required="required" title="Your password" />
                         </div>
                  
                         <span className="span-text">Birthday</span>
                         <div class="mb-3">
                             <span class="datepicker-toggle">
-                                <input required type="date" id="birthday"  data-date-format="DD MMMM YYYY" value={Birthday} onChange={e => onChangeBirthday(e)} />
+                                <input required type="date" id="birthday"  data-date-format="DD MMMM YYYY" value={birthday} onChange={e => onChangeBirthday(e)} />
                             </span>
                         </div>
                         <span className="span-text">Login</span>
                         <div class="mb-3">
-                            <input required type="text" id="login_" value={Login} onChange={e => onChangeLogin(e)} />
+                            <input required type="text" id="login_" value={login} onChange={e => onChangeLogin(e)} />
                         </div>
 
                         <span className="span-text">Email</span>
                         <div class="mb-3">
-                            <input required type="email" id="email" value={Email} onChange={e => onChangeEmail(e)} />
+                            <input required type="email" id="email" value={email} onChange={e => onChangeEmail(e)} />
                         </div>
                     </div>
                    
@@ -179,7 +194,7 @@ function EditFromStudent(props){
                         <span className="span-text">Admission Date</span>
                         <div class="mb-3">
                             <span class="datepicker-toggle">
-                                <input required type="date" id="admissionDate"  data-date-format="DD MMMM YYYY" value={AdmissionDate} onChange={e => onChangeAdmissionDate(e)} />
+                                <input required type="date" id="admissionDate"  data-date-format="DD MMMM YYYY" value={admissionDate} onChange={e => onChangeAdmissionDate(e)} />
                             </span>
                         </div>
 

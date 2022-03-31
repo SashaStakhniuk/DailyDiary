@@ -11,25 +11,25 @@ function Teachers(){
     const [teachersSkip, setTeachersSkip] = useState(0)
     const [loading, setLoading] = useState(true) 
 
-    // useEffect(() => {
-    //     if(loading){
-    //         axios.get(`https://localhost:44364/api/teacher/GetRangTeachers/${teachersSkip}`)
-    //         .then(response => {
-    //             setTeachers([...teachers, ...response.data])
-    //             setTeachersSkip(prevCourBlogs => prevCourBlogs +5)
-    //         }).finally(() => setLoading(false))
-    //         setLoading(false)
-    //     }
-    // }, [])
-
     useEffect(() => {
         if(loading){
-            console.log('geting')
-            axios.get(`https://localhost:44364/api/teacher/GetRangTeachers/${teachersSkip}`)
-            .then(response => {
-                setTeachers([...teachers, ...response.data])
-                setTeachersSkip(prevCourBlogs => prevCourBlogs +5)
-            }).finally(() => setLoading(false))
+            var loader_container = document.getElementById('loader-container')
+            loader_container.style.visibility = 'visible'
+            loader_container.style.opacity = 1
+            loader_container.style.height = "300px"
+            //loader_container.style.transition = 'all 7s ease 0s'
+            setTimeout(() => {
+                axios.get(`https://localhost:44364/api/teacher/GetRangTeachers/${teachersSkip}`)
+                .then(response => {
+                    setTeachers([...teachers, ...response.data])
+                    setTeachersSkip(prevCourBlogs => prevCourBlogs +5)
+                }).finally(() => setLoading(false))
+                var loader_container = document.getElementById('loader-container')
+                loader_container.style.visibility = 'hidden'
+                loader_container.style.opacity = 0
+                loader_container.style.height = 0
+            }, 900)
+            
         }
     }, [loading])
 
@@ -101,6 +101,10 @@ function Teachers(){
                     {teachers.map((teacher, i) => 
                         <CartTeacher key={i} infoTeacher={teacher} />
                     )}
+                    
+                </div>
+                <div id="loader-container" className="loader-container">
+                    <div className="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                 </div>
             </div>
         </>
