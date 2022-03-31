@@ -127,14 +127,20 @@ namespace DailyDiary.Models
                    new TeacherGroup { TeacherId = 2, Group = group3 },                  
                    new TeacherGroup { TeacherId = 2, Group = group2 }                  
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
 =======
                    /*new TeacherGroup { TeacherId = 1, GroupId = 2 },
                    new TeacherGroup { TeacherId = 1, GroupId = 3 },*/
                    new TeacherGroup { TeacherId = 2, GroupId = 3 },                  
                    new TeacherGroup { TeacherId = 2, GroupId = 2 }                  
 >>>>>>> ecd71480669503514892726ce84bed31585f47ac
+<<<<<<< HEAD
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
+=======
 >>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
                );
                 db.SaveChanges();

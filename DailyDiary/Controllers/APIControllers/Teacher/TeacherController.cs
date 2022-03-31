@@ -107,6 +107,7 @@ namespace DailyDiary.Controllers.APIControllers
             if(teacherSubjectsId != null)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 return Ok(teacherSubjects);
             }
             return NotFound(new { error = "Teacher's subjects not found" });
@@ -123,6 +124,8 @@ namespace DailyDiary.Controllers.APIControllers
             //}
             //return NotFound(new {error = "Teacher's subjects not found" });
 =======
+=======
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
                 //teacherSubjectsId = teacherSubjectsId.Distinct();
                 var subjects = new List<Subject>();
                 foreach (var subjectId in teacherSubjectsId)
@@ -132,6 +135,9 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(subjects);
             }
             return NotFound(new {error = "Teacher's subjects not found" });
+<<<<<<< HEAD
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
+=======
 >>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
         }
 
@@ -220,9 +226,17 @@ namespace DailyDiary.Controllers.APIControllers
 
         [HttpPost("{id}/{groupId}")]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public ActionResult<bool> GroupExist(int id, int groupId)
         {
             return Ok(false);
+=======
+        public async Task<ActionResult<bool>> GroupEzist(int id, int groupId)
+        {
+
+            return Ok(false);
+>>>>>>> ecd71480669503514892726ce84bed31585f47ac
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
 =======
         public async Task<ActionResult<bool>> GroupEzist(int id, int groupId)
         {

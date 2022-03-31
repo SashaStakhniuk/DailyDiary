@@ -14,7 +14,10 @@ import Teachers from './Teachers/Teachers'
 import TeacherProfil from './Teachers/TeacherProfil'
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
 =======
 >>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
 import TeacherPage from './Teachers/TeacherPage.js';
@@ -24,6 +27,7 @@ import GroupEditing from './Teachers/GroupEditing.js';
 import EdmitFromTeaher from './Teachers/EdmitFromTeaher'
 import TeacheImage from './Teachers/TeacheImage'
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 import TeacherPage from './Teachers/TeacherPage.js';
@@ -31,6 +35,9 @@ import GroupEditing from './Teachers/GroupEditing.js';
 import EdmitFromTeaher from './Teachers/EdmitFromTeaher'
 import TeacheImage from './Teachers/TeacheImage'
 >>>>>>> 196b7525646dcd28dc4d483c55b0ee0bc24d2364
+=======
+>>>>>>> ecd71480669503514892726ce84bed31585f47ac
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
 =======
 >>>>>>> ecd71480669503514892726ce84bed31585f47ac
 >>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
@@ -54,15 +61,19 @@ const Root = ({ store }) => (
                 <Route exact path="/admin/teacher-profil/:id"><TeacherProfil/></Route>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 196b7525646dcd28dc4d483c55b0ee0bc24d2364
+=======
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
 =======
 >>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
                 <Route exact path="/teacher-page"><TeacherPage/></Route>
                 <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
 
                 {/* <Route exact path="/teacher/group-editing/:id"><GroupEditing/></Route> */}
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -74,6 +85,12 @@ const Root = ({ store }) => (
                 <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
                 <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
 >>>>>>> 196b7525646dcd28dc4d483c55b0ee0bc24d2364
+=======
+=======
+                <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
+                <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
+>>>>>>> ecd71480669503514892726ce84bed31585f47ac
+>>>>>>> parent of a85b990 (added loader and CRUD operations on Admin Teachers)
 =======
 =======
                 <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
