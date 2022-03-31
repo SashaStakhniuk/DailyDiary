@@ -1,31 +1,32 @@
 import React from 'react'
+import { isConstructorDeclaration } from 'typescript';
+import AddClassworkForm from './AddClassworkForm';
+import AddHomeworkForm from './AddHomeworkForm';
+import HomeworkClassworkView from './HomeworkClassworkView';
 
 class GroupEditing extends React.Component{
     constructor(props) {
         super(props);
         this.state = 
         {
+            homeworksToSkip:0,
+            homeworksToDisplay:2,
+            classworksToSkip:0,
+            classworksToDisplay:2,
             homeworks:[],
-            classWorks:[],
-            groupHomeworkId:0,
-            groupId:0,
-            subjectId:0,
-            theme:"",
-            homework:"",
-            teacherId:0,
-            published:"2022-03-24",
-            deadline:"2022-03-24"
+            classworks:[],          
+            statusMessage:"",
+            addHomeworkForm:"",
+            addClassworkForm:""
         };
-    
-        // this.handleSubmit = this.handleSubmit.bind(this);
         this.getHomeworks = this.getHomeworks.bind(this);
-        this.handleFileInputChange=this.handleFileInputChange.bind(this)
-        this.getBase64=this.getBase64.bind(this)
-        this.onSubmit=this.onSubmit.bind(this)
-        this.AddNewHomework=this.AddNewHomework.bind(this)
+        // this.getClassworks = this.getClassworks.bind(this);
+        this.getSomeHomeworks = this.getSomeHomeworks.bind(this);      
+        this.getSomeClassworks = this.getSomeClassworks.bind(this);      
+        this.showHomeworkForm=this.showHomeworkForm.bind(this);        
+        this.showClassworkForm=this.showClassworkForm.bind(this);        
       }
 
-    
     componentDidMount(){
         // Array.from(document.styleSheets).forEach(sheet => sheet.disabled = true)
         //console.log(this.props)
@@ -34,45 +35,38 @@ class GroupEditing extends React.Component{
         this.setState({
             teacherId:1,
             groupId:this.props.match.params.id
-        }
-        ,()=> this.getHomeworks(this.state.groupId,this.state.teacherId)
-        ,()=> this.getClassworks(this.state.groupId,this.state.teacherId)
+        }   
+         //,()=> this.getSomeHomeworks()
+         ,()=> this.getSomeClassworks()
+        // ,()=> this.getTeacherSubjects()
+        //,()=> this.getHomeworks(this.state.groupId,this.state.teacherId)
+        //,()=> this.getClassworks(this.state.groupId,this.state.teacherId)
 
         );
+        // if(this.state.teacherId>0 && this.state.groupId>0){
+        //     this.getSomeHomeworks()
+        //     this.getSomeClassworks()
+        // }
+        // this.getSomeHomeworks()
          //this.getHomeworks(this.groupId,this.teacherId);
          //this.getClassworks(this.groupId,this.teacherId);
     } 
    }
-
     async getHomeworks(groupId,teacherId) // всі домашки групи за ід групи і ід вчителя
     {
         try{
-            const response= await fetch(`https://localhost:44364/api/GroupHomeworks/GetByGroupIdAndTeacherId/details?groupId=${groupId}&&teacherId=${teacherId}`)
+            const response= await fetch(`https://localhost:44364/api/GroupHomeworks/GetByGroupIdAndTeacherId/details?groupId=${groupId}&&teacherId=${teacherId}`);
 
-             const data = await response.json()
-             //console.log(data)
+             const data = await response.json();
+             console.log(data)
 
              if (response.ok === true) {
-                
-                 //this.state.homeworks.forEach
-                 data.forEach(element => {
-                    //var td=document.createElement('td');
-                    var obj = document.createElement('object');
-                    obj.style.width = '100%';
-                    obj.style.height = '842pt';
-                    obj.style.zIndex = '3';
-                    obj.type = 'application/pdf';
-                    obj.data = element.homework;
-                    document.getElementById('Myhomeworks').appendChild(obj);
-                    //element.homework = obj;
-                    //document.body.appendChild(obj);
-                 })
-                 console.log(data)
-                 this.setState({
+                this.setState({
                     homeworks:data
                 }
-                ,()=> console.log(this.state)
+                //,()=> console.log(this.state)
                 )
+                 console.log(data)        
                 
              } else {
                  console.log("error",data)
@@ -80,194 +74,184 @@ class GroupEditing extends React.Component{
             }
         catch{}
     }
-    async getClassworks(groupId,teacherId) // всі домашки групи за ід групи і ід вчителя
+    async getSomeHomeworks() // кілька домашок групи за ід групи і ід вчителя
     {
         try{
-            const response= await fetch(`https://localhost:44364/api/GroupClass/GetByGroupIdAndTeacherId/details?groupId=${groupId}&&teacherId=${teacherId}`)
+            // console.log("Fetching the homeworks")
+            const response= await fetch(`https://localhost:44364/api/GroupHomeworks/GetSomeHomeworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
 
-             const data = await response.json()
-             //console.log(data)
+             const data = await response.json();
+             console.log(data)
+
+             if (response.ok === true) {
+                // console.log("Got the homeworks")
+                this.setState({
+                    homeworks:[...this.state.homeworks,...data],
+                    homeworksToSkip:this.state.homeworksToDisplay+this.state.homeworksToSkip
+                }
+                //,()=> console.log(this.state)
+                )
+                 //console.log(data)        
+                
+             } else {
+                 console.log("error",data)
+             }
+            }
+        catch{
+            console.log("getSomeHomeworks  ERROR !!!")
+        }
+    }
+    // async getClassworks(groupId,teacherId) // всі домашки групи за ід групи і ід вчителя
+    // {
+    //     try{
+    //         const response= await fetch(`https://localhost:44364/api/GroupClass/GetByGroupIdAndTeacherId/details?groupId=${groupId}&&teacherId=${teacherId}`)
+
+    //          const data = await response.json()
+    //          //console.log(data)
+
+    //          if (response.ok === true) {
+    //             this.setState({
+    //                 classWorks:data
+    //             })
+    //          } else {
+    //              console.log("error",data)
+    //          }
+    //         }
+    //     catch{
+
+    //     }
+    // }
+    async getSomeClassworks() // кілька classworks групи за ід групи і ід вчителя
+    {
+        try{
+            const response= await fetch(`https://localhost:44364/api/GroupClassworks/GetSomeClassworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
+
+             const data = await response.json();
+             console.log(data)
 
              if (response.ok === true) {
                 this.setState({
-                    classWorks:data
-                })
+                    classworks:[...this.state.classworks,...data],
+                    classworksToSkip:this.state.classworksToDisplay+this.state.classworksToSkip
+                }
+                //,()=> console.log(this.state)
+                )
+                 //console.log(data)        
+                
              } else {
                  console.log("error",data)
              }
             }
         catch{
-
+            console.log("getSomeClassworks  ERROR !!!")
         }
     }
-    getBase64 = file => {
-        return new Promise(resolve => {
-          //let fileInfo;
-          let baseURL = "";
-          // Make new FileReader
-          let reader = new FileReader();
     
-          // Convert the file to base64 text
-          reader.readAsDataURL(file);
-    
-          reader.onload = () => {
-            baseURL = reader.result;
-            resolve(baseURL);
-          };
-        });
-      };
 
-      handleFileInputChange = e => {
-        //console.log(e.target.files[0]);
-        let { file } = this.state;
-        file = e.target.files[0];
-        this.getBase64(file)
-          .then(result => {
-            file["base64"] = result;
-            this.setState({
-            homework:result,
-            }
-            //,()=>console.log(this.state)
-            );
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      };
-     onSubmit(e){
-        e.preventDefault();
-        if(this.state.groupId==0)
-        {
-            console.log("No id of group")
-            return ;
-        }
-        
-        const {theme,subjectId,deadline} = e.target;
+   async showHomeworkForm(){
+        //console.log("click")
+       var homeworkForm = document.getElementById('addHomeworkForm');
+       if(homeworkForm.style.display=="none"){
+        // const addHomeworkForm = this.state.groupId>0 && this.state.teacherId>0?
+        // <AddHomeworkForm groupId={this.state.groupId} teacherId={this.state.teacherId} getSomeHomeworks={this.getSomeHomeworks}></AddHomeworkForm>
+        // :
+        // <></> 
         this.setState({
-            theme:theme.value,
-            subjectId:subjectId.value,
-            //homework:"",
-            //teacherId:0,
-            //published:0,
-            deadline:deadline.value
-        }
-        ,()=>this.AddNewHomework()
-
-        //,()=>console.log(this.state)
-        );
-        
-       // console.log(id,subjectId.value,theme.value,homework,teacherId,deadline.value);
+            addHomeworkForm: <AddHomeworkForm groupId={this.state.groupId} teacherId={this.state.teacherId} getSomeHomeworks={this.getSomeHomeworks}></AddHomeworkForm>
+        })
+        homeworkForm.style.display = "block"
+       }
+       else{
+        homeworkForm.style.display="none"
+       }
     }
-    async AddNewHomework(){
-        try{
-
-            const response= await fetch(`https://localhost:44364/api/GroupHomeworks/CreateOrUpdateHomework`,{
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(this.state)
-            })
-             const data = await response.json()
-             //console.log(data)
-
-             if (response.ok === true) {
-                console.log("Homework was added successfully"); 
-             } else {
-                 console.log("error",data)
-             }
-            }
-        catch{
-
+    async showClassworkForm(){
+        //console.log("click")
+       var homeworkForm = document.getElementById('addClassworkForm');
+       if(homeworkForm.style.display=="none"){
+        // const addClassworkForm = this.state.groupId>0 && this.state.teacherId>0?
+        // <AddClassworkForm groupId={this.state.groupId} teacherId={this.state.teacherId} getSomeClassworks={this.getSomeClassworks}></AddClassworkForm>
+        // :
+        // <></>
+        this.setState({
+            addClassworkForm: <AddClassworkForm groupId={this.state.groupId} teacherId={this.state.teacherId} getSomeClassworks={this.getSomeClassworks}></AddClassworkForm>
         }
+        ,()=>homeworkForm.style.display = "block"
+        )
+       }
+       else{
+        homeworkForm.style.display="none"
+       }
     }
     render(){
+        
+        const homeworks = this.state.homeworks.length<=0?
+        <div className="text-center" style={{color:"red"}}><h1>No homeworks yet...</h1>
+        </div>
+        :
+        <div className="container">
+            <div className="row row-cols-xl-4 row-cols-md-3 row-cols-sm-2 row-cols-1 m-5">                          
+            {this.state.homeworks.map((homework) =>
+            <div className='col' key={homework.groupHomeworkId} style={{minWidth: "22rem"}}>
+                <HomeworkClassworkView task={homework} homework={true}/>
+            </div>
+            )}
+            </div>  
+            <button className="btn btn-secondary" onClick={()=>this.getSomeHomeworks()}>View more</button>                          
+        </div>
+       
+        const classworks = this.state.classworks.length<=0?
+        <div className="text-center" style={{color:"red"}}><h1>No classworks yet...</h1>
+        </div>
+        :
+        <div className="container">
+            <div className="row row-cols-xl-4 row-cols-md-3 row-cols-sm-2 row-cols-1 m-5">                          
+            {this.state.classworks.map((classwork) =>
+            <div className='col' key={classwork.groupClassworkId} style={{minWidth: "22rem"}}>
+                <HomeworkClassworkView task={classwork} homework={false}/>
+            </div>
+            )}
+            </div>  
+            <button className="btn btn-secondary" onClick={()=>this.getSomeClassworks()}>View more</button>                          
+        </div>
         return(
             <div> 
-                    <div className="text-center">
-                        <h1>Adding new homework form:</h1>
-                        <form onSubmit={this.onSubmit}>
-    
-                        <div className="container">
-                        <span className="span-text">Subject:</span>
-                            <div className="mb-3">
-                                <select required="required" className="form-select" id="subjectId" name = "subjectId" placeholder="Select subject"  title="Subject">
-                                    <option value={1}>Reading</option>
-                                    <option value={2}>Musik</option>                   
-                                </select>
-                            </div>
-    
-                            <span className="span-text">Theme:</span>
-                            <div className="mb-3">
-                                <input  required="required"  defaultValue={"Integral"} id="theme" name = "theme" type="text" placeholder="Enter homework theme"  title="Theme" />
-                            </div>
-                            <span className="span-text">Homework:</span>
-                            <div className="mb-3">
-                                <input  required="required"  id="homework" name = "homework" type="file" placeholder="Add homework file"  title="Homework File"
-                                onChange={e => this.handleFileInputChange(e)} />
-                            </div>
-                            {/* <span className="span-text">Published:</span>
-                            <div className="mb-3">
-                                <span className="datepicker-toggle">
-                                    <input required type="date" id="published" name = "published"  data-date-format="DD MMMM YYYY" value={published} />
-                                </span>
-                            </div>                        */}
-                            <span className="span-text">Deadline:</span>
-                            <div className="mb-3">
-                                <span className="datepicker-toggle">
-                                    <input required="required" type="date" id="deadline" name = "deadline"  data-date-format="DD MMMM YYYY" />
-                                </span>
-                            </div>                       
-                        </div>
-                        <button type="submit" className="btn__edit align-self-end">Add</button>
-    
-                    </form>
-                        <h1>Homeworks:</h1>
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-                                        <th>Theme:</th>
-                                        {/* <th>Homework:</th> */}
-                                        <th>Published:</th>
-                                        <th>Deadline:</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {this.state.homeworks.map(homework =>
-                            <tr key={homework.groupHomeworkId}>
-                                <td>{homework.theme}</td>
-                                {/* {homework.homework} */}
-                                <td>{homework.published}</td>
-                                <td>{homework.deadline}</td>
-                            </tr>
-                        )}
-                                </tbody>
-                            </table>
-                            <div id = "Myhomeworks"></div> 
+<button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">Enable backdrop (default)</button>
+
+<div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel">
+  <div className="offcanvas-header">
+    <h5 className="offcanvas-title" id="offcanvasWithBackdropLabel">Offcanvas with backdrop</h5>
+    <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div className="offcanvas-body">
+      <div>
+       <button className='btn btn-primary' onClick={()=> this.showHomeworkForm()}>Add new homework</button>
+      </div>
+      <div>
+       <button className='btn btn-primary' onClick={()=> this.showClassworkForm()}>Add new classwork</button>
+      </div>
+      <div>
+      {/* <button className='btn btn-primary' onClick={()=> this.getHomeworks(this.state.groupId,this.state.teacherId)}>View Homeworks</button> */}
+      </div>
+  </div>
+</div>
+
+                    <div id="addHomeworkForm" style={{display:"none"}}>
+                        {this.state.addHomeworkForm}
+                    </div>                        
+                    <div id="addClassworkForm" style={{display:"none"}}>
+                        {this.state.addClassworkForm}
+                    </div>
+
+
+                            <h1>Homeworks:</h1>
+                            {homeworks}
+                            
 
                         <h1>Classworks:</h1>
-                        <ul className="list-group">
-                            <table className='table'>
-                                <thead>
-                                    <tr>
-                                        <th>Theme:</th>
-                                        <th>Classwork:</th>
-                                        <th>Date:</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {this.state.classWorks.map(classWork =>
-                            <tr key={classWork.groupClassworkId} className="list-group-item">
-                                <td>{classWork.theme}</td>
-                                <td>{classWork.homework}</td>
-                                <td>{classWork.date}</td>
-                            </tr>
-                        )}
-                                    
-                                </tbody>
-                            </table>                        
-                        </ul>
-                    </div>
+                        <div>
+                            {classworks}                         
+                        </div>         
             </div>
         )
     }

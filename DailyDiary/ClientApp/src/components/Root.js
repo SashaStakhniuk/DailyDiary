@@ -12,6 +12,7 @@ import CreateNewStudent from './Students/CreateNewStudent'
 import StudentImage from './Students/StudentImage'
 import Teachers from './Teachers/Teachers'
 import TeacherProfil from './Teachers/TeacherProfil'
+<<<<<<< HEAD
 
 import TeacherPage from './Teachers/TeacherPage.js';
 import GroupEditing from './Teachers/GroupEditing.js';
@@ -20,6 +21,12 @@ import CreateNewTeacher from './Teachers/CreateNewTeacher';
 import EdmitFromTeaher from './Teachers/EdmitFromTeaher'
 import TeacheImage from './Teachers/TeacheImage'
 
+=======
+import TeacherPage from './Teachers/TeacherPage.js';
+import GroupEditing from './Teachers/GroupEditing.js';
+import EdmitFromTeaher from './Teachers/EdmitFromTeaher'
+import TeacheImage from './Teachers/TeacheImage'
+>>>>>>> 196b7525646dcd28dc4d483c55b0ee0bc24d2364
 const Root = ({ store }) => (
     <Provider store={store}>
         <Router>
@@ -38,16 +45,24 @@ const Root = ({ store }) => (
 
                 <Route exact path="/admin/teachers"><Teachers/></Route>
                 <Route exact path="/admin/teacher-profil/:id"><TeacherProfil/></Route>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 196b7525646dcd28dc4d483c55b0ee0bc24d2364
                 <Route exact path="/teacher-page"><TeacherPage/></Route>
                 <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
 
                 {/* <Route exact path="/teacher/group-editing/:id"><GroupEditing/></Route> */}
+<<<<<<< HEAD
 
                 <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
                 <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
                 <Route exact path="/admin/new-teacher"><CreateNewTeacher/></Route>
                 
+=======
+                <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
+                <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
+>>>>>>> 196b7525646dcd28dc4d483c55b0ee0bc24d2364
                 <Route path='*' exact={true}><NotFound/></Route>
             </Switch>
         </Router>

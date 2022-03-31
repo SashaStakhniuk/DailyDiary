@@ -8,15 +8,31 @@ namespace DailyDiary.Models.ViewModels
 {
     public class GroupClassworksViewModel
     {
+        [Required]
         public int GroupClassworkId { get; set; }
+
+        [Required]
         public int SubjectId { get; set; }
+
+        [Required]
+        public int GroupId { get; set; }
+
         [Required]
         public string Theme { get; set; }
+        [Required]
+        public string Classwork { get; set; }
+
+        [Required]
         public int TeacherId { get; set; }
-        public int GroupId { get; set; }
+
+        //[Required]
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Published { get; set; }
+
+        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        [Required]
-        public DateTime Date { get; set; }
+        public DateTime Deadline { get; set; }
     }
 }

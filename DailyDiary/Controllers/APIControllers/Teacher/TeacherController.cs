@@ -143,22 +143,35 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Subject>>> GetTeacherSubjectsById(int id)
         {
-            List<Subject> subjects = new List<Subject>();
-            var teacherSubjects = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).ToListAsync(); // можливі повтори!!!
-            if (teacherSubjects.Count != 0)
+            var teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).ToListAsync(); // можливі повтори!!!
+            if(teacherSubjectsId != null)
             {
-                foreach (var sudjectId in teacherSubjects)
-                {
-                    subjects.Add(await db.Subjects.FirstOrDefaultAsync(x => x.Id == sudjectId));
-                }
-                return Ok(subjects);
+                return Ok(teacherSubjects);
             }
-            return NotFound(new { error = "Teacher's groups not found" });
+            return NotFound(new { error = "Teacher's subjects not found" });
+            //var teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == id).Select(x => x.SubjectId).ToListAsync(); // можливі повтори!!!
+            //if(teacherSubjectsId != null)
+            //{
+            //    //teacherSubjectsId = teacherSubjectsId.Distinct();
+            //    var subjects = new List<Subject>();
+            //    foreach (var subjectId in teacherSubjectsId)
+            //    {
+            //        subjects.Add(await db.Subjects.FirstOrDefaultAsync(x=> x.Id == subjectId));
+            //    }
+            //    return Ok(subjects);
+            //}
+            //return NotFound(new {error = "Teacher's subjects not found" });
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Group>>> GetTeacherGroupsById(int id)
         {
+<<<<<<< HEAD
+            var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).Select(x => x.Group).ToListAsync(); // можливі повтори? !!!
+            if (teacherGroups != null)
+            {
+                return Ok(teacherGroups);
+=======
             List<Group> groups = new List<Group>();
             var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).Select(x => x.GroupId).ToListAsync(); // можливі повтори!!!
             if (teacherGroups.Count != 0)
@@ -168,12 +181,29 @@ namespace DailyDiary.Controllers.APIControllers
                     groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == teacherGroup));
                 }
                 return Ok(groups);
+>>>>>>> ecd71480669503514892726ce84bed31585f47ac
             }
             return NotFound(new { error = "Teacher's groups not found" });
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups()
+        }
+            //var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).ToListAsync(); // можливі повтори!!!
+            //if (teacherGroups != null)
+            //{
+            //    var groups = new List<Group>();
+            //    foreach (var teacherGroup in teacherGroups)
+            //    {
+            //        groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == teacherGroup.GroupId));
+            //    }
+            //    return Ok(groups);
+            //}
+            //return NotFound(new { error = "Teacher's groups not found" });
+        
+    [HttpGet]
+
+    public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups()
         {
             return await db.Groups.ToListAsync();
         }
@@ -181,7 +211,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Subject>>> GetAllSubjects()
         {
-            return await db.Subjects.Distinct().ToListAsync();
+            return await db.Subjects.ToListAsync();
         }
 
         [HttpPost]
@@ -200,18 +230,10 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
-        [HttpPost("{id}/{subjectId}")]
-        public ActionResult<bool> SubjectsExizst(int id, int subjectId)
+        [HttpPost("{id}/{groupId}")]
+        public ActionResult<bool> GroupExist(int id, int groupId)
         {
-            var subjwct = db.TeacherSubjects.FirstOrDefault(x => x.TeacherId == id && x.SubjectId == subjectId);
-            if (subjwct != null)
-            {
-                return Ok(true);
-            }
-            else
-            {
-                return Ok(false);
-            }
+            return Ok(false);
         }
 
         [HttpPost]

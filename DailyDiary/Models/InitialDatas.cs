@@ -9,20 +9,23 @@ namespace DailyDiary.Models
     {
         public static void Initialize(DailyDiaryDatasContext db)
         {
+            var subject1 = new Subject { Title = "Reading" };
+            var subject2 = new Subject { Title = "Math" };
+            var subject3 = new Subject { Title = "Health" };
+            var subject4 = new Subject { Title = "Art" };
+            var subject5 = new Subject { Title = "Music" };
+            var subject6 = new Subject { Title = "English" };
+            var subject7 = new Subject { Title = "Algebra" };
+            var subject8 = new Subject { Title = "Geometry" };
+            var subject9 = new Subject { Title = "Physical Science" };
+            var subject10 = new Subject { Title = "Geography" };
+            var subject11 = new Subject { Title = "Computer Science" };
+
             if (!db.Subjects.Any())
             {
+               
                 db.Subjects.AddRange(
-                new Subject { Title = "Reading" },
-                new Subject { Title = "Math" },
-                new Subject { Title = "Health" },
-                new Subject { Title = "Art" },
-                new Subject { Title = "Music" },
-                new Subject { Title = "English" },
-                new Subject { Title = "Algebra" },
-                new Subject { Title = "Geometry" },
-                new Subject { Title = "Physical Science" },
-                new Subject { Title = "Geography" },
-                new Subject { Title = "Computer Science" }
+                subject11, subject10, subject9, subject8, subject7, subject6, subject5, subject4, subject3, subject2, subject1
                 );
                 db.SaveChanges();
             }
@@ -82,28 +85,35 @@ namespace DailyDiary.Models
                 db.SaveChanges();
             }
 
+           var teacher1 = new Teacher { Name = "Teacher1", LastName = "Jonson", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 };
+           var teacher2 = new Teacher { Name = "Teacher2", LastName = "Alor", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 };
+           var teacher3 = new Teacher { Name = "Teacher3", LastName = "Kilons", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 };
+           var teacher4 = new Teacher { Name = "Teacher4", LastName = "Paul", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 };
+           var teacher5 = new Teacher { Name = "Teacher5", LastName = "Jena", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 };
+           var teacher6 = new Teacher { Name = "Teacher6", LastName = "Ong", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 };
             if (!db.Teachers.Any())
             {
 
                 db.Teachers.AddRange(
-                    new Teacher { Name = "Teacher1", LastName = "Jonson", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 },
-                    new Teacher { Name = "Teacher2", LastName = "Alor", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree ="Master", Education = "Higher", Experience = 0,Salary=12000},
-                    new Teacher { Name = "Teacher3", LastName = "Kilons", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree ="Professor, PHD", Education = "Higher", Experience = 18,Salary=16000},
-                    new Teacher { Name = "Teacher4", LastName = "Paul", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 },
-                    new Teacher { Name = "Teacher5", LastName = "Jena", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 },
-                    new Teacher { Name = "Teacher6", LastName = "Ong", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 }
+                    teacher6, teacher5, teacher4, teacher3, teacher2, teacher1
+                //new Teacher { Name = "Teacher1", LastName = "Jonson", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 },
+                //new Teacher { Name = "Teacher2", LastName = "Alor", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree ="Master", Education = "Higher", Experience = 0,Salary=12000},
+                //new Teacher { Name = "Teacher3", LastName = "Kilons", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree ="Professor, PHD", Education = "Higher", Experience = 18,Salary=16000},
+                //new Teacher { Name = "Teacher4", LastName = "Paul", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 },
+                //new Teacher { Name = "Teacher5", LastName = "Jena", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 },
+                //new Teacher { Name = "Teacher6", LastName = "Ong", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 }
                 );
                 db.SaveChanges();
             }
             if (!db.TeacherSubjects.Any())
             {
                 db.TeacherSubjects.AddRange(
-                   new TeacherSubject { TeacherId = 1, SubjectId = 2 },
-                   new TeacherSubject { TeacherId = 1, SubjectId = 9 },
-                   new TeacherSubject { TeacherId = 2, SubjectId = 1 },
-                   new TeacherSubject { TeacherId = 2, SubjectId = 6 },
-                   new TeacherSubject { TeacherId = 3, SubjectId = 4 },
-                   new TeacherSubject { TeacherId = 3, SubjectId = 6 }
+                   new TeacherSubject { Teacher = teacher1, Subject = subject2 },
+                   new TeacherSubject { Teacher = teacher1, Subject = subject9 },
+                   new TeacherSubject { Teacher = teacher2, Subject = subject1 },
+                   new TeacherSubject { Teacher = teacher2, Subject = subject6 },
+                   new TeacherSubject { Teacher = teacher3, Subject = subject4 },
+                   new TeacherSubject { Teacher = teacher3, Subject = subject6 }
                );
                 db.SaveChanges();
             }
@@ -114,11 +124,8 @@ namespace DailyDiary.Models
                    new TeacherGroup { TeacherId = 1, Group = group2 },
                    new TeacherGroup { TeacherId = 1, Group = group3 },
                    new TeacherGroup { TeacherId = 2, Group = group3 },                  
-                   new TeacherGroup { TeacherId = 2, Group = group2 },                  
-                   /*new TeacherGroup { TeacherId = 1, GroupId = 2 },
-                   new TeacherGroup { TeacherId = 1, GroupId = 3 },*/
-                   new TeacherGroup { TeacherId = 2, GroupId = 3 },                  
-                   new TeacherGroup { TeacherId = 2, GroupId = 2 }                  
+                   new TeacherGroup { TeacherId = 2, Group = group2 }                  
+
                );
                 db.SaveChanges();
             }
