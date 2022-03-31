@@ -19,7 +19,7 @@ namespace DailyDiary.Models.ViewModels
         internal string LastName { get; set; }
         /*[DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]*/
-        internal DateTime Birthday { get; set; }
+        internal Nullable<DateTime> Birthday { get; set; }
         /*[Required]
         [Range(0,100)]*/
         internal int Age { get; set; }
@@ -40,11 +40,9 @@ namespace DailyDiary.Models.ViewModels
         internal int Experience { get; set; }
         /*[Range(0.0, Double.MaxValue)]*/
         internal float Salary { get; set; }
-        internal string Base64URL { get; set; }
-        internal int Rate { get; set; }
 
+        internal int Rate { get; set; }
         internal string Login { get; set; }
-        internal string Password { get; set; }
         internal string Email { get; set; }
     }
 }

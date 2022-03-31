@@ -2,24 +2,23 @@ import React from "react"
 import '../../styles/Students.css'
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
+import {moment} from 'moment/moment';
 
 function EditFromStudent(props){
     
     const [student,  setStudent] = useState({})
 
-    const[userName, setUserName] = useState()
-    const[lastName_, setlastName] = useState()
+    const[Name, setUserName] = useState()
+    const[LastName, setlastName] = useState()
     const[Password, setPassword] = useState()
     const[Birthday, setBirthday] = useState()
     const[Login, setLogin] = useState()
     const[Email, setEmail] = useState()
     const[AdmissionDate, setAdmissionDate] = useState()
-    const[Age, setAge] = useState(0)
-    const[StudyYear, setStudyYear] = useState()
-    const[GroupId, setGroupId] = useState()
-    const[SubgroupId, setSubgroupId] = useState()
-    const[PrevName, setPrevName] = useState()
-    const[ConfirmPassword, setConfirmPassword] = useState()
+    const[age, setAge] = useState(0)
+    const[studyYear, setStudyYear] = useState()
+    const[groupId, setGroupId] = useState()
+    const[subgroupId, setSubgroupId] = useState()
     
     useEffect(() => {
         getStudent()
@@ -28,34 +27,35 @@ function EditFromStudent(props){
     let { id } = useParams();
 
     async function edit(){
-        var StudentId = id
-        var age = Number(Age)
-        var groupId = Number(GroupId)
-        var studyYear = Number(StudyYear)
-        var subgroupId = Number(SubgroupId)
-        console.log(typeof(Age)) 
-        var name = userName
-        var lastName = lastName_
-        setConfirmPassword(Password) 
+        var StudentId = Number(id)
+        var Age = Number(age)
+        var GroupId = Number(groupId)
+        var SubgroupId = Number(subgroupId)
+        var StudyYear = Number(studyYear)
+        console.log("StudentId: " + typeof(StudentId) + " " + StudentId)
+        console.log("Age: " + typeof(Age) + " " + Age)
+        console.log("GroupId: " + typeof(GroupId) + " " + GroupId)
+        console.log("SubgroupId: " + typeof(SubgroupId) + " " + SubgroupId)
+        console.log("StudyYear: " + typeof(StudyYear) + " " + StudyYear)
+
         const request = await fetch('https://localhost:44364/api/student/Edit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name,
-                lastName, 
+                id,
+                Name,
+                LastName,
                 Birthday,
-                age, 
-                studyYear, 
-                AdmissionDate, 
-                groupId, 
-                subgroupId, 
-                Login, 
-                Password, 
-                Email, 
-                PrevName,
-                ConfirmPassword
+                AdmissionDate,
+                Age,
+                GroupId,
+                SubgroupId,
+                Login,
+                Password,
+                Email,
+                StudyYear
             })
         })
         if(request.ok === true){
@@ -73,7 +73,6 @@ function EditFromStudent(props){
 
                setStudent(data)
                setUserName(data.name) 
-               setPrevName(data.name) 
                setlastName(data.lastName)
                setPassword(data.password)
                setBirthday(data.birthday)
@@ -113,7 +112,7 @@ function EditFromStudent(props){
     }
     function onChangeAge(e){
         setAge(e.target.value)
-        var age = Number(Age)
+        var age = Number(age)
         console.log("age: " + typeof(age)) 
     }
     function onChangeStudyYear(e){
@@ -145,12 +144,12 @@ function EditFromStudent(props){
                     <div className="container1">
                         <span className="span-text">UserName</span>
                         <div class="mb-3">
-                            <input id="username" value={userName} onChange={e => onChangeUserName(e)} type="text" placeholder="Enter student usrname" required="required" title="Your username" />
+                            <input id="username" value={Name} onChange={e => onChangeUserName(e)} type="text" placeholder="Enter student usrname" required="required" title="Your username" />
                         </div>
 
                         <span className="span-text">lastName</span>
                         <div class="mb-3">
-                            <input type="text" id="lastName" value={lastName_} onChange={e => onChangeLastName(e)}  placeholder="Enter student lastName" required="required" title="Your username" />
+                            <input type="text" id="lastName" value={LastName} onChange={e => onChangeLastName(e)}  placeholder="Enter student lastName" required="required" title="Your username" />
                         </div>
 
                         <span className="span-text">Password</span>
@@ -185,22 +184,22 @@ function EditFromStudent(props){
 
                         <span className="span-text">Age</span>
                         <div class="mb-3">
-                            <input id="age" type="number" value={Age} onChange={e => onChangeAge(e)}/>
+                            <input id="age" type="number" value={age} onChange={e => onChangeAge(e)}/>
                         </div>
 
                         <span className="span-text">Study year</span>
                         <div class="mb-3">
-                            <input id="studyYear" type="number" value={StudyYear} onChange={e => onChangeStudyYear(e)}/>
+                            <input id="studyYear" type="number" value={studyYear} onChange={e => onChangeStudyYear(e)}/>
                         </div>
 
                         <span className="span-text">Group</span>
                         <div class="mb-3">
-                            <input id="studyYear" type="number" value={GroupId} onChange={e => onChangeGroup(e)}/>
+                            <input id="studyYear" type="number" value={groupId} onChange={e => onChangeGroup(e)}/>
                         </div>
 
                         <span className="span-text">Subgroup</span>
                         <div class="mb-3">
-                            <input id="subgroupId" type="number" value={SubgroupId} onChange={e => onChangessubgroupId(e)}/>
+                            <input id="subgroupId" type="number" value={subgroupId} onChange={e => onChangessubgroupId(e)}/>
                         </div>
                         <button onClick={onClickAddImage} className="btn btn-primary">Edit imgage</button>
                         <button type="submit" className="btn__edit align-self-end">Edit</button>

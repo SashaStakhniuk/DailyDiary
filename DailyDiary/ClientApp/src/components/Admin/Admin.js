@@ -47,10 +47,12 @@ class Admin extends Component{
                     <NavigationBar/>
                     <div id="all-container" className="all-container">
                         <div className="wrapper">
-                            <div style={{ cursor: 'pointer' }} onClick={this.onClickhendlerNewStudent} className="effect2 container">
-                                <div className="Image"></div>
-                                <div className="caption-student">New student</div>
-                        </div>
+                            <div className="m-3">
+                                <a href="/admin/new-student" className="btn">New student</a>
+                            </div>
+                            <div className="m-3">
+                                <a href="/admin/new-teacher" className="btn">New teacher</a>
+                            </div>
                         </div>
                         
                     </div>
