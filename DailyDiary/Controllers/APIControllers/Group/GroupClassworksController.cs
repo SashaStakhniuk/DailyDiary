@@ -35,55 +35,157 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return Ok(classwork);
         }
-
-        [HttpPut]
-        [Authorize(Roles = "MainAdmin,Admin")]
-        public async Task<IActionResult> CreateOrUpdateTeacherAsync(GroupClassworksViewModel model)
+        [HttpGet("details")]
+        public async Task<ActionResult<IEnumerable<GroupClasswork>>> GetSomeClassworksByGroupIdAndTeacherId(int groupId, int teacherId, int skip, int take)
         {
-            if (ModelState.IsValid)
+            var classworks = await db.GroupClassworks.OrderByDescending(x => x.GroupClassworkId).Where(x => x.GroupId == groupId && x.TeacherId == teacherId).Skip(skip).Take(take).ToListAsync();
+            //foreach (var homework in classworks)
+            //{
+            //    homework.Homework = Encoding.ASCII.GetString(homework.HomeworkInBytes);
+            //    homework.HomeworkInBytes = null;
+            //}
+            //var classworks = db.GroupHomeworks.Where(x => x.GroupId == groupId && x.TeacherId == teacherId).ToList();
+            if (classworks != null)
             {
-                if (model != null)
+                return Ok(classworks);
+            }
+            else
+            {
+                return NotFound(new { error = "No more files" });
+            }
+        }
+        [HttpPost] // для вставки, для оновлення треба зробити PUT і новий метод!
+        //[Authorize(Roles = "MainAdmin,Admin")]
+        public async Task<IActionResult> CreateClassworkAsync(GroupClassworksViewModel model)
+        {
+            if (model != null)
+            {
+
+                if (string.IsNullOrEmpty(model.Theme))
                 {
+                    ModelState.AddModelError("Theme error", "Enter theme");
+                }
+                if (string.IsNullOrEmpty(model.Classwork))
+                {
+                    ModelState.AddModelError("Homework error", "You should add homework");
+                }
+                if (model.TeacherId <= 0)
+                {
+                    ModelState.AddModelError("Teacher id error", "Teacher id must be > 0");
+                }
+                if (model.SubjectId <= 0)
+                {
+                    ModelState.AddModelError("Subject's id error", "Subject's id must be > 0");
+                }
+                if (model.GroupId <= 0)
+                {
+                    ModelState.AddModelError("Group's id error", "Group's id must be > 0");
+                }
+                if (model.Deadline == null)
+                {
+                    ModelState.AddModelError("Deadline error", "Deadline can't be null");
+                }
+                if (!ModelState.IsValid)
+                {
+                    //ModelState.AddModelError("DatasModelError", "Please,enter all required datas correctly");
+                    return BadRequest(ModelState);
+                }
 
-                    // тут зробити перевірку моделі
-                    //if (model.Salary <= 0)
-                    //{
-                    //    ModelState.AddModelError("SalaryError", "Salary must be bigger than 0");
-                    //}
-                    //if (!ModelState.IsValid)
-                    //{
-                    //    //ModelState.AddModelError("DatasModelError", "Please,enter all required datas correctly");
-                    //    return BadRequest(ModelState);
-                    //}
 
+                var classworkDatasToEdit = await db.GroupClassworks.FirstOrDefaultAsync(x => x.GroupClassworkId == model.GroupClassworkId);
+                if (classworkDatasToEdit == null)
+                {
+                    var group = await db.Groups.FindAsync(model.GroupId);
+                    var subject = await db.Subjects.FindAsync(model.SubjectId);
+                    var teacher = await db.Teachers.FindAsync(model.TeacherId);
 
-                    var classworkDatasToEdit = await db.GroupClassworks.FirstOrDefaultAsync(x => x.GroupClassworkId == model.GroupClassworkId);
-                    if (classworkDatasToEdit == null)
+                    classworkDatasToEdit = new GroupClasswork
                     {
-                        classworkDatasToEdit = new GroupClasswork
-                        {
-                            SubjectId = model.SubjectId,
-                            Theme = model.Theme,
-                            TeacherId = model.TeacherId,
-                            GroupId = model.GroupId,
-                            Date = model.Date                        
-                        };
-                    }
-                    else
-                    {
-                        //classworkDatasToEdit.GroupClassworkId = model.GroupClassworkId;
-                        classworkDatasToEdit.SubjectId = model.SubjectId;
-                        classworkDatasToEdit.Theme = model.Theme;
-                        classworkDatasToEdit.TeacherId = model.TeacherId;
-                        classworkDatasToEdit.GroupId = model.GroupId;
-                        classworkDatasToEdit.Date = model.Date;
-                    }
+                        //SubjectId = model.SubjectId,
+                        Subject = subject,
+                        Theme = model.Theme,
+                        //TeacherId = model.TeacherId,
+                        Teacher = teacher,
+                        //GroupId = model.GroupId,
+                        Group = group,
+                        Classwork = model.Classwork,                       
+                        // Published = model.Published,
+                        Published = DateTime.Now,
+                        Deadline = model.Deadline
+                    };
+                    db.GroupClassworks.Add(classworkDatasToEdit);
+                    await db.SaveChangesAsync();
+                    return Ok(new { success = "Classwork was added successfully" });
+                }
+                else
+                {
+                    return BadRequest(new { error = "Such classwork is already exist" });
+                }
+                //db.GroupHomeworks.Update(homeworkDatasToEdit);
+                //db.SaveChanges();
+            }
+            return BadRequest(ModelState);
+        }
+        [HttpPut] 
+        //[Authorize(Roles = "MainAdmin,Admin")]
+        public async Task<IActionResult> UpdateClassworkAsync(GroupClassworksViewModel model)
+        {
+            if (model != null)
+            {
+
+                if (string.IsNullOrEmpty(model.Theme))
+                {
+                    ModelState.AddModelError("Theme error", "Enter theme");
+                }
+                if (string.IsNullOrEmpty(model.Classwork))
+                {
+                    ModelState.AddModelError("Homework error", "You should add homework");
+                }
+                if (model.TeacherId <= 0)
+                {
+                    ModelState.AddModelError("Teacher id error", "Teacher id must be > 0");
+                }
+                if (model.SubjectId <= 0)
+                {
+                    ModelState.AddModelError("Subject's id error", "Subject's id must be > 0");
+                }
+                if (model.GroupId <= 0)
+                {
+                    ModelState.AddModelError("Group's id error", "Group's id must be > 0");
+                }
+                if (model.Deadline == null)
+                {
+                    ModelState.AddModelError("Deadline error", "Deadline can't be null");
+                }
+                if (!ModelState.IsValid)
+                {
+                    //ModelState.AddModelError("DatasModelError", "Please,enter all required datas correctly");
+                    return BadRequest(ModelState);
+                }
+
+
+                var classworkDatasToEdit = await db.GroupClassworks.FirstOrDefaultAsync(x => x.GroupClassworkId == model.GroupClassworkId);
+                if (classworkDatasToEdit != null)
+                {
+                    var group = await db.Groups.FindAsync(model.GroupId);
+                    var subject = await db.Subjects.FindAsync(model.SubjectId);
+                    var teacher = await db.Teachers.FindAsync(model.TeacherId);
+
+                    classworkDatasToEdit.Subject = subject;
+                    classworkDatasToEdit.Theme = model.Theme;
+                    classworkDatasToEdit.Teacher = teacher;
+                    classworkDatasToEdit.Group = group;
+                    classworkDatasToEdit.Published = model.Published;
+                    classworkDatasToEdit.Deadline = model.Deadline;
                     db.GroupClassworks.Update(classworkDatasToEdit);
                     await db.SaveChangesAsync();
-                    return Ok(classworkDatasToEdit);
+                    return Ok(new { success = "Classwork was updated successfully" });
+                }
+                else
+                {
+                    return NotFound(new { error="No such classwork"});
                 }
             }
-
             return BadRequest(ModelState);
         }
         [HttpDelete("{id}")]
@@ -141,30 +243,30 @@ namespace DailyDiary.Controllers.APIControllers
                 return NotFound();
             return Ok(classworks);
         }
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<GroupClasswork>>> GetByDate(GroupClassworksViewModel model)
-        {
-            if(model!=null)
-            {
-                var classworks = await db.GroupClassworks.Where(x => x.Date.ToShortDateString() == model.Date.ToShortDateString()).ToListAsync();
-                if (classworks == null)
-                    return NotFound();
-                return Ok(classworks);
-            }
-            return BadRequest(new { error = "Model is empty"});            
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<GroupClasswork>>> GetByDate(GroupClassworksViewModel model)
+        //{
+        //    if(model!=null)
+        //    {
+        //        var classworks = await db.GroupClassworks.Where(x => x.Date.ToShortDateString() == model.Date.ToShortDateString()).ToListAsync();
+        //        if (classworks == null)
+        //            return NotFound();
+        //        return Ok(classworks);
+        //    }
+        //    return BadRequest(new { error = "Model is empty"});            
+        //}
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<GroupClasswork>>> GetBySubjectIdAndDate(GroupClassworksViewModel model)
-        {
-            if (model != null)
-            {
-                var classworks = await db.GroupClassworks.Where(x => x.Date.ToShortDateString() == model.Date.ToShortDateString() && x.SubjectId == model.SubjectId).ToListAsync();
-                if (classworks == null)
-                    return NotFound();
-                return Ok(classworks);
-            }
-            return BadRequest(new { error = "Model is empty" });
-        }
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<GroupClasswork>>> GetBySubjectIdAndDate(GroupClassworksViewModel model)
+        //{
+        //    if (model != null)
+        //    {
+        //        var classworks = await db.GroupClassworks.Where(x => x.Date.ToShortDateString() == model.Date.ToShortDateString() && x.SubjectId == model.SubjectId).ToListAsync();
+        //        if (classworks == null)
+        //            return NotFound();
+        //        return Ok(classworks);
+        //    }
+        //    return BadRequest(new { error = "Model is empty" });
+        //}
     }
 }
