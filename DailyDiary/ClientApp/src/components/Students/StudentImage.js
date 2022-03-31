@@ -17,7 +17,6 @@ function StudentImage(){
     async function getStudent(){
         try{
             const response= await fetch(`https://localhost:44364/api/student/get/${id}`)
-
              const data = await response.json()
     
              if (response.ok === true) { 
@@ -48,7 +47,7 @@ function StudentImage(){
             })
         })
         if(result.ok === true){
-            window.location = '/students'
+            window.location = '/admin/teacers'
         }
         else{
             console.log("Error")

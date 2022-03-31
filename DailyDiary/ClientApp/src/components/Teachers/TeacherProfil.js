@@ -48,7 +48,6 @@ function TeacherProfil(){
     }
     
     async function getTeacher(){
-        
         try
         {
             const response = await fetch(`https://localhost:44364/api/Teacher/Get/${id}`)

@@ -134,6 +134,7 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return NotFound(new { error = "Teacher's groups not found" });
 
+        }
             //var teacherGroups = await db.TeacherGroups.Where(x => x.TeacherId == id).ToListAsync(); // можливі повтори!!!
             //if (teacherGroups != null)
             //{
@@ -145,15 +146,34 @@ namespace DailyDiary.Controllers.APIControllers
             //    return Ok(groups);
             //}
             //return NotFound(new { error = "Teacher's groups not found" });
-        }
-        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups()
+        
+    [HttpGet]
+
+    public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups()
         {
             return await db.Groups.ToListAsync();
         }
 
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Subject>>> GetAllSubjects()
         {
             return await db.Subjects.ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddBase64(Base64ViewModel model)
+        {
+            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.Id);
+            if (teacher != null)
+            {
+                teacher.Base64URL = model.Base64URL;
+                await db.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost("{id}/{groupId}")]
