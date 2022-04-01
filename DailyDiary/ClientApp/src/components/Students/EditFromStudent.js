@@ -27,6 +27,7 @@ function EditFromStudent(props){
     let { id } = useParams();
 
     async function edit(){
+
         var StudentId = Number(id)
         var Age = Number(age)
         var GroupId = Number(groupId)
@@ -44,7 +45,7 @@ function EditFromStudent(props){
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id,
+                StudentId,
                 Name,
                 LastName,
                 Birthday,
