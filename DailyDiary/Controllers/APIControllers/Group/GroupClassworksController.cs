@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DailyDiary.Controllers.APIControllers
@@ -31,22 +32,26 @@ namespace DailyDiary.Controllers.APIControllers
             var classwork = await db.GroupClassworks.FirstOrDefaultAsync(x => x.GroupClassworkId == id);
             if (classwork == null)
             {
-                return NotFound();
+                return NotFound(new { error = "Classwork task not found" });
             }
-            return Ok(classwork);
+            else
+            {
+                classwork.Classwork = Encoding.ASCII.GetString(classwork.ClassworkInBytes);
+                classwork.ClassworkInBytes = null;
+                return Ok(classwork);
+            }
         }
         [HttpGet("details")]
         public async Task<ActionResult<IEnumerable<GroupClasswork>>> GetSomeClassworksByGroupIdAndTeacherId(int groupId, int teacherId, int skip, int take)
         {
             var classworks = await db.GroupClassworks.OrderByDescending(x => x.GroupClassworkId).Where(x => x.GroupId == groupId && x.TeacherId == teacherId).Skip(skip).Take(take).ToListAsync();
-            //foreach (var homework in classworks)
-            //{
-            //    homework.Homework = Encoding.ASCII.GetString(homework.HomeworkInBytes);
-            //    homework.HomeworkInBytes = null;
-            //}
-            //var classworks = db.GroupHomeworks.Where(x => x.GroupId == groupId && x.TeacherId == teacherId).ToList();
             if (classworks != null)
             {
+                foreach (var classwork in classworks)
+                {
+                    classwork.ClassworkInBytes = null;
+                }
+
                 return Ok(classworks);
             }
             else
@@ -54,7 +59,7 @@ namespace DailyDiary.Controllers.APIControllers
                 return NotFound(new { error = "No more files" });
             }
         }
-        [HttpPost] // для вставки, для оновлення треба зробити PUT і новий метод!
+        [HttpPost] // для вставки, для оновлення PUT!
         //[Authorize(Roles = "MainAdmin,Admin")]
         public async Task<IActionResult> CreateClassworkAsync(GroupClassworksViewModel model)
         {
@@ -108,7 +113,9 @@ namespace DailyDiary.Controllers.APIControllers
                         Teacher = teacher,
                         //GroupId = model.GroupId,
                         Group = group,
-                        Classwork = model.Classwork,                       
+                        ClassworkInBytes = Encoding.ASCII.GetBytes(model.Classwork),
+                        FileName = model.FileName,
+                        //Classwork = model.Classwork,                       
                         // Published = model.Published,
                         Published = DateTime.Now,
                         Deadline = model.Deadline
@@ -189,17 +196,17 @@ namespace DailyDiary.Controllers.APIControllers
             return BadRequest(ModelState);
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "MainAdmin,Admin")]
-        public async Task<ActionResult<GroupClasswork>> Delete(int id)
+        //[Authorize(Roles = "MainAdmin,Admin")]
+        public async Task<IActionResult> Delete(int id)
         {
             var classwork = await db.GroupClassworks.FirstOrDefaultAsync(x => x.GroupClassworkId == id);
             if (classwork == null)
             {
-                return NotFound();
+                return NotFound(new { error="File not found"});
             }
             db.GroupClassworks.Remove(classwork);
             await db.SaveChangesAsync();
-            return Ok(classwork);
+            return Ok(new { success = "File was removed" });
         }
 
         [HttpGet("id")]

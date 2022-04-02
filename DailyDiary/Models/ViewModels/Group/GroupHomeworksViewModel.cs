@@ -15,6 +15,7 @@ namespace DailyDiary.Models.ViewModels
         //[Required]
         public string Homework { get; set; }//base64
         //public byte[] HomeworkInBytes { get; set; }
+        public string FileName { get; set; }
 
         public int TeacherId { get; set; }
 

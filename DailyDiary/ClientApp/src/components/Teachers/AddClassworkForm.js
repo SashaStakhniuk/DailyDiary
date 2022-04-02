@@ -12,6 +12,7 @@ class AddClassworkForm extends React.Component{
             subjectId:0,
             theme:"",
             classwork:"",
+            fileName:"",
             teacherId:0,
             published:"2022-03-24",
             deadline:"2022-03-24",
@@ -78,14 +79,18 @@ class AddClassworkForm extends React.Component{
         //console.log(e.target.files[0]);
         let { file } = this.state;
         file = e.target.files[0];
+         console.log(file)
+              
         this.getBase64(file)
           .then(result => {
             file["base64"] = result;
-            this.setState({
-            classwork:result,
-            }
-            //,()=>console.log(this.state)
-            );
+            
+                this.setState({
+                    classwork:result,
+                    fileName:file.name
+                    }
+                    ,()=>console.log(this.state)
+                    );          
           })
           .catch(err => {
             console.log(err);
@@ -131,18 +136,11 @@ class AddClassworkForm extends React.Component{
                  this.setState({
                      statusMessage:<h4 style={{color:"green"}}>{data.success}</h4>
                  }               
-                 ,()=> setTimeout(() => 
-                    this.setState({
-                     statusMessage:""
-                    }
-                     //,()=>this.props.getSomeHomeworks()
-
-                    )
-                    , 5000)
-                 )
-                //  this.props.getSomeHomeworks();
-                // ,()=> document.getElementById('addHomeworkForm').style.display=="none"
-
+                 ,()=>this.props.getSomeClassworks())
+                 setTimeout(() => 
+                 this.setState({
+                  statusMessage:""
+                 }), 2000)
                 //console.log(data.success)
              } else {
                  
