@@ -14,7 +14,9 @@ namespace DailyDiary.Models
         public int GroupId { get; set; }
         public Group Group { get; set; }
         public string Theme { get; set; }
+        public byte[] ClassworkInBytes { get; set; }
         public string Classwork { get; set; }
+        public string FileName { get; set; }
         public int TeacherId { get; set; }
         public Teacher Teacher { get; set; }
 

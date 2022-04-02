@@ -14,6 +14,7 @@ namespace DailyDiary.Models
         public string Theme { get; set; }
         public byte[] HomeworkInBytes { get; set; }
         public string Homework { get; set; }//base64    
+        public string FileName { get; set; }
 
         public int TeacherId { get; set; }
 

@@ -33,9 +33,14 @@ namespace DailyDiary.Controllers.APIControllers
             var homework = await db.GroupHomeworks.FirstOrDefaultAsync(x => x.GroupHomeworkId == id);
             if (homework == null)
             {
-                return NotFound();
+                return NotFound(new { error = "No such homework task" });
             }
-            return Ok(homework);
+            else
+            {
+                homework.Homework = Encoding.ASCII.GetString(homework.HomeworkInBytes);
+                homework.HomeworkInBytes = null;
+                return Ok(homework);
+            }
         }
 
         //[Authorize(Roles = "MainAdmin,Admin,Teacher")]
@@ -106,16 +111,17 @@ namespace DailyDiary.Controllers.APIControllers
                         var subject = await db.Subjects.FindAsync(model.SubjectId);
                         var teacher = await db.Teachers.FindAsync(model.TeacherId);
 
-                        homeworkDatasToEdit = new GroupHomework
-                        {
-                            //SubjectId = model.SubjectId,
-                            Subject = subject,
-                            Theme = model.Theme,
-                            //TeacherId = model.TeacherId,
-                            Teacher = teacher,
-                            //GroupId = model.GroupId,
-                            Group = group,
-                            HomeworkInBytes = Encoding.ASCII.GetBytes(model.Homework),
+                    homeworkDatasToEdit = new GroupHomework
+                    {
+                        //SubjectId = model.SubjectId,
+                        Subject = subject,
+                        Theme = model.Theme,
+                        //TeacherId = model.TeacherId,
+                        Teacher = teacher,
+                        //GroupId = model.GroupId,
+                        Group = group,
+                        HomeworkInBytes = Encoding.ASCII.GetBytes(model.Homework),
+                        FileName = model.FileName,
                             //model.Homework = Encoding.ASCII.GetString(Homework);
                             //Homework = model.Homework,//base64 string
                             // Published = model.Published,
@@ -201,17 +207,17 @@ namespace DailyDiary.Controllers.APIControllers
             return BadRequest(ModelState);
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "MainAdmin,Admin")]
-        public async Task<ActionResult<GroupHomework>> Delete(int id)
+        //[Authorize(Roles = "MainAdmin,Admin")]
+        public async Task<IActionResult> Delete(int id)
         {
             var homework = await db.GroupHomeworks.FirstOrDefaultAsync(x => x.GroupHomeworkId == id);
             if (homework == null)
             {
-                return NotFound();
+                return NotFound(new { error = "File not found" });
             }
             db.GroupHomeworks.Remove(homework);
             await db.SaveChangesAsync();
-            return Ok(homework);
+            return Ok(new { success = "File was removed" });
         }
 
         [HttpGet("id")]
@@ -227,15 +233,22 @@ namespace DailyDiary.Controllers.APIControllers
         {
             //var homeworks = await db.GroupHomeworks.Where(x => x.GroupId == groupId && x.TeacherId == teacherId).Skip(skip).Take(take).ToListAsync();
             var homeworks = await db.GroupHomeworks.OrderByDescending(x=> x.GroupHomeworkId).Where(x => x.GroupId == groupId && x.TeacherId == teacherId).Skip(skip).Take(take).ToListAsync();
-            foreach(var homework in homeworks)
-            {
-                homework.Homework = Encoding.ASCII.GetString(homework.HomeworkInBytes);
-                homework.HomeworkInBytes = null;
-            }
-            //homeworks.OrderByDescending(x => x.GroupHomeworkId);
-            //var homeworks = db.GroupHomeworks.Where(x => x.GroupId == groupId && x.TeacherId == teacherId).ToList();
             if (homeworks != null)
+            {
+                foreach (var homework in homeworks)
+                {
+                    //var homeworkToView = new GroupHomeworksViewModel();
+                    //homeworkToView.GroupHomeworkId = homework.GroupHomeworkId;
+                    //homeworkToView.GroupId = homework.GroupId;
+                    //homeworkToView.SubjectId = homework.SubjectId;
+                    //homeworkToView.Theme = homework.Theme;
+                    //homeworkToView.Homework = Encoding.ASCII.GetString(homework.HomeworkInBytes);
+                    //homework.Homework = Encoding.ASCII.GetString(homework.HomeworkInBytes);
+                    homework.HomeworkInBytes = null;
+                }
+
                 return Ok(homeworks);
+            }
             return NotFound(new { error ="No more files"});
         }
         [HttpGet("details")]

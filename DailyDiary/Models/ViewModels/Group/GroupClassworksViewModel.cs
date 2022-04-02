@@ -21,6 +21,8 @@ namespace DailyDiary.Models.ViewModels
         public string Theme { get; set; }
         [Required]
         public string Classwork { get; set; }
+        [Required]
+        public string FileName { get; set; }
 
         [Required]
         public int TeacherId { get; set; }
