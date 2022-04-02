@@ -42,7 +42,15 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{studentsSkip}")]
         public ActionResult<IEnumerable<Student>> GetRangStudents(int studentsSkip)
         {
-            return db.Students.Skip(studentsSkip).Take(5).ToList();
+            List<Student> result = db.Students.Skip(studentsSkip).Take(5).ToList();
+            if (result.Count() > 0)
+            {
+                return result;
+            }
+            else
+            {
+                return Ok(false);
+            }
         }
 
         [HttpPost]

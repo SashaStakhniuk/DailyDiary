@@ -37,7 +37,15 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{teachersSkip}")]
         public async Task< ActionResult<IEnumerable<Teacher>>> GetRangTeachers(int teachersSkip)
         {
-            return await db.Teachers.Skip(teachersSkip).Take(5).ToListAsync();
+            List<Teacher> teachers = await db.Teachers.Skip(teachersSkip).Take(5).ToListAsync();
+            if(teachers.Count() > 0)
+            {
+                return teachers;
+            }
+            else
+            {
+                return Ok(false);
+            }
         }
 
         [HttpGet("{id}")]
