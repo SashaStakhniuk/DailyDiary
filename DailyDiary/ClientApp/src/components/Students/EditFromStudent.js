@@ -28,12 +28,12 @@ function EditFromStudent(props){
 
     async function edit(){
 
-        var StudentId = Number(id)
+        var Id = Number(id)
         var Age = Number(age)
         var GroupId = Number(groupId)
         var SubgroupId = Number(subgroupId)
         var StudyYear = Number(studyYear)
-        console.log("StudentId: " + typeof(StudentId) + " " + StudentId)
+        console.log("StudentId: " + typeof(Id) + " " + Id)
         console.log("Age: " + typeof(Age) + " " + Age)
         console.log("GroupId: " + typeof(GroupId) + " " + GroupId)
         console.log("SubgroupId: " + typeof(SubgroupId) + " " + SubgroupId)
@@ -45,7 +45,7 @@ function EditFromStudent(props){
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                StudentId,
+                Id,
                 Name,
                 LastName,
                 Birthday,

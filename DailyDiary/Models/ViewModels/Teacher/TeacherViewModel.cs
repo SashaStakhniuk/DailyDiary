@@ -8,7 +8,7 @@ namespace DailyDiary.Models.ViewModels
 {
     public class TeacherViewModel
     {
-        public int TeacherId { get; set; }
+        public int Id { get; set; }
         /*[Required(ErrorMessage = "Name is required")]
         [StringLength(100, ErrorMessage = "Name length must be less than 100 characters")]
         [MinLength(2,ErrorMessage = "Name must include more than 1 characters")]*/

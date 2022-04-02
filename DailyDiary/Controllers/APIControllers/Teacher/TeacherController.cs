@@ -24,7 +24,7 @@ namespace DailyDiary.Controllers.APIControllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Teacher>>> Get()//GetAllTeachersAsync
-        {
+       {
             return await db.Teachers.ToListAsync();
         }
 
@@ -56,10 +56,15 @@ namespace DailyDiary.Controllers.APIControllers
         {
             if (ModelState.IsValid)
             {
+                if(model.Rate < 0 || model.Salary < 2000 
+                        || model.Experience < 0 || model.Age < 0)
+                {
+                    return BadRequest("Vrong values");
+                }
                 if (model != null)
                 {
                     Teacher teacher = new Teacher();
-                    string Passsword = Services.GeneratorService.GenerateNewPassword();
+                    string Password = Services.GeneratorService.GenerateNewPassword();
                     string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
 
                     teacher.Name = model.Name;
@@ -74,9 +79,10 @@ namespace DailyDiary.Controllers.APIControllers
                     teacher.Salary = model.Salary;
                     teacher.Rate = model.Rate;
                     teacher.Login = Login;
-                    teacher.Passsword = Passsword;
+                    teacher.Passsword = Password;
                     teacher.Email = model.Email;
 
+                    Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
                     db.Teachers.Add(teacher);
                     await db.SaveChangesAsync();
                     return Ok(teacher);
@@ -95,7 +101,7 @@ namespace DailyDiary.Controllers.APIControllers
                 if (model != null)
                 {
 
-                    var teacer = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.TeacherId);
+                    var teacer = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.Id);
                     if (teacer != null)
                     {
 
@@ -193,6 +199,24 @@ namespace DailyDiary.Controllers.APIControllers
                 teacher.Base64URL = model.Base64URL;
                 await db.SaveChangesAsync();
                 return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateLogin(CreateLoginViewModel model)
+        {
+            var Login = Services.GeneratorService.GenerateNewLogin(model.Name);
+            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.Id);
+            if(teacher != null)
+            {
+                teacher.Login = Login;
+                db.Teachers.Update(teacher);
+                await db.SaveChangesAsync();
+                return Ok(teacher);
             }
             else
             {

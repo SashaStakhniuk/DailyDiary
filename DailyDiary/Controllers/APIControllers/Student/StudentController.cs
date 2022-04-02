@@ -75,7 +75,7 @@ namespace DailyDiary.Controllers.APIControllers
             {
                 if (model != null)
                 {
-                    var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.StudentId);
+                    var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.Id);
                     if (student != null)
                     {
                         Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);

@@ -36,7 +36,7 @@ namespace DailyDiary.Controllers.APIControllers
             //return group == null ? NotFound() : Ok(group);
         }
         [HttpPut]
-        [Authorize(Roles = "MainAdmin,Admin")]
+       /* [Authorize(Roles = "MainAdmin,Admin")]*/
         public async Task<ActionResult<Group>> CreateOrUpdateGroup(GroupViewModel model) //CreateOrUpdateGroupAsync
         {
             if (ModelState.IsValid)

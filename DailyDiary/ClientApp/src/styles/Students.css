@@ -163,21 +163,20 @@
     height: 960px;
 }
 .edit__container{
-    color: #fff;
-    background-repeat: no-repeat;
-    background-size: 200px;
-    background-color: rgb(231, 237, 241);
-    background-position: 20px 50px;
-	background-image: url('../images/gears2.png');
-    overflow-x: hidden;
-    overflow-y: hidden;
-    position: absolute;
+    width: 100%;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 960px;
+    margin:0px;
+    height: auto;
+    padding-left: 100px;
+	font-family: "Open Sans", arial;
+    background-color: rgb(231, 237, 241);
+    z-index: 10;
+    background-repeat: no-repeat;
+    background-size: cover;
+	color:#000;
+	font-weight:300;
 }
 
 .container1{
@@ -246,7 +245,7 @@
     margin-top: 150px;
     padding: 17px;
     height: auto;
-    width: auto;
+    width: 700px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
