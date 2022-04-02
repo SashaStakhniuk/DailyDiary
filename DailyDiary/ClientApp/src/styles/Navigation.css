@@ -44,6 +44,12 @@ body::-webkit-scrollbar-thumb {
   z-index: 10;
 }
 
+.header-logo{
+  height: 200px;
+  margin-bottom: 50px;
+  position: fixed;
+}
+
 .login-img{
   margin-bottom: 50px;
   margin-left: 85px;
@@ -138,6 +144,9 @@ body
   overflow-y: scroll;
   overflow-x: hidden;
 }
+.scrollbar:hover .all-container{
+  overflow-y: hidden;
+}
 
 /* Scrollbar Style */ 
 
@@ -177,22 +186,30 @@ body
 }
 
 .main-menu:hover, nav.main-menu.expanded {
-  width:330px;
+  width: 330px;
   overflow-y:scroll;
   opacity:1;
 }
 .backgr{
   background: rgba(44, 51, 71, 0.8);
   /* background: rgba( #007bff, #007bff, #007bff, 0.4); */
-  position: fixed;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
   height: 100%;
   width: 100%;
   z-index: 0;
 }
 .img-menu{
   position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  top: 0;
   height: 100%;
-  width: 100%;
+  width: 80px;
+  min-width: 100%;
   z-index: 0;
   background-repeat: no-repeat;
   background-image: url('https://mystat.itstep.org/assets/images/park.jpg?v=879533787a3acfa750e3c1310bace6e2');
@@ -200,7 +217,7 @@ body
 
 .main-menu {
   z-index: 10;
-  background: rgba(44, 51, 71, 0.8);
+  background: rgba(44, 51, 71, 0.6);
   position: fixed;
   top:0;
   bottom:0;

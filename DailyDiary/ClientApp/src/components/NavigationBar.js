@@ -4,7 +4,10 @@ import { useEffect } from 'react'
 function NavigationBar()
 {
     function onMouseEnterHendler(){
-
+      var all_container = document.getElementById('all-container')
+      if(all_container){
+        all_container.style.overflow = 'hidden'
+      }
       var font_all_page = document.getElementById('font_all_page')
       var all_students__container = document.getElementById('all-container')
       var login_img = document.getElementById('login-img')
@@ -34,7 +37,7 @@ function NavigationBar()
     }
 
     function defaultStules(){
-
+      
       var font_all_page = document.getElementById('font_all_page')
       var all_students__container = document.getElementById('all-container')
       var login_img = document.getElementById('login-img')
@@ -73,17 +76,23 @@ function NavigationBar()
      
       <div className="menu__container" style={{backgroundColor: 'gray'}}>        
         <div id="font_all_page" className="font_all_page"></div>
+       
         <nav onMouseLeave={defaultStules} onMouseEnter={onMouseEnterHendler}  className="main-menu">
-        <div className="img-menu"></div>
+        <div id="img-menu" className="img-menu"></div>
         <div id="backgr" className="backgr"></div>
         <div className="d-flex flex-row">
-          <div id="login-img" className="login-img">
-            <div>
-              <a href="/">
-                  <img src="https://mystat.itstep.org/assets/images/logo.png?v=cce222be7d237f6d95418ecb8c5529b8" style={{ color: 'black' }} width="100%" alt="..."/>
-              </a>
+
+            <div className="header-logo">
+           
+              <div id="login-img" className="login-img">
+                <div>
+                  <a href="/">
+                      <img src="https://mystat.itstep.org/assets/images/logo.png?v=cce222be7d237f6d95418ecb8c5529b8" style={{ color: 'black' }} width="100%" alt="..."/>
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
+
           <i className="point"></i>
         </div>
        
