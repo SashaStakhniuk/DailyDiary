@@ -6,7 +6,8 @@ function NavigationBar()
     function onMouseEnterHendler(){
       var all_container = document.getElementById('all-container')
       if(all_container){
-        all_container.style.overflow = 'hidden'
+        console.log('all_container');
+        all_container.style.overflowY = 'hidden'
       }
       var font_all_page = document.getElementById('font_all_page')
       var all_students__container = document.getElementById('all-container')
@@ -37,7 +38,11 @@ function NavigationBar()
     }
 
     function defaultStules(){
-      
+      var all_container = document.getElementById('all-container')
+      if(all_container){
+        console.log('all_container');
+        all_container.style.overflowY = 'hidden'
+      }
       var font_all_page = document.getElementById('font_all_page')
       var all_students__container = document.getElementById('all-container')
       var login_img = document.getElementById('login-img')

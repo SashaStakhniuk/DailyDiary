@@ -12,6 +12,7 @@
     background-repeat: no-repeat;
     background-size: cover;
 	color:#000;
+    overflow-y: hidden;
 	font-weight:300;
 }
 
