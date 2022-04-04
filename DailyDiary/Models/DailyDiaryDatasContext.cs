@@ -16,6 +16,8 @@ namespace DailyDiary.Models
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<TeacherSubject> TeacherSubjects { get; set; }
         public DbSet<TeacherGroup> TeacherGroups { get; set; }
+
+        public DbSet<TeacherNews> TeacherNews { get; set; }
         //public DbSet<GroupSubject> GroupSubjects { get; set; }
         public DbSet<StudyPlan> StudyPlans { get; set; }
         public DbSet<SubjectsStudyPlan> SubjectsStudyPlans { get; set; }
@@ -23,6 +25,7 @@ namespace DailyDiary.Models
         public DbSet<GroupClasswork> GroupClassworks { get; set; }
         public DbSet<StudentHomework> StudentHomeworks { get; set; }
         public DbSet<StudentClasswork> StudentClassworks { get; set; }
+        public DbSet<News> News { get; set; }
 
         public DailyDiaryDatasContext(DbContextOptions<DailyDiaryDatasContext> options) : base(options)
         {
@@ -31,6 +34,22 @@ namespace DailyDiary.Models
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
+            //  Many-to-Many  TEacher and News
+
+            builder.Entity<TeacherNews>()
+                    .HasKey(tn => new { tn.TeacherId, tn.NewsId });
+
+            builder.Entity<TeacherNews>()
+                    .HasOne(tch => tch.Teacher)
+                    .WithMany(tn => tn.TeacherNews)
+                    .HasForeignKey(tch => tch.TeacherId);
+
+            builder.Entity<TeacherNews>()
+                    .HasOne(n => n.News)
+                    .WithMany(tn => tn.TeacherNews)
+                    .HasForeignKey(n => n.NewsId);
+
             //_________________________________________________________________Many-to-Many_______Teachers&Subjects____________________________________->
 
             builder.Entity<TeacherSubject>()

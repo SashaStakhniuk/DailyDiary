@@ -14,6 +14,7 @@ namespace DailyDiary.Models
             GroupHomeworks = new HashSet<GroupHomework>();
             TeacherGroups = new HashSet<TeacherGroup>();
             TeacherSubjects = new HashSet<TeacherSubject>();
+            TeacherNews = new HashSet<TeacherNews>();
         }
         //[Key]
         public int TeacherId { get; set; }
@@ -33,6 +34,7 @@ namespace DailyDiary.Models
         public ICollection<GroupHomework> GroupHomeworks { get; set; }
         public ICollection<TeacherSubject> TeacherSubjects { get; set; }
         public ICollection<TeacherGroup> TeacherGroups { get; set; }
+        public ICollection<TeacherNews> TeacherNews { get; set; }
 
         //public string Percent { get; set; } // ставка зарплати
     }

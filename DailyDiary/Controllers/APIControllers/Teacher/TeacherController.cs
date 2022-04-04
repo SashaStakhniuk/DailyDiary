@@ -231,5 +231,12 @@ namespace DailyDiary.Controllers.APIControllers
                 return NotFound();
             }
         }
+
+        [HttpPost("{id}")]
+        public async Task<ActionResult> SendMessageById(int id)
+        {
+
+            return Ok();
+        }
     }
 }

@@ -19,7 +19,8 @@ import CreateNewTeacher from './Teachers/CreateNewTeacher.js';
 
 import EdmitFromTeaher from './Teachers/EdmitFromTeaher'
 import TeacheImage from './Teachers/TeacheImage'
-
+import NewsPage from './Teachers/NewsPage'
+import '../styles/Root.css'
 const Root = ({ store }) => (
     <Provider store={store}>
         <Router>
@@ -41,7 +42,7 @@ const Root = ({ store }) => (
 
                 <Route exact path="/teacher-page"><TeacherPage/></Route>
                 <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
-
+                <Route exact path="/teacher/news-page/:id" ><NewsPage /></Route>
                 {/* <Route exact path="/teacher/group-editing/:id"><GroupEditing/></Route> */}
 
                 <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>

@@ -66,6 +66,7 @@ render()
                          
                     </ul>
                 </div>
+                <a className='btn' href='/teacher/news-page/1'>News</a>
             </div>
         </>
     )

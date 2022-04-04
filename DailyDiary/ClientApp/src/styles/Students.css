@@ -92,6 +92,7 @@
     padding: 30px 50px;
 }
 .all-container{
+    overflow: hidden;
     overflow-x: hidden;
     width: 100%;
     display: flex;
@@ -99,13 +100,13 @@
     margin:0px;
     height: 100%;
     padding-left: 100px;
-	font-family: "Open Sans", arial;
+	  font-family: "Open Sans", arial;
     background-color: rgb(231, 237, 241);
     z-index: 10;
     background-repeat: no-repeat;
     background-size: cover;
-	color:#000;
-	font-weight:300;
+	  color:#000;
+	  font-weight:300;
 }
 .cart-teacher{
     display: flex;

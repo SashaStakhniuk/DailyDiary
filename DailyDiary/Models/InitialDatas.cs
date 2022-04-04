@@ -23,7 +23,6 @@ namespace DailyDiary.Models
 
             if (!db.Subjects.Any())
             {
-               
                 db.Subjects.AddRange(
                 subject11, subject10, subject9, subject8, subject7, subject6, subject5, subject4, subject3, subject2, subject1
                 );
@@ -35,6 +34,18 @@ namespace DailyDiary.Models
             Group group3 = new Group { Title = "2-A" };
             Group group4 = new Group { Title = "2-B" };
             Group group5 = new Group { Title = "9-B" };
+
+            DateTime data = new DateTime();
+            News news = new News { Title = "Майстер-клас «Монетизація навичок і досвіду під час війни» для студентів Академії ШАГ", DataPublication = data.Date, MainInfo = "Майстер-клас  «Монетизація навичок і досвіду під час війни» для студентів Академії ШАГ від засновників компанії BRAND PEOPLE.", Base64Url = null, Sender = "Admin" };
+            News news2 = new News { Title = "Безкоштовні майстер класи", DataPublication = data.Date, MainInfo = "Друзі, Комп'ютерна Академія ШАГ в умовах воєнного стану запускає серію онлайн майстер-класів і тематичних зустрічей для дітей 7-14 років.В період з 01.03 - 07.03 щодня будуть проходити цікаві майстер - класи, зустрічі з психологом.", Base64Url = null, Sender = "Adm"};
+
+            if (!db.News.Any())
+            {
+                db.News.Add(news);
+                db.News.Add(news2);
+                db.SaveChanges();
+            }
+
             if (!db.Groups.Any())
             {
                 db.Groups.AddRange(
@@ -91,6 +102,7 @@ namespace DailyDiary.Models
            var teacher4 = new Teacher { Name = "Teacher4", LastName = "Paul", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 };
            var teacher5 = new Teacher { Name = "Teacher5", LastName = "Jena", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 };
            var teacher6 = new Teacher { Name = "Teacher6", LastName = "Ong", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 };
+
             if (!db.Teachers.Any())
             {
 
@@ -114,14 +126,18 @@ namespace DailyDiary.Models
                    new TeacherSubject { Teacher = teacher2, Subject = subject6 },
                    new TeacherSubject { Teacher = teacher3, Subject = subject4 },
                    new TeacherSubject { Teacher = teacher3, Subject = subject6 }
+
                );
+                db.TeacherNews.Add(new TeacherNews { Teacher = teacher1, News = news });
+                db.TeacherNews.Add(new TeacherNews { Teacher = teacher1, News = news2 });
+                db.TeacherNews.Add(new TeacherNews { Teacher = teacher2, News = news });
                 db.SaveChanges();
             }
             if (!db.TeacherGroups.Any())
             {
 
                 db.TeacherGroups.AddRange(
-                   new TeacherGroup { TeacherId = 1, Group = group2 },
+                   new TeacherGroup { Teacher = teacher1, Group = group2 },
                    new TeacherGroup { TeacherId = 1, Group = group3 },
                    new TeacherGroup { TeacherId = 2, Group = group3 },                  
                    new TeacherGroup { TeacherId = 2, Group = group2 },               
@@ -134,7 +150,6 @@ namespace DailyDiary.Models
                );
                 db.SaveChanges();
             }
-
         }
     }
 }
