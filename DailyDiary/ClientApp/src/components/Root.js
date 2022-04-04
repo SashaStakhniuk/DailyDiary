@@ -21,6 +21,8 @@ import EdmitFromTeaher from './Teachers/EdmitFromTeaher'
 import TeacheImage from './Teachers/TeacheImage'
 import NewsPage from './Teachers/NewsPage'
 import '../styles/Root.css'
+import SendMessage from './Teachers/SendMessage.js';
+
 const Root = ({ store }) => (
     <Provider store={store}>
         <Router>
@@ -39,7 +41,7 @@ const Root = ({ store }) => (
 
                 <Route exact path="/admin/teachers"><Teachers/></Route>
                 <Route exact path="/admin/teacher-profil/:id"><TeacherProfil/></Route>
-
+                <Route exact path="/admin/send-for-teacher"><SendMessage/></Route>
                 <Route exact path="/teacher-page"><TeacherPage/></Route>
                 <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
                 <Route exact path="/teacher/news-page/:id" ><NewsPage /></Route>
@@ -48,7 +50,7 @@ const Root = ({ store }) => (
                 <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
                 <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
                 <Route exact path="/admin/new-teacher"><CreateNewTeacher/></Route>
-
+                
                 <Route path='*' exact={true}><NotFound/></Route>
             </Switch>
         </Router>

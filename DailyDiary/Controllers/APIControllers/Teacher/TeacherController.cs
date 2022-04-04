@@ -24,7 +24,7 @@ namespace DailyDiary.Controllers.APIControllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Teacher>>> Get()//GetAllTeachersAsync
-       {
+        {
             return await db.Teachers.ToListAsync();
         }
 
