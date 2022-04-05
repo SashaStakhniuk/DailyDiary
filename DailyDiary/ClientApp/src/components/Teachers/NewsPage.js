@@ -7,22 +7,35 @@ import { useParams } from 'react-router-dom'
 function NewsPage(){
 
     let { id } = useParams()
+    const [stateData, setStateData] = useState(true)
 
     useEffect(() => {
-        setNewsData()
+        var loader_container = document.getElementById('loader-container')
+
+        if(stateData){
+            loader_container.style.visibility = 'visible'
+            loader_container.style.opacity = 1
+            loader_container.style.height = '500px' 
+            setNewsData()
+        }
+        
     }, [])
+
 
     const [news, setNews] = useState([])
 
     async function setNewsData(){
-        
+        var loader_container = document.getElementById('loader-container')
+
         try
         {
             const response = await fetch(`https://localhost:44364/api/News/GetTeacherNewssById/${id}`)
             const data = await response.json()
             if(response.ok === true){
-                console.log("Secsesfuly");
                 setNews(data)
+                loader_container.style.visibility = 'hidden'
+                loader_container.style.opacity = 0
+                loader_container.style.height = '0px'
             }else{
                 console.log('Error ', data)
             }
@@ -40,6 +53,10 @@ function NewsPage(){
         popup.style.transition = "all 0.5s";
         document.getElementById('mainInfo').innerText = value.mainInfo
         document.getElementById('title').innerText = value.title
+        document.getElementById('img-news').src = value.base64Url
+        var NewsId = value.id
+
+        const response = await fetch(`https://localhost:44364/api/News/NewsIsRead/${NewsId}`)
     }
 
     async function popupLoginCliseClick(){
@@ -50,13 +67,13 @@ function NewsPage(){
         popup.style.opacity = 0
         popup.style.transition = "all 0.5s";
         document.querySelector('b').innerText = ''
+        document.getElementById('img-news').src = ''
     }
 
     return(
         <>
             <div id='all-container' className="cont">
                 <NavigationBar />
-                
                     <div className='all-container'>
                         <div className="heaber"></div>
                         <div className='container-title'>
@@ -70,7 +87,7 @@ function NewsPage(){
                                             <div className="popup__body">
                                                 <div style={{position: 'relative'}} id="popup__content" class="popup__content">
                                                     <a className="popup__close" onClick={popupLoginCliseClick} >X</a>
-                                                    <div className="modal-content">
+                                                    <div id="modal-content" className="modal-content">
                                                         <div className="big-news-container">
                                                             <p>
                                                                 <br />
@@ -86,16 +103,29 @@ function NewsPage(){
                                                                 <br />
                                                                 <span>
                                                                     <b id='mainInfo' className='mainInfo'></b>
+                                                                    <hr />
                                                                 </span>
                                                             </p>
                                                         </div>
+                                                        <p>
+                                                                <br />
+                                                                <span>
+                                                                    <img id="img-news" className="img-news" />       
+                                                                </span>
+                                                            </p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div id={i} key={i} onClick={e => onClickDetailInfo(e, i, value)} className="news-container">
                                             <div id="logo" className='logo'>
-                                                {value.title}
+                                                {value.isRed === true ? "" : <span id={'new-message'+i} className='new-message' >New!</span>}
+                                                <div className="d-flex flex-row jusify-content-center">
+                                                    <div className="d-flex flex-column jusify-content-center">
+                                                        {value.title}
+                                                        <hr />
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div className="date">
                                                 {value.dataPublication}
@@ -106,6 +136,9 @@ function NewsPage(){
                             })}                          
                         </div>
                     </div>
+                <div id="loader-container" className='loader-container'>
+                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                </div>
             </div>
         </>
     )

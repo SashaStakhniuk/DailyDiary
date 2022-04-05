@@ -62,7 +62,8 @@ function EdmitFromTeaher(){
                 setLogin(data.login)
                 setEmail(data.email)
                 console.log(data.login)
-                console.log(data.birthday);         
+                console.log(data.birthday)
+                        
             }else{
                 console.log('Error ', data)
             }

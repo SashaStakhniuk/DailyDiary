@@ -27,6 +27,7 @@
   font-size: 16px;
   margin-top: 25px;
   margin-bottom: 10px;
+  padding-bottom: 10px;
   display: flex;
   align-items: flex-end;
   height: 20%;
@@ -34,7 +35,7 @@
 .wraper{
   margin-top: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
   align-content: stretch;
@@ -74,7 +75,7 @@ p.title{
   text-align: left;
   font-weight: bold;
   margin-top: 20px;
-  margin-bottom: 10px;
+  margin-bottom: -5px;
 }
 div{
   display: block;
@@ -84,7 +85,8 @@ div{
   width: 80%;
   margin: 10px;
   margin-right: 60px;
-  height: 150px;
+  height: auto;
+  min-height: 150px;
   background-color: #fff;
   border-radius: 5px;
   -webkit-box-shadow: 0px 2px 4px rgb(0 0 0 / 10%);
@@ -94,6 +96,11 @@ div{
   flex-direction: column;
   border-top: 3px solid #1bd2c7;
   justify-content: space-between;
+}
+.img-news{
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 340px;
 }
 .heaber{
     box-shadow: 5px 5px 10px rgb(0 0 0 / 20%);
@@ -254,11 +261,14 @@ div{
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 .modal-content{
+  transition: all 1s ease 0s;
   position: relative;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   pointer-events: auto;
   background-color: #fff;
@@ -266,9 +276,11 @@ div{
   outline: 0;
 }
 .big-news-container{
+  transition: all 1s ease 0s;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgb(0 0 0 / 20%);  margin-top: 50px;
   height: 100%;
+  width: 100%;
   background-color: #fff;
   padding: 15px;
   display: flex;
@@ -276,6 +288,7 @@ div{
   justify-content: center;
   align-items: center;
   align-content: center;
+  margin-bottom: 10px;
 }
 b.title{
   align-self: flex-start;
@@ -285,4 +298,22 @@ b.title{
 
 b.mainInfo{
   font-size: 20px;
+}
+
+hr {
+  width: 50px;
+  background-color: #fa5873;
+  height: 5px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 10px;
+}
+
+.new-message{
+  font-size: 22px;
+  font-weight: bolder;
+  color: red;
+  margin-left: 70px;
+  transform: rotate(45deg);
+  position: absolute;
 }

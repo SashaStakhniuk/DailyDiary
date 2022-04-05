@@ -90,7 +90,7 @@ function TeacherProfil(){
         var button = $('.sendButton');
         $('.sendButton').hide().html('Sending <span class="loading"></span>').fadeIn('fast');
         
-        window.location = '/admin/send-for-teacher'
+        window.location = `/admin/send-for-teacher/${id}`
         
         setTimeout(() => {
             if(true){

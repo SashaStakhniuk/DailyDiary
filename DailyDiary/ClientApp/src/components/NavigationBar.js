@@ -135,7 +135,7 @@ function NavigationBar()
 
                 <i className="fa fa-clock-o fa-lg"></i>
                 <span className="nav-text">News</span>
-                <span className="news-badge-counter">4</span>
+                <span id="news-badge-counter" className="news-badge-counter"></span>
               </a>
             </li>
 
