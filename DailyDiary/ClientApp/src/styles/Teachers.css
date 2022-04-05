@@ -35,7 +35,9 @@
 .wraper{
   margin-top: 0;
   display: flex;
-  flex-direction: column-reverse;
+
+  /* Column revers !!! */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: stretch;

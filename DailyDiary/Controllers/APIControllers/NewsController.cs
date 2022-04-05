@@ -56,6 +56,29 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
+        [HttpGet("{id}/{newsSkip}")]
+        public async Task<ActionResult<IEnumerable<News>>> GetRangTeacherNewssById(int id, int newsSkip)
+        {
+            List<News> news = new List<News>();
+            var teachersNews = await db.TeacherNews.Where(x => x.TeacherId == id).Select(x => x.NewsId).ToListAsync();
+            if (teachersNews.Count != 0)
+            {
+                foreach (var teacherNew in teachersNews)
+                {
+                    news.Add(await db.News.FirstOrDefaultAsync(x => x.Id == teacherNew));
+                }
+                if (news.Count() > 0)
+                {
+                    return Ok(news.OrderByDescending(n => n.Id).Skip(newsSkip).Take(5).ToList());
+                }
+                else 
+                {
+                    return Ok(false);
+                }
+            }
+            return NotFound(new { error = "Teacher's groups not found" });
+        }
+
         [HttpGet("{TeacherId}")]
         public async Task<ActionResult<int>> GetNotReadNews(int TeacherId)
         {

@@ -3,26 +3,78 @@ import { useState, useEffect } from 'react'
 import '../../styles/Teachers.css'
 import NavigationBar from '../NavigationBar'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
 
 function NewsPage(){
 
     let { id } = useParams()
     const [stateData, setStateData] = useState(true)
+    const [newsSkip, setNewsSkip] = useState(0)
+    const [loading, setLoading] = useState(true) 
+    const [news, setNews] = useState([])
 
     useEffect(() => {
         var loader_container = document.getElementById('loader-container')
 
-        if(stateData){
-            loader_container.style.visibility = 'visible'
-            loader_container.style.opacity = 1
-            loader_container.style.height = '500px' 
-            setNewsData()
+        if(loading){
+            if(stateData){
+                loader_container.style.visibility = 'visible'
+                loader_container.style.opacity = 1
+                loader_container.style.height = '100px' 
+                
+                axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
+                    .then(response => {
+                        if(response.data == false){
+                            setStateData(false)
+                            loader_container.style.visibility = 'hidden'
+                            loader_container.style.opacity = 0
+                            loader_container.style.height = '0px'
+                        } else {
+                            setNews([...news, ...response.data])
+                            setNewsSkip(prevCourBlogs => prevCourBlogs +5)
+                        }
+                    }).finally(() => setLoading(false))
+            }
         }
-        
     }, [])
 
+    useEffect(() => {
+        var loader_container = document.getElementById('loader-container')
 
-    const [news, setNews] = useState([])
+        if(loading){
+            if(stateData){
+                loader_container.style.visibility = 'visible'
+                loader_container.style.opacity = 1
+                loader_container.style.height = '100px' 
+                
+                axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
+                    .then(response => {
+                        if(response.data == false){
+                            setStateData(false)
+                            loader_container.style.visibility = 'hidden'
+                            loader_container.style.opacity = 0
+                            loader_container.style.height = '0px'
+                        } else {
+                            setNews([...news, ...response.data])
+                            setNewsSkip(prevCourBlogs => prevCourBlogs +5)
+                        }
+                    }).finally(() => setLoading(false))
+            }
+        }
+    }, [loading])
+    
+    function scrollHendler(e){
+        if(e.target.documentElement.scrollHeight-(e.target.documentElement.scrollTop+window.innerHeight)<100){
+            setLoading(true)
+        }
+    }
+
+    useState(() =>{
+        document.addEventListener('scroll', scrollHendler)
+        return function(){
+            document.removeEventListener('scroll', scrollHendler)
+        }
+    }, [])
 
     async function setNewsData(){
         var loader_container = document.getElementById('loader-container')
@@ -33,9 +85,7 @@ function NewsPage(){
             const data = await response.json()
             if(response.ok === true){
                 setNews(data)
-                loader_container.style.visibility = 'hidden'
-                loader_container.style.opacity = 0
-                loader_container.style.height = '0px'
+                
             }else{
                 console.log('Error ', data)
             }
