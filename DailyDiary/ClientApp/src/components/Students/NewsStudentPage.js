@@ -1,28 +1,29 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React from "react"
 import '../../styles/Teachers.css'
 import NavigationBar from '../NavigationBar'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-
-function NewsPage(){
+import { useEffect, useState } from 'react'
+function NewsStudentPage(){
 
     let { id } = useParams()
+    const [loading, setLoading] = useState(true)
     const [stateData, setStateData] = useState(true)
     const [newsSkip, setNewsSkip] = useState(0)
-    const [loading, setLoading] = useState(true) 
     const [news, setNews] = useState([])
 
     useEffect(() => {
         var loader_container = document.getElementById('loader-container')
-
+        loader_container.style.visibility = 'hidden'
+        loader_container.style.opacity = 0
+        loader_container.style.height = '0px'
         if(loading){
             if(stateData){
                 loader_container.style.visibility = 'visible'
                 loader_container.style.opacity = 1
                 loader_container.style.height = '100px' 
-                
-                axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
+                setTimeout(() => {
+                    axios.get(`https://localhost:44364/api/News/GetRangStudentNewssById/${id}/${newsSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -34,20 +35,23 @@ function NewsPage(){
                             setNewsSkip(prevCourBlogs => prevCourBlogs +4)
                         }
                     }).finally(() => setLoading(false))
+                }, 700)
             }
         }
     }, [])
 
     useEffect(() => {
         var loader_container = document.getElementById('loader-container')
-
+        loader_container.style.visibility = 'hidden'
+        loader_container.style.opacity = 0
+        loader_container.style.height = '0px'
         if(loading){
             if(stateData){
                 loader_container.style.visibility = 'visible'
                 loader_container.style.opacity = 1
                 loader_container.style.height = '100px' 
-                
-                axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
+                setTimeout(() => {
+                    axios.get(`https://localhost:44364/api/News/GetRangStudentNewssById/${id}/${newsSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -56,13 +60,14 @@ function NewsPage(){
                             loader_container.style.height = '0px'
                         } else {
                             setNews([...news, ...response.data])
-                            setNewsSkip(prevCourBlogs => prevCourBlogs +5)
+                            setNewsSkip(prevCourBlogs => prevCourBlogs +4)
                         }
                     }).finally(() => setLoading(false))
+                }, 700)
             }
         }
     }, [loading])
-    
+
     function scrollHendler(e){
         if(e.target.documentElement.scrollHeight-(e.target.documentElement.scrollTop+window.innerHeight)<100){
             setLoading(true)
@@ -75,23 +80,6 @@ function NewsPage(){
             document.removeEventListener('scroll', scrollHendler)
         }
     }, [])
-
-    async function setNewsData(){
-        var loader_container = document.getElementById('loader-container')
-
-        try
-        {
-            const response = await fetch(`https://localhost:44364/api/News/GetTeacherNewssById/${id}`)
-            const data = await response.json()
-            if(response.ok === true){
-                setNews(data)
-                
-            }else{
-                console.log('Error ', data)
-            }
-
-        }catch{}
-    }
 
     async function onClickDetailInfo(e, i, value){
         console.log("Id: " + i)
@@ -106,7 +94,7 @@ function NewsPage(){
         document.getElementById('img-news').src = value.base64Url
         var NewsId = value.id
 
-        const response = await fetch(`https://localhost:44364/api/News/NewsIsRead/${NewsId}`)
+        const response = await fetch(`https://localhost:44364/api/News/NewsStudentIsRead/${NewsId}`)
     }
 
     async function popupLoginCliseClick(){
@@ -120,11 +108,13 @@ function NewsPage(){
         document.getElementById('img-news').src = ''
     }
 
+
+
     return(
         <>
             <div id='all-container' className="cont">
                 <NavigationBar />
-                    <div className='all-container'>
+                <div className='all-container'>
                         <div className="heaber"></div>
                         <div className='container-title'>
                             <p className='text-uppercase title'>News</p>
@@ -194,4 +184,4 @@ function NewsPage(){
     )
 }
 
-export default NewsPage
+export default NewsStudentPage

@@ -17,5 +17,6 @@ namespace DailyDiary.Models
         public bool IsRed { get; set; }
         public Nullable<DateTime> DataPublication { get; set; }
         public ICollection<TeacherNews> TeacherNews { get; set; }
+        public ICollection<StudentNews> StudentNews { get; set; }
     }
 }

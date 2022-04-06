@@ -86,12 +86,14 @@ namespace DailyDiary.Models
                 );
                 db.SaveChanges();
             }
+
+            Student st1 = new Student { Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Denis", LastName = "Goolorev", Age = 14, StudyYear = 9, GroupId = 3, SubgroupId = 3 /*Group = group5*/ };
+            Student st2 = new Student { Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Klar", Age = 6, StudyYear = 1, GroupId = 2, SubgroupId = 1 /*Group = group2*/ };
+            Student st3 = new Student { Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Stiv", LastName = "jobs", Age = 7, StudyYear = 2, GroupId = 5, SubgroupId = 2/* Group = group3*/ };
             if (!db.Students.Any())
             {
                 db.Students.AddRange(
-                    new Student { Email = "denis@gmail.com", Password = "1111",  Login = "login", Name = "Denis", LastName = "Goolorev", Age = 14, StudyYear = 9, GroupId = 3 , SubgroupId = 3 /*Group = group5*/ },
-                    new Student { Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Klar", Age = 6, StudyYear = 1, GroupId = 2, SubgroupId = 1 /*Group = group2*/ },
-                    new Student { Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Stiv", LastName = "jobs", Age = 7, StudyYear = 2, GroupId = 5, SubgroupId = 2/* Group = group3*/ }
+                   st1, st2, st3
                 );
                 db.SaveChanges();
             }
@@ -128,9 +130,14 @@ namespace DailyDiary.Models
                    new TeacherSubject { Teacher = teacher3, Subject = subject6 }
 
                );
+                db.StudentNews.Add(new StudentNews { Student = st1, News = news });
+                db.StudentNews.Add(new StudentNews { Student = st1, News = news2 });
+                db.StudentNews.Add(new StudentNews { Student = st2, News = news2 });
+
                 db.TeacherNews.Add(new TeacherNews { Teacher = teacher1, News = news });
                 db.TeacherNews.Add(new TeacherNews { Teacher = teacher1, News = news2 });
                 db.TeacherNews.Add(new TeacherNews { Teacher = teacher2, News = news });
+
                 db.SaveChanges();
             }
             if (!db.TeacherGroups.Any())

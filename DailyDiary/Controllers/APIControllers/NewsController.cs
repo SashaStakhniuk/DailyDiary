@@ -71,7 +71,7 @@ namespace DailyDiary.Controllers.APIControllers
                 {
                     return Ok(news.OrderByDescending(n => n.Id).Skip(newsSkip).Take(5).ToList());
                 }
-                else 
+                else
                 {
                     return Ok(false);
                 }
@@ -79,11 +79,49 @@ namespace DailyDiary.Controllers.APIControllers
             return NotFound(new { error = "Teacher's groups not found" });
         }
 
+        [HttpGet("{StudentId}")]
+        public async Task<ActionResult<int>> GetNotStudentReadNews(int StudentId)
+        {
+            Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == StudentId);
+            if(student == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                int count = 0;
+                List<News> news = new List<News>();
+                var studentNews = await db.StudentNews.Where(x => x.StudentId == StudentId).Select(x => x.NewsId).ToListAsync();
+                if(studentNews.Count() != 0)
+                {
+                    foreach (var studentNewID in studentNews)
+                    {
+                        news.Add(await db.News.FirstOrDefaultAsync(x => x.Id == studentNewID));
+                    }
+                    foreach (var studentNew in news)
+                    {
+                        /*StudentNews sn = await db.StudentNews.FirstOrDefaultAsync(x => x.StudentId == StudentId && x.NewsId == studentNew.Id);
+                        if(sn.isRead == false)
+                        {
+                            count++;
+                        }*/
+                        if(studentNew.IsRed == false)
+                        {
+                            count++;
+                        }
+                    }
+
+                    return Ok(count);
+                }
+            }
+            return BadRequest();
+        }
+
         [HttpGet("{TeacherId}")]
         public async Task<ActionResult<int>> GetNotReadNews(int TeacherId)
         {
             Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == TeacherId);
-            if(teacher == null)
+            if (teacher == null)
             {
                 return NotFound();
             }
@@ -98,9 +136,9 @@ namespace DailyDiary.Controllers.APIControllers
                     {
                         news.Add(await db.News.FirstOrDefaultAsync(x => x.Id == teacherNew));
                     }
-                    foreach(var el in news)
+                    foreach (var el in news)
                     {
-                        if(el.IsRed == false)
+                        if (el.IsRed == false)
                         {
                             count++;
                         }
@@ -115,7 +153,7 @@ namespace DailyDiary.Controllers.APIControllers
         public async Task<ActionResult<bool>> NewsIsRead(int NewsId)
         {
             News news = await db.News.FirstOrDefaultAsync(x => x.Id == NewsId);
-            if(news == null)
+            if (news == null)
             {
                 return NotFound(false);
             }
@@ -127,11 +165,57 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<News>>> GetStudentNewsById(int id)
+        [HttpGet("{NewsId}")]
+        public async Task<ActionResult<bool>> NewsStudentIsRead(int NewsId)
+        {
+
+            // ! Если искать в промежуточной таблице 
+            /*StudentNews studentNews = await db.StudentNews.FirstOrDefaultAsync(x => x.StudentId == id && x.NewsId == NewsId);
+            if(studentNews == null)
+            {
+                return NotFound(false);
+            }
+            else
+            {
+                studentNews.isRead = true;
+                await db.SaveChangesAsync();
+                return Ok(true);
+            }*/
+
+            News news = await db.News.FirstOrDefaultAsync(x => x.Id == NewsId);
+            if (news == null)
+            {
+                return NotFound(false);
+            }
+            else
+            {
+                news.IsRed = true;
+                await db.SaveChangesAsync();
+                return Ok(true);
+            }
+        }
+
+        [HttpGet("{id}/{newsSkip}")]
+        public async Task<ActionResult<IEnumerable<News>>> GetRangStudentNewssById(int id, int newsSkip)
         {
             List<News> news = new List<News>();
-            var 
+            var studentNews = await db.StudentNews.Where(x => x.StudentId == id).Select(x => x.NewsId).ToListAsync();
+            if (studentNews.Count != 0)
+            {
+                foreach (var studentNew in studentNews)
+                {
+                    news.Add(await db.News.FirstOrDefaultAsync(x => x.Id == studentNew));
+                }
+                if (news.Count() > 0)
+                {
+                    return Ok(news.OrderByDescending(n => n.Id).Skip(newsSkip).Take(5).ToList());
+                }
+                else
+                {
+                    return Ok(false);
+                }
+            }
+            return NotFound(new { error = "Student's groups not found" });
         }
     }
 }
