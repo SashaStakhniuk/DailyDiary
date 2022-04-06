@@ -15,14 +15,16 @@ function NewsPage(){
 
     useEffect(() => {
         var loader_container = document.getElementById('loader-container')
-
+        loader_container.style.visibility = 'hidden'
+        loader_container.style.opacity = 0
+        loader_container.style.height = '0px'
         if(loading){
             if(stateData){
                 loader_container.style.visibility = 'visible'
                 loader_container.style.opacity = 1
                 loader_container.style.height = '100px' 
-                
-                axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
+                setTimeout(() => {
+                    axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -34,20 +36,23 @@ function NewsPage(){
                             setNewsSkip(prevCourBlogs => prevCourBlogs +4)
                         }
                     }).finally(() => setLoading(false))
+                }, 700)
             }
         }
     }, [])
 
     useEffect(() => {
         var loader_container = document.getElementById('loader-container')
-
+        loader_container.style.visibility = 'hidden'
+        loader_container.style.opacity = 0
+        loader_container.style.height = '0px'
         if(loading){
             if(stateData){
                 loader_container.style.visibility = 'visible'
                 loader_container.style.opacity = 1
                 loader_container.style.height = '100px' 
-                
-                axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
+                setTimeout(() => {
+                    axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -59,6 +64,7 @@ function NewsPage(){
                             setNewsSkip(prevCourBlogs => prevCourBlogs +5)
                         }
                     }).finally(() => setLoading(false))
+                }, 700)
             }
         }
     }, [loading])

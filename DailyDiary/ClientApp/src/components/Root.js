@@ -26,8 +26,8 @@ import NewsStudentPage from './Students/NewsStudentPage'
 
 const Root = ({ store }) => {
 
-    const [isStudent, setIsStudent] = useState(true)
-    const [isTeacher, setIsTeacher] = useState(false)
+    const [isStudent, setIsStudent] = useState(false)
+    const [isTeacher, setIsTeacher] = useState(true)
 
     async function grtNotReaadCountTeacherNews(){
         var news = document.getElementById('news-badge-counter')
@@ -83,7 +83,7 @@ const Root = ({ store }) => {
     }
 
     useEffect(() => {
-        grtNotReaadCountStudentNews()
+        grtNotReaadCountTeacherNews()
         // Если студент 
         // if(isTeacher){
         //     // Если залогинен преподаватель
