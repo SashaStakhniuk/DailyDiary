@@ -23,7 +23,7 @@ import SendMessage from './Teachers/SendMessage.js';
 import { useEffect } from 'react'
 const Root = ({ store }) => {
 
-    async function getNumberNotreadMessages(){
+    async function grtNotReaadCountTeacherNews(){
         var news = document.getElementById('news-badge-counter')
         news.innerText = ''
         news.style.visibility = 'hidden'
@@ -43,14 +43,25 @@ const Root = ({ store }) => {
         }
     }
 
+    async function grtNotReaadCountStudentNews(){
+
+    }
+
     useEffect(() => {
         
+
+        // Если залогинен преподаватель
         // тут устанавливаю состояние оповещений об увидомлений
         // ! буду передавать id = 1 преподавателя для отображения количества непрочитаных смс
         // ! при зарегестрированом пользователе id пользователя будет подставляться автоматически  
         // https://localhost:44364/api/News/GetNotReadNews/1
 
-        getNumberNotreadMessages()
+
+        // Если студент 
+        grtNotReaadCountStudentNews()
+        
+        // Если залогинен преподаватель
+        grtNotReaadCountTeacherNews()
 
     }, [])
     

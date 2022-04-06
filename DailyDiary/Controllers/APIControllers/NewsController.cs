@@ -126,5 +126,12 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(true);
             }
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<News>>> GetStudentNewsById(int id)
+        {
+            List<News> news = new List<News>();
+            var 
+        }
     }
 }
