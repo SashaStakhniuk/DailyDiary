@@ -83,7 +83,7 @@ const Root = ({ store }) => {
     }
 
     useEffect(() => {
-        grtNotReaadCountTeacherNews()
+        grtNotReaadCountStudentNews()
         // Если студент 
         // if(isTeacher){
         //     // Если залогинен преподаватель

@@ -11,6 +11,7 @@ function NewsStudentPage(){
     const [stateData, setStateData] = useState(true)
     const [newsSkip, setNewsSkip] = useState(0)
     const [news, setNews] = useState([])
+    const [notReadNews, setNotreadNews] = useState([])
 
     useEffect(() => {
         var loader_container = document.getElementById('loader-container')
@@ -107,8 +108,6 @@ function NewsStudentPage(){
         document.querySelector('b').innerText = ''
         document.getElementById('img-news').src = ''
     }
-
-
 
     return(
         <>

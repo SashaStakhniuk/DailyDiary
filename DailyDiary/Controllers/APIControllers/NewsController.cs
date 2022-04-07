@@ -89,10 +89,11 @@ namespace DailyDiary.Controllers.APIControllers
             }
             else
             {
+
                 int count = 0;
                 List<News> news = new List<News>();
                 var studentNews = await db.StudentNews.Where(x => x.StudentId == StudentId).Select(x => x.NewsId).ToListAsync();
-                if(studentNews.Count() != 0)
+                if (studentNews.Count() != 0)
                 {
                     foreach (var studentNewID in studentNews)
                     {
@@ -100,11 +101,6 @@ namespace DailyDiary.Controllers.APIControllers
                     }
                     foreach (var studentNew in news)
                     {
-                        /*StudentNews sn = await db.StudentNews.FirstOrDefaultAsync(x => x.StudentId == StudentId && x.NewsId == studentNew.Id);
-                        if(sn.isRead == false)
-                        {
-                            count++;
-                        }*/
                         if(studentNew.IsRed == false)
                         {
                             count++;
@@ -112,7 +108,21 @@ namespace DailyDiary.Controllers.APIControllers
                     }
 
                     return Ok(count);
+
                 }
+
+                // Поиск В промежуточной табоице 
+                /*int count = 0;
+                List<News> news = new List<News>();
+                var studentNews = await db.StudentNews.Where(x => x.StudentId == StudentId).ToListAsync();
+                foreach(var studentMews in studentNews)
+                {
+                    if(studentMews.isRead == false)
+                    {
+                        count++;
+                    }
+                }*/
+                return Ok(count);
             }
             return BadRequest();
         }
@@ -170,6 +180,7 @@ namespace DailyDiary.Controllers.APIControllers
         {
 
             // ! Если искать в промежуточной таблице 
+
             /*StudentNews studentNews = await db.StudentNews.FirstOrDefaultAsync(x => x.StudentId == id && x.NewsId == NewsId);
             if(studentNews == null)
             {
