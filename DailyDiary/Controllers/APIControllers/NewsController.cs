@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DailyDiary.Models.ViewModels;
+using DailyDiary.Models.ViewModels.News;
 
 namespace DailyDiary.Controllers.APIControllers
 {
@@ -35,6 +36,25 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(news);
             }
             return NotFound(new { error = "Teacher's groups not found" });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<bool>> SandMessageForStudent(StudentNewsViewModel model)
+        {
+            Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.StudentId);
+            if(student == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                News news = new News { Title = model.Title, DataPublication = model.DataPublication, MainInfo = model.MainInfo, Sender = model.Sender, Base64Url = model.Base64Url, IsRed = false };
+                db.News.Add(news);
+                StudentNews studentNews = new StudentNews { Student = student, News = news };
+                db.StudentNews.Add(studentNews);
+                await db.SaveChangesAsync();
+                return Ok(true);
+            }
         }
 
         [HttpPost]

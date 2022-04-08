@@ -23,7 +23,7 @@ import SendMessage from './Teachers/SendMessage.js';
 import { useEffect, useState } from 'react'
 import Feedback from './Students/Feedback'
 import NewsStudentPage from './Students/NewsStudentPage'
-
+import SendMessageForStudent from './Students/SendMessageForStudent'
 const Root = ({ store }) => {
 
     const [isStudent, setIsStudent] = useState(false)
@@ -75,9 +75,12 @@ const Root = ({ store }) => {
                 news.style.visibility = 'visible'
                 news.style.opacity = 1
             } else {
-                news.innerText = ''
-                news.style.visibility = 'hidden'
-                news.style.opacity = 0
+                if(news){
+                    news.innerText = ''
+                    news.style.visibility = 'hidden'
+                    news.style.opacity = 0
+                }
+               
             }
         }
     }
@@ -116,6 +119,7 @@ const Root = ({ store }) => {
                     <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
                     <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
                     <Route exact path="/admin/new-teacher"><CreateNewTeacher/></Route>
+                    <Route exact path="/admin/send-for-student/:id"><SendMessageForStudent/></Route>
 
                     <Route exact path="/teacher-page"><TeacherPage/></Route>
                     <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>

@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
+import { useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import $ from 'jquery'
 import '../../styles/Students.css'
 import NavigationBar from "../NavigationBar"
-import $ from 'jquery'
-import { useParams } from 'react-router-dom'
 
-function SendMessage(){
+function SendMessageForStudent(){
 
     let { id } = useParams()
+
+    const [sendVariand, setSendVariant] = useState(["Send for this student",, "Send For all sudent"])
     const [title, setTitle] = useState('title')
     const [mainInfo, setMainInfo] = useState('mainInfo')
     const [sender, setSender] = useState('admin')
@@ -15,19 +18,19 @@ function SendMessage(){
 
     async function onSubmit(e){
         e.preventDefault()
-        var teacherId = id
+        var studentId = id
         var button = $('.sendButton');
         $('.sendButton').hide().html('Sending <span class="loading"></span>').fadeIn('fast');
-
+        var variatSending = document.getElementById('variatSending').value
         try
         {
-            const response = await fetch(`https://localhost:44364/api/News/SendMessageForTeacher`, {
+            const response = await fetch(`https://localhost:44364/api/News/${variatSending}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    teacherId,
+                    studentId,
                     title,
                     mainInfo,
                     sender,
@@ -90,11 +93,24 @@ function SendMessage(){
             })
     }
 
+    function onChangeSending(e){
+        setSendVariant(e.target.value)
+    }
+
     return(
         <>
             <div className="all-container">
                 <NavigationBar />
                 <form onSubmit={e => onSubmit(e)} className='form-edit'>
+                    <select onChange={e => onChangeSending(e)} type="date" id="variatSending" className="variatSending">
+                        {sendVariand.map((data, i) => {
+                            return(
+                                <>
+                                    <option key={i} value={i == 0 ? "SandMessageForStudent" : "SendForAllStudents"} selected={i == 0 ? "selected" : ""}>{data}</option>
+                                </>
+                            )
+                        })}
+                    </select >
                     <div className="d-flex flex-column align-items-center">
                         <div className="mb-3 w-100 d-flex justify-content-center flex-column align-items-center">
                             <span className="span-text">Title</span>
@@ -123,4 +139,4 @@ function SendMessage(){
     )
 }
 
-export default SendMessage
+export default SendMessageForStudent

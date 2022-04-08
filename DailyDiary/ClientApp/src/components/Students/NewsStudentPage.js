@@ -11,7 +11,6 @@ function NewsStudentPage(){
     const [stateData, setStateData] = useState(true)
     const [newsSkip, setNewsSkip] = useState(0)
     const [news, setNews] = useState([])
-    const [notReadNews, setNotreadNews] = useState([])
 
     useEffect(() => {
         var loader_container = document.getElementById('loader-container')
@@ -113,7 +112,7 @@ function NewsStudentPage(){
         <>
             <div id='all-container' className="cont">
                 <NavigationBar />
-                <div className='all-container'>
+                <div className='sub-all-container'>
                         <div className="heaber"></div>
                         <div className='container-title'>
                             <p className='text-uppercase title'>News</p>
@@ -146,7 +145,7 @@ function NewsStudentPage(){
                                                                 </span>
                                                             </p>
                                                         </div>
-                                                        <p>
+                                                            <p>
                                                                 <br />
                                                                 <span>
                                                                     <img id="img-news" className="img-news" />       

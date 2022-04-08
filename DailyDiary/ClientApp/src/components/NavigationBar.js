@@ -5,8 +5,8 @@ function NavigationBar()
 {
     function onMouseEnterHendler(){
       var all_container = document.getElementById('all-container')
+      var root = document.getElementById('root')
       if(all_container){
-        console.log('all_container');
         all_container.style.overflowY = 'hidden'
       }
       var font_all_page = document.getElementById('font_all_page')
@@ -16,11 +16,12 @@ function NavigationBar()
 
         var HeightAllContainer = all_students__container.offsetHeight
         var Heightfont_all_page =  font_all_page.offsetHeight
+        var Heightroot = root.offsetHeight
 
-        if(HeightAllContainer < 500){
+        if(HeightAllContainer < Heightroot){
           //all_students__container.style.height = `855px`
          
-          font_all_page.style.height = `850px`
+          font_all_page.style.height = `${Heightroot}px`
         } else{
        
           var remainder = HeightAllContainer - Heightfont_all_page
