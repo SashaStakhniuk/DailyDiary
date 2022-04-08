@@ -1,6 +1,6 @@
 import React from "react"
 import "../styles/Navigation.css"
-import { useEffect } from 'react'
+
 function NavigationBar()
 {
     function onMouseEnterHendler(){
@@ -137,6 +137,15 @@ function NavigationBar()
                 <i className="fa fa-clock-o fa-lg"></i>
                 <span className="nav-text">News</span>
                 <span id="news-badge-counter" className="news-badge-counter"></span>
+              </a>
+            </li>
+
+            <li className="darkerli">
+              <a href="/">
+
+                <i className="fa fa-clock-o fa-lg"></i>
+                <span className="nav-text">Feedback</span>
+                <span id="feedback-badge-counter" className="feedback-badge-counter"></span>
               </a>
             </li>
 

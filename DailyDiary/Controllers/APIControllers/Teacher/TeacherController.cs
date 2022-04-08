@@ -232,9 +232,10 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
-        [HttpPost("{id}")]
-        public async Task<ActionResult> SendMessageById(int id)
+        [HttpPost("{TeacherId}/{StudentId}")]
+        public async Task<ActionResult> SendFeedback(int TeacherId, int StudentId)
         {
+
 
             return Ok();
         }

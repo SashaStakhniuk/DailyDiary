@@ -18,10 +18,10 @@ function SendMessage(){
         var teacherId = id
         var button = $('.sendButton');
         $('.sendButton').hide().html('Sending <span class="loading"></span>').fadeIn('fast');
-
+        var sendVariant = document.getElementById('sendVariant').value
         try
         {
-            const response = await fetch(`https://localhost:44364/api/News/SendMessageForTeacher`, {
+            const response = await fetch(`https://localhost:44364/api/News/${sendVariant}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -95,7 +95,12 @@ function SendMessage(){
             <div className="all-container">
                 <NavigationBar />
                 <form onSubmit={e => onSubmit(e)} className='form-edit'>
-                    <div className="d-flex flex-column align-items-center">
+                    <div className="d-flex flex-column m-3 p-2">
+                        <select type="date" id="sendVariant" className="sendVariant">
+                            <option value="SendMessageForTeacher">Send for this teacher</option>
+                            <option value="SendForAllTeachers">Send for all teachers</option>
+                        </select>
+                        <div className="d-flex flex-column align-items-center">
                         <div className="mb-3 w-100 d-flex justify-content-center flex-column align-items-center">
                             <span className="span-text">Title</span>
                             <div className="mb-3">
@@ -116,7 +121,7 @@ function SendMessage(){
                         </div>
                         <button style={{ width: '150px', height: '60px' }} type="submit" className="sendButton">Send</button>
                     </div>
-                    
+                    </div>
                 </form>
             </div>
         </>

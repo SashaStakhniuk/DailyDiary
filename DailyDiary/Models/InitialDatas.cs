@@ -21,6 +21,13 @@ namespace DailyDiary.Models
             var subject10 = new Subject { Title = "Geography" };
             var subject11 = new Subject { Title = "Computer Science" };
 
+            var teacher1 = new Teacher { Name = "Teacher1", LastName = "Jonson", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 };
+            var teacher2 = new Teacher { Name = "Teacher2", LastName = "Alor", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 };
+            var teacher3 = new Teacher { Name = "Teacher3", LastName = "Kilons", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 };
+            var teacher4 = new Teacher { Name = "Teacher4", LastName = "Paul", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 };
+            var teacher5 = new Teacher { Name = "Teacher5", LastName = "Jena", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 };
+            var teacher6 = new Teacher { Name = "Teacher6", LastName = "Ong", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 };
+
             if (!db.Subjects.Any())
             {
                 db.Subjects.AddRange(
@@ -39,10 +46,13 @@ namespace DailyDiary.Models
             News news = new News { Title = "Майстер-клас «Монетизація навичок і досвіду під час війни» для студентів Академії ШАГ", DataPublication = data.Date, MainInfo = "Майстер-клас  «Монетизація навичок і досвіду під час війни» для студентів Академії ШАГ від засновників компанії BRAND PEOPLE.", Base64Url = null, Sender = "Admin", IsRed = false };
             News news2 = new News { Title = "Безкоштовні майстер класи", DataPublication = data.Date, MainInfo = "Друзі, Комп'ютерна Академія ШАГ в умовах воєнного стану запускає серію онлайн майстер-класів і тематичних зустрічей для дітей 7-14 років.В період з 01.03 - 07.03 щодня будуть проходити цікаві майстер - класи, зустрічі з психологом.", Base64Url = null, Sender = "Adm", IsRed = false };
 
+            Feedback feedback1 = new Feedback { MainInformation = "Денис, поздравляю с успешным завершением курса PHP!)", IsRead = false, Teacher = teacher1, Subject = subject2, DataPublication = data.Date };
+
             if (!db.News.Any())
             {
                 db.News.Add(news);
                 db.News.Add(news2);
+                db.Feedback.Add(feedback1);
                 db.SaveChanges();
             }
 
@@ -98,13 +108,6 @@ namespace DailyDiary.Models
                 db.SaveChanges();
             }
 
-           var teacher1 = new Teacher { Name = "Teacher1", LastName = "Jonson", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 };
-           var teacher2 = new Teacher { Name = "Teacher2", LastName = "Alor", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 };
-           var teacher3 = new Teacher { Name = "Teacher3", LastName = "Kilons", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 };
-           var teacher4 = new Teacher { Name = "Teacher4", LastName = "Paul", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 };
-           var teacher5 = new Teacher { Name = "Teacher5", LastName = "Jena", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 };
-           var teacher6 = new Teacher { Name = "Teacher6", LastName = "Ong", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 };
-
             if (!db.Teachers.Any())
             {
 
@@ -133,6 +136,8 @@ namespace DailyDiary.Models
                 db.StudentNews.Add(new StudentNews { Student = st1, News = news });
                 db.StudentNews.Add(new StudentNews { Student = st1, News = news2 });
                 db.StudentNews.Add(new StudentNews { Student = st2, News = news2 });
+
+                db.StudentFeedback.Add(new StudentFeedback { Student = st1, Feedback = feedback1 });
 
                 db.TeacherNews.Add(new TeacherNews { Teacher = teacher1, News = news });
                 db.TeacherNews.Add(new TeacherNews { Teacher = teacher1, News = news2 });

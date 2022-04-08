@@ -11,6 +11,7 @@ namespace DailyDiary.Models
         public Student()
         {
             StudentNews = new HashSet<StudentNews>();
+            StudentFeedback = new HashSet<StudentFeedback>();
         }
         public int StudentId { get; set; }
         public string Name { get; set; }
@@ -37,5 +38,6 @@ namespace DailyDiary.Models
         public ICollection<StudentClasswork> StudentClassworks { get; set; }
         public ICollection<StudentHomework> StudentHomeworks { get; set; }
         public ICollection<StudentNews> StudentNews { get; set; }
+        public ICollection<StudentFeedback> StudentFeedback { get; set; }
     }
 }

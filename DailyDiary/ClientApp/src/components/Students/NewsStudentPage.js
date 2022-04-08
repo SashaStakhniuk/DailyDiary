@@ -113,7 +113,9 @@ function NewsStudentPage(){
             <div id='all-container' className="cont">
                 <NavigationBar />
                 <div className='sub-all-container'>
-                        <div className="heaber"></div>
+                        <div className="heaber">
+
+                        </div>
                         <div className='container-title'>
                             <p className='text-uppercase title'>News</p>
                         </div>
@@ -166,7 +168,7 @@ function NewsStudentPage(){
                                                 </div>
                                             </div>
                                             <div className="date">
-                                                {value.dataPublication}
+                                                {new Date(value.dataPublication).toLocaleDateString()}
                                             </div>
                                         </div>
                                     </>

@@ -60,14 +60,24 @@ const Root = ({ store }) => {
 
     async function grtNotReaadCountStudentNews(){
         var news = document.getElementById('news-badge-counter')
+        var feedback = document.getElementById('feedback-badge-counter')
+
+        if(feedback){
+            feedback.innerText = ''
+            feedback.style.visibility = 'hidden'
+            feedback.style.opacity = 0
+        }
         if(news){
             news.innerText = ''
             news.style.visibility = 'hidden'
             news.style.opacity = 0
         }
 
+        //const response_feedback = await fetch(`https://localhost:44364/api/Teacher/GetNotStudentReadNews/3`) 
+
         //  Тут передаю псевдо зареганого студента у которого ID 3
         const response = await fetch(`https://localhost:44364/api/News/GetNotStudentReadNews/3`)
+
         const data = await response.json()
         if(response.ok == true){
             if(data > 0){

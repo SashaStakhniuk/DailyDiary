@@ -58,6 +58,21 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpPost]
+        public async Task<ActionResult<bool>> SendForAllStudents(StudentNewsViewModel model)
+        {
+            List<Student> students = await db.Students.ToListAsync();
+            foreach(var student in students)
+            {
+                News news = new News { Title = model.Title, DataPublication = model.DataPublication, MainInfo = model.MainInfo, Sender = model.Sender, Base64Url = model.Base64Url, IsRed = false };
+                db.News.Add(news);
+                StudentNews studentNews = new StudentNews { Student = student, News = news };
+                db.StudentNews.Add(studentNews);
+            }
+            await db.SaveChangesAsync();
+            return Ok(true);
+        }
+
+        [HttpPost]
         public async Task<ActionResult<bool>> SendMessageForTeacher(NewsViewModel model)
         {
             Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.TeacherId);
@@ -74,6 +89,22 @@ namespace DailyDiary.Controllers.APIControllers
                 await db.SaveChangesAsync();
                 return Ok(true);
             }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<bool>> SendForAllTeachers(NewsViewModel model) 
+        {
+            List<Teacher> teachers = await db.Teachers.ToListAsync();
+
+            foreach(var teacher in teachers)
+            {
+                News news = new News { Title = model.Title, DataPublication = model.DataPublication, MainInfo = model.MainInfo, Sender = model.Sender, Base64Url = model.Base64Url, IsRed = false };
+                db.News.Add(news);
+                TeacherNews teacherNews = new TeacherNews { Teacher = teacher, News = news };
+                db.TeacherNews.Add(teacherNews);
+            }
+            await db.SaveChangesAsync();
+            return Ok(true);
         }
 
         [HttpGet("{id}/{newsSkip}")]

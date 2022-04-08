@@ -184,7 +184,7 @@ function NewsPage(){
                                                 </div>
                                             </div>
                                             <div className="date">
-                                                {value.dataPublication}
+                                                {new Date(value.dataPublication).toLocaleDateString()}
                                             </div>
                                         </div>
                                     </>
