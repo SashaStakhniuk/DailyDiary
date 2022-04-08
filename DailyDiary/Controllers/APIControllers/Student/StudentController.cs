@@ -69,11 +69,11 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{lastName}")]
         public async Task<ActionResult<IEnumerable<Student>>> GetByName(string lastName)
         {
-            if(lastName == null)
+            if (lastName == null)
             {
                 return await db.Students.ToListAsync();
             }
-           return await db.Students.Where(s => s.LastName.Contains(lastName)).ToListAsync();
+            return await db.Students.Where(s => s.LastName.Contains(lastName)).ToListAsync();
         }
 
         [HttpPost]
@@ -114,17 +114,15 @@ namespace DailyDiary.Controllers.APIControllers
             return BadRequest(ModelState);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> CreateNew(NewStudentViewModel model)
         {
             if (ModelState.IsValid)
             {
                 Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.Id);
-                if(student == null)
+                if (student == null)
                 {
-                    string Login =  Services.GeneratorService.GenerateNewLogin(model.LastName);
+                    string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
                     string Password = Services.GeneratorService.GenerateNewPassword();
                     Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
                     Subgroup subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == model.SubgroupId);
@@ -144,7 +142,7 @@ namespace DailyDiary.Controllers.APIControllers
                         StudyYear = model.StudyYear,
                         Group = group,
                         Subgroup = subgroup
-                        
+
                     };
                     Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
                     db.Students.Add(student);
@@ -157,7 +155,7 @@ namespace DailyDiary.Controllers.APIControllers
                 }
             }
             return BadRequest();
-        }  
+        }
 
         [HttpDelete("{id}")]
         /*[Authorize(Roles = "MainAdmin,Admin")]*/
@@ -172,34 +170,35 @@ namespace DailyDiary.Controllers.APIControllers
             await db.SaveChangesAsync();
             return Ok(student);
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Group>> GetStudentGroupByIdAsync(int id)//GetStudentGroupByIdAsync
         {
             var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == id);
             if (student != null)
-            {               
-                var group = await db.Groups.FirstOrDefaultAsync(x=> x.Id == student.GroupId);
+            {
+                var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == student.GroupId);
                 if (group != null)
                 {
                     return Ok(group);
                 }
                 else
                 {
-                    return NotFound( new { error = "Group not found" });
+                    return NotFound(new { error = "Group not found" });
                 }
             }
-            return NotFound(new {error = "Student not found" });
+            return NotFound(new { error = "Student not found" });
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Subgroup>> GetStudentSubgroupByIdAsync(int id)//GetStudentSubgroupsByStudentIdAsync
         {
             var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == id);
-            
+
             if (student != null)
             {
-                var subgroup = await db.Subgroups.FirstOrDefaultAsync(x=> x.Id == student.SubgroupId);
+                var subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == student.SubgroupId);
                 if (subgroup != null)
-                {              
+                {
                     return Ok(subgroup);
                 }
                 else
@@ -208,6 +207,38 @@ namespace DailyDiary.Controllers.APIControllers
                 }
             }
             return NotFound(new { error = "Student not found" });
+        }
+
+        [HttpGet("{StudentId}/{feedbackSkip}")]
+        public async Task<ActionResult<IEnumerable<Feedbackinfo>>> GetRangStudentFeedbackById(int StudentId, int feedbackSkip)
+        {
+            List<Feedback> feedbacks = new List<Feedback>();
+            List<Feedbackinfo> feedbackinfos = new List<Feedbackinfo>();
+            var studentFeedbacks = await db.StudentFeedback.Where(x => x.StudentId == StudentId).Select(x => x.FeedbackId).ToListAsync();
+            if (studentFeedbacks.Count != 0)
+            {
+                foreach (var studentFeedback in studentFeedbacks)
+                {
+                    feedbacks.Add(await db.Feedback.FirstOrDefaultAsync(x => x.Id == studentFeedback));
+                }
+                foreach(var feedback in feedbacks)
+                {
+                    Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == feedback.SubjectId);
+                    Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == feedback.TeacherId);
+                    Feedbackinfo feedbackinfo = new Feedbackinfo { MainInformation = feedback.MainInformation, IsRead = feedback.IsRead, DataPublication = feedback.DataPublication, SubjectTitle = subject.Title, TeacherName = teacher.Name, TeacherLastName = teacher.LastName };
+                    feedbackinfos.Add(feedbackinfo);
+                }
+                if (feedbackinfos.Count() > 0)
+                {
+                    
+                    return Ok(feedbackinfos.OrderByDescending(n => n.Id).Skip(feedbackSkip).Take(5).ToList());
+                }
+                else
+                {
+                    return Ok(false);
+                }
+            }
+            return NotFound(new { error = "Student's groups not found" });
         }
     }
 }

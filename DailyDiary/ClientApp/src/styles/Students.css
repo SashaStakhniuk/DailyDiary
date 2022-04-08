@@ -1,3 +1,66 @@
+.feedback-container{
+  background-color: #fff;
+  border-top: 4px solid #a3aec8;
+  box-shadow: 0px 2px 4px rgb(0 0 0 / 10%);
+  border-radius: 3px;
+  max-width: auto;
+  min-height: 300px;
+  height: auto;
+  position: absolute;
+  left: 140px;
+  right: 0;
+  top: 30%;
+  width: 80%;
+  padding: 50px 60px;
+  display: flex;
+  justify-content: space-between;
+  
+  align-items: baseline;
+  flex-direction: column;
+}
+.data-info{
+  position: absolute;
+  right: 50px;
+  top: 20%;
+  font-family: "Segoe UI";
+}
+.main-info{
+  margin-top: 15px;
+  min-width: 80%;
+  align-self: center;
+  font-weight: bolder;
+  font-size: 18px;
+  font-family: "Segoe UI";
+}
+.new-message{
+  position: absolute;
+  left: 30%;
+  right: 50%;
+}
+.title-beedback{
+  font-family: "Segoe UI";
+  margin-left: 30px;
+  color: #212529;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.card-feedback{
+  font-family: "Segoe UI";
+  cursor: pointer;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  border-bottom: 1px solid #e5ebf2;
+  background-color: #fff;
+  width: 100%;
+  height: auto;
+  min-height: 150px;
+  max-width: auto;
+}
+
 .stud-text{
     cursor: pointer;
     font-size: 25px;
@@ -5,13 +68,13 @@
     font-family: "Times New Roman", Georgia, Serif;
 }
 .info-container{
-    height: auto;
-    min-width: 600px;
-    min-height: 30px;
-    display: flex;
-    flex-direction: column;
-    margin: 0 0;
-    padding: 30px 50px;
+  height: auto;
+  min-width: 600px;
+  min-height: 30px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0;
+  padding: 30px 50px;
 }
 .card-body{
     margin-right: 20px;
@@ -98,7 +161,8 @@
     display: flex;
     justify-content: center;
     margin:0px;
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     padding-left: 100px;
 	  font-family: "Open Sans", arial;
     background-color: rgb(231, 237, 241);
@@ -449,4 +513,8 @@ body {
   line-height: 16px;
   font-size: 16px;
   background: #fa5873;
+}
+
+.sub-all-container{
+
 }

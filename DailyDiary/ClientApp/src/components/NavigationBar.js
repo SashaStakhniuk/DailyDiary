@@ -142,7 +142,6 @@ function NavigationBar()
 
             <li className="darkerli">
               <a href="/">
-
                 <i className="fa fa-clock-o fa-lg"></i>
                 <span className="nav-text">Feedback</span>
                 <span id="feedback-badge-counter" className="feedback-badge-counter"></span>

@@ -4,6 +4,7 @@ import NavigationBar from '../NavigationBar'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+
 function NewsStudentPage(){
 
     let { id } = useParams()
@@ -33,6 +34,9 @@ function NewsStudentPage(){
                         } else {
                             setNews([...news, ...response.data])
                             setNewsSkip(prevCourBlogs => prevCourBlogs +4)
+                            loader_container.style.visibility = 'hidden'
+                            loader_container.style.opacity = 0
+                            loader_container.style.height = '0px'
                         }
                     }).finally(() => setLoading(false))
                 }, 700)
@@ -61,6 +65,9 @@ function NewsStudentPage(){
                         } else {
                             setNews([...news, ...response.data])
                             setNewsSkip(prevCourBlogs => prevCourBlogs +4)
+                            loader_container.style.visibility = 'hidden'
+                            loader_container.style.opacity = 0
+                            loader_container.style.height = '0px'
                         }
                     }).finally(() => setLoading(false))
                 }, 700)
@@ -123,6 +130,7 @@ function NewsStudentPage(){
                             {news.map((value, i) => {
                                 return(
                                     <>
+                                        {/* Сам попап  */}
                                         <div className="popup" id="popup">
                                             <div className="popup__body">
                                                 <div style={{position: 'relative'}} id="popup__content" class="popup__content">
@@ -157,6 +165,7 @@ function NewsStudentPage(){
                                                 </div>
                                             </div>
                                         </div>
+                                                                {/* Передаю в обработчик открытия попапа обект корорый я рендерю onClickDetailInfo(e, i, value) */}
                                         <div id={i} key={i} onClick={e => onClickDetailInfo(e, i, value)} className="news-container">
                                             <div id="logo" className='logo'>
                                                 {value.isRed === true ? "" : <span id={'new-message'+i} className='new-message' >New!</span>}
