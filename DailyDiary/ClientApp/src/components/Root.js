@@ -60,13 +60,7 @@ const Root = ({ store }) => {
 
     async function grtNotReaadCountStudentNews(){
         var news = document.getElementById('news-badge-counter')
-        var feedback = document.getElementById('feedback-badge-counter')
 
-        if(feedback){
-            feedback.innerText = ''
-            feedback.style.visibility = 'hidden'
-            feedback.style.opacity = 0
-        }
         if(news){
             news.innerText = ''
             news.style.visibility = 'hidden'
@@ -81,22 +75,55 @@ const Root = ({ store }) => {
         const data = await response.json()
         if(response.ok == true){
             if(data > 0){
-                news.innerText = data
-                news.style.visibility = 'visible'
-                news.style.opacity = 1
+                if(news){
+                    news.innerText = data
+                    news.style.visibility = 'visible'
+                    news.style.opacity = 1
+                }
             } else {
                 if(news){
                     news.innerText = ''
                     news.style.visibility = 'hidden'
                     news.style.opacity = 0
                 }
-               
+            }
+        }
+        
+    }
+    async function grtNotReaadCountStudentFeedback(){
+        var feedback = document.getElementById('feedback-badge-counter')
+
+        if(feedback){
+            feedback.innerText = ''
+            feedback.style.visibility = 'hidden'
+            feedback.style.opacity = 0
+        }
+        var StudentId = 3
+        const responsefeedbacks = await fetch(`https://localhost:44364/api/Student/GetNotreadFeedback/${StudentId}`)
+        const dataf = await responsefeedbacks.json()
+        if(responsefeedbacks.ok == true){
+            if(dataf > 0){
+                if(feedback){
+                    feedback.innerText = dataf
+                    feedback.style.visibility = 'visible'
+                    feedback.style.opacity = 1
+                }
+                
+            } else {
+                if(feedback){
+                    feedback.innerText = ''
+                    feedback.style.visibility = 'hidden'
+                    feedback.style.opacity = 0
+                }
             }
         }
     }
 
     useEffect(() => {
+
         grtNotReaadCountStudentNews()
+        grtNotReaadCountStudentFeedback()
+
         // Если студент 
         // if(isTeacher){
         //     // Если залогинен преподаватель

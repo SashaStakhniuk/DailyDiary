@@ -92,22 +92,23 @@ namespace DailyDiary.Controllers.APIControllers
             return NotFound(new { error = "No one teacher found" });
         }
 
-/*        [HttpGet("id")]
-        public async Task<ActionResult<IEnumerable<Subject>>> GetGroupSubjectsById(int id)//List of subjects that taught this group
-        {
-            IEnumerable<int> groupSubjectsId = await db.GroupSubjects.Where(x => x.GroupId == id).Select(x => x.SubjectId).ToListAsync();
-            if (groupSubjectsId != null)
-            {
-                //groupTeachersId = groupTeachersId.Distinct();
-                var subjects = new List<Subject>();
-                foreach (var subjectId in groupSubjectsId)
+        /*        [HttpGet("id")]
+                public async Task<ActionResult<IEnumerable<Subject>>> GetGroupSubjectsById(int id)//List of subjects that taught this group
                 {
-                    subjects.Add(await db.Subjects.FirstOrDefaultAsync(x => x.Id == subjectId));
-                }
-                return Ok(subjects);
-            }
-            return NotFound(new { error = "No one subject found" });
-        }*/
+                    IEnumerable<int> groupSubjectsId = await db.GroupSubjects.Where(x => x.GroupId == id).Select(x => x.SubjectId).ToListAsync();
+                    if (groupSubjectsId != null)
+                    {
+                        //groupTeachersId = groupTeachersId.Distinct();
+                        var subjects = new List<Subject>();
+                        foreach (var subjectId in groupSubjectsId)
+                        {
+                            subjects.Add(await db.Subjects.FirstOrDefaultAsync(x => x.Id == subjectId));
+                        }
+                        return Ok(subjects);
+                    }
+                    return NotFound(new { error = "No one subject found" });
+                }*/
+
 
     }
 }

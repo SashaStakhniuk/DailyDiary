@@ -115,30 +115,22 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return NotFound(new { error = "No one teacher found" });
         }
-       //private async Task<List<int>> GetGroupsBySubjectId(int id) // get groups id by subject
-       // {
-       //     var groupsBySubjectId = await db.GroupSubjects.Where(x => x.SubjectId == id).Select(x => x.GroupId).ToListAsync();
-       //     if (groupsBySubjectId != null)
-       //     {
-       //         return groupsBySubjectId;
-       //     }
-       //     return null;
-       // }
-        //[HttpGet("id")]
-        //public async Task<ActionResult<IEnumerable<Group>>> GetSubjectGroupsById(int id)//List of groups with this subject
-        //{
-        //   var groupsBySubjectId = await GetGroupsBySubjectId(id);
-        //    if (groupsBySubjectId != null)
-        //    {
-        //        //groupTeachersId = groupTeachersId.Distinct();
-        //        var groups = new List<Group>();
-        //        foreach (var groupId in groupsBySubjectId)
-        //        {
-        //            groups.Add(await db.Groups.FirstOrDefaultAsync(x => x.Id == groupId));
-        //        }
-        //        return Ok(groups);
-        //    }
-        //    return NotFound(new { error = "No one group found" });
-        //}
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<int>> GetSubjectId(int id)
+        {
+            StudyPlan stydyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.GroupId == id);
+            if (stydyPlan != null)
+            {
+                SubjectsStudyPlan subjectsStudyPlan = await db.SubjectsStudyPlans.FirstOrDefaultAsync(x => x.StudyPlanId == stydyPlan.StudyPlanId);
+                if (subjectsStudyPlan != null)
+                {
+                    return Ok(subjectsStudyPlan.SubjectId);
+                }
+            }
+
+            return NotFound();
+        }
     }
 }

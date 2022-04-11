@@ -159,7 +159,7 @@
     overflow-x: hidden;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin:0px;
     height: auto;
     min-height: 100%;
@@ -516,5 +516,26 @@ body {
 }
 
 .sub-all-container{
+  font-family: 'Gt super text book', Georgia, sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  border-bottom: 0.2px solid gray;
+  background-color: white
+}
 
+.teacher-header{
+  box-shadow: 5px 5px 10px rgb(0 0 0 / 20%);
+  height: 80px;
+  width: 100%;
+  background-color: #fff;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  margin-left: 160px;
 }

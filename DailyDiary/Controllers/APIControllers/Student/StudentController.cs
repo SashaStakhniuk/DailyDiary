@@ -42,7 +42,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{studentsSkip}")]
         public ActionResult<IEnumerable<Student>> GetRangStudents(int studentsSkip)
         {
-            List<Student> result = db.Students.Skip(studentsSkip).Take(5).ToList();
+            List<Student> result = db.Students.OrderByDescending(x => x.StudentId).Skip(studentsSkip).Take(5).ToList();
             if (result.Count() > 0)
             {
                 return result;
@@ -239,6 +239,61 @@ namespace DailyDiary.Controllers.APIControllers
                 }
             }
             return NotFound(new { error = "Student's groups not found" });
+        }
+
+
+        [HttpGet("{StudentId}")]
+        public async Task<ActionResult<int>> GetNotreadFeedback(int StudentId)
+        {
+            Student stuent = await db.Students.FirstOrDefaultAsync(x => x.StudentId == StudentId);
+            if(stuent != null)
+            {
+                int count = 0;
+                List<Feedback> feedbacks = new List<Feedback>();
+                List<int> studentsFeedbackIds = await db.StudentFeedback.Where(x => x.StudentId == StudentId).Select(x => x.FeedbackId).ToListAsync();
+                foreach(var studentsFeedbackId in studentsFeedbackIds)
+                {
+                    feedbacks.Add(await db.Feedback.FirstOrDefaultAsync(x => x.Id == studentsFeedbackId));
+                }
+                if(feedbacks.Count > 0)
+                {
+                    foreach(var feedback in feedbacks)
+                    {
+                        if(feedback.IsRead == false)
+                        {
+                            count++;
+                        }
+                    }
+                    return Ok(count);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpGet("{GroupId}")]
+        public async Task<ActionResult<IEnumerable<Student>>> AetStudentFromGroupById(int GroupId)
+        {
+            var students = await db.Students.Where(x => x.GroupId == GroupId).ToListAsync();
+            if(students.Count > 0)
+            {
+                return Ok(students);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<bool>> IsReadAllFeedbacks()
+        {
+            var feedbacks = await db.Feedback.ToListAsync();
+            foreach(var feedback in feedbacks)
+            {
+                if(feedback.IsRead == false)
+                {
+                    feedback.IsRead = true;
+                }
+            }
+            await db.SaveChangesAsync();
+            return Ok(true);
         }
     }
 }

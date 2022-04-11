@@ -35,10 +35,10 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet("{teachersSkip}")]
-        public async Task< ActionResult<IEnumerable<Teacher>>> GetRangTeachers(int teachersSkip)
+        public async Task<ActionResult<IEnumerable<Teacher>>> GetRangTeachers(int teachersSkip)
         {
-            List<Teacher> teachers = await db.Teachers.Skip(teachersSkip).Take(5).ToListAsync();
-            if(teachers.Count() > 0)
+            List<Teacher> teachers = await db.Teachers.OrderByDescending(x => x.TeacherId).Skip(teachersSkip).Take(5).ToListAsync();
+            if (teachers.Count() > 0)
             {
                 return teachers;
             }
@@ -51,7 +51,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Teacher>> Get(int id)//GetTeacherByIdAsync
         {
-            var teacher = await db.Teachers.FirstOrDefaultAsync(x=> x.TeacherId==id);
+            var teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == id);
             if (teacher == null)
             {
                 return NotFound();
@@ -64,7 +64,7 @@ namespace DailyDiary.Controllers.APIControllers
         {
             if (ModelState.IsValid)
             {
-                if(model.Rate < 0 || model.Salary < 2000 
+                if (model.Rate < 0 || model.Salary < 2000
                         || model.Experience < 0 || model.Age < 0)
                 {
                     return BadRequest("Vrong values");
@@ -104,7 +104,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpPost]
         public async Task<IActionResult> Edit(TeacherViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 if (model != null)
                 {
@@ -137,7 +137,7 @@ namespace DailyDiary.Controllers.APIControllers
                     }
                 }
             }
-            
+
             return BadRequest(ModelState);
         }
 
