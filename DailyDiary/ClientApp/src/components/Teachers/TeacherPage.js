@@ -84,10 +84,12 @@ class TeacherPage extends React.Component{
         return(
             <>
                 <div id='all-container' className="all-container">
+                    
                     <NavigationBar />
                     <div className="teacher-header">
 
                     </div>
+
                     <div style={{marginTop: '10px'}}>
 
                         <div className='groups_navigation-container'>
@@ -104,14 +106,35 @@ class TeacherPage extends React.Component{
                                     
                                 </div>
                             </div>
-                            <div className='main-containe'>
-                                <div className='student-cart'>
-
+                            <div className='main-student-containe'>
+                                <div className='header-container-description'>
+                                    <span className='fio'>FIO</span>
+                                    <span className='online'>Online</span>
+                                    <span className='feedback'>Feedback</span>
                                 </div>
                                 <div className='student-cart'>
-
-                                </div>      
-                                
+                                    <div className='fio-stident-container'>
+                                        <span className='id-student'>1</span>
+                                        <img id='img-student' className='img-student' />
+                                        <div className='fio-student'>
+                                            <span>
+                                                First name Last Name (SubName) 2001
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="active-time-container">
+                                        <span className="online">Online</span>
+                                        <span className="tile-oneline">31.10.2022</span>
+                                        <span className=""></span>
+                                    </div>
+                                    <div className="send-feedback-container">
+                                        <div>
+                                            <a href='/' className="image-ref">
+                                                <img src='https://www.veryicon.com/download/png/business/blue-business-icon/send-message-4?s=256' id='img-feedback' className="img-feedback sepia " />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div> 
                             </div>
                         </div>
                     </div>
