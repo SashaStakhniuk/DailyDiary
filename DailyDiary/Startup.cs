@@ -28,13 +28,11 @@ namespace DailyDiary
         {
             var identityConfiguration = Configuration.GetConnectionString("DailyDiaryUsers");
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(identityConfiguration));
+            services.AddIdentity<Person, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
 
             var dailyDiaryDatasConfiguration = Configuration.GetConnectionString("DailyDiaryDatas");
             services.AddDbContext<DailyDiaryDatasContext>(options => options.UseSqlServer(dailyDiaryDatasConfiguration));
 
-
-
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -71,6 +69,8 @@ namespace DailyDiary
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DailyDiary.Models
 {
-    public class User:IdentityUser
+    public class User : IdentityUser
     {
         public string LastName { get; set; }
     }

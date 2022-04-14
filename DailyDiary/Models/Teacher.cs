@@ -16,7 +16,7 @@ namespace DailyDiary.Models
             TeacherSubjects = new HashSet<TeacherSubject>();
             TeacherNews = new HashSet<TeacherNews>();
         }
-        //[Key]
+        [Key]
         public int TeacherId { get; set; }
         public string Specialty { get; set; } // вчителі початкових класів, вчителі-дефектологи,вихователі-методисти і т.п
         //public string Subjects { get; set; } // математика, фізика, інформатика і т.п

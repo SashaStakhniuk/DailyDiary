@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,20 +7,29 @@ using System.Threading.Tasks;
 
 namespace DailyDiary.Models
 {
-    public class Student 
+    public class Student : IdentityUser
     {
-        public Student()
+        public Student() 
         {
             StudentNews = new HashSet<StudentNews>();
             StudentFeedback = new HashSet<StudentFeedback>();
         }
-        public int StudentId { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
-       /* [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]*/
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<DateTime> Birthday { get; set; }
         public int Age { get; set; }
+
+        //[Key]
+        public int StudentId { get; set; }
+
+        //public string Name { get; set; }
+        //public string LastName { get; set; }
+        /* [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]*/
+        //public Nullable<DateTime> Birthday { get; set; }
+        //public int Age { get; set; }
         public int StudyYear { get; set; } //year of study
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]

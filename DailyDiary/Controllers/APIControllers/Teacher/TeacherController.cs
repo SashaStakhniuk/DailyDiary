@@ -2,6 +2,7 @@
 using DailyDiary.Models.ViewModels;
 using DailyDiary.Models.ViewModels.Teacher;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,15 +17,19 @@ namespace DailyDiary.Controllers.APIControllers
     public class TeacherController : Controller
     {
         private readonly DailyDiaryDatasContext db;
-
-        public TeacherController(DailyDiaryDatasContext datasContext)
+        private readonly UserManager<Person> userManager;
+        IdentityContext context;
+        public TeacherController(DailyDiaryDatasContext datasContext, IdentityContext context, UserManager<Person> userManager)
         {
+            this.userManager = userManager;
+            this.context = context;
             this.db = datasContext;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Teacher>>> Get()//GetAllTeachersAsync
         {
+            //List<Teacher> teachers = await context.Users.Find(db.Teachers.Where(x => x.TeacherId == ));
             return await db.Teachers.ToListAsync();
         }
 
@@ -235,6 +240,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpPost]
         public async Task<ActionResult> SendFeedback(SendFeedbackViewModel model)
         {
+
             Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.SubjectId);
             Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.TeacherId);
             Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.StudentId);

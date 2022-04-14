@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DailyDiary.Models
 {
-    public class IdentityContext : IdentityDbContext<User>
+    public class IdentityContext : IdentityDbContext<Person>
     {
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
         {

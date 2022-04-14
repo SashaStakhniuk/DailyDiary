@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +9,16 @@ namespace DailyDiary.Models
 {
     public class DailyDiaryDatasContext : DbContext
     {
-        
+
+        // Using Idenitity
         public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+
         public DbSet<Group> Groups { get; set; }
         public DbSet<Subgroup> Subgroups { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<TeacherSubject> TeacherSubjects { get; set; }
         public DbSet<TeacherGroup> TeacherGroups { get; set; }
-
         public DbSet<TeacherNews> TeacherNews { get; set; }
         //public DbSet<GroupSubject> GroupSubjects { get; set; }
         public DbSet<StudyPlan> StudyPlans { get; set; }
@@ -35,6 +37,7 @@ namespace DailyDiary.Models
             //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
