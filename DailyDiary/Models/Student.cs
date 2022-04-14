@@ -7,21 +7,15 @@ using System.Threading.Tasks;
 
 namespace DailyDiary.Models
 {
-    public class Student : IdentityUser
+    public class Student :Person//: IdentityUser
     {
         public Student() 
         {
             StudentNews = new HashSet<StudentNews>();
             StudentFeedback = new HashSet<StudentFeedback>();
         }
-        public string Name { get; set; }
-        public string LastName { get; set; }
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public Nullable<DateTime> Birthday { get; set; }
-        public int Age { get; set; }
 
-        //[Key]
+        [Key]
         public int StudentId { get; set; }
 
         //public string Name { get; set; }

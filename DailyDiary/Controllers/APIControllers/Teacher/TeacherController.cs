@@ -259,8 +259,8 @@ namespace DailyDiary.Controllers.APIControllers
             { 
                 Feedback = feedback, 
                 FeedbackId = feedback.Id, 
-                Student = student, 
-                StudentId = student.StudentId 
+                Student = student,
+                StudentId = student.StudentId
             };
             db.StudentFeedback.Add(studentFeedback);
             await db.SaveChangesAsync();

@@ -28,7 +28,7 @@ namespace DailyDiary
         {
             var identityConfiguration = Configuration.GetConnectionString("DailyDiaryUsers");
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(identityConfiguration));
-            services.AddIdentity<Person, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
 
             var dailyDiaryDatasConfiguration = Configuration.GetConnectionString("DailyDiaryDatas");
             services.AddDbContext<DailyDiaryDatasContext>(options => options.UseSqlServer(dailyDiaryDatasConfiguration));
