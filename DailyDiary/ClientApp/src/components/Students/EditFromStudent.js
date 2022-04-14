@@ -132,7 +132,7 @@ function EditFromStudent(props){
         setLogin(e.target.value)
     }
     function onClickAddImage(){
-        window.location = `/admin/add-image/${id}`
+        window.location = `/admin/add-image-student/${id}`
     }
 
 

@@ -5,7 +5,7 @@ import '../../styles/Students.css'
 function CartStudent(props){
 
     function onClick(id) {
-        window.location = `/student/${id}`
+        window.location = `/admin/student-profil/${id}`
     }
 
     return(

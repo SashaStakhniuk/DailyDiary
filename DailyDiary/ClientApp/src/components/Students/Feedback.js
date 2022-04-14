@@ -14,6 +14,10 @@ function Feedback(){
     const [feedbackSkip, setFeedbacksSkip] = useState(0)
 
     useEffect(() => {
+        isRead()
+    }, [id])
+
+    useEffect(() => {
 
         var loader_container = document.getElementById('loader-container')
         loader_container.style.visibility = 'hidden'
@@ -41,9 +45,7 @@ function Feedback(){
                             loader_container.style.height = '0px'
                         }
                     }).finally(() => {
-                        setTimeout(() => {
-                            isRead()
-                        }, 0)
+                      
                         setLoading(false)
                     })
                 }, 100)
@@ -79,9 +81,9 @@ function Feedback(){
                             
                         }
                     }).finally(() => {
-                        // setTimeout(() => {
-                        //     isRead()
-                        // }, 0)
+                        setTimeout(() => {
+                          
+                        }, 0)
                         setLoading(false)
                     })
                 }, 100)
@@ -91,7 +93,7 @@ function Feedback(){
 
     async function isRead(){
 
-        const response = await fetch(`https://localhost:44364/api/Student/IsReadAllFeedbacks`, {
+        const response = await fetch(`https://localhost:44364/api/Student/IsReadAllStudentFeedbacks`, {
             method: "POST"
         })
         if(response.ok === true){
@@ -115,37 +117,39 @@ function Feedback(){
 
     return(
         <>
-            <div id='all-container' className="cont">
+            <div id='all-container' className="all-container">
                 <NavigationBar />
-                <div className='sub-all-container'>
-                        <div className="heaber">
-
-                        </div>
-                        <div className='container-title'>
-                            <p className='text-uppercase title'>FEEDBACK</p>
-                        </div>
-                        <div className="feedback-container">
-                            {feedbacks.map((feedback, i) => {
-                                    return(
-                                        <>
-                                            <div className="card-feedback">
-                                                <div className="title-beedback">
-                                                    <span>{feedback.teacherName}  {feedback.teacherLastName} {feedback.subjectTitle}</span>
-                                                </div>
-                                                <div className="main-info">
-                                                    {feedback.mainInformation} 
-                                                </div>
-                                                <div className="data-info">
-                                                    {new Date(feedback.dataPublication).toLocaleDateString()}
-                                                </div>
-                                                {feedback.isRed === false ? <span id={'new-message'+i} className='new-message' >New!</span> : ""}
-                                            </div>
-                                        </>
-                                    )
-                            })}
-                            
-                        </div>
+                <div className="heaber"></div>
+                <div className='container-title'>
+                    <p className='text-uppercase title'>FEEDBACK</p>
                 </div>
+                <div className="feedback-container">
+                    {feedbacks.map((feedback, i) => {
+                        return(
+                            <>
+                                <div className="card-feedback">
+                                    <div className="title-beedback">
+                                        <span>{feedback.teacherName} {feedback.teacherLastName}  ({feedback.subjectTitle})</span>
+                                    </div>
+                                    <div className="main-info">
+                                        {feedback.mainInformation}
+                                    </div>
+                                    <div className="data-info">
+                                        {new Date(feedback.dataPublication).toLocaleDateString()}
+                                    </div>
+                                    {feedback.isRed === false ? <span id={'new-message'+i} className='new-message' >New!</span>: ""}
+                                </div>
+                            </>
+                        )
+                    })
+                    // : 
+                    // <div className="card-notfound">
+                    //     <span style={{fontSize: '23px', color: 'red'}}>No feedbacks yet</span>
+                    // </div>
+                }
+
+
+                </div> 
                 <div id="loader-container" className='loader-container'>
                     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                 </div>

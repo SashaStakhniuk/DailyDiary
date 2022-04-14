@@ -100,6 +100,229 @@ body #root{
   height: 100%;
   width: auto;
 }
+.border-green{
+  margin-top: 2px;
+  height: 13px;
+  width: 13px;
+  border-radius: 50%;
+  border: 1.7px solid rgb(36, 140, 36);
+}
+.visiting{
+  color: white;
+  font-size: 18px;
+  font-weight: bolder;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  min-width: 100px;
+  width: 100px;
+  margin-right: 10px;
+}
+.radio1{
+  margin-right: 5px;
+  line-height: 5px;
+  position: relative;
+  padding: 0px 0p 0px 50px;
+  transition: all 0.3s ease 0s;
+  font-size: 10px;
+  color: #b2b2b2;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -ms-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+}
+input .radio1{
+  display: none;
+}
+.radio1::before{
+  content: '';
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  border: 2px solid rgb(36, 140, 36);
+  border-radius: 50%;  
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow:  0 0 3px rgba(0, 0, 0, 0.3);
+}
+.radio1::after{
+
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  left: 0px;
+  top: 0px;
+  background-color:rgb(36, 140, 36);
+  content: '';
+  border-radius: 50%;
+
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -ms-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+
+  transform: scale(0);
+  -moz-transform: scale(0);
+  -ms-transform: scale(0);
+  -webkit-transform: scale(0);
+  -o-transform: scale(0);
+}
+.radio1.active{
+  color: #000;
+}
+.radio1.active::after{
+  transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -webkit-transform: scale(1);
+  -o-transform: scale(1);
+}
+
+.radio2{
+  margin-right: 5px;
+  line-height: 5px;
+  position: relative;
+  padding: 0px 0p 0px 50px;
+  transition: all 0.3s ease 0s;
+  font-size: 10px;
+  color: #b2b2b2;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -ms-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+}
+
+input .radio2{
+  display: none;
+}
+
+.radio2::before{
+  content: '';
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  border: 2px solid rgb(227, 227, 25);
+  border-radius: 50%;  
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow:  0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.radio2::after{
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  left: 0px;
+  top: 0px;
+  background-color:rgb(227, 227, 25);
+  content: '';
+  border-radius: 50%;
+
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -ms-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+
+  transform: scale(0);
+  -moz-transform: scale(0);
+  -ms-transform: scale(0);
+  -webkit-transform: scale(0);
+  -o-transform: scale(0);
+}
+.radio2.active{
+  color: #000;
+}
+.radio2.active::after{
+  transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -webkit-transform: scale(1);
+  -o-transform: scale(1);
+}
+.radio3{
+  line-height: 5px;
+  position: relative;
+  padding: 0px 0p 0px 50px;
+  transition: all 0.3s ease 0s;
+  font-size: 10px;
+  color: #b2b2b2;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -ms-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+}
+input .radio3{
+  display: none;
+}
+
+.radio3::before{
+  content: '';
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  border: 2px solid red;
+  border-radius: 50%;  
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow:  0 0 3px rgba(0, 0, 0, 0.3);
+}
+.radio3::after{
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  left: 0px;
+  top: 0px;
+  background-color:red;
+  content: '';
+  border-radius: 50%;
+
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -ms-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+
+  transform: scale(0);
+  -moz-transform: scale(0);
+  -ms-transform: scale(0);
+  -webkit-transform: scale(0);
+  -o-transform: scale(0);
+}
+.radio3.active{
+  color: #000;
+}
+.radio3.active::after{
+  transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -webkit-transform: scale(1);
+  -o-transform: scale(1);
+}
+.visiting-container{
+  margin-left: -40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  text-align: center;
+  align-items: center;
+  height: 100%;
+  width: auto;
+  max-width: 80px;
+  min-width: 50px;
+}
 .active-time-container .tile-oneline{
   font-size: 19px;
   color: #000;
@@ -151,7 +374,6 @@ body #root{
   border: none;
   text-decoration: none;
   border-radius: 50%;
-  background-color: rgb(157, 201, 207);
   height: 65px;
   width: 65px;
 }

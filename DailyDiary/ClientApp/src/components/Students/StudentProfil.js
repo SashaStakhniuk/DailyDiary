@@ -64,12 +64,12 @@ function StudentProfil(props){
     }
 
     function onClickEditButton(){
-        window.location = `/edit-student/${id}`
+        window.location = `/admin/edit-student/${id}`
     }
     
     function onClickDelete(){
         Delete()
-        window.location = `/students/`
+        window.location = `/admin/students/`
     }
 
     return(

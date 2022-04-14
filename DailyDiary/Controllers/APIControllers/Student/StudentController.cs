@@ -230,11 +230,12 @@ namespace DailyDiary.Controllers.APIControllers
                 }
                 if (feedbackinfos.Count() > 0)
                 {
-                    
-                    return Ok(feedbackinfos.OrderByDescending(n => n.Id).Skip(feedbackSkip).Take(5).ToList());
+                    var takeFeedback = feedbackinfos.Count();
+                    return Ok(feedbackinfos.OrderByDescending(f => f.Id).Skip(feedbackSkip).Take(takeFeedback).ToList());
                 }
                 else
                 {
+
                     return Ok(false);
                 }
             }
@@ -271,7 +272,7 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet("{GroupId}")]
-        public async Task<ActionResult<IEnumerable<Student>>> AetStudentFromGroupById(int GroupId)
+        public async Task<ActionResult<IEnumerable<Student>>> GetStudentsByGroupId(int GroupId)
         {
             var students = await db.Students.Where(x => x.GroupId == GroupId).ToListAsync();
             if(students.Count > 0)
@@ -282,7 +283,7 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> IsReadAllFeedbacks()
+        public async Task<ActionResult<bool>> IsReadAllStudentFeedbacks()
         {
             var feedbacks = await db.Feedback.ToListAsync();
             foreach(var feedback in feedbacks)

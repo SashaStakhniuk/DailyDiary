@@ -232,11 +232,32 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
-        [HttpPost("{TeacherId}/{StudentId}")]
-        public async Task<ActionResult> SendFeedback(int TeacherId, int StudentId)
+        [HttpPost]
+        public async Task<ActionResult> SendFeedback(SendFeedbackViewModel model)
         {
-
-
+            Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.SubjectId);
+            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.TeacherId);
+            Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.StudentId);
+            Feedback feedback = new Feedback
+            {
+                IsRead = false,
+                DataPublication = model.DataPublication,
+                MainInformation = model.MainInformation,
+                SubjectId = model.SubjectId,
+                Subject = subject,
+                TeacherId = model.TeacherId,
+                Teacher = teacher,
+            };
+            db.Feedback.Add(feedback);
+            StudentFeedback studentFeedback = new StudentFeedback 
+            { 
+                Feedback = feedback, 
+                FeedbackId = feedback.Id, 
+                Student = student, 
+                StudentId = student.StudentId 
+            };
+            db.StudentFeedback.Add(studentFeedback);
+            await db.SaveChangesAsync();
             return Ok();
         }
     }

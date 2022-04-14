@@ -24,6 +24,7 @@ import { useEffect, useState } from 'react'
 import Feedback from './Students/Feedback'
 import NewsStudentPage from './Students/NewsStudentPage'
 import SendMessageForStudent from './Students/SendMessageForStudent'
+import SandFeedback from './Teachers/SandFeedback'
 const Root = ({ store }) => {
 
     const [isStudent, setIsStudent] = useState(false)
@@ -98,7 +99,7 @@ const Root = ({ store }) => {
             feedback.style.visibility = 'hidden'
             feedback.style.opacity = 0
         }
-        var StudentId = 3
+        var StudentId = 12
         const responsefeedbacks = await fetch(`https://localhost:44364/api/Student/GetNotreadFeedback/${StudentId}`)
         const dataf = await responsefeedbacks.json()
         if(responsefeedbacks.ok == true){
@@ -159,6 +160,7 @@ const Root = ({ store }) => {
                     <Route exact path="/admin/send-for-student/:id"><SendMessageForStudent/></Route>
 
                     <Route exact path="/teacher-page"><TeacherPage/></Route>
+                    <Route exact path="/teacher-page/send-feedback/:studentId/:teacherId/:subjectId/:studentName"><SandFeedback/></Route>
                     <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
                     <Route exact path="/teacher/news-page/:id" ><NewsPage /></Route>
                     

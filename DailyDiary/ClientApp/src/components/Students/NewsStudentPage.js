@@ -100,7 +100,7 @@ function NewsStudentPage(){
         document.getElementById('title').innerText = value.title
         document.getElementById('img-news').src = value.base64Url
         var NewsId = value.id
-
+        
         const response = await fetch(`https://localhost:44364/api/News/NewsStudentIsRead/${NewsId}`)
     }
 
