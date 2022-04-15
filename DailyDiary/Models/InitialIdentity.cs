@@ -10,7 +10,7 @@ namespace DailyDiary.Models
         public static void Initialize(IdentityContext db) 
         {
             //Teacher teacher = new Teacher { LastName = "Klar", UserName = "Alex", Base64URL = "URL" };
-            User student = new User { LastName = "Oliver", UserName = "Dnis" };
+            User student = new User { UserName = "Dnis", ForeignKeyTeackerId = 1 };
             //db.Users.Add(teacher);
             db.Users.Add(student);
 

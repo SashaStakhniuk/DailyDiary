@@ -80,13 +80,13 @@ namespace DailyDiary.Controllers.APIControllers
                     await roleManager.CreateAsync(new IdentityRole("User"));
                 }
 
-                User user = new User { Email = model.Email, UserName = model.UserName, LastName = model.LastName };
+                User user = new User { Email = model.Email, UserName = model.UserName };
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     List<string> role = new List<string>();
 
-                    if (user.Email == "MainAdmin@gmail.com" && user.UserName == "Main" && user.LastName == "Admin")
+                    if (user.Email == "MainAdmin@gmail.com" && user.UserName == "Main")
                     {
                         role.Add("MainAdmin");
                     }

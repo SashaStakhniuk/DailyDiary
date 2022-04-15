@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DailyDiary.Models
 {
-    public class Person : IdentityUser
+    public class Person 
     {
         //public int PersonId { get; set; }
         public string Name { get; set; }

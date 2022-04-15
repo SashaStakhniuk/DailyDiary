@@ -8,6 +8,7 @@ namespace DailyDiary.Models
 {
     public class User : IdentityUser
     {
-        public string LastName { get; set; }
+        public int ForeignKeyStudentId { get; set; }
+        public int ForeignKeyTeackerId { get; set; }
     }
 }
