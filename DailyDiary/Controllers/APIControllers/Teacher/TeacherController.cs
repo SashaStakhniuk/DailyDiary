@@ -18,18 +18,20 @@ namespace DailyDiary.Controllers.APIControllers
     {
         private readonly DailyDiaryDatasContext db;
         private readonly UserManager<Person> userManager;
-        IdentityContext context;
-        public TeacherController(DailyDiaryDatasContext datasContext, IdentityContext context, UserManager<Person> userManager)
+        private readonly IdentityContext context;
+        private readonly SignInManager<User> signInManager;
+        public TeacherController(DailyDiaryDatasContext datasContext, IdentityContext context, 
+            UserManager<Person> userManager, SignInManager<User> signInManager)
         {
             this.userManager = userManager;
             this.context = context;
             this.db = datasContext;
+            this.signInManager = signInManager;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Teacher>>> Get()//GetAllTeachersAsync
         {
-            //List<Teacher> teachers = await context.Users.Find(db.Teachers.Where(x => x.TeacherId == ));
             return await db.Teachers.ToListAsync();
         }
 
@@ -67,18 +69,21 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpPost]
         public async Task<IActionResult> CreateNew(NewTeacherViewModel model)
         {
+            string Password = Services.GeneratorService.GenerateNewPassword();
+            string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
+
             if (ModelState.IsValid)
             {
                 if (model.Rate < 0 || model.Salary < 2000
-                        || model.Experience < 0 || model.Age < 0)
+                        |model.Experience < 0 || model.Age < 0)
                 {
                     return BadRequest("Vrong values");
                 }
+
                 if (model != null)
                 {
                     Teacher teacher = new Teacher();
-                    string Password = Services.GeneratorService.GenerateNewPassword();
-                    string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
+                    
 
                     teacher.Name = model.Name;
                     teacher.LastName = model.LastName;
@@ -94,6 +99,7 @@ namespace DailyDiary.Controllers.APIControllers
                     teacher.Login = Login;
                     teacher.Passsword = Password;
                     teacher.Email = model.Email;
+                    //teacher.ForeignKeyTeackerId
 
                     Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
                     db.Teachers.Add(teacher);
