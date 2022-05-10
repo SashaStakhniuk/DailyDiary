@@ -15,7 +15,7 @@ function CreateNewStudent(){
     const[SubgroupId, setSubgroupId] = useState(0)
 
     async function add(){
-
+        
         var age = Number(Age)
         var groupId = Number(GroupId)
         var studyYear = Number(StudyYear)

@@ -75,11 +75,14 @@ form {
 [type='password']:valid, [type='username']:valid {
   --accent: #5f0;
 }
-[type='password']:invalid, [type='username']:invalid, 
+[type='number'].invalid{
+  border: rgba(255,43,0,0.5) 3px solid;
+}
+/* [type='password']:invalid, [type='username']:invalid, 
       [type='date']:invalid, [type="number"]:invalid, 
       [type="text"]:invalid, [type="email"]:invalid{
   --accent: rgba(255,43,0,0.5);
-}
+} */
 [type='password']:-moz-placeholder-shown, [type='username']:-moz-placeholder-shown, 
       [type='date']:-moz-placeholder-shown, [type="number"]:-moz-placeholder-shown,
       [type="text"]:-moz-placeholder-shown, [type="email"]:-moz-placeholder-shown{

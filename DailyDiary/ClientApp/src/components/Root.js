@@ -25,6 +25,9 @@ import Feedback from './Students/Feedback'
 import NewsStudentPage from './Students/NewsStudentPage'
 import SendMessageForStudent from './Students/SendMessageForStudent'
 import SandFeedback from './Teachers/SandFeedback'
+import NewStudyPlan from './Admin/NewStudyPlan'
+import AllGroups from './Group/AllGroups'
+import EditGroup from './Group/EditGroup';
 const Root = ({ store }) => {
 
     const [isStudent, setIsStudent] = useState(false)
@@ -71,7 +74,8 @@ const Root = ({ store }) => {
         //const response_feedback = await fetch(`https://localhost:44364/api/Teacher/GetNotStudentReadNews/3`) 
 
         //  Тут передаю псевдо зареганого студента у которого ID 3
-        const response = await fetch(`https://localhost:44364/api/News/GetNotStudentReadNews/3`)
+        var StudentId = 6
+        const response = await fetch(`https://localhost:44364/api/News/GetNotStudentReadNews/${StudentId}`)
 
         const data = await response.json()
         if(response.ok == true){
@@ -91,6 +95,7 @@ const Root = ({ store }) => {
         }
         
     }
+
     async function grtNotReaadCountStudentFeedback(){
         var feedback = document.getElementById('feedback-badge-counter')
 
@@ -99,7 +104,7 @@ const Root = ({ store }) => {
             feedback.style.visibility = 'hidden'
             feedback.style.opacity = 0
         }
-        var StudentId = 12
+        var StudentId = 6
         const responsefeedbacks = await fetch(`https://localhost:44364/api/Student/GetNotreadFeedback/${StudentId}`)
         const dataf = await responsefeedbacks.json()
         if(responsefeedbacks.ok == true){
@@ -121,6 +126,7 @@ const Root = ({ store }) => {
     }
 
     useEffect(() => {
+        //grtNotReaadCountTeacherNews()
 
         grtNotReaadCountStudentNews()
         grtNotReaadCountStudentFeedback()
@@ -133,9 +139,11 @@ const Root = ({ store }) => {
 
         //     // Если студент 
         //     grtNotReaadCountStudentNews()
+        //     grtNotReaadCountStudentFeedback()
         // } else {
         //     // никто не логинился ))
         // }
+
     }, [])
     
     return(
@@ -143,8 +151,10 @@ const Root = ({ store }) => {
             <Router>
                 <Switch>
                     <Route exact path="/"><Login/></Route>
+                    <Route exact path="/inst"><LoginChildrens/></Route>
                     <Route exact path="/children-login"><LoginChildrens/></Route>
-    
+                    <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route>
+                    <Route exact path="/admin/groups"><AllGroups/></Route>
                     <Route exact path="/admin/new-student"><CreateNewStudent/></Route>
                     <Route exact path="/admin/students"><Students/></Route>
                     <Route exact path="/admin/student-profil/:id"><StudentProfil/></Route>
@@ -158,7 +168,8 @@ const Root = ({ store }) => {
                     <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
                     <Route exact path="/admin/new-teacher"><CreateNewTeacher/></Route>
                     <Route exact path="/admin/send-for-student/:id"><SendMessageForStudent/></Route>
-
+                    <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>
+                    
                     <Route exact path="/teacher-page"><TeacherPage/></Route>
                     <Route exact path="/teacher-page/send-feedback/:studentId/:teacherId/:subjectId/:studentName"><SandFeedback/></Route>
                     <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>

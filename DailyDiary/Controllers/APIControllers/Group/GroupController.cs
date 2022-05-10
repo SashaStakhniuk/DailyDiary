@@ -1,5 +1,6 @@
 ﻿using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
+using DailyDiary.Models.ViewModels.Group;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace DailyDiary.Controllers.APIControllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]    
+    [Route("api/[controller]/[action]")]
     public class GroupController : Controller
     {
         private readonly DailyDiaryDatasContext db;
@@ -20,29 +21,59 @@ namespace DailyDiary.Controllers.APIControllers
         {
             this.db = db;
         }
-        public async Task<ActionResult<IEnumerable<Group>>> Get() //Get all
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Group>>> Get() 
         {
             return await db.Groups.ToListAsync();
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Group>> Get(int id) //Get one by id
+        public async Task<ActionResult<Group>> Get(int id) 
         {
-            var group = await db.Groups.FirstOrDefaultAsync(x=> x.Id == id);
+            var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == id);
             if (group != null)
             {
                 return Ok(group);
             }
-            return NotFound(new {error = "Group not found" });
-            //return group == null ? NotFound() : Ok(group);
+            return NotFound(new { error = "Group not found" });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditStudyPlan(StudyPlanGroupViewModel model)
+        {
+            if (ModelState.IsValid == true)
+            {
+                Group groupToEdit = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                if (groupToEdit != null)
+                {
+                    StudyPlan studyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.StudyPlanId == model.StudyPlanId);
+                    groupToEdit.Title = model.Title;
+                    groupToEdit.StudyPlan = studyPlan;
+                    groupToEdit.StudyPlanId = model.StudyPlanId;
+                    if(studyPlan.StudyPlanId != groupToEdit.StudyPlanId)
+                    {
+                        studyPlan.GroupId = Convert.ToInt32(null);
+                    }
+                    db.Groups.Update(groupToEdit);
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+                    Console.WriteLine();
+                }
+            }
+            return BadRequest();
+        }
+
         [HttpPut]
-       /* [Authorize(Roles = "MainAdmin,Admin")]*/
-        public async Task<ActionResult<Group>> CreateOrUpdateGroup(GroupViewModel model) //CreateOrUpdateGroupAsync
+        public async Task<ActionResult<Group>> CreateOrUpdateGroup(GroupViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if(model!=null)
+                if (model != null)
                 {
+                    
                     var groupToEdit = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.Id);
                     if (groupToEdit == null)
                     {
@@ -53,35 +84,36 @@ namespace DailyDiary.Controllers.APIControllers
                     }
                     else
                     {
-                        groupToEdit.Id = model.Id;
+                        StudyPlan studyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.StudyPlanId == model.StudyPlanId);
                         groupToEdit.Title = model.Title;
+                        groupToEdit.StudyPlan = studyPlan;
                     }
                     db.Groups.Update(groupToEdit);
                     await db.SaveChangesAsync();
                     return Ok(groupToEdit);
                 }
-                return BadRequest(new { error = "Model is empty or null"});
+                return BadRequest(new { error = "Model is empty or null" });
             }
             return BadRequest(ModelState);
-            //return group == null ? NotFound() : Ok(group);
         }
+
         [HttpGet("id")]
-        public async Task<ActionResult<IEnumerable<Student>>> GetGroupStudentsById(int id)//List of student that study in this group
+        public async Task<ActionResult<IEnumerable<Student>>> GetGroupStudentsById(int id)
         {
-            var students = await db.Students.Where(x=> x.GroupId == id).ToListAsync();
+            var students = await db.Students.Where(x => x.GroupId == id).ToListAsync();
             if (students != null)
-            {               
+            {
                 return Ok(students);
             }
             return NotFound(new { error = "No one student found" });
         }
+
         [HttpGet("id")]
-        public async Task<ActionResult<IEnumerable<Teacher>>> GetGroupTeachersById(int id)//GetGroupTeachersById list of teachers that have lessons at this group
+        public async Task<ActionResult<IEnumerable<Teacher>>> GetGroupTeachersById(int id)
         {
-            IEnumerable<int> groupTeachersId = await db.TeacherGroups.Where(x => x.GroupId == id).Select(x=> x.TeacherId).ToListAsync();
-            if(groupTeachersId!=null)
+            IEnumerable<int> groupTeachersId = await db.TeacherGroups.Where(x => x.GroupId == id).Select(x => x.TeacherId).ToListAsync();
+            if (groupTeachersId != null)
             {
-                //groupTeachersId = groupTeachersId.Distinct();
                 var teachers = new List<Teacher>();
                 foreach (var groupTeacherId in groupTeachersId)
                 {
@@ -92,23 +124,78 @@ namespace DailyDiary.Controllers.APIControllers
             return NotFound(new { error = "No one teacher found" });
         }
 
-        /*        [HttpGet("id")]
-                public async Task<ActionResult<IEnumerable<Subject>>> GetGroupSubjectsById(int id)//List of subjects that taught this group
+        [HttpPost] 
+        public async Task<ActionResult<Boolean>> Edit(EditGrooupViewModel model)
+        {
+            Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+            if(group != null)
+            {
+                StudyPlan studyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.StudyPlanId == group.StudyPlanId);
+                if (model.SubjsId.Count == 0)
                 {
-                    IEnumerable<int> groupSubjectsId = await db.GroupSubjects.Where(x => x.GroupId == id).Select(x => x.SubjectId).ToListAsync();
-                    if (groupSubjectsId != null)
+                    if (model.Hours.Count == 0)
                     {
-                        //groupTeachersId = groupTeachersId.Distinct();
-                        var subjects = new List<Subject>();
-                        foreach (var subjectId in groupSubjectsId)
+                        var subjests = await db.SubjectsStudyPlans.Where(x => x.StudyPlanId == studyPlan.StudyPlanId).ToListAsync();
+                        foreach(var subject in subjests)
                         {
-                            subjects.Add(await db.Subjects.FirstOrDefaultAsync(x => x.Id == subjectId));
+                            db.SubjectsStudyPlans.Remove(subject);
                         }
-                        return Ok(subjects);
                     }
-                    return NotFound(new { error = "No one subject found" });
-                }*/
-
-
+                }
+                foreach(var subjectStPl in db.SubjectsStudyPlans)
+                {
+                    for (int i = 0; i < model.SubjsId.Count; i++)
+                    { 
+                        if(subjectStPl.SubjectId != model.SubjsId[i] && subjectStPl.StudyPlanId == studyPlan.StudyPlanId)
+                        {
+                            db.SubjectsStudyPlans.Remove(subjectStPl);
+                        }
+                    }
+                }
+                for (int i = 0; i < model.SubjsId.Count; i++)
+                {
+                    for (int j = 0; j < model.Hours.Count; j++)
+                    {
+                        if (i == j)
+                        {
+                            Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.SubjsId[i]);
+                            SubjectsStudyPlan subjectsStudyPlan = await db.SubjectsStudyPlans.FirstOrDefaultAsync(x => x.SubjectId == subject.Id && x.StudyPlanId == studyPlan.StudyPlanId);
+                            if (subjectsStudyPlan != null)
+                            {
+                                subjectsStudyPlan.Hours = model.Hours[i];
+                                db.SubjectsStudyPlans.Update(subjectsStudyPlan);
+                            } 
+                            else if(subjectsStudyPlan == null)
+                            {
+                                SubjectsStudyPlan newSubjectsStudyPlan = new SubjectsStudyPlan
+                                {
+                                    Subject = subject,
+                                    SubjectId = model.SubjsId[i],
+                                    StudyPlan = studyPlan,
+                                    StudyPlanId = studyPlan.StudyPlanId,
+                                    Hours = model.Hours[i]
+                                };
+                                db.SubjectsStudyPlans.Add(newSubjectsStudyPlan);
+                                studyPlan.SubjectsStudyPlans.Add(newSubjectsStudyPlan);
+                            }
+                        }
+                    }
+                }
+                studyPlan.Semester = model.Semester;
+                var allGroups = await db.Groups.ToListAsync();
+                foreach(var globalGroup in allGroups)
+                {
+                    if(globalGroup.Title != model.Title)
+                    {
+                        group.Title = model.Title;
+                    }
+                }
+                db.StudyPlans.Update(studyPlan);
+                db.Groups.Update(group);
+                await db.SaveChangesAsync();
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

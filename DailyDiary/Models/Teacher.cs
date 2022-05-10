@@ -31,7 +31,7 @@ namespace DailyDiary.Models
         public string Passsword { get; set; }
         public int Rate { get; set; }
         public int ForeignKeyTeackerId { get; set; }
-        public User User { get; set; }
+        //public User User { get; set; }
         public ICollection<GroupClasswork> GroupClassworks { get; set; }
         public ICollection<GroupHomework> GroupHomeworks { get; set; }
         public ICollection<TeacherSubject> TeacherSubjects { get; set; }

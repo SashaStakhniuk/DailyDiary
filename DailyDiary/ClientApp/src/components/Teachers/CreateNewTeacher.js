@@ -21,6 +21,7 @@ function CreateNewTeacher(){
     const [rate, setRate] = useState(0)
     const [email, setEmail] = useState('Empty')
     const [id, setId] = useState(0)
+    
     async function add(){
         var Specialty = document.getElementById('dataSpecialty').value
         var Category = document.getElementById('dataCategory').value

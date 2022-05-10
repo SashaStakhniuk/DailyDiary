@@ -49,6 +49,12 @@ class Admin extends Component{
                         <div className="wrapper">
                             <div className="m-3">
                                 <a href="/admin/new-student" className="btn">New student</a>
+                            </div>  
+                            <div className="m-3">
+                                <a href="/admin/new-study-plan" className="btn">New Study plan</a>
+                            </div>  
+                            <div className="m-3">
+                                <a href="/admin/new-student" className="btn">New Subject Study plan</a>
                             </div>
                             <div className="m-3">
                                 <a href="/admin/new-teacher" className="btn">New teacher</a>

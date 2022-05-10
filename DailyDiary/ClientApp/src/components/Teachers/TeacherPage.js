@@ -25,7 +25,7 @@ class TeacherPage extends React.Component{
         this.onClickRadio3 = this.onClickRadio3.bind(this);
         this.getStudents = this.getStudents.bind(this);
     }
-    
+
     componentDidMount(){
         this.getTeacherGroups(1); 
     }

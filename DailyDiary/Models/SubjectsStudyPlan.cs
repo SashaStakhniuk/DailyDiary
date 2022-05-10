@@ -9,7 +9,7 @@ namespace DailyDiary.Models
     {
         public int StudyPlanId { get; set; }
         public int SubjectId {get;set;}
-        public float Hours { get; set; }
+        public int Hours { get; set; }
         public Subject Subject { get; set; }
         public StudyPlan StudyPlan { get; set; }
 

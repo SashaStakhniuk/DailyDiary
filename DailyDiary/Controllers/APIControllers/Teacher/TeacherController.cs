@@ -17,16 +17,11 @@ namespace DailyDiary.Controllers.APIControllers
     public class TeacherController : Controller
     {
         private readonly DailyDiaryDatasContext db;
-        private readonly UserManager<Person> userManager;
-        private readonly IdentityContext context;
-        private readonly SignInManager<User> signInManager;
-        public TeacherController(DailyDiaryDatasContext datasContext, IdentityContext context, 
-            UserManager<Person> userManager, SignInManager<User> signInManager)
+        private readonly UserManager<User> userManager;
+        public TeacherController(DailyDiaryDatasContext context, UserManager<User> userManager)
         {
             this.userManager = userManager;
-            this.context = context;
-            this.db = datasContext;
-            this.signInManager = signInManager;
+            this.db = context;
         }
 
         [HttpGet]
@@ -68,7 +63,7 @@ namespace DailyDiary.Controllers.APIControllers
 
         [HttpPost]
         public async Task<IActionResult> CreateNew(NewTeacherViewModel model)
-        {
+        { 
             string Password = Services.GeneratorService.GenerateNewPassword();
             string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
 
@@ -199,7 +194,8 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups() {
+        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups() 
+        {
             return await db.Groups.ToListAsync();
         }
 
@@ -271,6 +267,12 @@ namespace DailyDiary.Controllers.APIControllers
             db.StudentFeedback.Add(studentFeedback);
             await db.SaveChangesAsync();
             return Ok();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Teacher>> Login()
+        {
+            return null;
         }
     }
 }

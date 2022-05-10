@@ -33,7 +33,7 @@ namespace DailyDiary.Models
         public string Base64URL { get; set; }
         public int Rate { get; set; }
         public int ForeignKeyStudentId { get; set; }
-        public User User { get; set; }
+        //public User User { get; set; }
         public ICollection<StudentClasswork> StudentClassworks { get; set; }
         public ICollection<StudentHomework> StudentHomeworks { get; set; }
         public ICollection<StudentNews> StudentNews { get; set; }

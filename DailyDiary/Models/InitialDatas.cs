@@ -50,33 +50,29 @@ namespace DailyDiary.Models
                 db.SaveChanges();
             }
 
-            var StudyPlan1 = new StudyPlan { GroupId = 1, Semester = 1 };
-            var StudyPlan2 = new StudyPlan { GroupId = 1, Semester = 2 };
-            var StudyPlan3 = new StudyPlan { GroupId = 3, Semester = 2 };
+            var StudyPlan1 = new StudyPlan { GroupId = 3, Title = "Study Plan 1", Semester = 2 };
 
             if (!db.StudyPlans.Any())
             {
                 db.StudyPlans.AddRange(
-                    StudyPlan1, StudyPlan2, StudyPlan3
+                    StudyPlan1
                 );
                 db.SaveChanges();
             }
 
             var SubjectsStudyPlan1 = new SubjectsStudyPlan { StudyPlanId = 1, SubjectId = 1, Hours = 40 };
-            var SubjectsStudyPlan2 = new SubjectsStudyPlan { StudyPlanId = 2, SubjectId = 1, Hours = 40 };
-            var SubjectsStudyPlan3 = new SubjectsStudyPlan { StudyPlanId = 3, SubjectId = 1, Hours = 60 };
 
             if (!db.SubjectsStudyPlans.Any())
             {
                 db.SubjectsStudyPlans.AddRange(
-                   SubjectsStudyPlan1, SubjectsStudyPlan2, SubjectsStudyPlan3
+                   SubjectsStudyPlan1
                 );
                 db.SaveChanges();
             }
 
             Group group1 = new Group { Title = "1-A" };
             Group group2 = new Group { Title = "1-B" };
-            Group group3 = new Group { Title = "PV-911", StudyPlan = StudyPlan3 };
+            Group group3 = new Group { Title = "PV-911", StudyPlan = StudyPlan1 };
             Group group4 = new Group { Title = "2-B" };
             Group group5 = new Group { Title = "9-B" };
             if (!db.Groups.Any())
@@ -124,12 +120,6 @@ namespace DailyDiary.Models
 
                 db.Teachers.AddRange(
                     teacher6, teacher5, teacher4, teacher3, teacher2, teacher1
-                //new Teacher { Name = "Teacher1", LastName = "Jonson", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 },
-                //new Teacher { Name = "Teacher2", LastName = "Alor", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree ="Master", Education = "Higher", Experience = 0,Salary=12000},
-                //new Teacher { Name = "Teacher3", LastName = "Kilons", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree ="Professor, PHD", Education = "Higher", Experience = 18,Salary=16000},
-                //new Teacher { Name = "Teacher4", LastName = "Paul", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 },
-                //new Teacher { Name = "Teacher5", LastName = "Jena", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 },
-                //new Teacher { Name = "Teacher6", LastName = "Ong", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 }
                 );
                 db.SaveChanges();
             }

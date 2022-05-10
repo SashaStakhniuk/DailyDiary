@@ -305,24 +305,24 @@ function EdmitFromTeaher(){
                             <input id="number" value={rate} onChange={e => onChangeRate(e)} type="number" placeholder="Enter teacher rate" title="" />
                         </div>
 
-                        <div class="mb-3">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingOne">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        <div className="mb-3">
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="flush-headingOne">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                                         Subgects
                                     </button>
                                 </h2>
 
-                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                     <div style={{ margin: '14px 20px' }}>
                                         {subjecs.map((subject, i) => {
                                             return(
                                                 <>
-                                                    <label class="container">
+                                                    <label className="container">
                                                         {subject.title}
                                                         <input 
                                                         value={subject.id}/>
-                                                        <span class="checkmark"></span>
+                                                        <span className="checkmark"></span>
                                                     </label>
                                                 </>
                                             )
@@ -332,24 +332,24 @@ function EdmitFromTeaher(){
                             </div>
                             
                         </div>
-                        <div class="mb-3">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        <div className="mb-3">
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="flush-headingTwo">
+                                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                                     Groups
                                 </button>
 
                                 </h2>
-                                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                <div id="flush-collapseTwo" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
                                     <div style={{ margin: '14px 20px' }}>
                                         {groups.map((group, i) => {
                                             return(
                                                 <>
-                                                    <label class="container">
+                                                    <label className="container">
                                                         {group.title}
                                                         <input type="checkbox"
                                                         value={group.id}/>
-                                                        <span class="checkmark"></span>
+                                                        <span className="checkmark"></span>
                                                     </label>
                                                 </>              
                                             )

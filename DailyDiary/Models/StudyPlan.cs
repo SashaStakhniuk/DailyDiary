@@ -12,6 +12,7 @@ namespace DailyDiary.Models
             Groups = new HashSet<Group>();
         }
         public int StudyPlanId { get; set; }
+        public string Title { get; set; }
         public int GroupId { get; set; }
         public int Semester { get; set; }
         public ICollection<Group> Groups { get; set; }
