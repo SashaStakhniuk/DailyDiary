@@ -224,17 +224,18 @@
 /* Edit form student */
 
 .title-edit{
-    margin-left: 50px;
+    /*margin-left: 50px;*/
+    margin-bottom: 5px;
     font-size: 26px;
     color:#29313f;
-    font-family: "Arial, Helvetica, sans-serif";
+    font-family: "Segoe UI";
 }
 .new-student__Container{
     background-repeat: no-repeat;
     background-size: 200px;
     background-color: rgb(231, 237, 241);
     background-position: 20px 50px;
-	background-image: url('../images/gears2.png');
+	  background-image: url('../images/gears2.png');
     overflow-x: hidden;
     overflow-y: hidden;
     position: absolute;

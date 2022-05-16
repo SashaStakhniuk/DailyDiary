@@ -51,7 +51,7 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Teacher>> Get(int id)//GetTeacherByIdAsync
+        public async Task<ActionResult<Teacher>> Get(int id) 
         {
             var teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == id);
             if (teacher == null)
@@ -191,12 +191,6 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(groups);
             }
             return NotFound(new { error = "Teacher's groups not found" });
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroups() 
-        {
-            return await db.Groups.ToListAsync();
         }
 
         [HttpGet]

@@ -68,6 +68,9 @@ function NewStudyPlan(){
                 title
             })
         })
+        if(request.ok === true){
+                window.location = `/admin`
+        }
         }catch {}
     }
 
@@ -101,7 +104,9 @@ function NewStudyPlan(){
                             )
                         })}
                     </select>
-                    <input style={{ width: '250px' }} type="text" id="title" value={title} onChange={e => onChangeTitle(e)} placeholder="Enter title of study plan"/>
+                    <div className="mb-3">
+                        <input style={{ width: '250px' }} type="text" id="title" value={title} onChange={e => onChangeTitle(e)} placeholder="Enter title of study plan"/>
+                    </div>
                     <div className="mb-3">
                             <div className="accordion-item">
                                 <h2 className="accordion-header" id="flush-headingOne">
@@ -117,7 +122,7 @@ function NewStudyPlan(){
                                                 <>
                                                 <div  className="d-flex flex-column">
                                                     <div className="d-flex flex-row w-100 align-items-center justify-content-center"> 
-                                                        <input style={{ marginRight: '5px' }} type="checkbox" id={`ch_${subject.id}`} value={subject.id} name="scales" />
+                                                        <input style={{ marginRight: '5px' }} type="checkbox" id={`ch_${subject.id}`} value={subject.id} name="scales" placeholder={`hours for ${subject.title}`}/>
                                                         <span>{subject.title}</span>
                                                     </div>
                                                     <input className='none' id={`hours-subject-${subject.id}`} type="number"/>

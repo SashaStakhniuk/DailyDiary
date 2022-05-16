@@ -104,7 +104,7 @@ function EditGroup(){
             window.location = `/admin/edit-group/${groupId}`
         }
     }
-
+    
     async function onSubmit(e){
         e.preventDefault()
         await edit()

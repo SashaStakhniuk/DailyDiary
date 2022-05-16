@@ -159,9 +159,9 @@ function Students(){
                     <input onChange={onChangeHendler} id="lastName" type="username" placeholder="Enter student lastNamr" required="required" title="Your username" />
                 </div>
                 {students.map((student, i) =>
-                <>
-                    <CartStudent key={i} infoStudent={student} dataGroups={groups} />
-                </> 
+                    <>
+                        <CartStudent key={i} infoStudent={student} dataGroups={groups} />
+                    </> 
                 )}
                 <div id="loader-container" className='loader-container'>
                     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>

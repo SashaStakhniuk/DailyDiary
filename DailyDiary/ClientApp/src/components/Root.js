@@ -27,11 +27,15 @@ import SendMessageForStudent from './Students/SendMessageForStudent'
 import SandFeedback from './Teachers/SandFeedback'
 import NewStudyPlan from './Admin/NewStudyPlan'
 import AllGroups from './Group/AllGroups'
-import EditGroup from './Group/EditGroup';
-const Root = ({ store }) => {
+import EditGroup from './Group/EditGroup'
+import CreateNewGroup from './Group/CreateNewGroup'
+import { useSelector } from 'react-redux'
+
+const Root = () => {
 
     const [isStudent, setIsStudent] = useState(false)
     const [isTeacher, setIsTeacher] = useState(true)
+    const [groups, setgroups] = useState(useSelector(state => state.groups))
 
     async function grtNotReaadCountTeacherNews(){
         var news = document.getElementById('news-badge-counter')
@@ -145,17 +149,18 @@ const Root = ({ store }) => {
         // }
 
     }, [])
+
     
     return(
-        <Provider store={store}>
+        <>
             <Router>
                 <Switch>
                     <Route exact path="/"><Login/></Route>
-                    <Route exact path="/inst"><LoginChildrens/></Route>
                     <Route exact path="/children-login"><LoginChildrens/></Route>
                     <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route>
                     <Route exact path="/admin/groups"><AllGroups/></Route>
-                    <Route exact path="/admin/new-student"><CreateNewStudent/></Route>
+                    <Route exact path="/admin/new-group"><CreateNewGroup/></Route>
+                    <Route exact path="/admin/new-student"><CreateNewStudent groups={groups}/></Route>
                     <Route exact path="/admin/students"><Students/></Route>
                     <Route exact path="/admin/student-profil/:id"><StudentProfil/></Route>
                     <Route exact path="/admin/edit-student/:id"><EditFromStudent/></Route>
@@ -180,7 +185,7 @@ const Root = ({ store }) => {
                     <Route path='*' exact={true}><NotFound/></Route>
                 </Switch>
             </Router>
-        </Provider>
+        </>
     )
 } 
 export default Root

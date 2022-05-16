@@ -23,13 +23,13 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> Get()//GetAllStudentsAsync
+        public async Task<ActionResult<IEnumerable<Student>>> Get()
         {
-            return await db.Students.ToListAsync();
+           return await db.Students.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> Get(int id)//GetStudentByIdAsync
+        public async Task<ActionResult<Student>> Get(int id)
         {
             var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == id);
             if (student == null)
@@ -124,8 +124,17 @@ namespace DailyDiary.Controllers.APIControllers
                 {
                     string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
                     string Password = Services.GeneratorService.GenerateNewPassword();
-                    Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
-                    Subgroup subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == model.SubgroupId);
+                    Group group = null;
+                    Subgroup subgroup = null;
+                    if (model.GroupId != 0)
+                    {
+                        group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                    }
+                    if (model.SubgroupId != 0)
+                    {
+                        subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == model.SubgroupId);
+                    } 
+
                     student = new Student
                     {
                         Name = model.Name,
@@ -135,14 +144,13 @@ namespace DailyDiary.Controllers.APIControllers
                         Login = Login,
                         Password = Password,
                         Email = model.Email,
-                        PrevName = "",
-                        GroupId = model.GroupId,
-                        SubgroupId = model.SubgroupId,
+                        //GroupId = model.GroupId,
+                        //Group = group,
+                        //SubgroupId = model.SubgroupId,
+                        //Subgroup = subgroup,
                         Age = model.Age,
                         StudyYear = model.StudyYear,
-                        Group = group,
-                        Subgroup = subgroup
-
+                        Order = db.Students.Count() + 1
                     };
                     Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
                     db.Students.Add(student);

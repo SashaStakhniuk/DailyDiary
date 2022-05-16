@@ -43,30 +43,6 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
-        //[Authorize(Roles = "MainAdmin,Admin,Teacher")]
-        //[HttpPost]
-        //public IActionResult CreatePhoto(Base64FilesViewModel bvm)
-        //{
-        //    if (bvm.Photo_Base64 != null)
-        //    {
-        //        Base64File file = new Base64File { Name = bvm.Name };
-        //        byte[] imageData = null;
-        //        // считываем переданный файл в массив байтов
-        //        using (var binaryReader = new BinaryReader(bvm.Photo_Base64.OpenReadStream()))
-        //        {
-        //            imageData = binaryReader.ReadBytes((int)bvm.Photo_Base64.Length);
-        //        }
-        //        // установка массива байтов
-        //        file.Photo_Base64 = imageData;
-        //        context.Base64Files.Add(file);
-        //        context.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    else
-        //    {
-        //        return View(bvm);
-        //    }
-        //}
         [HttpPost]
         public async Task<IActionResult> CreateHomeworkAsync(GroupHomeworksViewModel model)
         {
@@ -143,7 +119,7 @@ namespace DailyDiary.Controllers.APIControllers
                     }
             return BadRequest(ModelState);
         }
-        [HttpPut] // для вставки, для оновлення треба зробити PUT і новий метод!
+        [HttpPut] 
         public async Task<IActionResult> UpdateHomeworkAsync(GroupHomeworksViewModel model)
         {
             if (model != null)
@@ -206,6 +182,7 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return BadRequest(ModelState);
         }
+
         [HttpDelete("{id}")]
         //[Authorize(Roles = "MainAdmin,Admin")]
         public async Task<IActionResult> Delete(int id)
@@ -228,6 +205,7 @@ namespace DailyDiary.Controllers.APIControllers
             return NotFound();
             return Ok(homeworks);
         }
+
         [HttpGet("details")]
         public async Task<ActionResult<IEnumerable<GroupHomework>>> GetSomeHomeworksByGroupIdAndTeacherId(int groupId, int teacherId,int skip,int take)
         {
@@ -271,6 +249,7 @@ namespace DailyDiary.Controllers.APIControllers
                 return NotFound();
             return Ok(homeworks);
         }
+
         [HttpPost]
         public async Task<ActionResult<IEnumerable<GroupHomework>>> GetByTheme(GroupHomeworksViewModel model)
         {

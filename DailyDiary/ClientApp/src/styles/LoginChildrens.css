@@ -54,8 +54,7 @@ form {
   padding: 12px 20px;
   font-size: 1rem;
   border-width: calc(var(--border-width) * 1px);
-  border-style: solid;
-  border-color: var(--accent);
+  border: 3px solid #b7f6f7;
   border-radius: calc(var(--border-radius) * 1px);
   text-align: center;
   outline: transparent;

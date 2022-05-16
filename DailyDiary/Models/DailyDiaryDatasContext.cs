@@ -13,7 +13,7 @@ namespace DailyDiary.Models
         // Using Idenitity
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-
+        public DbSet<StudyYear> StudyYears{ get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Subgroup> Subgroups { get; set; }
         public DbSet<Subject> Subjects { get; set; }
@@ -31,15 +31,30 @@ namespace DailyDiary.Models
         public DbSet<StudentFeedback> StudentFeedback { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
+        public DbSet<StudyYearGroup> StudyYearGroups { get; set; }
 
         public DailyDiaryDatasContext(DbContextOptions<DailyDiaryDatasContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
+            // Many-to-Many StudyYear and Groups
+
+            builder.Entity<StudyYearGroup>()
+                .HasKey(sy => new { sy.StudyYearId, sy.GroupId });
+
+            builder.Entity<StudyYearGroup>()
+                .HasOne(sy => sy.StudyYear)
+                .WithMany(g => g.StudyYearGroups)
+                .HasForeignKey(sy => sy.StudyYearId);
+
+            builder.Entity<StudyYearGroup>()
+                .HasOne(g => g.Group)
+                .WithMany(sy => sy.StudyYearGroups)
+                .HasForeignKey(g => g.GroupId);
 
             //  Many-to-Many  Student and Feedback
 

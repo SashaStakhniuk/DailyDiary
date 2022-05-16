@@ -1,11 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Root from './components/Root';
-import store from './redux/store/store';
+//import store from './redux/store/store';
+import { createStore }  from 'redux'
+import { Provider } from 'react-redux';
+
+async function GetAllGroups(){
+  const response = await fetch(`https://localhost:44364/api/group/get`)
+  const data = await response.json()
+  return data
+}
+
+const reducer = (state, action) => {
+  const response = fetch(`https://localhost:44364/api/group/get`)
+  const data = GetAllGroups()
+  state = {
+    groups: [{title: "PV-911"}]
+  } //[{title: "PV-911"}]
+
+  switch(action.type) {
+    
+    case "Add":
+
+      break
+
+    default: 
+      return state
+  }
+}
+
+const store = createStore(reducer)
 
 ReactDOM.render(
-  <Root store={store}/>,
-  document.getElementById('root')
+  <Provider store={store}>
+    <Root />
+  </Provider>, document.getElementById('root')
 );
 
 

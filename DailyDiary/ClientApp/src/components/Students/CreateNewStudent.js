@@ -1,11 +1,12 @@
-import React from "react"
-import { useState } from 'react'
+import React, { useState } from "react"
 import '../../styles/Students.css'
+import { useSelector } from 'react-redux'
 
-function CreateNewStudent(){
+function CreateNewStudent(){ 
 
-    const[name, setUserName] = useState()
-    const[lastName, setlastName] = useState()
+    const [groups, setGroups] = useState(useSelector(state => state.groups))
+    const[name, setUserName] = useState("")
+    const[lastName, setlastName] = useState("")
     const[Birthday, setBirthday] = useState()
     const[Email, setEmail] = useState()
     const[AdmissionDate, setAdmissionDate] = useState()
@@ -15,7 +16,6 @@ function CreateNewStudent(){
     const[SubgroupId, setSubgroupId] = useState(0)
 
     async function add(){
-        
         var age = Number(Age)
         var groupId = Number(GroupId)
         var studyYear = Number(StudyYear)
@@ -51,30 +51,39 @@ function CreateNewStudent(){
         e.preventDefault();
         await add()
     }
+
     function onChangeUserName(e){
         setUserName(e.target.value)
     }
+
     function onChangeLastName(e){
         setlastName(e.target.value)
     }
+
     function onChangeBirthday(e){
         setBirthday(e.target.value)
     }
+
     function onChangeAdmissionDate(e){
         setAdmissionDate(e.target.value)
     }
+
     function onChangeAge(e){
         setAge(e.target.value)
     }
+
     function onChangeStudyYear(e){
         setStudyYear(e.target.value)
     }
+
     function onChangeGroup(e){
         setGroupId(e.target.value)
     }
+
     function onChangessubgroupId(e){
         setSubgroupId(e.target.value)
     }
+
     function onChangeEmail(e){
         setEmail(e.target.value)
     }
@@ -108,8 +117,26 @@ function CreateNewStudent(){
                             <input type="email" id="email" value={Email} onChange={e => onChangeEmail(e)} />
                         </div>
                     </div>
-                   
+
                     <div className="container2">
+                        <div className='mb-3'>
+                            <div className="stud-container">
+                                <div className='sub-stud-container'>
+                                    {groups.map((group, i) => {
+                                        return(
+                                            <>
+                                                <label className="container">
+                                                    {group.title}
+                                                    <input type="checkbox"
+                                                    value={group.id}/>
+                                                    <span className="checkmark"></span>
+                                                </label>
+                                            </>              
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        </div>
                         <span className="span-text">Admission Date</span>
                         <div class="mb-3">
                             <span class="datepicker-toggle">

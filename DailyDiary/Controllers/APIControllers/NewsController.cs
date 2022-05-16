@@ -257,7 +257,8 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
-        [HttpGet("{id}/{newsSkip}")]
+        // Снять с коментария 
+        //[HttpGet("{id}/{newsSkip}")]
         public async Task<ActionResult<IEnumerable<News>>> GetRangStudentNewssById(int id, int newsSkip)
         {
             List<News> news = new List<News>();

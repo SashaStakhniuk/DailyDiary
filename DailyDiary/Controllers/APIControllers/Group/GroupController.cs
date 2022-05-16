@@ -1,4 +1,5 @@
-﻿using DailyDiary.Models;
+﻿using DM = DailyDiary.Models;
+using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
 using DailyDiary.Models.ViewModels.Group;
 using Microsoft.AspNetCore.Authorization;
@@ -37,43 +38,15 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(group);
             }
             return NotFound(new { error = "Group not found" });
-        }
+        } 
 
         [HttpPost]
-        public async Task<IActionResult> EditStudyPlan(StudyPlanGroupViewModel model)
-        {
-            if (ModelState.IsValid == true)
-            {
-                Group groupToEdit = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
-                if (groupToEdit != null)
-                {
-                    StudyPlan studyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.StudyPlanId == model.StudyPlanId);
-                    groupToEdit.Title = model.Title;
-                    groupToEdit.StudyPlan = studyPlan;
-                    groupToEdit.StudyPlanId = model.StudyPlanId;
-                    if(studyPlan.StudyPlanId != groupToEdit.StudyPlanId)
-                    {
-                        studyPlan.GroupId = Convert.ToInt32(null);
-                    }
-                    db.Groups.Update(groupToEdit);
-                    await db.SaveChangesAsync();
-                }
-                else
-                {
-                    Console.WriteLine();
-                }
-            }
-            return BadRequest();
-        }
-
-        [HttpPut]
-        public async Task<ActionResult<Group>> CreateOrUpdateGroup(GroupViewModel model)
+        public async Task<ActionResult<Group>> Create(GroupViewModel model)
         {
             if (ModelState.IsValid)
             {
                 if (model != null)
                 {
-                    
                     var groupToEdit = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.Id);
                     if (groupToEdit == null)
                     {
@@ -81,14 +54,14 @@ namespace DailyDiary.Controllers.APIControllers
                         {
                             Title = model.Title
                         };
+                        foreach (int studentId in model.StudentsId)
+                        {
+                            Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == studentId);
+                            groupToEdit.Students.Add(student);
+                        }
+                        db.Groups.Add(groupToEdit);
                     }
-                    else
-                    {
-                        StudyPlan studyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.StudyPlanId == model.StudyPlanId);
-                        groupToEdit.Title = model.Title;
-                        groupToEdit.StudyPlan = studyPlan;
-                    }
-                    db.Groups.Update(groupToEdit);
+                    
                     await db.SaveChangesAsync();
                     return Ok(groupToEdit);
                 }
@@ -130,12 +103,12 @@ namespace DailyDiary.Controllers.APIControllers
             Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
             if(group != null)
             {
-                StudyPlan studyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.StudyPlanId == group.StudyPlanId);
+                StudyPlan studyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.CurrentStudyPlan == true);
                 if (model.SubjsId.Count == 0)
                 {
                     if (model.Hours.Count == 0)
                     {
-                        var subjests = await db.SubjectsStudyPlans.Where(x => x.StudyPlanId == studyPlan.StudyPlanId).ToListAsync();
+                        var subjests = await db.SubjectsStudyPlans.Where(x => x.StudyPlanId == studyPlan.Id).ToListAsync();
                         foreach(var subject in subjests)
                         {
                             db.SubjectsStudyPlans.Remove(subject);
@@ -146,7 +119,7 @@ namespace DailyDiary.Controllers.APIControllers
                 {
                     for (int i = 0; i < model.SubjsId.Count; i++)
                     { 
-                        if(subjectStPl.SubjectId != model.SubjsId[i] && subjectStPl.StudyPlanId == studyPlan.StudyPlanId)
+                        if(subjectStPl.SubjectId != model.SubjsId[i] && subjectStPl.StudyPlanId == studyPlan.Id)
                         {
                             db.SubjectsStudyPlans.Remove(subjectStPl);
                         }
@@ -159,7 +132,7 @@ namespace DailyDiary.Controllers.APIControllers
                         if (i == j)
                         {
                             Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.SubjsId[i]);
-                            SubjectsStudyPlan subjectsStudyPlan = await db.SubjectsStudyPlans.FirstOrDefaultAsync(x => x.SubjectId == subject.Id && x.StudyPlanId == studyPlan.StudyPlanId);
+                            SubjectsStudyPlan subjectsStudyPlan = await db.SubjectsStudyPlans.FirstOrDefaultAsync(x => x.SubjectId == subject.Id && x.StudyPlanId == studyPlan.Id);
                             if (subjectsStudyPlan != null)
                             {
                                 subjectsStudyPlan.Hours = model.Hours[i];
@@ -172,7 +145,7 @@ namespace DailyDiary.Controllers.APIControllers
                                     Subject = subject,
                                     SubjectId = model.SubjsId[i],
                                     StudyPlan = studyPlan,
-                                    StudyPlanId = studyPlan.StudyPlanId,
+                                    StudyPlanId = studyPlan.Id,
                                     Hours = model.Hours[i]
                                 };
                                 db.SubjectsStudyPlans.Add(newSubjectsStudyPlan);
