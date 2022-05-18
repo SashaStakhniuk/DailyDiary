@@ -18,7 +18,7 @@ namespace DailyDiary.Models
         [Key]
         public int StudentId { get; set; }
         public int Order { get; set; }
-        public int StudyYear { get; set; } //year of study
+        public int YearOfStudy { get; set; } //year of study
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<DateTime> AdmissionDate{ get; set; } //Date of learning start
@@ -30,8 +30,8 @@ namespace DailyDiary.Models
         public string Login { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public string Base64URL { get; set; }
-        public int Rate { get; set; }
+        public string? Base64URL { get; set; }
+        public int? Rate { get; set; }
         public int ForeignKeyStudentId { get; set; }
         //public User User { get; set; }
         public ICollection<StudentClasswork> StudentClassworks { get; set; }

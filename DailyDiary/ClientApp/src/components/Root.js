@@ -30,6 +30,7 @@ import AllGroups from './Group/AllGroups'
 import EditGroup from './Group/EditGroup'
 import CreateNewGroup from './Group/CreateNewGroup'
 import { useSelector } from 'react-redux'
+import CreateNewStudyYear from './StudyYear/CreateNewStudyYear'
 
 const Root = () => {
 
@@ -157,23 +158,28 @@ const Root = () => {
                 <Switch>
                     <Route exact path="/"><Login/></Route>
                     <Route exact path="/children-login"><LoginChildrens/></Route>
+
+                    <Route exact path="/admin"><Admin/></Route>
+                    <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route>
                     <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route>
+
                     <Route exact path="/admin/groups"><AllGroups/></Route>
+                    <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>
                     <Route exact path="/admin/new-group"><CreateNewGroup/></Route>
+
                     <Route exact path="/admin/new-student"><CreateNewStudent groups={groups}/></Route>
                     <Route exact path="/admin/students"><Students/></Route>
                     <Route exact path="/admin/student-profil/:id"><StudentProfil/></Route>
                     <Route exact path="/admin/edit-student/:id"><EditFromStudent/></Route>
-                    <Route exact path="/admin"><Admin/></Route>
                     <Route exact path="/admin/add-image-student/:id"><StudentImage/></Route>
+
                     <Route exact path="/admin/teachers"><Teachers/></Route>
                     <Route exact path="/admin/teacher-profil/:id"><TeacherProfil/></Route>
                     <Route exact path="/admin/send-for-teacher/:id"><SendMessage/></Route>
                     <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
                     <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
                     <Route exact path="/admin/new-teacher"><CreateNewTeacher/></Route>
-                    <Route exact path="/admin/send-for-student/:id"><SendMessageForStudent/></Route>
-                    <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>
+                    <Route exact path="/admin/send-message-for-student/:id"><SendMessageForStudent/></Route>
                     
                     <Route exact path="/teacher-page"><TeacherPage/></Route>
                     <Route exact path="/teacher-page/send-feedback/:studentId/:teacherId/:subjectId/:studentName"><SandFeedback/></Route>
@@ -182,6 +188,7 @@ const Root = () => {
                     
                     <Route exact path="/student/feedback/:id" ><Feedback /></Route>
                     <Route exact path="/student/news-page/:id" ><NewsStudentPage /></Route>
+                    
                     <Route path='*' exact={true}><NotFound/></Route>
                 </Switch>
             </Router>

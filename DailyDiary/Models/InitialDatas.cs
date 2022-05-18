@@ -29,18 +29,18 @@ namespace DailyDiary.Models
                 db.SaveChanges();
             }
 
-            Student st1 = new Student { Order = 1, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Denis", LastName = "Goolorev", Age = 14, StudyYear = 9/*Group = group5*/ };
-            Student st2 = new Student { Order = 2, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Klar", Age = 6, StudyYear = 1 /*Group = group2*/ };
-            Student st3 = new Student { Order = 3, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Stiv", LastName = "jobs", Age = 7, StudyYear = 2 /* Group = group3*/ };
-            Student st4 = new Student { Order = 4, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Jon", LastName = "Oliver", Age = 14, StudyYear = 9 /*Group = group5*/ };
-            Student st5 = new Student { Order = 5, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Bred", LastName = "Pit", Age = 6, StudyYear = 1 /*Group = group2*/ };
-            Student st6 = new Student { Order = 6, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Santa", LastName = "Lichia", Age = 7, StudyYear = 2/* Group = group3*/ };
-            Student st7 = new Student { Order = 7, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Fill", LastName = "Gonson", Age = 14, StudyYear = 9 /*Group = group5*/ };
-            Student st8 = new Student { Order = 8, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Angelina", LastName = "Joli", Age = 6, StudyYear = 1 /*Group = group2*/ };
-            Student st9 = new Student { Order = 9, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Mishel", LastName = "Streach", Age = 7, StudyYear = 2 /* Group = group3*/ };
-            Student st10 = new Student { Order = 10, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Paul", LastName = "Li", Age = 14, StudyYear = 9 /*Group = group5*/ };
-            Student st11 = new Student { Order = 11, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Stedhem", Age = 6, StudyYear = 1 /*Group = group2*/ };
-            Student st12 = new Student { Order = 12, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Jena", LastName = "Ops", Age = 7, StudyYear = 2 /* Group = group3*/ };
+            Student st1 = new Student { Order = 1, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Denis", LastName = "Goolorev", Age = 14, YearOfStudy = 9/*Group = group5*/ };
+            Student st2 = new Student { Order = 2, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Klar", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+            Student st3 = new Student { Order = 3, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Stiv", LastName = "jobs", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
+            Student st4 = new Student { Order = 4, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Jon", LastName = "Oliver", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
+            Student st5 = new Student { Order = 5, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Bred", LastName = "Pit", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+            Student st6 = new Student { Order = 6, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Santa", LastName = "Lichia", Age = 7, YearOfStudy = 2/* Group = group3*/ };
+            Student st7 = new Student { Order = 7, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Fill", LastName = "Gonson", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
+            Student st8 = new Student { Order = 8, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Angelina", LastName = "Joli", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+            Student st9 = new Student { Order = 9, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Mishel", LastName = "Streach", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
+            Student st10 = new Student { Order = 10, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Paul", LastName = "Li", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
+            Student st11 = new Student { Order = 11, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Stedhem", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+            Student st12 = new Student { Order = 12, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Jena", LastName = "Ops", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
 
             db.Students.AddRange(
                    st1, st2, st3, st4, st5, st6, st7, st8, st9, st10, st11, st12

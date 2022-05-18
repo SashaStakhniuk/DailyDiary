@@ -96,7 +96,7 @@ namespace DailyDiary.Controllers.APIControllers
                         student.LastName = model.LastName;
                         student.Birthday = model.Birthday;
                         student.Age = model.Age;
-                        student.StudyYear = model.StudyYear;
+                        student.YearOfStudy = model.StudyYear;
                         student.GroupId = model.GroupId;
                         student.Group = group;
                         student.Subgroup = subgroup;
@@ -119,48 +119,32 @@ namespace DailyDiary.Controllers.APIControllers
         {
             if (ModelState.IsValid)
             {
-                Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.Id);
-                if (student == null)
+                Student student = new Student();
+                string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
+                string Password = Services.GeneratorService.GenerateNewPassword();
+                Group group = null;
+                if (model.GroupId != 0)
                 {
-                    string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
-                    string Password = Services.GeneratorService.GenerateNewPassword();
-                    Group group = null;
-                    Subgroup subgroup = null;
-                    if (model.GroupId != 0)
-                    {
-                        group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
-                    }
-                    if (model.SubgroupId != 0)
-                    {
-                        subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == model.SubgroupId);
-                    } 
+                    group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                }
 
-                    student = new Student
-                    {
-                        Name = model.Name,
-                        LastName = model.LastName,
-                        Birthday = model.Birthday,
-                        AdmissionDate = model.AdmissionDate,
-                        Login = Login,
-                        Password = Password,
-                        Email = model.Email,
-                        //GroupId = model.GroupId,
-                        //Group = group,
-                        //SubgroupId = model.SubgroupId,
-                        //Subgroup = subgroup,
-                        Age = model.Age,
-                        StudyYear = model.StudyYear,
-                        Order = db.Students.Count() + 1
-                    };
-                    Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
-                    db.Students.Add(student);
-                    await db.SaveChangesAsync();
-                    return Ok();
-                }
-                else
+                student = new Student
                 {
-                    return NotFound(new { error = "Student exist" });
-                }
+                    Name = model.Name,
+                    LastName = model.LastName,
+                    Birthday = model.Birthday,
+                    AdmissionDate = model.AdmissionDate,
+                    Login = Login,
+                    Password = Password,
+                    Email = model.Email,
+                    GroupId = model.GroupId,
+                    Group = group,
+                    Age = model.Age
+                };
+                //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
+                db.Students.Add(student);
+                await db.SaveChangesAsync();
+                return Ok();
             }
             return BadRequest();
         }
@@ -197,8 +181,9 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return NotFound(new { error = "Student not found" });
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Subgroup>> GetStudentSubgroupByIdAsync(int id)//GetStudentSubgroupsByStudentIdAsync
+        public async Task<ActionResult<Subgroup>> GetStudentSubgroupByIdAsync(int id)
         {
             var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == id);
 

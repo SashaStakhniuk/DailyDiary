@@ -140,7 +140,6 @@ namespace DailyDiary.Controllers.APIControllers
             }
             else
             {
-
                 int count = 0;
                 List<News> news = new List<News>();
                 var studentNews = await db.StudentNews.Where(x => x.StudentId == StudentId).Select(x => x.NewsId).ToListAsync();

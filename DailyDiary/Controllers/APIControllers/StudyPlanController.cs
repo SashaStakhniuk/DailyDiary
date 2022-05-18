@@ -24,53 +24,54 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpPost]
         public async Task<ActionResult<Boolean>> Create(StudyPlanViewModel  model)
         {
-            StudyPlan studyPlan = new StudyPlan();
-            Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
-            foreach(var stplan in db.StudyPlans)
+            if (ModelState.IsValid)
             {
-                if(stplan.Title == model.Title)
-                {
-                    return BadRequest();
-                }
+
             }
-            foreach (var sudyplan in db.StudyPlans)
+            var stYear = await db.StudyPlans.FirstOrDefaultAsync(x => x.Title == model.Title && x.Id == model.StudyYearId);
+            if(stYear == null)
             {
-                if(sudyplan.Semester != model.Semester)
+                StudyPlan studyPlan = new StudyPlan();
+                DM.StudyYear studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.Id == model.StudyYearId);
+                studyPlan = new StudyPlan
                 {
-                    studyPlan = new StudyPlan
-                    {
-                        Title = model.Title,
-                        Semester = model.Semester,
-                    };
-                }
-            }
-            db.StudyPlans.Add(studyPlan);
-            for (int i = 0; i < model.Subjects.Count; i++)
-            {
-                for(int j = 0; j < model.ListHouts.Count; j++)
+                    Title = model.Title,
+                    Semester = model.Semester,
+                    CurrentStudyPlan = model.CurrentStudyPlan,
+                };
+
+                for (int i = 0; i < model.Subjects.Count; i++)
                 {
-                    if(i == j)
+                    for (int j = 0; j < model.ListHouts.Count; j++)
                     {
-                        Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.Subjects[i]);
-                        SubjectsStudyPlan subjectsStudyPlan = new SubjectsStudyPlan
+                        if (i == j)
                         {
-                            Subject = subject,
-                            SubjectId = model.Subjects[i],
-                            StudyPlan = studyPlan,
-                            StudyPlanId = studyPlan.Id,
-                            Hours = model.ListHouts[i]
-                        };
-                        db.SubjectsStudyPlans.Add(subjectsStudyPlan);
-                        studyPlan.SubjectsStudyPlans.Add(subjectsStudyPlan);
+                            Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.Subjects[i]);
+                            SubjectsStudyPlan subjectsStudyPlan = new SubjectsStudyPlan
+                            {
+                                Subject = subject,
+                                SubjectId = model.Subjects[i],
+                                StudyPlan = studyPlan,
+                                StudyPlanId = studyPlan.Id,
+                                Hours = model.ListHouts[i]
+                            };
+                            db.SubjectsStudyPlans.Add(subjectsStudyPlan);
+                            studyPlan.SubjectsStudyPlans.Add(subjectsStudyPlan);
+                        }
                     }
+
                 }
-                
+                db.StudyPlans.Add(studyPlan);
+                StudyYearStudyPlan studyYearStudyPlan = new StudyYearStudyPlan
+                {
+                    StudyPlan = studyPlan,
+                    StudyYear = studyYear,
+                };
+                db.StudyYearStudyPlans.Add(studyYearStudyPlan);
+                await db.SaveChangesAsync();
+                return Ok(true);
             }
-            DM.StudyYear studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.Id == group.StudyYearId);
-            studyYear.StudyPlans.Add(studyPlan);
-            db.Groups.Update(group);
-            await db.SaveChangesAsync();
-            return Ok(true);
+            return BadRequest();
         }
 
         [HttpGet("{groupId}")]
@@ -160,7 +161,6 @@ namespace DailyDiary.Controllers.APIControllers
 
                     model = new StudyPlanViewModel
                     {
-                        GroupId = group.Id,
                         Semester = studyPlan.Semester,
                         Title = studyPlan.Title,
                         Subjects = subjectsId,

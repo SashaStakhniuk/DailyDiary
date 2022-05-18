@@ -1,26 +1,45 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import '../../styles/Students.css'
 import { useSelector } from 'react-redux'
 
 function CreateNewStudent(){ 
 
-    const [groups, setGroups] = useState(useSelector(state => state.groups))
+    //useSelector(state => state.groups)
+    const [groups, setGroups] = useState([])
+
     const[name, setUserName] = useState("")
     const[lastName, setlastName] = useState("")
     const[Birthday, setBirthday] = useState()
     const[Email, setEmail] = useState()
     const[AdmissionDate, setAdmissionDate] = useState()
     const[Age, setAge] = useState(0)
-    const[StudyYear, setStudyYear] = useState(0)
-    const[GroupId, setGroupId] = useState(0)
-    const[SubgroupId, setSubgroupId] = useState(0)
+
+    useEffect(() => {
+        getAllGroups()
+    }, [])
+
+    async function getAllGroups(){
+        try
+        {
+            const response = await fetch(`https://localhost:44364/api/group/get`)
+            const data = await response.json()
+            if(response.ok === true){
+                setGroups(data)
+            }else{
+                console.log('Error ', data)
+            }
+        }catch{}
+    }
 
     async function add(){
         var age = Number(Age)
-        var groupId = Number(GroupId)
-        var studyYear = Number(StudyYear)
-        var subgroupId = Number(SubgroupId)
-        
+        var groupId = 0;
+        groups.forEach(group => {
+            var radio = document.getElementById(`ro_${group.id}`)
+            if(radio.checked == true) {
+                groupId = group.id
+            }
+        })
         const request = await fetch('https://localhost:44364/api/student/CreateNew', {
             method: 'POST',
             headers: {
@@ -31,10 +50,8 @@ function CreateNewStudent(){
                 lastName, 
                 Birthday,
                 age, 
-                studyYear, 
                 AdmissionDate, 
                 groupId, 
-                subgroupId, 
                 Email
             })
         })
@@ -70,18 +87,6 @@ function CreateNewStudent(){
 
     function onChangeAge(e){
         setAge(e.target.value)
-    }
-
-    function onChangeStudyYear(e){
-        setStudyYear(e.target.value)
-    }
-
-    function onChangeGroup(e){
-        setGroupId(e.target.value)
-    }
-
-    function onChangessubgroupId(e){
-        setSubgroupId(e.target.value)
     }
 
     function onChangeEmail(e){
@@ -120,20 +125,29 @@ function CreateNewStudent(){
 
                     <div className="container2">
                         <div className='mb-3'>
-                            <div className="stud-container">
-                                <div className='sub-stud-container'>
-                                    {groups.map((group, i) => {
-                                        return(
-                                            <>
-                                                <label className="container">
-                                                    {group.title}
-                                                    <input type="checkbox"
-                                                    value={group.id}/>
-                                                    <span className="checkmark"></span>
-                                                </label>
-                                            </>              
-                                        )
-                                    })}
+
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="flush-headingOne">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Group
+                                    </button>
+                                </h2>
+
+                                <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <div className=' d-flex flex-column align-items-center justify-content-start' style={{ margin: '14px 20px', width: '100px' }}>
+                                        {groups.map((group, i) => {
+                                            return(
+                                                <>
+                                                    <div key={i} className="w-100 d-flex flex-column">
+                                                        <div className="d-flex flex-row w-100 align-items-center justify-content-center"> 
+                                                            <input style={{ marginRight: '5px' }} type="radio" id={`ro_${group.id}`} value={group.id} name="scales" placeholder={`hours for ${group.title}`}/>
+                                                            <span>{group.title}</span>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -147,21 +161,6 @@ function CreateNewStudent(){
                         <span className="span-text">Age</span>
                         <div class="mb-3">
                             <input id="age" type="number" value={Age} onChange={onChangeAge}/>
-                        </div>
-
-                        <span className="span-text">Study year</span>
-                        <div class="mb-3">
-                            <input id="studyYear" type="number" value={StudyYear} onChange={e => onChangeStudyYear(e)}/>
-                        </div>
-
-                        <span className="span-text">Group</span>
-                        <div class="mb-3">
-                            <input id="studyYear" type="number" value={GroupId} onChange={e => onChangeGroup(e)}/>
-                        </div>
-
-                        <span className="span-text">Subgroup</span>
-                        <div class="mb-3">
-                            <input id="subgroupId" type="number" value={SubgroupId} onChange={e => onChangessubgroupId(e)}/>
                         </div>
 
                         <button type="submit" class="btn__edit align-self-end">Add</button>

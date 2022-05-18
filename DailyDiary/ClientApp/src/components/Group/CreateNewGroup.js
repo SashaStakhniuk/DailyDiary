@@ -27,7 +27,6 @@ function CreateNewGroup(){
 
     async function create(){
         var id = 0
-        var studyPlanId = 0
         var studentsId = []
 
         students.forEach(student => {
@@ -48,12 +47,11 @@ function CreateNewGroup(){
                 body: JSON.stringify({
                     id,
                     title,
-                    studyPlanId,
                     studentsId
                 })
             })
             if(response.ok === true){
-                window.location = `/admin`
+                window.location = `/admin/groups`
             }
 
         }catch {}
@@ -251,9 +249,9 @@ function CreateNewGroup(){
                                                     onDragOver={e => onDragOverHandler(e, student)}
                                                     onDrop={e => onDropHandler(e, student)}
                                                     onClick={e => onClickStudentCart(e, student.studentId)} id={`student-${student.studentId}`} className='stud-cart' >
-                                                    <input  value={student.studentId} id={`ch_${student.studentId}`} type='checkbox'/>
-                                                    <div id={`fio-container-${student.studentId}`} className='fio-container'>
-                                                        {student.name} {student.lastName}
+                                                    <input style={{ display: 'none', visibility: 'hidden', opacity: '0' }} value={student.studentId} id={`ch_${student.studentId}`} type='checkbox'/>
+                                                    <div style={{ padding: '9px' }} id={`fio-container-${student.studentId}`} className='fio-container'>
+                                                        {student.name} {student.lastName} {student.age} year
                                                     </div>
                                                 </div>
                                             </>
