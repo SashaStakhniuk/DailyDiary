@@ -2,12 +2,12 @@ import React from "react"
 import '../../styles/Students.css'
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
-import {moment} from 'moment/moment';
+import { moment } from 'moment/moment';
 
 function EditFromStudent(props){
     
+    let { id } = useParams();
     const [student,  setStudent] = useState({})
-
     const[Name, setUserName] = useState()
     const[LastName, setlastName] = useState()
     const[Password, setPassword] = useState()
@@ -23,8 +23,6 @@ function EditFromStudent(props){
     useEffect(() => {
         getStudent()
     }, [id])
-
-    let { id } = useParams();
 
     async function edit(){
 

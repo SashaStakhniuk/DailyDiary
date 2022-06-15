@@ -130,7 +130,6 @@ function NewsStudentPage(){
                             {news.map((value, i) => {
                                 return(
                                     <>
-                                        {/* Сам попап  */}
                                         <div className="popup" id="popup">
                                             <div className="popup__body">
                                                 <div style={{position: 'relative'}} id="popup__content" class="popup__content">

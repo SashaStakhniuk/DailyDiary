@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DailyDiary.Models.ViewModels.StudyYear;
 using Microsoft.EntityFrameworkCore;
+using DailyDiary.Models.ViewModels;
 
 namespace DailyDiary.Controllers.APIControllers
 {
@@ -53,5 +54,6 @@ namespace DailyDiary.Controllers.APIControllers
             } catch (Exception e) { }
             return BadRequest();
         }
+
     }
 }

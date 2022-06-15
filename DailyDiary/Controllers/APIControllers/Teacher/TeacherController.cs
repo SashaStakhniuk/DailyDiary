@@ -66,40 +66,45 @@ namespace DailyDiary.Controllers.APIControllers
         { 
             string Password = Services.GeneratorService.GenerateNewPassword();
             string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
-
             if (ModelState.IsValid)
             {
-                if (model.Rate < 0 || model.Salary < 2000
-                        |model.Experience < 0 || model.Age < 0)
+                try
                 {
-                    return BadRequest("Vrong values");
-                }
+                    if (model.Rate < 0 || model.Salary < 2000
+                        | model.Experience < 0 || model.Age < 0)
+                    {
+                        return BadRequest("Vrong values");
+                    }
 
-                if (model != null)
+                    if (model != null)
+                    {
+                        Teacher teacher = new Teacher
+                        {
+                            Name = model.Name,
+                            LastName = model.LastName,
+                            Birthday = model.Birthday,
+                            Age = model.Age,
+                            Specialty = model.Specialty,
+                            Category = model.Category,
+                            Degree = model.Degree,
+                            Education = model.Education,
+                            Experience = model.Experience,
+                            Salary = model.Salary,
+                            Base64URL = model.Base64URL,
+                            Email = model.Email,
+                            Rate = model.Rate,
+                            Login = Login,
+                            Passsword = Password
+                        };
+                        Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
+                        db.Teachers.Add(teacher);
+                        await db.SaveChangesAsync();
+                        return Ok(teacher);
+                    }
+                } 
+                catch(Exception ex)
                 {
-                    Teacher teacher = new Teacher();
-                    
-
-                    teacher.Name = model.Name;
-                    teacher.LastName = model.LastName;
-                    teacher.Birthday = model.Birthday;
-                    teacher.Age = model.Age;
-                    teacher.Specialty = model.Specialty;
-                    teacher.Category = model.Category;
-                    teacher.Degree = model.Degree;
-                    teacher.Education = model.Education;
-                    teacher.Experience = model.Experience;
-                    teacher.Salary = model.Salary;
-                    teacher.Rate = model.Rate;
-                    teacher.Login = Login;
-                    teacher.Passsword = Password;
-                    teacher.Email = model.Email;
-                    //teacher.ForeignKeyTeackerId
-
-                    Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
-                    db.Teachers.Add(teacher);
-                    await db.SaveChangesAsync();
-                    return Ok(teacher);
+                    Console.WriteLine();
                 }
                 return BadRequest();
             }

@@ -7,10 +7,23 @@ function CreateNewGroup(){
     const [title, setTitle] = useState("")
     const [students, setStudents] = useState([])
     const [currentCart, setCurrentCart] = useState(null)  
+    const [studyYears, setStudyYears] = useState([])  
 
     useEffect(() => {
         getStudents()
+        getStudyYears()
     }, [])
+
+    async function getStudyYears(){
+        try
+        {
+            const response = await fetch(`https://localhost:44364/api/PlanEducation/Get`)
+            const data = await response.json()
+            if(response.ok === true){
+                setStudyYears(data)
+            }
+        }catch { }
+    }
 
     async function getStudents(){
         try {
@@ -28,7 +41,8 @@ function CreateNewGroup(){
     async function create(){
         var id = 0
         var studentsId = []
-
+        var studyYearsSt = document.getElementById('studyYears').value
+        var studyYearId = Number(studyYearsSt)
         students.forEach(student => {
             var checkbox = document.getElementById(`ch_${student.studentId}`)
             if(checkbox) {
@@ -47,13 +61,13 @@ function CreateNewGroup(){
                 body: JSON.stringify({
                     id,
                     title,
+                    studyYearId,
                     studentsId
                 })
             })
             if(response.ok === true){
                 window.location = `/admin/groups`
             }
-
         }catch {}
     }
 
@@ -230,6 +244,17 @@ function CreateNewGroup(){
                 <form onSubmit={e => onSubmit(e)} className='form-edit d-flex flex-column'>
                     <div className="mb-3">
                         <input id="title" type="text" value={title} onChange={onChangeTitle} placeholder="Enter group title" required="required"/>
+                    </div>
+                    <div className='mb-3'>
+                        <select id='studyYears' className='date mb-3'>
+                            {studyYears.map((studyYear, i) => {
+                                return(
+                                    <>
+                                        <option key={i} value={studyYear.id}>{studyYear.title}</option>
+                                    </>
+                                )
+                            })}
+                        </select>
                     </div>
                     <div className='mb-3'>
                         <div className="stud-container">

@@ -56,10 +56,9 @@ function CreateNewStudent(){
             })
         })
         if(request.ok === true){
-            window.location = '/admin'
+            //window.location = '/admin'
         }
         else{
-
             console.log("Error feching data")
         }
     }

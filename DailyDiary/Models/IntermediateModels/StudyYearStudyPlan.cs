@@ -4,14 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DailyDiary.Models.ViewModels
+namespace DailyDiary.Models
 {
-    public class GroupViewModel
+    public class StudyYearStudyPlan
     {
+        [Key]
         public int Id { get; set; }
-        [Required]
-        public string Title { get; set; }
         public int StudyYearId { get; set; }
-        public List<int> StudentsId { get; set; }
+        public int StudyPlanId { get; set; }
+        public virtual StudyPlan StudyPlan { get; set; }
+        public virtual StudyYear StudyYear { get; set; }
     }
 }

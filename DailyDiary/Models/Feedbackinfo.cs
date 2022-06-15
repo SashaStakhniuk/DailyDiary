@@ -14,6 +14,6 @@ namespace DailyDiary.Models
         public string TeacherName { get; set; }
         public string TeacherLastName { get; set; }
         public bool IsRead { get; set; }
-        public Nullable<DateTime> DataPublication { get; set; }
+        public DateTime? DataPublication { get; set; }
     }
 }

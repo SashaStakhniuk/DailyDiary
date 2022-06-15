@@ -25,12 +25,13 @@ import Feedback from './Students/Feedback'
 import NewsStudentPage from './Students/NewsStudentPage'
 import SendMessageForStudent from './Students/SendMessageForStudent'
 import SandFeedback from './Teachers/SandFeedback'
-import NewStudyPlan from './Admin/NewStudyPlan'
+import NewStudyPlan from './StudyPlan/NewStudyPlan'
 import AllGroups from './Group/AllGroups'
 import EditGroup from './Group/EditGroup'
 import CreateNewGroup from './Group/CreateNewGroup'
 import { useSelector } from 'react-redux'
 import CreateNewStudyYear from './StudyYear/CreateNewStudyYear'
+import EditStudyPlan from './StudyPlan/EditStudyPlan'
 
 const Root = () => {
 
@@ -162,6 +163,7 @@ const Root = () => {
                     <Route exact path="/admin"><Admin/></Route>
                     <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route>
                     <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route>
+                    <Route exact path="/admin/edit-study-plan/:id"><EditStudyPlan/></Route>
 
                     <Route exact path="/admin/groups"><AllGroups/></Route>
                     <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>

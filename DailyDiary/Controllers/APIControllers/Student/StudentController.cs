@@ -1,7 +1,6 @@
 ﻿using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
 using DailyDiary.Models.ViewModels.Student;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -119,38 +118,44 @@ namespace DailyDiary.Controllers.APIControllers
         {
             if (ModelState.IsValid)
             {
-                Student student = new Student();
-                string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
-                string Password = Services.GeneratorService.GenerateNewPassword();
-                Group group = null;
-                if (model.GroupId != 0)
+                try
                 {
-                    group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                    Student student = new Student();
+                    string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
+                    string Password = Services.GeneratorService.GenerateNewPassword();
+                    Group group = null;
+                    int order = db.Students.Count() + 1;
+                    if (model.GroupId != 0)
+                    {
+                        group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                    }
+                    student = new Student
+                    {
+                        Name = model.Name,
+                        LastName = model.LastName,
+                        Birthday = model.Birthday,
+                        Age = model.Age,
+                        AdmissionDate = model.AdmissionDate,
+                        Login = Login,
+                        Password = Password,
+                        Email = model.Email,
+                        Group = group,
+                        Order = order
+                    };
+                    //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
+                    db.Students.Add(student);
+                    await db.SaveChangesAsync();
+                    return Ok();
+                } 
+                catch(Exception ex)
+                {
+                    Console.WriteLine();
                 }
-
-                student = new Student
-                {
-                    Name = model.Name,
-                    LastName = model.LastName,
-                    Birthday = model.Birthday,
-                    AdmissionDate = model.AdmissionDate,
-                    Login = Login,
-                    Password = Password,
-                    Email = model.Email,
-                    GroupId = model.GroupId,
-                    Group = group,
-                    Age = model.Age
-                };
-                //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
-                db.Students.Add(student);
-                await db.SaveChangesAsync();
-                return Ok();
             }
             return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        /*[Authorize(Roles = "MainAdmin,Admin")]*/
         public async Task<ActionResult<Student>> Delete(int id)
         {
             Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == id);

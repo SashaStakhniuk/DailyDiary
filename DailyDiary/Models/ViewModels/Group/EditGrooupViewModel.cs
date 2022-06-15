@@ -8,9 +8,8 @@ namespace DailyDiary.Models.ViewModels.Group
     public class EditGrooupViewModel
     {
         public int GroupId { get; set; }
-        public int Semester { get; set; }
         public string Title { get; set; }
-        public List<int> SubjsId { get; set; }
-        public List<int> Hours { get; set; }
+        public List<int> CurrentStudentsId { get; set; }
+        public List<int> NewStudentsId { get; set; }
     }
 }

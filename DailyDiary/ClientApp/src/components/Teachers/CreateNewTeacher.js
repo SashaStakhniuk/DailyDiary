@@ -2,7 +2,9 @@ import React from "react"
 import NavigationBar from '../NavigationBar'
 import '../../styles/Students.css'
 import { useState } from 'react'
+
 function CreateNewTeacher(){
+    
     const [dataSpecialty, setDayaSpecialty] = useState(["Teacher", "Pro Teacher"])
     const [dataCategory, setDataCategory] = useState(["Specialist", "First category specialist"])
     const [dataDegree, setDatDegree] = useState(["Master", "Profesional PHP"])
@@ -20,6 +22,7 @@ function CreateNewTeacher(){
     const [salary, setSalary] = useState(0)
     const [rate, setRate] = useState(0)
     const [email, setEmail] = useState('Empty')
+    const [base64URL, setBase64URL] = useState("")
     const [id, setId] = useState(0)
     
     async function add(){
@@ -59,6 +62,7 @@ function CreateNewTeacher(){
                 Education,
                 experience,
                 salary,
+                base64URL,
                 rate,
                 email
             })
@@ -124,6 +128,35 @@ function CreateNewTeacher(){
         setEmail(e.target.value)
     }
 
+    const getBase64 = file => {
+        return new Promise(resolve => {
+            let fileInfo;
+            let baseURL = "";
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+
+            baseURL = reader.result;
+            resolve(baseURL);
+            };
+        });
+    };
+
+    function handleFileInputChange(e){
+        var file = e.target.files[0]
+        getBase64(file)
+            .then(result => {
+                file["base64"] = result;
+
+                console.log("Url: " + file["base64"])
+                
+                setBase64URL(result)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     return(
         <>
             <div key={id} className="edit__container">
@@ -181,6 +214,13 @@ function CreateNewTeacher(){
                                 )
                             })}
                         </select>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', disabled: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <div className="mb-3" style={{ display: 'flex', flexDirection: 'column'}}>
+                                <label style={{ color: 'gray' }} htmlFor="floatingTextarea">Сhoose a picture student</label>
+                                <input style={{  }} className="btn btn-primary" type="file" name="file" onChange={e => handleFileInputChange(e)} />
+                            </div>
+                        </div>
 
                         <span className="span-text">degree</span>
                         <select onChange={e => onChangeDegree(e)} type="date" id="dataDegree" className="dataDegree">

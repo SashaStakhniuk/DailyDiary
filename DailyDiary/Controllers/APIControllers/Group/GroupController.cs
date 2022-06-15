@@ -38,7 +38,17 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(group);
             }
             return NotFound(new { error = "Group not found" });
-        } 
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Group>> GetStudents(int id)
+        {
+            var groups = await db.Groups
+                    .Include(c => c.Students)
+                    .ToListAsync();
+            Group group = groups.FirstOrDefault(x => x.Id == id);
+            return Ok(group);
+        }
 
         [HttpPost]
         public async Task<ActionResult<Group>> Create(GroupViewModel model)
@@ -47,27 +57,85 @@ namespace DailyDiary.Controllers.APIControllers
             {
                 if (model != null)
                 {
-                    var groupToEdit = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.Id);
-                    if (groupToEdit == null)
+                    try
                     {
-                        groupToEdit = new Group
+                        Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.Id);
+                        StudyYear studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.Id == model.StudyYearId);
+                        if (group == null && studyYear != null)
                         {
-                            Title = model.Title
-                        };
-                        foreach (int studentId in model.StudentsId)
-                        {
-                            Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == studentId);
-                            groupToEdit.Students.Add(student);
+                            group = new Group
+                            {
+                                Title = model.Title,
+                                StudyYearId = studyYear.Id,
+                                StudyYear = studyYear,
+                            };
+                            foreach (int studentId in model.StudentsId)
+                            {
+                                Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == studentId);
+                                student.Group = group;
+                                group.Students.Add(student);
+                            }
+                            db.Groups.Add(group);
+                            studyYear.Groups.Add(group);
+                            await db.SaveChangesAsync();
+                            return Ok(group);
                         }
-                        db.Groups.Add(groupToEdit);
+                    } 
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine();
                     }
-                    
-                    await db.SaveChangesAsync();
-                    return Ok(groupToEdit);
                 }
                 return BadRequest(new { error = "Model is empty or null" });
             }
             return BadRequest(ModelState);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Boolean>> Edit(EditGrooupViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                if (group != null)
+                {
+                    var allGroups = await db.Groups.ToListAsync();
+
+                    foreach (var globalGroup in allGroups)
+                    {
+                        if (globalGroup.Title != model.Title)
+                        {
+                            group.Title = model.Title;
+                        }
+                    }
+
+                    foreach(var st in db.Students)
+                    {
+                        if(st.GroupId == model.GroupId)
+                        {
+                            group.Students.Remove(st);
+                            st.Group = null;
+                        }
+                    }
+
+                    foreach(var newSt in model.NewStudentsId)
+                    {
+                        model.CurrentStudentsId.Add(newSt);
+                    }
+                    
+
+                    db.Groups.Update(group);
+                    await db.SaveChangesAsync();
+                    return Ok();
+                }
+            }
+            return BadRequest();
+        }
+
+        private async Task<Group> updateStudents(Group group, EditGrooupViewModel model)
+        {
+
+            return group;
         }
 
         [HttpGet("id")]
@@ -95,80 +163,6 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(teachers);
             }
             return NotFound(new { error = "No one teacher found" });
-        }
-
-        [HttpPost] 
-        public async Task<ActionResult<Boolean>> Edit(EditGrooupViewModel model)
-        {
-            Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
-            if(group != null)
-            {
-                StudyPlan studyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.CurrentStudyPlan == true);
-                if (model.SubjsId.Count == 0)
-                {
-                    if (model.Hours.Count == 0)
-                    {
-                        var subjests = await db.SubjectsStudyPlans.Where(x => x.StudyPlanId == studyPlan.Id).ToListAsync();
-                        foreach(var subject in subjests)
-                        {
-                            db.SubjectsStudyPlans.Remove(subject);
-                        }
-                    }
-                }
-                foreach(var subjectStPl in db.SubjectsStudyPlans)
-                {
-                    for (int i = 0; i < model.SubjsId.Count; i++)
-                    { 
-                        if(subjectStPl.SubjectId != model.SubjsId[i] && subjectStPl.StudyPlanId == studyPlan.Id)
-                        {
-                            db.SubjectsStudyPlans.Remove(subjectStPl);
-                        }
-                    }
-                }
-                for (int i = 0; i < model.SubjsId.Count; i++)
-                {
-                    for (int j = 0; j < model.Hours.Count; j++)
-                    {
-                        if (i == j)
-                        {
-                            Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.SubjsId[i]);
-                            SubjectsStudyPlan subjectsStudyPlan = await db.SubjectsStudyPlans.FirstOrDefaultAsync(x => x.SubjectId == subject.Id && x.StudyPlanId == studyPlan.Id);
-                            if (subjectsStudyPlan != null)
-                            {
-                                subjectsStudyPlan.Hours = model.Hours[i];
-                                db.SubjectsStudyPlans.Update(subjectsStudyPlan);
-                            } 
-                            else if(subjectsStudyPlan == null)
-                            {
-                                SubjectsStudyPlan newSubjectsStudyPlan = new SubjectsStudyPlan
-                                {
-                                    Subject = subject,
-                                    SubjectId = model.SubjsId[i],
-                                    StudyPlan = studyPlan,
-                                    StudyPlanId = studyPlan.Id,
-                                    Hours = model.Hours[i]
-                                };
-                                db.SubjectsStudyPlans.Add(newSubjectsStudyPlan);
-                                studyPlan.SubjectsStudyPlans.Add(newSubjectsStudyPlan);
-                            }
-                        }
-                    }
-                }
-                studyPlan.Semester = model.Semester;
-                var allGroups = await db.Groups.ToListAsync();
-                foreach(var globalGroup in allGroups)
-                {
-                    if(globalGroup.Title != model.Title)
-                    {
-                        group.Title = model.Title;
-                    }
-                }
-                db.StudyPlans.Update(studyPlan);
-                db.Groups.Update(group);
-                await db.SaveChangesAsync();
-                return Ok();
-            }
-            return BadRequest();
         }
     }
 }
