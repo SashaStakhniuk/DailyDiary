@@ -149,7 +149,7 @@ namespace DailyDiary.Controllers.APIControllers
                 } 
                 catch(Exception ex)
                 {
-                    Console.WriteLine();
+                    Console.WriteLine(ex.Message);
                 }
             }
             return BadRequest();

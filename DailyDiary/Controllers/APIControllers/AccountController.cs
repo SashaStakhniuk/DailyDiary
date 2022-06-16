@@ -1,16 +1,22 @@
-﻿using DailyDiary.Models;
+﻿using DailyDiary.JWTConfig;
+using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MVCBikeShop.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DailyDiary.Controllers.APIControllers
 {
+    [ApiController]
+    [Route("api/[controller]/[action]")]
     public class AccountController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -46,7 +52,7 @@ namespace DailyDiary.Controllers.APIControllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home"); // перенаправлення на сорінку входу
+                        return RedirectToAction("Index", "Home"); // перенаправлення на сторінку входу
 
                         //return RedirectToAction("Index", "Home");
                     }
@@ -78,6 +84,7 @@ namespace DailyDiary.Controllers.APIControllers
                     await roleManager.CreateAsync(new IdentityRole("Teacher"));
                     await roleManager.CreateAsync(new IdentityRole("Student"));
                     await roleManager.CreateAsync(new IdentityRole("User"));
+                    await roleManager.CreateAsync(new IdentityRole("Parrent"));
                 }
 
                 User user = new User { Email = model.Email, UserName = model.UserName };
@@ -118,6 +125,63 @@ namespace DailyDiary.Controllers.APIControllers
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Token(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.FindByEmailAsync(model.Email);
+                //var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
+                if (user != null)
+                {
+                    var identity = await GetIdentity(user.Email, model.Password);
+                    if (identity == null)
+                    {
+                        return BadRequest(new { error = "Invalid login or password" });
+                    }
+                    var jwt = new JwtSecurityToken(
+                        issuer: AuthOptions.ISSURER,
+                        audience: AuthOptions.AUDIENCE,
+                        claims: identity.Claims,
+                        expires: DateTime.Now.AddMinutes(AuthOptions.LIFETIME),
+                        signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+                        );
+                    var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+                    return Json(new
+                    {
+                        access_token = encodedJwt,
+                        userId = user.Id
+                    });
+                }
+                else
+                {
+                    //ModelState.AddModelError("errorText", "Invalid login or password");
+                    return BadRequest(new {errorText = "Invalid login or password" });
+                }
+            }
+            return View(model);
+        }
+        private async Task<ClaimsIdentity> GetIdentity(string email, string password)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            var result = await signInManager.PasswordSignInAsync(user.UserName, password, false, false);
+            if (result.Succeeded)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType,user.Email),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, password)
+                };
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+                return claimsIdentity;
+            }
+            else
+            {
+                ModelState.AddModelError("", "Invalid login or password");
+            }
+            return null;
         }
     }
 }

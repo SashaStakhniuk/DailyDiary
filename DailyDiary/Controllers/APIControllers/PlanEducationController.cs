@@ -51,7 +51,7 @@ namespace DailyDiary.Controllers.APIControllers
                     }
                 }
 
-            } catch (Exception e) { }
+            } catch (Exception) { }
             return BadRequest();
         }
 

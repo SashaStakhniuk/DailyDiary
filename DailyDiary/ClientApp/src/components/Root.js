@@ -17,16 +17,6 @@ import GroupEditing from './Teachers/GroupEditing.js';
 import CreateNewTeacher from './Teachers/CreateNewTeacher.js';
 import EdmitFromTeaher from './Teachers/EdmitFromTeaher'
 import TeacheImage from './Teachers/TeacheImage'
-<<<<<<< HEAD
-import Student from './Students/Student.js';
-import AboutStudent from './Students/AboutStudent.js';
-const Root = ({ store }) => (
-    <Provider store={store}>
-        <Router>
-            <Switch>
-                <Route exact path="/"><Login/></Route>
-                <Route exact path="/children-login"><LoginChildrens/></Route>
-=======
 import NewsPage from './Teachers/NewsPage'
 import '../styles/Root.css'
 import SendMessage from './Teachers/SendMessage.js';
@@ -42,7 +32,8 @@ import CreateNewGroup from './Group/CreateNewGroup'
 import { useSelector } from 'react-redux'
 import CreateNewStudyYear from './StudyYear/CreateNewStudyYear'
 import EditStudyPlan from './StudyPlan/EditStudyPlan'
->>>>>>> f86e3b9d3e24a2a18d14ac28ad5d8cffb9a4cb18
+import Student from './Students/Student.js';
+import AboutStudent from './Students/AboutStudent.js';
 
 const Root = () => {
 
@@ -79,19 +70,6 @@ const Root = () => {
         }
     }
 
-<<<<<<< HEAD
-                {/* <Route exact path="/teacher/group-editing/:id"><GroupEditing/></Route> */}
-                <Route exact path="/admin/edit-teacher/:id"><EdmitFromTeaher/></Route>
-                <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
-                <Route exact path="/student-page/:id" component={Student}></Route>
-                <Route exact path="/about-student/:id" component={AboutStudent}></Route>
-
-                <Route path='*' exact={true}><NotFound/></Route>
-            </Switch>
-        </Router>
-    </Provider>
-)
-=======
     async function grtNotReaadCountStudentNews(){
         var news = document.getElementById('news-badge-counter')
 
@@ -211,7 +189,10 @@ const Root = () => {
                     <Route exact path="/teacher-page/send-feedback/:studentId/:teacherId/:subjectId/:studentName"><SandFeedback/></Route>
                     <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
                     <Route exact path="/teacher/news-page/:id" ><NewsPage /></Route>
-                    
+
+                     <Route exact path="/student-page/:id" component={Student}></Route>
+					<Route exact path="/about-student/:id" component={AboutStudent}></Route>
+					
                     <Route exact path="/student/feedback/:id" ><Feedback /></Route>
                     <Route exact path="/student/news-page/:id" ><NewsStudentPage /></Route>
                     
@@ -221,5 +202,4 @@ const Root = () => {
         </>
     )
 } 
->>>>>>> f86e3b9d3e24a2a18d14ac28ad5d8cffb9a4cb18
 export default Root

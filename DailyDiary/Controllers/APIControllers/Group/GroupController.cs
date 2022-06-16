@@ -83,7 +83,7 @@ namespace DailyDiary.Controllers.APIControllers
                     } 
                     catch(Exception ex)
                     {
-                        Console.WriteLine();
+                        Console.WriteLine(ex.Message);
                     }
                 }
                 return BadRequest(new { error = "Model is empty or null" });
@@ -134,7 +134,6 @@ namespace DailyDiary.Controllers.APIControllers
 
         private async Task<Group> updateStudents(Group group, EditGrooupViewModel model)
         {
-
             return group;
         }
 
