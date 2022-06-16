@@ -1,0 +1,688 @@
+ <mystat ng-version="6.0.4">
+                <router-outlet></router-outlet>
+                <ng-component>
+                    <router-outlet></router-outlet>
+                    <ng-component>
+                        <div className="wrap">
+                            <div className="sidebar-parent-block">
+
+                                <nav className="sidebar">
+                                    <div className="sidebar-content">
+                                        <div className="sidebar-header">
+                                            <div className="arrow-navigation"><img alt="" src="./Mystat_files/right.png" /></div><a
+                                                href="javascript:void(0)"><img alt="" className="mystat-img" src="./Mystat_files/logo.png" /></a>
+                                        </div>
+                                        <div>
+                                            <ul className="sidebar-nav">
+
+                                                <li className="main-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/dashboard/page"
+                                                        className=""><span className="side-text">Main</span>
+
+                                                        <div className="close-hover"> Main </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="progress-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/progress/page"><span
+                                                        className="side-text">Progress</span>
+
+                                                        <div className="close-hover"> Progress </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="rewards-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/rewards/page"><span
+                                                        className="side-text">Your Rewards</span>
+
+                                                        <div className="close-hover"> Your Rewards </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="homeworks-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/homework/page"
+                                                        className="active"><span className="side-text">Homework</span>
+
+                                                        <div className="close-hover"> Homework </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="library-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/library/page"><span
+                                                        className="side-text">Educational Materials</span>
+                                                        <span className="badge-counter litle-size"> 616 </span>
+                                                        <div className="close-hover"> Educational Materials </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="news-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/news/page"><span
+                                                        className="side-text">News</span>
+
+                                                        <div className="close-hover"> News </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="payment-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/payment/page"><span
+                                                        className="side-text">Payment</span>
+
+                                                        <div className="close-hover"> Payment </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="schedule-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/schedule/page"><span
+                                                        className="side-text">Schedule</span>
+
+                                                        <div className="close-hover"> Schedule </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="feedback-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/feedback/page"><span
+                                                        className="side-text">Feedback</span>
+
+                                                        <div className="close-hover"> Feedback </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="profile-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/settings/page"><span
+                                                        className="side-text">Profile</span>
+
+                                                        <div className="close-hover"> Profile </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="portfolio-item">
+
+
+                                                </li>
+                                                <li className="vacancy-item">
+
+
+                                                </li>
+                                                <li className="meal-item">
+
+
+                                                </li>
+                                                <li className="food-pay-item">
+
+
+                                                </li>
+                                                <li className="faq-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/faq/page"><span
+                                                        className="side-text">FAQ</span>
+
+                                                        <div className="close-hover"> FAQ </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="contacts-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/contacts/page"><span
+                                                        className="side-text">Contact Info</span>
+
+                                                        <div className="close-hover"> Contact Info </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="signal-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/signal/page"><span
+                                                        className="side-text">Signal to administration</span>
+
+                                                        <div className="close-hover"> Signal to administration </div>
+                                                    </a>
+
+                                                </li>
+                                                <li className="manual-item">
+
+                                                    <a target="_blank" href="https://mystat.itstep.org/helpers/"> [manual] </a>
+                                                </li>
+                                            </ul>
+                                            <div className="shop-nav-link"><a href="https://mystat.itstep.org/en/main/market/page">
+                                                <div className="shop-image"></div>
+                                                <div>Store</div>
+                                            </a></div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                            <div className="sidebar-parent-top-block">
+                                <nav className="sidebar">
+                                    <div className="sidebar-content">
+                                        <div className="sidebar-header">
+                                            <div className="arrow-navigation"><img alt="" src="./Mystat_files/right.png" /></div><a
+                                                href="javascript:void(0)"><img alt="" className="mystat-img" src="./Mystat_files/logo.png" /></a>
+                                        </div>
+                                        <div className="top-panel-phone">
+                                            <top-pane>
+                                                <nav className="navbar navbar-expand-lg justify-content-between">
+                                                    <div className="left-block"><span className="student">
+                                                        <div className="student-foto-nav">
+                                                            <img className="avatar" src="./Mystat_files/index.php" />
+
+                                                        </div>
+                                                    </span><span className="user-full-name"><span className="profile-link"><a className="fio-stud"> Стахнюк
+                                                        Олександр Юрійович </a></span><span className="select-univercity"
+                                                            style={{ overflow: "hidden" }}><span className="group-const">Group: </span>
+                                                                <span>ПВ911*</span>
+
+                                                            </span></span><span><span className="my-tooltip" containerclass="counts-tooltip star"
+                                                                id="all-pricess" placement="bottom"><span className="count-item">2521</span>
+                                                                <img alt="star" src="./Mystat_files/star.png" /></span><span className="wrap-counts"><span
+                                                                    className="count-item with-link" containerclass="counts-tooltip" id="all-christal"
+                                                                    placement="auto" triggers=""><span className="count-item">1027</span>
+                                                                    <img alt="star" src="./Mystat_files/christal.png" /></span><span className="count-item"
+                                                                        containerclass="counts-tooltip" id="all-coin" placement="auto" triggers=""><span
+                                                                            className="count-item">1494</span>
+                                                                    <img alt="star" src="./Mystat_files/coin.png" /></span><span
+                                                                        className="count-item" containerclass="counts-tooltip" id="all-badges" placement="auto"><span
+                                                                            className="count-item">9</span>
+                                                                    <img alt="star"
+                                                                        src="./Mystat_files/badge.png" /></span></span></span></div>
+                                                    <div className="right-block">
+                                                        <span className="dropdown dropdown-langs">
+                                                            <div className="btn-group" dropdown="" placement="bottom left"><span
+                                                                className="dropdown-toggle dropdown-item" dropdowntoggle="" aria-haspopup="true"> en <span
+                                                                    className="caret"></span></span>
+
+                                                            </div>
+                                                        </span><a className="logout-link align-self-end" href="javascript:void(0)">
+                                                            <div className="img-logout-block"></div>
+                                                        </a>
+                                                    </div>
+                                                </nav>
+
+
+
+
+                                            </top-pane>
+                                        </div>
+                                        <div className="open-sidebar">
+                                            <ul className="sidebar-nav">
+
+                                                <li className="main-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/dashboard/page"
+                                                        className=""><span className="side-text">Main</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="progress-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/progress/page"><span
+                                                        className="side-text">Progress</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="rewards-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/rewards/page"><span
+                                                        className="side-text">Your Rewards</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="homeworks-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/homework/page"
+                                                        className="active"><span className="side-text">Homework</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="library-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/library/page"><span
+                                                        className="side-text">Educational Materials</span>
+                                                        <span className="badge-counter litle-size"> 616 </span>
+                                                    </a>
+                                                </li>
+                                                <li className="news-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/news/page"><span
+                                                        className="side-text">News</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="payment-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/payment/page"><span
+                                                        className="side-text">Payment</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="schedule-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/schedule/page"><span
+                                                        className="side-text">Schedule</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="feedback-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/feedback/page"><span
+                                                        className="side-text">Feedback</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="profile-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/settings/page"><span
+                                                        className="side-text">Profile</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="portfolio-item">
+
+                                                </li>
+                                                <li className="vacancy-item">
+
+                                                </li>
+                                                <li className="meal-item">
+
+                                                </li>
+                                                <li className="food-pay-item">
+
+                                                </li>
+                                                <li className="faq-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/faq/page"><span
+                                                        className="side-text">FAQ</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="contacts-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/contacts/page"><span
+                                                        className="side-text">Contact Info</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="signal-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/signal/page"><span
+                                                        className="side-text">Signal to administration</span>
+
+                                                    </a>
+                                                </li>
+                                                <li className="manual-item">
+                                                    <a routerlinkactive="active" href="https://mystat.itstep.org/en/main/homework/page/index"
+                                                        className="active"><span className="side-text">[manual]</span>
+
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div className="shop-nav-link"><a href="https://mystat.itstep.org/en/main/market/page">
+                                                <div className="shop-image"></div>
+                                                <div>Store</div>
+                                            </a></div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                            <div className="content">
+                                <div className="pos-f-t">
+                                    <top-pane>
+                                        <nav className="navbar navbar-expand-lg justify-content-between">
+                                            <div className="left-block"><span className="student">
+                                                <div className="student-foto-nav">
+                                                    <img className="avatar" src="./Mystat_files/index.php" />
+
+                                                </div>
+                                            </span><span className="user-full-name"><span className="profile-link"><a className="fio-stud"> Стахнюк
+                                                Олександр Юрійович </a></span><span className="select-univercity" style={{ overflow: "hidden" }}><span
+                                                    className="group-const">Group: </span>
+                                                        <span>ПВ911*</span>
+
+                                                    </span></span><span><span className="my-tooltip" containerclass="counts-tooltip star" id="all-pricess"
+                                                        placement="bottom"><span className="count-item">2521</span>
+                                                        <img alt="star" src="./Mystat_files/star.png" /></span><span className="wrap-counts"><span
+                                                            className="count-item with-link" containerclass="counts-tooltip" id="all-christal"
+                                                            placement="auto" triggers=""><span className="count-item">1027</span>
+                                                            <img alt="star" src="./Mystat_files/christal.png" /></span><span className="count-item"
+                                                                containerclass="counts-tooltip" id="all-coin" placement="auto" triggers=""><span
+                                                                    className="count-item">1494</span>
+                                                            <img alt="star" src="./Mystat_files/coin.png" /></span><span
+                                                                className="count-item" containerclass="counts-tooltip" id="all-badges" placement="auto"><span
+                                                                    className="count-item">9</span>
+                                                            <img alt="star" src="./Mystat_files/badge.png" /></span></span></span></div>
+                                            <div className="right-block">
+                                                <span className="dropdown dropdown-langs">
+                                                    <div className="btn-group" dropdown="" placement="bottom left"><span
+                                                        className="dropdown-toggle dropdown-item" dropdowntoggle="" aria-haspopup="true"> en <span
+                                                            className="caret"></span></span>
+
+                                                    </div>
+                                                </span><a className="logout-link align-self-end" href="javascript:void(0)">
+                                                    <div className="img-logout-block"></div>
+                                                </a>
+                                            </div>
+                                        </nav>
+
+
+
+
+                                    </top-pane>
+                                </div>
+                                <div className="wrapper">
+                                    <router-outlet></router-outlet>
+                                    <ng-component>
+
+                                        <p className="title text-uppercase font-weight-bold">Homework</p>
+
+                                        <div className="homeworks-section">
+                                            <div className="homeworks-navigation row">
+                                                <div className="col-4 select-block">
+                                                    <ng-select className="ng-select ng-select-single ng-pristine ng-valid ng-select-bottom ng-touched"
+                                                        role="listbox">
+                                                        <div className="ng-select-container ng-has-value">
+                                                            <div className="ng-value-container">
+                                                                <div className="ng-placeholder"></div>
+
+
+
+                                                                <div className="ng-value">
+
+                                                                    <span aria-hidden="true" className="ng-value-icon left">?</span><span
+                                                                        className="ng-value-label"> ПВ911* </span>
+                                                                </div>
+
+
+                                                                <div className="ng-input"><input role="combobox" type="text" autocomplete="a2e3c71acb10"
+                                                                    readonly="" aria-expanded="false" /></div>
+                                                            </div>
+
+                                                            <span className="ng-clear-wrapper" title="Clear all"><span aria-hidden="true"
+                                                                className="ng-clear">?</span></span><span className="ng-arrow-wrapper"><span
+                                                                    className="ng-arrow"></span></span>
+                                                        </div>
+
+                                                    </ng-select>
+                                                    <ng-select
+                                                        className="ng-select ng-select-single ng-pristine ng-valid ng-select-bottom ng-touched ng-select-focused"
+                                                        role="listbox">
+                                                        <div className="ng-select-container">
+                                                            <div className="ng-value-container">
+                                                                <div className="ng-placeholder">All Subjects</div>
+
+
+                                                                <div className="ng-input"><input role="combobox" type="text" autocomplete="aa3162d2eb44"
+                                                                    readonly="" aria-expanded="false" /></div>
+                                                            </div>
+
+                                                            <span className="ng-arrow-wrapper"><span className="ng-arrow"></span></span>
+                                                        </div>
+
+                                                    </ng-select>
+                                                </div>
+                                                <div className="col-3 all-task"> All Assignments: 3 </div>
+                                                <div className="col-5 next-page">
+                                                    <span className="float-right"> Labs </span>
+
+                                                    <span className="float-right library-quiz" tabindex="0">
+                                                        <span>Tests: 0</span>
+                                                        <span>/63</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="item-homework">
+
+
+                                                <hw-item className="d-flex  item-container child-comp">
+
+                                                    <div className="item-container">
+
+                                                    </div>
+
+
+
+
+
+
+                                                </hw-item>
+
+                                                <hw-item className="n-flex  item-container child-comp">
+
+                                                    <div className="item-container">
+
+                                                    </div>
+
+
+
+
+
+
+                                                </hw-item>
+
+                                                <hw-item className="n-flex  item-container child-comp">
+
+                                                    <p><span className="link"> Current: <span>2</span></span><span className="link"> Overdue:
+                                                        <span>2</span></span><span className="link active-counter"> Under Review:
+                                                            <span>2</span></span><span className="link"> Reviewed: <span>2</span></span><span className="link">
+                                                            Removed by teacher: <span>2</span></span></p>
+                                                    <div className="item-container">
+
+                                                        <div className="homework-item">
+                                                            <div className="col d-flex flex-column item iphone-click status2">
+                                                                <div className="item-header"><span className="name-spec"> Программирование с использованием
+                                                                    технологии Java и СУБД Oracle
+                                                                    <span className="all-name-spec">Программирование с использованием технологии Java и
+                                                                        СУБД Oracle</span>
+                                                                </span><span className="info"><img alt="" src="./Mystat_files/info.png" />
+                                                                        <div className="info-content">
+                                                                            <div className="header-info"> Программирование с использованием технологии Java и СУБД
+                                                                                Oracle </div>
+                                                                            <div className="body-info">
+                                                                                <p><span>Issued</span> 1.04.2022 </p>
+                                                                                <p><span>Subject</span> ПВ911*-Java: "Основи модульного тестування Java-проектів.
+                                                                                    Створення і використання модульних тестів за допомогою фреймворка JUnit. Значення
+                                                                                    тестових дублерів. Розробка тестових дублерів за допомогою фреймворка Mockito"
+                                                                                </p>
+                                                                                <p><span>Teacher</span> Попов Владимир Иванович </p>
+
+                                                                            </div>
+
+                                                                            <div className="footer-info"> Delete the Work </div>
+
+                                                                        </div>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div className="item-image">
+                                                                    <img alt="" src="./Mystat_files/ШАГ.jpg" />
+                                                                </div>
+
+
+                                                                <div className="item-footer">
+                                                                    <div container="body" containerclass="filename-tooltip" placement="top">
+                                                                        <p className="item-footer-title">Deadline</p> 11.04.2022
+                                                                    </div>
+
+                                                                    <div container="body" containerclass="filename-tooltip" placement="top">
+                                                                        <p className="item-footer-title">HWs uploaded</p> 5.04.2022
+                                                                    </div>
+                                                                </div>
+                                                                <div className="on-hover with-text-homework">
+                                                                    <div className="load-file" containerclass="filename-tooltip" placement="bottom"><a
+                                                                        href="https://fsx1.itstep.org/api/v1/files/mT4mcvDelpieTRt-tCGiY1p-NAW3KOWG"
+                                                                        download="null"><img alt="" src="./Mystat_files/load.png" /></a>
+                                                                        <p className="load-description">Download homework</p>
+                                                                    </div>
+                                                                    <div className="load-file" containerclass="filename-tooltip" placement="bottom"><img alt=""
+                                                                        src="./Mystat_files/load.png" />
+                                                                        <p className="load-description">Download/view homework done</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="homework-item">
+                                                            <div className="col d-flex flex-column item iphone-click status2">
+                                                                <div className="item-header">
+                                                                    <span className="name-spec"> Программирование с использованием технологии Java и СУБД Oracle
+                                                                        <span className="all-name-spec">Программирование с использованием технологии Java и СУБД Oracle</span>
+                                                                    </span>
+                                                                    <span className="info"><img alt="" src="./Mystat_files/info.png" />
+                                                                        <div className="info-content" style={{ bottom: "auto", top: "0px" }}>
+                                                                            <div className="header-info"> Программирование с использованием технологии Java и СУБД
+                                                                                Oracle </div>
+                                                                            <div className="body-info">
+                                                                                <p><span>Issued</span> 31.03.2022 </p>
+                                                                                <p><span>Subject</span> ПВ911*-Java: "Класи віджетів та менеджерів компоновки із
+                                                                                    бібліотеки Swing. Обробка подій у Swing. Створення прикладного додатку із GUI
+                                                                                    [Валютний калькулятор]. Знайомство із підходами до тестування програм в мові Java"
+                                                                                </p>
+                                                                                <p><span>Teacher</span> Попов Владимир Иванович </p>
+
+                                                                            </div>
+
+                                                                            <div className="footer-info"> Delete the Work </div>
+
+                                                                        </div>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div className="item-image">
+                                                                    <img alt="" src="./Mystat_files/ШАГ(1).jpg" />
+                                                                </div>
+
+
+                                                                <div className="item-footer">
+                                                                    <div container="body" containerclass="filename-tooltip" placement="top">
+                                                                        <p className="item-footer-title">Deadline</p> 10.04.2022
+                                                                    </div>
+
+                                                                    <div container="body" containerclass="filename-tooltip" placement="top">
+                                                                        <p className="item-footer-title">HWs uploaded</p> 5.04.2022
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <div className="on-hover with-text-homework">
+                                                                    <div className="load-file" containerclass="filename-tooltip" placement="bottom"><a
+                                                                        href="https://fsx1.itstep.org/api/v1/files/7DbO1S6V1tM-ThRtTYeSBMMaIj2j0FhK"
+                                                                        download="null"><img alt="" src="./Mystat_files/load.png" /></a>
+                                                                        <p className="load-description">Download homework</p>
+                                                                    </div>
+                                                                    <div className="load-file" containerclass="filename-tooltip" placement="bottom"><a
+                                                                        href="https://fsx3.itstep.org/api/v1/files/Xn31umpsQnQiQ8kjrCqfw-EhI7aO8l4Z"
+                                                                        download="null"><img alt="" src="./Mystat_files/load.png" /></a>
+                                                                        <p className="load-description">Download/view homework done</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+
+                                                </hw-item>
+
+                                                <hw-item className="d-flex  item-container child-comp">
+
+                                                    <p><span className="link"> Current: <span>1</span></span><span className="link"> Overdue:
+                                                        <span>1</span></span><span className="link"> Under Review: <span>1</span></span><span
+                                                            className="link active-counter"> Reviewed: <span>1</span></span><span className="link"> Removed by
+                                                                teacher: <span>1</span></span></p>
+                                                    <div className="item-container">
+
+                                                        <div className="homework-item">
+                                                            <div className="col d-flex flex-column item iphone-click status1">
+                                                                <div className="item-header"><span className="name-spec"> Программирование с использованием
+                                                                    технологии Java и СУБД Oracle
+                                                                    <span className="all-name-spec">Программирование с использованием технологии Java и
+                                                                        СУБД Oracle</span>
+                                                                </span><span className="info"><img alt="" src="./Mystat_files/info.png" />
+                                                                        <div className="info-content">
+                                                                            <div className="header-info"> Программирование с использованием технологии Java и СУБД
+                                                                                Oracle </div>
+                                                                            <div className="body-info">
+                                                                                <p><span>Issued</span> 29.03.2022 </p>
+                                                                                <p><span>Subject</span> ПВ911*-Java: "Синхронізація потоків у мові Java. Основи
+                                                                                    створення мережевих Java-додатків. Використання TCP-сокетів. Знайомство із
+                                                                                    графічною бібліотекою Swing" </p>
+                                                                                <p><span>Teacher</span> Попов Владимир Иванович </p>
+
+                                                                                <p className="comment-homework"><span>Teacher's comment</span><span
+                                                                                    className="comment-height">
+
+                                                                                    <span> </span>
+                                                                                </span></p>
+                                                                            </div>
+
+
+                                                                            <div className="footer-info">
+
+                                                                                <p> Request for Redo <span className="price"> -2 <img alt=""
+                                                                                    src="./Mystat_files/coin.png" /></span></p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </span>
+
+                                                                </div>
+                                                                <div className="item-image">
+                                                                    <img alt="" src="./Mystat_files/ШАГ(2).jpg" />
+                                                                </div>
+
+                                                                <div className="count-checked">11</div>
+
+                                                                <div className="item-footer">
+                                                                    <div container="body" containerclass="filename-tooltip" placement="top">
+                                                                        <p className="item-footer-title">Deadline</p> 8.04.2022
+                                                                    </div>
+
+                                                                    <div container="body" containerclass="filename-tooltip" placement="top">
+                                                                        <p className="item-footer-title">HWs uploaded</p> 31.03.2022
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <div className="on-hover with-text-homework">
+
+                                                                    <div className="load-file" containerclass="filename-tooltip" placement="bottom"><a
+                                                                        href="https://fsx1.itstep.org/api/v1/files/EumjCft427cxup-nTPvRBPHoucnFiRHQ"
+                                                                        download="null"><img alt="" src="./Mystat_files/load.png" /></a>
+                                                                        <p className="load-description">Download homework</p>
+                                                                    </div>
+
+
+                                                                    <div className="load-file" containerclass="filename-tooltip" placement="bottom"><a
+                                                                        href="https://fsx3.itstep.org/api/v1/files/iExEclt5Qeb84bKD66c5QuIZEtonNg8f"
+                                                                        download="null"><img alt="" src="./Mystat_files/load.png" /></a>
+                                                                        <p className="load-description">Download/view homework done</p>
+                                                                    </div>
+
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+
+                                                </hw-item>
+
+                                                <hw-item className="d-flex  item-container child-comp">
+
+                                                    <div className="item-container">
+
+                                                    </div>
+
+
+
+
+
+
+                                                </hw-item>
+                                            </div>
+                                        </div>
+                                    </ng-component>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+                    </ng-component>
+                </ng-component>
+                <ngx-spinner bdcolor="rgba(255,255,255,0.5)" color="#1bd2c7" size="large" type="ball-spin-clockwise" _nghost-c1="">
+
+
+                </ngx-spinner>
+            </mystat>

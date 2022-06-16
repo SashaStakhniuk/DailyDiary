@@ -42,6 +42,39 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(homework);
             }
         }
+        [HttpGet("{details}")]
+        public async Task<ActionResult<IEnumerable<GroupHomework>>> GetSomeHomeworksByStudentId(int studentId,int skip,int take)
+        {
+            var student = await db.Students.FindAsync(studentId);
+            if (student != null)    
+            {
+                var homeworks = await db.GroupHomeworks.OrderByDescending(x => x.GroupHomeworkId).Where(x => x.GroupId == student.GroupId).Skip(skip).Take(take)
+                                        .Include(x => x.Teacher).AsNoTracking().Include(x=> x.Subject).AsNoTracking().ToListAsync();
+                //.Include(x=> x.Teacher).AsNoTracking().Include(x=> x.Subject).AsNoTracking().ToListAsync();
+                //var homeworks = await db.GroupHomeworks.OrderByDescending(x => x.GroupHomeworkId).Where(x => x.GroupId == student.GroupId).Skip(skip).Take(take).ToListAsync();
+                if (homeworks != null)
+                {
+                    foreach (var homework in homeworks)
+                    {
+                        homework.HomeworkInBytes = null;
+                        homework.Teacher.GroupHomeworks = null;
+                        homework.Subject.GroupHomeworks = null;
+                        
+                        //var teacher = await db.Teachers.FindAsync(homework.TeacherId);
+                        homework.Teacher = new Teacher {  Name=homework.Teacher.Name, LastName = homework.Teacher.LastName};
+                        homework.Subject = new Subject { Title = homework.Subject.Title };
+                        //homework.Teacher.LastName = teacher.LastName;
+                    }
+                    //homework.Homework = Encoding.ASCII.GetString(homework.HomeworkInBytes);
+                    return Ok(homeworks);
+                }
+                else
+                {
+                    return NotFound(new { error = "No such homework task" });
+                }
+            }
+            return NotFound(new { error = "Student not found" });
+        }
 
         //[Authorize(Roles = "MainAdmin,Admin,Teacher")]
         //[HttpPost]

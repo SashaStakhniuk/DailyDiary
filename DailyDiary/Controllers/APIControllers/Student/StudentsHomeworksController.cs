@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DailyDiary.Controllers.APIControllers
@@ -36,23 +37,126 @@ namespace DailyDiary.Controllers.APIControllers
             return Ok(studentHomework);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<StudentHomework>>> GetAllByHomeworkId(int id)
+        public async Task<ActionResult<StudentHomework>> GetByHomeworkId(int id)
         {
-            var studentHomework = await db.StudentHomeworks.Where(x => x.GroupHomeworkId == id).ToListAsync();
+            var studentHomework = await db.StudentHomeworks.FirstOrDefaultAsync(x => x.GroupHomeworkId == id);
             if (studentHomework == null)
             {
                 return NotFound();
             }
             return Ok(studentHomework);
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<StudentHomework>>> GetAssignedHomeworks(int studentId)
+        {
+            var student = await db.Students.FindAsync(studentId);
+            if (student != null)
+            {
+                var assignedHomeworks = await db.GroupHomeworks.Where(x=> x.GroupId==student.GroupId).Select(x=> x.GroupHomeworkId).ToListAsync(); // всі завдання, які задані групі
+                var passedHomeworks = await db.StudentHomeworks?.Where(x => x.StudentId == studentId).Select(x=> x.GroupHomeworkId).ToListAsync(); // всі здані домашки студента
+                foreach (var assignedHomework in assignedHomeworks)
+                {
+                    var homework = await db.StudentHomeworks.FirstOrDefaultAsync(x => x.StudentId == studentId && x.GroupHomeworkId == assignedHomework);
+                    assignedHomeworks.Remove(homework.GroupHomeworkId);
+                }
+                return Ok(assignedHomeworks);
+            }
+            return NotFound(new { error = "Student not found" });
+
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<StudentHomework>>> GetHomeworksUnderReview(int studentId)
+        {
+            var student = await db.Students.FindAsync(studentId);
+            if (student != null)
+            {
+                var homeworksUnderReview = await db.StudentHomeworks?.Where(x => x.StudentId == studentId && x.Mark<=0).ToListAsync(); // всі домашки студента, які знаходяться на перевірці (без оцінки)
+                if (homeworksUnderReview != null)
+                {
+                    foreach (var homeworkUnderReview in homeworksUnderReview)
+                    {
+                        homeworkUnderReview.PerformedHomework = null;
+                    }
+                    return Ok(homeworksUnderReview);
+                }
+                else
+                {
+                    return NotFound(new { error = "Homeworks under review not found" });
+                }
+            }
+            return NotFound(new { error = "Student not found" });
+
+        }
+        [HttpGet("{details}")]
+        public async Task<ActionResult<bool>> GetByStudentAndHomeworkId(int studentId, int id)
+        {
+            var studentHomework = await db.StudentHomeworks.FirstOrDefaultAsync(x => x.StudentId == studentId && x.GroupHomeworkId == id);
+            if (studentHomework == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        [HttpGet("{details}")]
+        public async Task<ActionResult<StudentHomework>> GetPassedByStudentAndHomeworkId(int studentId, int id)
+        {
+            var studentHomeworks = await db.StudentHomeworks.Where(x => x.StudentId == studentId && x.GroupHomeworkId == id).ToListAsync();
+            if (studentHomeworks == null)
+            {
+                return NotFound(new { error = "There are no passed homework" });
+            }
+            return Ok(studentHomeworks);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddDoneHomeworkAsync(StudentHomeworksViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var student = await db.Students.FindAsync(model.StudentId);
+                if (student != null)
+                {
+                    var studentHomeworkToEdit = await db.StudentHomeworks.FirstOrDefaultAsync(x => x.GroupHomeworkId == model.GroupHomeworkId && x.StudentId == model.StudentId);
+                    if (studentHomeworkToEdit == null)
+                    {
+                        studentHomeworkToEdit = new StudentHomework
+                        {
+                            StudentId = model.StudentId,
+                            GroupHomeworkId = model.GroupHomeworkId,
+                            PerformedHomework = Encoding.ASCII.GetBytes(model.PerformedHomeworkBase64),
+                            StudentComment = model.StudentComment,
+
+                            //Mark = model.Mark,
+                            //TeacherComment = model.TeacherComment,
+                            Published = DateTime.Now
+                        };
+                        await db.StudentHomeworks.AddAsync(studentHomeworkToEdit);
+                        await db.SaveChangesAsync();
+                        return Ok(new { success = "Homework was added successfully" });
+                    }
+                    else
+                    {
+                        return BadRequest(new { error = "Homework adready done" });
+                    }
+                }
+                else
+                {
+                    return NotFound(new { error = "Student not found" });
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
         [HttpPut]
-        public async Task<IActionResult> CreateOrUpdateAsync(StudentHomeworksViewModel model)
+        public async Task<IActionResult> UpdateAsync(StudentHomeworksViewModel model)
         {
             if (ModelState.IsValid)
             {
                 if (model != null)
                 {
-                    var studentHomeworkToEdit = await db.StudentHomeworks.FirstOrDefaultAsync(x => x.GroupHomeworkId ==model.GroupHomeworkId && x.StudentId == model.StudentId);
+                    var studentHomeworkToEdit = await db.StudentHomeworks.FirstOrDefaultAsync(x => x.GroupHomeworkId == model.GroupHomeworkId && x.StudentId == model.StudentId);
                     if (studentHomeworkToEdit == null)
                     {
                         studentHomeworkToEdit = new StudentHomework
@@ -70,7 +174,7 @@ namespace DailyDiary.Controllers.APIControllers
                         studentHomeworkToEdit.PerformedHomework = model.PerformedHomework;
                         studentHomeworkToEdit.StudentComment = model.StudentComment;
                         studentHomeworkToEdit.Mark = model.Mark;
-                        studentHomeworkToEdit.TeacherComment= model.TeacherComment;
+                        studentHomeworkToEdit.TeacherComment = model.TeacherComment;
                         studentHomeworkToEdit.Published = DateTime.Now;
                     }
                     db.StudentHomeworks.Update(studentHomeworkToEdit);
@@ -80,8 +184,8 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return BadRequest(ModelState);
         }
-        [HttpPost]
-        [Authorize(Roles = "MainAdmin,Admin,Teacher,Student")]
+        [HttpDelete]
+        //[Authorize(Roles = "MainAdmin,Admin,Teacher,Student")]
         public async Task<ActionResult<Student>> Delete(StudentHomeworksViewModel model)
         {
             var studentHomework = await db.StudentHomeworks.FirstOrDefaultAsync(x => x.GroupHomeworkId == model.GroupHomeworkId && x.StudentId == model.StudentId);
@@ -96,21 +200,21 @@ namespace DailyDiary.Controllers.APIControllers
 
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<StudentHomework>>> GetStudentsHomeworksBySubjectIdAsync(int id)
-        {          
-                var homeworksId = await db.GroupHomeworks.Where(x => x.SubjectId == id).Select(x => x.GroupHomeworkId).ToListAsync();
-                if (homeworksId != null)
+        {
+            var homeworksId = await db.GroupHomeworks.Where(x => x.SubjectId == id).Select(x => x.GroupHomeworkId).ToListAsync();
+            if (homeworksId != null)
+            {
+                List<StudentHomework> studentHomeworks = new List<StudentHomework>();
+                foreach (var homeworkId in homeworksId)
                 {
-                    List<StudentHomework> studentHomeworks = new List<StudentHomework>();
-                    foreach (var homeworkId in homeworksId)
-                    {
-                        studentHomeworks.Add(await db.StudentHomeworks.FirstOrDefaultAsync(x => x.GroupHomeworkId == homeworkId));
-                    }
-                    return Ok(studentHomeworks);
+                    studentHomeworks.Add(await db.StudentHomeworks.FirstOrDefaultAsync(x => x.GroupHomeworkId == homeworkId));
                 }
-                else
-                {
-                    return NotFound(new { error = "Homeworks not found" });
-                }
+                return Ok(studentHomeworks);
+            }
+            else
+            {
+                return NotFound(new { error = "Homeworks not found" });
+            }
         }
 
         [HttpGet("{id}")]

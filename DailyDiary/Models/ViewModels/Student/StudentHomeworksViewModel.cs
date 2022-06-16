@@ -11,7 +11,8 @@ namespace DailyDiary.Models.ViewModels
         public int GroupHomeworkId { get; set; }
         public int StudentId { get; set; }
         [Required]
-        public byte[] PerformedHomework { get; set; }//base64
+        public string PerformedHomeworkBase64 { get; set; }//base64
+        public byte[] PerformedHomework { get; set; }
         public string StudentComment { get; set; }
         public float Mark { get; set; }
         public string TeacherComment { get; set; }

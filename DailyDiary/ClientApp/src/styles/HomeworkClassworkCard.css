@@ -1,0 +1,242 @@
+/* globale variable */
+
+:root {
+  --bg-body: #f4f4f4;
+  --bg-hot: #dd3333;
+  --bg-success: #33dd4f;
+  --bg-yellow: #d3c019;
+  --bg-featured: #ea723d;
+  --p-text-color: #7e8186;
+  --icon-info-color: #808080;
+  --icon-image-color: white;
+  --h2-text-color: #1a1a1a;
+  --price-text-color: #2fa89e;
+  --backgound-imgage: #3b9f93;
+  --border-view-color: #a4d2c3;
+}
+
+
+/* container style */
+
+.my-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* cards style */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+
+
+/* card style */
+
+.card {
+  
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  background-color: white;
+  box-shadow:    10px 10px 10px rgba(0, 0, 0, 0.1);
+
+  margin: 10px;
+}
+
+.card:hover {
+  transform: translateY(-7px);
+}
+
+
+/* img-overlya style */
+
+.img-overlay {
+  border-radius: 10px 10px 0px 0px;
+  width: 100%;
+  padding-top: 56.25%;
+  position: relative;
+  overflow: hidden;
+}
+.img-overlay img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.not-passed:before {
+  content: "not passed";
+  position: absolute;
+  padding: 3px 7px;
+  background-color: var(--bg-hot);
+  z-index: 3;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  text-transform: capitalize;
+}
+.passed:before {
+  content: "passed";
+  position: absolute;
+  padding: 3px 7px;
+  background-color: var(--bg-success);
+  z-index: 3;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  text-transform: capitalize;
+}
+.on-checking:before {
+  content: "On checking";
+  position: absolute;
+  padding: 3px 7px;
+  background-color: var(--bg-yellow);
+  z-index: 3;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  text-transform: capitalize;
+}
+
+.img-overlay img:hover + div {
+  width: 100%;
+}
+.view-image{
+  cursor: pointer;
+  width: 50px;
+  transition: all 0.3s ease;
+}
+.view-image:hover{
+  transform: translateY(-7px);
+}
+figcaption {
+  padding: 30px 0 30px 30px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--h2-text-color);
+  font-size: 1.2rem;
+}
+
+/* card-content styles */
+
+.card-content {
+  padding: 0px 30px 30px;
+  line-height: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  font-size: 14px;
+}
+
+.card-content p {
+  color: var(--p-text-color);
+}
+
+/* icons-home style */
+
+.date-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-item {
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.date-item > span {
+  color:#a6acb9;
+  font-size: 1.2em;
+  text-transform: capitalize;
+}
+
+/* icon styles */
+
+.date-display {
+  display: flex;
+  align-items: center;
+}
+
+.date-display i {
+  color: var(--icon-info-color);
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.date-display span {
+  vertical-align: middle;
+  font-size: 1.3em;
+}
+
+/* price style */
+
+.bootom-field {
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: column;
+}
+
+.bootom-field span:last-of-type {
+  color: var(--price-text-color);
+  font-size: 18px;
+}
+
+  .subjectView{
+    color:#FF8000;
+    padding: 15px;
+    margin: 10px;
+    font-size: 18px;
+  }
+
+ .icon {
+  background-image: url("../images/info.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  padding: 15px;
+  margin: 10px;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  align-items: center;
+  box-shadow:   0 5px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.tooltip {
+  transition: all 0.3s ease-in-out;
+  border-radius: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index:99;
+  font-size: 1em;
+  background: #ffffff;
+  padding: 5px 8px;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.icon:hover .tooltip {
+  opacity: .9;
+  visibility: visible;
+  pointer-events: visible;
+}
+
+.infoicon{
+  display:flex;
+  justify-content: end;
+}
