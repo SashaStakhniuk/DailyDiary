@@ -10,28 +10,63 @@ function Students(){
     const[groups, setGroups] = useState([])
     const [loading, setLoading] = useState(true) 
     const [studentsSkip, setStudentsSkip] = useState(0)
+    const [stateData, setStateData] = useState(true)
 
     useEffect(() => {    
-        console.log("fatch data")
-        if(loading){
-            axios.get(`https://localhost:44364/api/student/GetRangStudents/${studentsSkip}`)
-                .then(response => {
-                    setStudents([...students, ...response.data])
-                    setStudentsSkip(prevCourBlogs => prevCourBlogs +5)
-                }).finally(() => setLoading(false))
-            setLoading(false)
-        }
+        var loader_container = document.getElementById('loader-container')
         
+        if(loading){
+            if(stateData){
+                loader_container.style.visibility = 'visible'
+                loader_container.style.opacity = 1
+                loader_container.style.height = '200px' 
+                setTimeout(() => {
+                    axios.get(`https://localhost:44364/api/student/GetRangStudents/${studentsSkip}`)
+                    .then(response => {
+                        if(response.data == false){
+                            setStateData(false)
+                            loader_container.style.visibility = 'hidden'
+                            loader_container.style.opacity = 0
+                            loader_container.style.height = '0px' 
+                        } else {
+                            setStudents([...students, ...response.data])
+                            setStudentsSkip(prevCourBlogs => prevCourBlogs +5)
+                        }
+                    }).finally(() => setLoading(false))
+                    setLoading(false)
+                    loader_container.style.visibility = 'hidden'
+                    loader_container.style.opacity = 0
+                    loader_container.style.height = '0px' 
+                }, 1500)
+            }
+        }
     }, [loading])
 
     useEffect(() => {
+        var loader_container = document.getElementById('loader-container')
+        
         if(loading){
-            axios.get(`https://localhost:44364/api/student/GetRangStudents/${studentsSkip}`)
-            .then(response => {
-                setStudents([...students, ...response.data])
-                setStudentsSkip(prevCourBlogs => prevCourBlogs +5)
-            }).finally(() => setLoading(false))
-            setLoading(false)
+            loader_container.style.visibility = 'visible'
+            loader_container.style.opacity = 1
+            loader_container.style.height = '500px' 
+            setTimeout(() => {
+                axios.get(`https://localhost:44364/api/student/GetRangStudents/${studentsSkip}`)
+                .then(response => {
+                    if(response.data == false){
+                        loader_container.style.visibility = 'hidden'
+                        loader_container.style.opacity = 0
+                        loader_container.style.height = '0px' 
+                    } else {
+                        setStudents([...students, ...response.data])
+                        setStudentsSkip(prevCourBlogs => prevCourBlogs +5)
+                    }
+                }).finally(() => setLoading(false))
+                setLoading(false)
+                loader_container.style.visibility = 'hidden'
+                loader_container.style.opacity = 0
+                loader_container.style.height = '0px' 
+            }, 1500)
+            
         }
     }, [])
 
@@ -118,15 +153,19 @@ function Students(){
     return(
         <>
             <div id='all-container' className="all-container">
-                <div className=" p-3 d-flex flex-column">
-                    <NavigationBar/>
-                    <div style={{ marginBottom: '10px' }}>
-                        <input onChange={onChangeHendler} id="lastName" type="username" placeholder="Enter student lastNamr" required="required" title="Your username" />
-                    </div>
-                    {students.map((student, i) => 
-                        <CartStudent key={i} infoStudent={student} dataGroups={groups} />
-                    )}
+               
+                <NavigationBar/>
+                <div style={{ marginBottom: '10px' }}>
+                    <input onChange={onChangeHendler} id="lastName" type="username" placeholder="Enter student lastNamr" required="required" title="Your username" />
                 </div>
+                {students.map((student, i) =>
+                    <>
+                        <CartStudent key={i} infoStudent={student} dataGroups={groups} />
+                    </> 
+                )}
+                <div id="loader-container" className='loader-container'>
+                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                </div>         
             </div>
         </>
     )

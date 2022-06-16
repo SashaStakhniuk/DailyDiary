@@ -11,7 +11,6 @@ body::-webkit-scrollbar-thumb {
   border-radius: 10px;
 }
 .all-container{
-  overflow-x: scroll;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -42,6 +41,12 @@ body::-webkit-scrollbar-thumb {
 
 .menu__container{
   z-index: 10;
+}
+
+.header-logo{
+  height: 200px;
+  margin-bottom: 50px;
+  position: fixed;
 }
 
 .login-img{
@@ -125,7 +130,9 @@ body
 /* ScrolBar  */
 .scrollbar
 {
-  height: 90%;
+  position: absolute;
+  bottom: 0;
+  height: 80%;
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
@@ -133,10 +140,13 @@ body
 
 .scrollbar:hover
 {
-  height: 90%;
+  height: 80%;
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+.scrollbar:hover .all-container{
+  overflow-y: hidden;
 }
 
 /* Scrollbar Style */ 
@@ -169,30 +179,38 @@ body
 .fa {
   position: relative;
   display: table-cell;
-  width: 55px;
+  width: 80px;
   height: 36px;
   text-align: center;
   top:12px; 
-  font-size: 33px;
+  font-size: 35px;
 }
 
 .main-menu:hover, nav.main-menu.expanded {
-  width:330px;
+  width: 330px;
   overflow-y:scroll;
   opacity:1;
 }
 .backgr{
   background: rgba(44, 51, 71, 0.8);
   /* background: rgba( #007bff, #007bff, #007bff, 0.4); */
-  position: fixed;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
   height: 100%;
   width: 100%;
   z-index: 0;
 }
 .img-menu{
   position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  top: 0;
   height: 100%;
-  width: 100%;
+  width: 80px;
+  min-width: 100%;
   z-index: 0;
   background-repeat: no-repeat;
   background-image: url('https://mystat.itstep.org/assets/images/park.jpg?v=879533787a3acfa750e3c1310bace6e2');
@@ -200,7 +218,7 @@ body
 
 .main-menu {
   z-index: 10;
-  background: rgba(44, 51, 71, 0.8);
+  background: rgba(44, 51, 71, 0.6);
   position: fixed;
   top:0;
   bottom:0;
@@ -226,7 +244,7 @@ body
 
 .main-menu li>a {
   position:relative;
-  width:350px;
+  width:360px;
   display:table;
   border-collapse:collapse;
   border-spacing:0;
@@ -275,6 +293,10 @@ body
 }
 .main-menu .nav-text:hover .fa{
   font-size: 34px;
+}
+.main-menu .badge-counter{
+  left: 36%;
+  transition: all 0.2s ease 0s;
 }
 .main-menu .nav-text:hover{
   font-size: 21px;
@@ -368,12 +390,13 @@ nav ul,nav li {
 /* Darker element side menu Start*/
 .darkerli
 {
+  position: relative;
   text-transform:capitalize;  
 }
 
 .darkerlishadow
 {
-  
+  position: relative;
   text-transform:capitalize;  
   -webkit-box-shadow: inset 0px 5px 5px -4px rgba(44, 51, 71, 0.8);
   -moz-box-shadow:    inset 0px 5px 5px -4px rgba(50, 50, 50, 0.55);
@@ -407,4 +430,58 @@ nav ul,nav li {
   font-style: normal;
   font-weight: 300;
   src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
+}
+
+.badge-counter{
+
+}
+.main-menu:hover .news-badge-counter{
+  left: 200px;
+  width: 25px;
+  height: 25px;
+  top: 27%;
+}
+.main-menu .news-badge-counter {
+  transition: all 0.2s ease 0s;
+  margin-left: 17px;
+  position: absolute;
+  right: 5px;
+  color: #fff;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 16px;
+  font-size: 16px;
+  background: #fa5873;
+  z-index: 100;
+  top: 30%;
+  left: 8%;
+}
+
+.main-menu .feedback-badge-counter{
+  transition: all 0.2s ease 0s;
+  margin-left: 17px;
+  position: absolute;
+  right: 5px;
+  color: #fff;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 16px;
+  font-size: 16px;
+  background: #fa5873;
+  z-index: 100;
+  top: 30%;
+  left: 8%;
+}
+
+.main-menu:hover .feedback-badge-counter{
+  left: 200px;
+  width: 25px;
+  height: 25px;
+  top: 27%;
 }

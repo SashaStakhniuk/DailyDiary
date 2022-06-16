@@ -32,7 +32,7 @@ class GroupEditing extends React.Component{
     componentDidMount(){
         // Array.from(document.styleSheets).forEach(sheet => sheet.disabled = true)
         //console.log(this.props)
-    if (this.props.match && this.props.match.params.id) {
+        if (this.props.match && this.props.match.params.id) {
         //console.log(this.props.match.params.id)
         this.setState({
             teacherId:1,

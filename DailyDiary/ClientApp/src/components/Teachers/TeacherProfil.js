@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import '../../styles/Students.css'
 import { useParams } from "react-router-dom"
 import NavigationBar from '../NavigationBar'
- 
+import $ from 'jquery'
 function TeacherProfil(){
 
     let { id } = useParams()
@@ -23,7 +23,6 @@ function TeacherProfil(){
             const response = await fetch(`https://localhost:44364/api/Teacher/GetTeacherGroupsById/${id}`)
             const data = await response.json()
             if(response.ok === true){
-                console.log('Secsesfuly')
                 setGroups(data)
             }else{
                 console.log('Error ', data)
@@ -75,6 +74,30 @@ function TeacherProfil(){
 
     function onClickEditButton(){
         window.location = `/admin/edit-teacher/${id}`
+    }
+    
+    var sendButton = function() {
+    var button = $('.sendButton');
+    button.on('click', function() {
+        $(this).hide().html('Sending <span class="loading"></span>').fadeIn('fast');
+        setTimeout( function() {
+        button.hide().html('Message sent &#10003;').fadeIn('fast');
+        }, 3000);
+    });
+    };
+      
+    function onClickSenpMessage(){
+        var button = $('.sendButton');
+        $('.sendButton').hide().html('Sending <span class="loading"></span>').fadeIn('fast');
+        
+        window.location = `/admin/send-for-teacher/${id}`
+        
+        setTimeout(() => {
+            if(true){
+                button.hide().html('Message sent &#10003;').fadeIn('fast');
+            }
+        }, 3500)
+        
     }
 
     return(
@@ -165,9 +188,10 @@ function TeacherProfil(){
                                 </div>
                             </div>
                         </div>
-                        <div className="w-100 m-2 container d-flex justify-content-center">
-                        <button style={{ marginRight: '7px', color: '#fff', borderRadius: '10%' }} onClick={onClickEditButton} className="button-edit">Edit</button>
+                        <div className="container-buttons">
+                            <button  onClick={onClickEditButton} className="button-edit">Edit</button>
                             <button style={{ borderRadius: '10%', color: '#fff', backgroundColor: '#7d4852' }} onClick={e => onClickDelete(e)} className="btn">Delete</button>
+                            <button onClick={onClickSenpMessage} class="sendButton">Send message</button>
                         </div>
                     </div>
                 </div>

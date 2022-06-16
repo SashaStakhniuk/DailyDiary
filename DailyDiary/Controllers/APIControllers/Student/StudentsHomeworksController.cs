@@ -57,7 +57,7 @@ namespace DailyDiary.Controllers.APIControllers
                 foreach (var assignedHomework in assignedHomeworks)
                 {
                     var homework = await db.StudentHomeworks.FirstOrDefaultAsync(x => x.StudentId == studentId && x.GroupHomeworkId == assignedHomework);
-                    assignedHomeworks.Remove(homework.GroupHomeworkId);
+                    assignedHomeworks.Remove((int)homework.GroupHomeworkId);
                 }
                 return Ok(assignedHomeworks);
             }

@@ -10,26 +10,63 @@ function Teachers(){
     const[teachers, setTeachers] = useState([])
     const [teachersSkip, setTeachersSkip] = useState(0)
     const [loading, setLoading] = useState(true) 
-
-    // useEffect(() => {
-    //     if(loading){
-    //         axios.get(`https://localhost:44364/api/teacher/GetRangTeachers/${teachersSkip}`)
-    //         .then(response => {
-    //             setTeachers([...teachers, ...response.data])
-    //             setTeachersSkip(prevCourBlogs => prevCourBlogs +5)
-    //         }).finally(() => setLoading(false))
-    //         setLoading(false)
-    //     }
-    // }, [])
+    const [stateData, setStateData] = useState(true)
 
     useEffect(() => {
+        var loader_container = document.getElementById('loader-container')
+
         if(loading){
-            console.log('geting')
-            axios.get(`https://localhost:44364/api/teacher/GetRangTeachers/${teachersSkip}`)
-            .then(response => {
-                setTeachers([...teachers, ...response.data])
-                setTeachersSkip(prevCourBlogs => prevCourBlogs +5)
-            }).finally(() => setLoading(false))
+            if(stateData){
+                loader_container.style.visibility = 'visible'
+                loader_container.style.opacity = 1
+                loader_container.style.height = '500px' 
+                setTimeout(() => {
+                    axios.get(`https://localhost:44364/api/teacher/GetRangTeachers/${teachersSkip}`)
+                    .then(response => {
+                        if(response.data == false){
+                            setStateData(false)
+                            loader_container.style.visibility = 'hidden'
+                            loader_container.style.opacity = 0
+                            loader_container.style.height = '0px' 
+                        } else {
+                            setTeachers([...teachers, ...response.data])
+                            setTeachersSkip(prevCourBlogs => prevCourBlogs +5)
+                        }
+                    }).finally(() => setLoading(false))
+                    loader_container.style.visibility = 'hidden'
+                    loader_container.style.opacity = 0
+                    loader_container.style.height = '0px'
+                }, 1000)
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+        var loader_container = document.getElementById('loader-container')
+
+        if(loading){
+            if(stateData){
+                loader_container.style.visibility = 'visible'
+                loader_container.style.opacity = 1
+                loader_container.style.height = '200px' 
+                setTimeout(() => {
+                    axios.get(`https://localhost:44364/api/teacher/GetRangTeachers/${teachersSkip}`)
+                    .then(response => {
+                        if(response.data == false){
+                            setStateData(false)
+                            loader_container.style.visibility = 'hidden'
+                            loader_container.style.opacity = 0
+                            loader_container.style.height = '0px' 
+                        } else {
+                            setTeachers([...teachers, ...response.data])
+                            setTeachersSkip(prevCourBlogs => prevCourBlogs +5)
+                        }
+                    }).finally(() => setLoading(false))
+                    loader_container.style.visibility = 'hidden'
+                    loader_container.style.opacity = 0
+                    loader_container.style.height = '0px'
+                }, 1000)
+            }
         }
     }, [loading])
 
@@ -93,15 +130,17 @@ function Teachers(){
     return(
         <>
             <div id='all-container' className="all-container">
-                <div className=" p-3 d-flex flex-column">
-                    <NavigationBar />
-                    <div style={{ marginBottom: '10px' }}>
-                            <input onChange={onChangeHendler} id="lastName" type="username" placeholder="Enter teacher lastName" required="required" title="Enter lastName" />
-                        </div>
-                    {teachers.map((teacher, i) => 
-                        <CartTeacher key={i} infoTeacher={teacher} />
-                    )}
-                </div>
+                
+                <NavigationBar />
+                <div style={{ marginBottom: '10px' }}>
+                        <input onChange={onChangeHendler} id="lastName" type="username" placeholder="Enter teacher lastName" required="required" title="Enter lastName" />
+                    </div>
+                {teachers.map((teacher, i) => 
+                    <CartTeacher key={i} infoTeacher={teacher} />
+                )}
+                <div id="loader-container" className='loader-container'>
+                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                </div>      
             </div>
         </>
     )

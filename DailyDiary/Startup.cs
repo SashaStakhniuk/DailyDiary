@@ -20,21 +20,19 @@ namespace DailyDiary
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>();
+
             var identityConfiguration = Configuration.GetConnectionString("DailyDiaryUsers");
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(identityConfiguration));
 
             var dailyDiaryDatasConfiguration = Configuration.GetConnectionString("DailyDiaryDatas");
             services.AddDbContext<DailyDiaryDatasContext>(options => options.UseSqlServer(dailyDiaryDatasConfiguration));
 
-
-
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -71,6 +69,8 @@ namespace DailyDiary
             app.UseSpaStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -5,6 +5,11 @@ import { useState, useEffect } from "react"
 import $ from 'jquery'
 function EdmitFromTeaher(){
 
+    const [dataSpecialty, setDayaSpecialty] = useState(["Teacher", "Pro Teacher"])
+    const [dataCategory, setDataCategory] = useState(["Specialist", "First category specialist"])
+    const [dataDegree, setDatDegree] = useState(["Master", "Profesional PHP"])
+    const [dataEducation, setDataEducation] = useState(["Higher"])
+
     let { id } = useParams()
     
     const[teacher, setTeacher] = useState({})
@@ -20,10 +25,8 @@ function EdmitFromTeaher(){
     const [education, setEducation] = useState("")
     const [experience, setExperience] = useState(null)
     const [salary, setSalary] = useState(null)
-    const [base64URL, setBase64Url] = useState(null)
     const [rate, setRate] = useState(null)
     const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
     const [login, setLogin] = useState("")
 
     const [subjecs, setSubjects] = useState([])
@@ -55,11 +58,12 @@ function EdmitFromTeaher(){
                 setEducation(data.education)
                 setExperience(data.experience)
                 setSalary(data.salary)
-                setBase64Url(data.base64URL)
                 setRate(data.rate)
                 setLogin(data.login)
-                setPassword(data.password)
                 setEmail(data.email)
+                console.log(data.login)
+                console.log(data.birthday)
+                        
             }else{
                 console.log('Error ', data)
             }
@@ -69,7 +73,7 @@ function EdmitFromTeaher(){
     async function GetAllGroups(){
         try
         {
-            const response = await fetch(`https://localhost:44364/api/Teacher/GetAllGroups`)
+            const response = await fetch(`https://localhost:44364/api/group/get`)
             const data = await response.json()
             if(response.ok === true){
                 setGroups(data)
@@ -96,33 +100,105 @@ function EdmitFromTeaher(){
     }
 
     async function edit(){
-        var teacerId = Number(id)
-        
+        const response = await fetch('https://localhost:44364/api/Teacher/Edit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id, 
+                name,
+                lastName,
+                age,
+                birthday,
+                specialty,
+                category,
+                degree,
+                education,
+                experience,
+                salary,
+                rate,
+                email,
+                login
+            })
+            
+        })
+        const data = await response.json()
+        if(response.ok === true){
+            console.log("Sexesfuly: " + data)
+        } else { 
+            console.log("Error: " + data)
+        }
     }
 
     async function onSubmit(e){
         e.preventDefault()
         await edit()
     }
-
-    async function StateGroup(groypId){
-        const request = await fetch(`https://localhost:44364/api/Teacher/GroupEzist/${id}/${groypId}`, {
-            method: 'POST'
-        })
-        if(request.ok === true){
-            const data = request.json()
-            console.log("data: " + data)
-            return false
-        }else{
-        }
-    }
-
-    async function StateSubgect(subgectId){
-
-    }
-
+    
     function onChangeName(e){
         setName(e.target.value)
+    }
+
+    function onChangelastName(e){
+        setLastName(e.target.value)
+    }
+
+    function onChangeSpecialty(e){
+        setSpecialty(e.target.value)
+    }
+
+    function onChangeCategory(e){
+        setCategory(e.target.value)
+    }
+
+    function onChangeAge(e){
+        setAge(e.target.value)
+    }
+
+    function onChangeBirthday(e){
+        setBirthday(e.target.value)
+    }
+
+    function onChangeEmail(e){
+        setEmail(e.target.value)
+    }
+
+    function onChangeLogin(e){
+        setLogin(e.target.value)
+    }
+
+    function onChangeDegree(e){
+        setDegree(e.target.value)
+    }
+
+    function onChangeEducation(e){
+        setEducation(e.target.value)
+    }
+
+    function onChangeExperience(e){
+        setExperience(e.target.value)
+    }
+
+    function onChangeSalary(e){
+        setSalary(e.target.value)
+    }
+
+    function onChangeRate(e){
+        setRate(e.target.value)
+    }
+
+    async function onClickCreateLogin(){
+        const response = await fetch(`https://localhost:44364/api/Teacher/CreateLogin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id,
+                name,
+            })
+        })
     }
     
     return(
@@ -134,29 +210,119 @@ function EdmitFromTeaher(){
 
                         <span className="span-text">Name</span>
                         <div class="mb-3">
-                            <input id="username" value={name} onChange={e => onChangeName(e)} type="text" placeholder="Enter student usrname" required="required" title="Your username" />
+                            <input id="username" value={name} onChange={e => onChangeName(e)} type="text" placeholder="Enter teacher usrname" required="required" title="Your username" />
                         </div>
+
+                        <span className="span-text">Last name</span>
+                        <div className="mb-3">
+                            <input id="username" value={lastName} onChange={e => onChangelastName(e)} type="text" placeholder="Enter teacher last name" title=" " />
+                        </div>
+
+                        <span className="span-text">Age</span>
+                        <div className="mb-3">
+                            <input id="number" value={age} onChange={e => onChangeAge(e)} type="number" placeholder="Enter teacher birthday" title="" />
+                        </div>
+
+                        <span className="span-text">Birthday</span>
+                        <div className="mb-3">
+                            <input id="date" data-date-format="DD MMMM YYYY" defaultValue={birthday} value={birthday} onChange={e => onChangeBirthday(e)} type="date" placeholder="Enter teacher birthday" title="teacher birthday" />
+                        </div>
+
+                        <span className="span-text">Email</span>
+                        <div className="mb-3">
+                            <input id="username" value={email} onChange={e => onChangeEmail(e)} type="email" placeholder="Enter teacher email" title="" />
+                        </div>
+
+                        <span className="span-text">Specialty</span>
+                        <select onChange={e => onChangeSpecialty(e)} type="date" id="dataSpecialty" className="dataSpecialty">
+                            {dataSpecialty.map((specialtyValue, i) => {
+                                return(
+                                    <>
+                                        <option key={i} value={specialtyValue} selected={specialty.includes(specialtyValue) ? "selected" : ""}>{specialtyValue}</option>
+                                    </>
+                                )
+                            })}
+                        </select >
 
                     </div>
                     <div className="container2">
-                        <div class="mb-3">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingOne">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+
+                        <span className="span-text">Login</span>
+                        <div className="mb-3">
+                            {login 
+                                ? 
+                                    <input id="number" value={login} onChange={e => onChangeLogin(e)} type="text" placeholder="Enter teacher login" required="required" title="Your login" />
+                                :
+                                    <a onClick={onClickCreateLogin} className="btn btn-primary">Create random</a>
+                            }
+                        </div>
+
+                        <span className="span-text">Category</span>
+                        <select onChange={e => onChangeCategory(e)} type="date" id="dataCategory" className="dataCategory">
+                            {dataCategory.map((categoryValue, i) => {
+                                return(
+                                    <>
+                                        <option key={i} value={categoryValue} selected={category.includes(categoryValue) ? "selected" : ""}>{categoryValue}</option>
+                                    </>
+                                )
+                            })}
+                        </select >
+
+                        <span className="span-text">Degree</span>
+                        <select onChange={e => onChangeDegree(e)} type="date" id="datadergee" className="datadergee">
+                            {dataDegree.map((degreeValue, i) => {
+                                return(
+                                    <>
+                                        <option key={i} value={degreeValue} selected={degree.includes(degreeValue) ? "selected" : ""}>{degreeValue}</option>
+                                    </>
+                                )
+                            })}
+                        </select>
+
+                        <span className="span-text">Education</span>
+                        <select onChange={e => onChangeEducation(e)} type="date" id="dataEducation" className="dataEducation">
+                            {dataEducation.map((educationValue, i) => {
+                                return(
+                                    <>
+                                        <option key={i} value={educationValue} selected={education.includes(educationValue) ? "selected" : ""}>{educationValue}</option>
+                                    </>
+                                )
+                            })}
+                        </select >
+
+                        <span className="span-text">Experience</span>
+                        <div className="mb-3">
+                            <input id="number" value={experience} onChange={e => onChangeExperience(e)} type="number" placeholder="Enter teacher experience" title="" />
+                        </div>
+
+                        <span className="span-text">Salary</span>
+                        <div className="mb-3">
+                            <input id="number" value={salary} onChange={e => onChangeSalary(e)} type="number" placeholder="Enter teacher salary" title="" />
+                        </div>
+
+                        <span className="span-text">Rate</span>
+                        <div className="mb-3">
+                            <input id="number" value={rate} onChange={e => onChangeRate(e)} type="number" placeholder="Enter teacher rate" title="" />
+                        </div>
+
+                        <div className="mb-3">
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="flush-headingOne">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                                         Subgects
                                     </button>
                                 </h2>
 
-                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                     <div style={{ margin: '14px 20px' }}>
                                         {subjecs.map((subject, i) => {
                                             return(
                                                 <>
-                                                    <label class="container">
+                                                    <label className="container">
                                                         {subject.title}
-                                                        <input defaultChecked={ StateSubgect(subject.id) ? "checked" : "" } type="checkbox"
+                                                        <input 
                                                         value={subject.id}/>
-                                                        <span class="checkmark"></span>
+                                                        <span className="checkmark"></span>
                                                     </label>
                                                 </>
                                             )
@@ -166,24 +332,24 @@ function EdmitFromTeaher(){
                             </div>
                             
                         </div>
-                        <div class="mb-3">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="flush-headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        <div className="mb-3">
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="flush-headingTwo">
+                                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                                     Groups
                                 </button>
 
                                 </h2>
-                                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                <div id="flush-collapseTwo" className="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
                                     <div style={{ margin: '14px 20px' }}>
                                         {groups.map((group, i) => {
                                             return(
                                                 <>
-                                                    <label class="container">
+                                                    <label className="container">
                                                         {group.title}
-                                                        <input defaultChecked={ StateGroup(group.id) ? "checked" : "" } type="checkbox"
+                                                        <input type="checkbox"
                                                         value={group.id}/>
-                                                        <span class="checkmark"></span>
+                                                        <span className="checkmark"></span>
                                                     </label>
                                                 </>              
                                             )

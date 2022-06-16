@@ -1,7 +1,6 @@
 ﻿using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
 using DailyDiary.Models.ViewModels.Student;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,13 +22,13 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> Get()//GetAllStudentsAsync
+        public async Task<ActionResult<IEnumerable<Student>>> Get()
         {
-            return await db.Students.ToListAsync();
+           return await db.Students.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> Get(int id)//GetStudentByIdAsync
+        public async Task<ActionResult<Student>> Get(int id)
         {
             var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == id);
             if (student == null)
@@ -42,7 +41,15 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{studentsSkip}")]
         public ActionResult<IEnumerable<Student>> GetRangStudents(int studentsSkip)
         {
-            return db.Students.Skip(studentsSkip).Take(5).ToList();
+            List<Student> result = db.Students.OrderByDescending(x => x.StudentId).Skip(studentsSkip).Take(5).ToList();
+            if (result.Count() > 0)
+            {
+                return result;
+            }
+            else
+            {
+                return Ok(false);
+            }
         }
 
         [HttpPost]
@@ -61,11 +68,11 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{lastName}")]
         public async Task<ActionResult<IEnumerable<Student>>> GetByName(string lastName)
         {
-            if(lastName == null)
+            if (lastName == null)
             {
                 return await db.Students.ToListAsync();
             }
-           return await db.Students.Where(s => s.LastName.Contains(lastName)).ToListAsync();
+            return await db.Students.Where(s => s.LastName.Contains(lastName)).ToListAsync();
         }
 
         [HttpPost]
@@ -75,7 +82,7 @@ namespace DailyDiary.Controllers.APIControllers
             {
                 if (model != null)
                 {
-                    var student = await db.Students.FirstOrDefaultAsync(x => x.Name == model.PrevName);
+                    var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.Id);
                     if (student != null)
                     {
                         Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
@@ -88,7 +95,7 @@ namespace DailyDiary.Controllers.APIControllers
                         student.LastName = model.LastName;
                         student.Birthday = model.Birthday;
                         student.Age = model.Age;
-                        student.StudyYear = model.StudyYear;
+                        student.YearOfStudy = model.StudyYear;
                         student.GroupId = model.GroupId;
                         student.Group = group;
                         student.Subgroup = subgroup;
@@ -106,52 +113,49 @@ namespace DailyDiary.Controllers.APIControllers
             return BadRequest(ModelState);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> CreateNew(NewStudentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.Id);
-                if(student == null)
+                try
                 {
-                    string Login =  Services.GeneratorService.GenerateNewLogin(model.LastName);
+                    Student student = new Student();
+                    string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
                     string Password = Services.GeneratorService.GenerateNewPassword();
-                    Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
-                    Subgroup subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == model.SubgroupId);
+                    Group group = null;
+                    int order = db.Students.Count() + 1;
+                    if (model.GroupId != 0)
+                    {
+                        group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                    }
                     student = new Student
                     {
                         Name = model.Name,
                         LastName = model.LastName,
                         Birthday = model.Birthday,
+                        Age = model.Age,
                         AdmissionDate = model.AdmissionDate,
                         Login = Login,
                         Password = Password,
                         Email = model.Email,
-                        PrevName = "",
-                        GroupId = model.GroupId,
-                        SubgroupId = model.SubgroupId,
-                        Age = model.Age,
-                        StudyYear = model.StudyYear,
                         Group = group,
-                        Subgroup = subgroup
+                        Order = order
                     };
-                    Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
+                    //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
                     db.Students.Add(student);
                     await db.SaveChangesAsync();
                     return Ok();
-                }
-                else
+                } 
+                catch(Exception ex)
                 {
-                    return NotFound(new { error = "Student exist" });
+                    Console.WriteLine();
                 }
             }
             return BadRequest();
-        }  
+        }
 
         [HttpDelete("{id}")]
-        /*[Authorize(Roles = "MainAdmin,Admin")]*/
         public async Task<ActionResult<Student>> Delete(int id)
         {
             Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == id);
@@ -163,34 +167,36 @@ namespace DailyDiary.Controllers.APIControllers
             await db.SaveChangesAsync();
             return Ok(student);
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Group>> GetStudentGroupByIdAsync(int id)//GetStudentGroupByIdAsync
         {
             var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == id);
             if (student != null)
-            {               
-                var group = await db.Groups.FirstOrDefaultAsync(x=> x.Id == student.GroupId);
+            {
+                var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == student.GroupId);
                 if (group != null)
                 {
                     return Ok(group);
                 }
                 else
                 {
-                    return NotFound( new { error = "Group not found" });
+                    return NotFound(new { error = "Group not found" });
                 }
             }
-            return NotFound(new {error = "Student not found" });
+            return NotFound(new { error = "Student not found" });
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Subgroup>> GetStudentSubgroupByIdAsync(int id)//GetStudentSubgroupsByStudentIdAsync
+        public async Task<ActionResult<Subgroup>> GetStudentSubgroupByIdAsync(int id)
         {
             var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == id);
-            
+
             if (student != null)
             {
-                var subgroup = await db.Subgroups.FirstOrDefaultAsync(x=> x.Id == student.SubgroupId);
+                var subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == student.SubgroupId);
                 if (subgroup != null)
-                {              
+                {
                     return Ok(subgroup);
                 }
                 else
@@ -199,6 +205,94 @@ namespace DailyDiary.Controllers.APIControllers
                 }
             }
             return NotFound(new { error = "Student not found" });
+        }
+
+        [HttpGet("{StudentId}/{feedbackSkip}")]
+        public async Task<ActionResult<IEnumerable<Feedbackinfo>>> GetRangStudentFeedbackById(int StudentId, int feedbackSkip)
+        {
+            List<Feedback> feedbacks = new List<Feedback>();
+            List<Feedbackinfo> feedbackinfos = new List<Feedbackinfo>();
+            var studentFeedbacks = await db.StudentFeedback.Where(x => x.StudentId == StudentId).Select(x => x.FeedbackId).ToListAsync();
+            if (studentFeedbacks.Count != 0)
+            {
+                foreach (var studentFeedback in studentFeedbacks)
+                {
+                    feedbacks.Add(await db.Feedback.FirstOrDefaultAsync(x => x.Id == studentFeedback));
+                }
+                foreach(var feedback in feedbacks)
+                {
+                    Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == feedback.SubjectId);
+                    Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == feedback.TeacherId);
+                    Feedbackinfo feedbackinfo = new Feedbackinfo { MainInformation = feedback.MainInformation, IsRead = feedback.IsRead, DataPublication = feedback.DataPublication, SubjectTitle = subject.Title, TeacherName = teacher.Name, TeacherLastName = teacher.LastName };
+                    feedbackinfos.Add(feedbackinfo);
+                }
+                if (feedbackinfos.Count() > 0)
+                {
+                    var takeFeedback = feedbackinfos.Count();
+                    return Ok(feedbackinfos.OrderByDescending(f => f.Id).Skip(feedbackSkip).Take(takeFeedback).ToList());
+                }
+                else
+                {
+
+                    return Ok(false);
+                }
+            }
+            return NotFound(new { error = "Student's groups not found" });
+        }
+
+
+        [HttpGet("{StudentId}")]
+        public async Task<ActionResult<int>> GetNotreadFeedback(int StudentId)
+        {
+            Student stuent = await db.Students.FirstOrDefaultAsync(x => x.StudentId == StudentId);
+            if(stuent != null)
+            {
+                int count = 0;
+                List<Feedback> feedbacks = new List<Feedback>();
+                List<int> studentsFeedbackIds = await db.StudentFeedback.Where(x => x.StudentId == StudentId).Select(x => x.FeedbackId).ToListAsync();
+                foreach(var studentsFeedbackId in studentsFeedbackIds)
+                {
+                    feedbacks.Add(await db.Feedback.FirstOrDefaultAsync(x => x.Id == studentsFeedbackId));
+                }
+                if(feedbacks.Count > 0)
+                {
+                    foreach(var feedback in feedbacks)
+                    {
+                        if(feedback.IsRead == false)
+                        {
+                            count++;
+                        }
+                    }
+                    return Ok(count);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpGet("{GroupId}")]
+        public async Task<ActionResult<IEnumerable<Student>>> GetStudentsByGroupId(int GroupId)
+        {
+            var students = await db.Students.Where(x => x.GroupId == GroupId).ToListAsync();
+            if(students.Count > 0)
+            {
+                return Ok(students);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<bool>> IsReadAllStudentFeedbacks()
+        {
+            var feedbacks = await db.Feedback.ToListAsync();
+            foreach(var feedback in feedbacks)
+            {
+                if(feedback.IsRead == false)
+                {
+                    feedback.IsRead = true;
+                }
+            }
+            await db.SaveChangesAsync();
+            return Ok(true);
         }
     }
 }

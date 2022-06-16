@@ -64,12 +64,12 @@ function StudentProfil(props){
     }
 
     function onClickEditButton(){
-        window.location = `/edit-student/${id}`
+        window.location = `/admin/edit-student/${id}`
     }
     
     function onClickDelete(){
         Delete()
-        window.location = `/students/`
+        window.location = `/admin/students/`
     }
 
     return(
@@ -78,16 +78,15 @@ function StudentProfil(props){
                 <div className="card-group p-3 d-flex justify-content-center">
                     <NavigationBar/>
                     <div className="cart-student">
-                            <div className="col-md-4">
-                            {student.base64URL ? <img 
-                                style={{ width: '120px', borderRadius: '25%', height: 'auto' }}
-                                className="img-fluid " 
-                                src={student.base64URL} alt="..."/> : <img 
-                                style={{ width: '120px', borderRadius: '25%' }}
-                                className="img-fluid rounded-start"
-                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png" alt="..."/>
-                            }
-                            
+                            <div style={{ zIndex: '0' }} className="col-md-4">
+                                {student.base64URL ? <img 
+                                    style={{ width: '120px', borderRadius: '25%', height: 'auto' }}
+                                    className="img-fluid " 
+                                    src={student.base64URL} /> : <img 
+                                    style={{ width: '120px', borderRadius: '25%' }}
+                                    className="img-fluid rounded-start"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png" />
+                                }
                             </div>
                             <div className="col-md-8 d-flex flex-column  align-items-center justify-content-center">
                                 <div className="card-body">

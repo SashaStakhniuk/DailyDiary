@@ -1,3 +1,83 @@
+.feedback-container{
+  background-color: #fff;
+  border-top: 4px solid #a3aec8;
+  box-shadow: 0px 2px 4px rgb(0 0 0 / 10%);
+  border-radius: 3px;
+  max-width: auto;
+  min-height: 300px;
+  height: auto;
+  position: absolute;
+  left: 140px;
+  right: 0;
+  top: 30%;
+  width: 80%;
+  padding: 50px 60px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  
+  align-items: baseline;
+  flex-direction: column;
+}
+.data-info{
+  position: absolute;
+  right: 50px;
+  top: 20%;
+  font-family: "Segoe UI";
+}
+.main-info{
+  margin-top: 15px;
+  min-width: 80%;
+  align-self: center;
+  font-weight: bolder;
+  font-size: 18px;
+  font-family: "Segoe UI";
+}
+.new-message{
+  position: absolute;
+  left: 30%;
+  right: 50%;
+}
+.title-beedback{
+  font-family: "Segoe UI";
+  margin-left: 30px;
+  color: #212529;
+  font-size: 22px;
+  font-weight: bold;
+}
+.card-notfound{
+  font-family: "Segoe UI";
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  border-bottom: 1px solid #e5ebf2;
+  background-color: #fff;
+  width: 100%;
+  height: auto;
+  min-height: 150px;
+  max-width: auto;
+}
+.card-feedback{
+  font-family: "Segoe UI";
+  cursor: pointer;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  border-bottom: 1px solid #e5ebf2;
+  background-color: #fff;
+  width: 100%;
+  height: auto;
+  min-height: 150px;
+  max-width: auto;
+}
+
 .stud-text{
     cursor: pointer;
     font-size: 25px;
@@ -5,13 +85,13 @@
     font-family: "Times New Roman", Georgia, Serif;
 }
 .info-container{
-    height: auto;
-    min-width: 600px;
-    min-height: 30px;
-    display: flex;
-    flex-direction: column;
-    margin: 0 0;
-    padding: 30px 50px;
+  height: auto;
+  min-width: 600px;
+  min-height: 30px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0;
+  padding: 30px 50px;
 }
 .card-body{
     margin-right: 20px;
@@ -92,21 +172,24 @@
     padding: 30px 50px;
 }
 .all-container{
+    overflow: hidden;
     overflow-x: hidden;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin:0px;
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     padding-left: 100px;
-	font-family: "Open Sans", arial;
+	  font-family: "Open Sans", arial;
     background-color: rgb(231, 237, 241);
     z-index: 10;
     background-repeat: no-repeat;
     background-size: cover;
-	color:#000;
-	font-weight:300;
+	  color:#000;
+	  font-weight:300;
 }
+
 .cart-teacher{
     display: flex;
     width: auto;
@@ -141,17 +224,18 @@
 /* Edit form student */
 
 .title-edit{
-    margin-left: 50px;
+    /*margin-left: 50px;*/
+    margin-bottom: 5px;
     font-size: 26px;
     color:#29313f;
-    font-family: "Arial, Helvetica, sans-serif";
+    font-family: "Segoe UI";
 }
 .new-student__Container{
     background-repeat: no-repeat;
     background-size: 200px;
     background-color: rgb(231, 237, 241);
     background-position: 20px 50px;
-	background-image: url('../images/gears2.png');
+	  background-image: url('../images/gears2.png');
     overflow-x: hidden;
     overflow-y: hidden;
     position: absolute;
@@ -163,21 +247,20 @@
     height: 960px;
 }
 .edit__container{
-    color: #fff;
-    background-repeat: no-repeat;
-    background-size: 200px;
-    background-color: rgb(231, 237, 241);
-    background-position: 20px 50px;
-	background-image: url('../images/gears2.png');
-    overflow-x: hidden;
-    overflow-y: hidden;
-    position: absolute;
+    width: 100%;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 960px;
+    margin:0px;
+    height: auto;
+    padding-left: 100px;
+	font-family: "Open Sans", arial;
+    background-color: rgb(231, 237, 241);
+    z-index: 10;
+    background-repeat: no-repeat;
+    background-size: cover;
+	color:#000;
+	font-weight:300;
 }
 
 .container1{
@@ -219,21 +302,19 @@
     background-color:rgb(54, 179, 179);
 }
 .button-edit{
-    margin-bottom: 7px;
-    font-size: 25px;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #fff;
-    background-color:rgb(18, 235, 235);
-    border: 1px solid #fff;
-    padding: 10px;
-    width: 70px;
-    height: 50px;
-    transition: all 0.5s ease 0s;
+  background: #58b9b6;
+  color: #f4f5f0;
+  border: 0;
+  cursor: pointer;
+  display: inline-block;
+  letter-spacing: 1px;
+  padding: 1rem 1.5rem;
+  border-radius: 5px;
+  transition: background 100ms ease-in-out;
 }
 
 .button-edit:hover{
-    background-color:rgb(18, 235, 235);
-    transition: all 0.5s ease 0s;
+  background: #6ac1be;
 }
 
 .form-edit{
@@ -246,7 +327,7 @@
     margin-top: 150px;
     padding: 17px;
     height: auto;
-    width: auto;
+    width: 700px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -322,3 +403,159 @@
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+
+
+.loader-container{
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-ellipsis div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #000;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+  .lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+  }
+  @keyframes lds-ellipsis1 {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes lds-ellipsis3 {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  @keyframes lds-ellipsis2 {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(24px, 0);
+    }
+  }
+
+body {
+    font-size: 16px;
+ }
+  .wrapper {
+    width: 90%;
+    margin: 100px auto;
+    text-align: center;
+ }
+  .sendButton {
+    background: #58b9b6;
+    color: #f4f5f0;
+    border: 0;
+    cursor: pointer;
+    display: inline-block;
+    letter-spacing: 1px;
+    padding: 1rem 1.5rem;
+    border-radius: 5px;
+    transition: background 100ms ease-in-out;
+ }
+  .sendButton:hover {
+    background: #6ac1be;
+ }
+  .sendButton:active {
+    background: #49aeab;
+ }
+  .sendButton .loading {
+    display: inline-block;
+    margin: -2px 2px;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    border: 3px solid #f4f5f0;
+    border-top-color: transparent;
+    animation: spin 800ms infinite linear;
+ }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+   }
+    100% {
+      transform: rotate(360deg);
+   }
+ }
+  
+ .container-buttons{
+   display: flex;
+   justify-content: space-between;
+ }
+
+ .badge-counter {
+  right: 5px;
+  color: #fff;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 16px;
+  font-size: 16px;
+  background: #fa5873;
+}
+
+.sub-all-container{
+  font-family: 'Gt super text book', Georgia, sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  border-bottom: 0.2px solid gray;
+  background-color: white
+}
+
+.teacher-header{
+  box-shadow: 5px 5px 10px rgb(0 0 0 / 20%);
+  height: 80px;
+  width: 100%;
+  background-color: #fff;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  margin-left: 160px;
+}
+

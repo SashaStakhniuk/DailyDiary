@@ -8,7 +8,8 @@ namespace DailyDiary.Models.ViewModels
 {
     public class StudentViewModel
     {
-        public int StudentId { get; set; }
+        [Required]
+        public int Id { get; set; }
         /*  [Required(ErrorMessage = "Name is required")]*/
         /*[StringLength(100, ErrorMessage = "Name length must be less than 100 characters")]
         [MinLength(2,ErrorMessage = "Name must include more than 1 characters")]*/
@@ -20,11 +21,11 @@ namespace DailyDiary.Models.ViewModels
         /*[DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]*/
        /* [Required]*/
-        public DateTime Birthday { get; set; }
+        public Nullable<DateTime> Birthday { get; set; }
         /* [DataType(DataType.Date)]
          [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]*/
        /* [Required]   */
-        public DateTime AdmissionDate { get; set; }
+        public  Nullable<DateTime> AdmissionDate { get; set; }
         /*[Required(ErrorMessage = "Age is required")]*/
         /* [Range(0,100)]*/
         public int Age { get; set; }
@@ -35,10 +36,8 @@ namespace DailyDiary.Models.ViewModels
         public int SubgroupId { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        [Compare("Password")]
-        public string ConfirmPassword { get; set; }
+     /*   [Compare("Password")]
+        public string ConfirmPassword { get; set; }*/
         public string Email { get; set; }
-
-        public string PrevName { get; set; }
     }
 }

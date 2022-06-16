@@ -4,8 +4,8 @@ namespace DailyDiary.Models.ViewModels
 {
     public class LoginViewModel
     {
-        [EmailAddress]
-        [Required(ErrorMessage = "Email is required")]
+        //[EmailAddress] Login
+        [Required(ErrorMessage = "Login is required")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Pasword is required")]
         [DataType(DataType.Password)]
