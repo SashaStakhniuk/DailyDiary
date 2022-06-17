@@ -1,8 +1,7 @@
 import React from 'react'
-import { isConstructorDeclaration } from 'typescript';
 import AddClassworkForm from './AddClassworkForm';
 import AddHomeworkForm from './AddHomeworkForm';
-import HomeworkClassworkView from './HomeworkClassworkView';
+import HomeworkClassworkView from '../GeneralComponents/HomeworkClassworkView';
 
 class GroupEditing extends React.Component{
     constructor(props) {
@@ -174,7 +173,7 @@ class GroupEditing extends React.Component{
    async showHomeworkForm(){
         //console.log("click")
        var homeworkForm = document.getElementById('addHomeworkForm');
-       if(homeworkForm.style.display=="none"){
+       if(homeworkForm.style.display==="none"){
         // const addHomeworkForm = this.state.groupId>0 && this.state.teacherId>0?
         // <AddHomeworkForm groupId={this.state.groupId} teacherId={this.state.teacherId} getSomeHomeworks={this.getSomeHomeworks}></AddHomeworkForm>
         // :
@@ -191,7 +190,7 @@ class GroupEditing extends React.Component{
     async showClassworkForm(){
         //console.log("click")
        var classworkForm = document.getElementById('addClassworkForm');
-       if(classworkForm.style.display=="none"){
+       if(classworkForm.style.display==="none"){
         // const addClassworkForm = this.state.groupId>0 && this.state.teacherId>0?
         // <AddClassworkForm groupId={this.state.groupId} teacherId={this.state.teacherId} getSomeClassworks={this.getSomeClassworks}></AddClassworkForm>
         // :
@@ -212,12 +211,10 @@ class GroupEditing extends React.Component{
         <div className="text-center" style={{color:"red"}}><h1>No homeworks yet...</h1>
         </div>
         :
-        <div className="container">
-            <div className="row row-cols-xl-4 row-cols-md-3 row-cols-sm-2 row-cols-1 m-5">                          
+        <div className="my-container">
+            <div className="cards">                          
             {this.state.homeworks.map((homework) =>
-            <div className='col' key={'homework_'+homework.groupHomeworkId} style={{minWidth: "22rem"}}>
-                <HomeworkClassworkView task={homework} getSomeHomeworks={this.getSomeHomeworksFromChild} homework={true}/>
-            </div>
+                <HomeworkClassworkView key={'homework_'+homework.groupHomeworkId} task={homework} accessLevel="teacher" getSomeHomeworks={this.getSomeHomeworksFromChild} homework={true}/>
             )}
             </div>  
             <button className="btn btn-secondary" onClick={()=>this.getMoreHomeworks()}>View more</button>                          
@@ -228,12 +225,10 @@ class GroupEditing extends React.Component{
             <h1>No classworks yet...</h1>
         </div>
         :
-        <div className="container">
-            <div className="row row-cols-xl-4 row-cols-md-3 row-cols-sm-2 row-cols-1 m-5">                          
+        <div className="my-container">
+            <div className="cards">                          
             {this.state.classworks.map((classwork) =>
-            <div className='col' key={'classwork_'+classwork.groupClassworkId} style={{minWidth: "22rem"}}>
-                <HomeworkClassworkView task={classwork} getSomeClassworks={this.getSomeClassworksFromChild} homework={false}/>
-            </div>
+                <HomeworkClassworkView key={'classwork_'+classwork.groupClassworkId} task={classwork} accessLevel="teacher" getSomeClassworks={this.getSomeClassworksFromChild} homework={false}/>
             )}
             </div>  
             <button className="btn btn-secondary" onClick={()=>this.getMoreClassworks()}>View more</button>                          

@@ -1,3 +1,5 @@
+@import url('Colors.css');
+
 .img-container{
     top: 100px;
     display: flex;
@@ -85,6 +87,9 @@ h2{
     color: #fff;
     font-size: 20px;
     font-family: Arial, Helvetica, sans-serif;
+
+    /* background-color: var(--orange); */
+
     background-color:rgb(18, 235, 235);
     border-radius: 30px;
 }

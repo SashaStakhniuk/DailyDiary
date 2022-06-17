@@ -32,6 +32,8 @@ import CreateNewGroup from './Group/CreateNewGroup'
 import { useSelector } from 'react-redux'
 import CreateNewStudyYear from './StudyYear/CreateNewStudyYear'
 import EditStudyPlan from './StudyPlan/EditStudyPlan'
+import Student from './Students/Student.js';
+import AboutStudent from './Students/AboutStudent.js';
 
 const Root = () => {
 
@@ -187,7 +189,10 @@ const Root = () => {
                     <Route exact path="/teacher-page/send-feedback/:studentId/:teacherId/:subjectId/:studentName"><SandFeedback/></Route>
                     <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
                     <Route exact path="/teacher/news-page/:id" ><NewsPage /></Route>
-                    
+
+                     <Route exact path="/student-page/:id" component={Student}></Route>
+					<Route exact path="/about-student/:id" component={AboutStudent}></Route>
+					
                     <Route exact path="/student/feedback/:id" ><Feedback /></Route>
                     <Route exact path="/student/news-page/:id" ><NewsStudentPage /></Route>
                     

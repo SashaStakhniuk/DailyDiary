@@ -98,7 +98,7 @@ class AddClassworkForm extends React.Component{
       };
      onSubmit(e){
         e.preventDefault();
-        if(this.state.groupId==0)
+        if(this.state.groupId===0)
         {
             console.log("No id of group")
             return ;

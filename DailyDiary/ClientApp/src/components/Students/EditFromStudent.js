@@ -2,7 +2,7 @@ import React from "react"
 import '../../styles/Students.css'
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
-import { moment } from 'moment/moment';
+//import { moment } from 'moment/moment';
 
 function EditFromStudent(props){
     

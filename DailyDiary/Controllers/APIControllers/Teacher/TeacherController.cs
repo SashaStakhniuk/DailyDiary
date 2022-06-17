@@ -104,7 +104,7 @@ namespace DailyDiary.Controllers.APIControllers
                 } 
                 catch(Exception ex)
                 {
-                    Console.WriteLine();
+                    Console.WriteLine(ex.Message);
                 }
                 return BadRequest();
             }
@@ -152,8 +152,8 @@ namespace DailyDiary.Controllers.APIControllers
             return BadRequest(ModelState);
         }
 
-        [HttpDelete("{id}")]/*
-        [Authorize(Roles = "MainAdmin,Admin")]*/
+        [HttpDelete("{id}")]
+        //[Authorize(Roles = "MainAdmin,Admin")]
         public async Task<ActionResult<Teacher>> Delete(int id)
         {
             Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == id);
