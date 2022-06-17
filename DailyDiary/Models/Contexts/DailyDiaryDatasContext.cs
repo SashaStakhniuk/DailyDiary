@@ -35,7 +35,6 @@ namespace DailyDiary.Models
             Database.EnsureCreated();
         }
 
-        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //  one-to-many Group & Student
