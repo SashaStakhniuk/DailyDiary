@@ -72,7 +72,6 @@ class Login extends React.Component{
             email:email.value,
             password:password.value,
             loading:loadingAnimation
-
         }
         ,()=>this.makeRequest())
     }

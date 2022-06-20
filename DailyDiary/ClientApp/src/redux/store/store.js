@@ -1,4 +1,5 @@
-import {createStore} from 'redux'
+import {createStore,applyMiddleware } from 'redux'
+import thunk from 'redux-thunk';
 import SetCredentialsReducer from '../reducers/SetCredentialsReducer'
 
 const credentials={
@@ -6,13 +7,38 @@ const credentials={
     userId:sessionStorage.getItem("userId")
     // email:sessionStorage.getItem("userEmail"),
 }
-const InitialStore={
+export const student={
+    studentId:"",
+    order:"",
+    yearOfStudy:"",
+    admissionDate:"",
+    email:"",
+    photoBase64:"",
+    rate:"",
+    userId:"",
+    groupId:"",
+    subgroupId:""
+}
+export const teacher={
+    teacherId:"",
+    specialty:"",
+    category:"",
+    degree:"",
+    education:"",
+    experience:"",  
+    salary:"", 
+    photoBase64:""
+}
+const currentUser ={
     credentials,
-    posts:[]
-    // credentials,
-    // posts:[]
+    student,
+    teacher
+}
+const InitialStore={
+    currentUser,
+    count:0
 }
 // const store = createStore(SetCredentialsReducer, window?.__REDUX_DEVTOOLS_EXTENSION__?.())
 
- const store=createStore(SetCredentialsReducer,InitialStore)
+ const store=createStore(SetCredentialsReducer,InitialStore,applyMiddleware(thunk))
 export default store
