@@ -17,6 +17,7 @@ namespace DailyDiary.Models
         // [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? Birthday { get; set; }
         public int? Age { get; set; }
+        public string PhoneNumber { get; set; }
         
     }
 }

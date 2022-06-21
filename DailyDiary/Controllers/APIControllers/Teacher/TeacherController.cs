@@ -16,9 +16,9 @@ namespace DailyDiary.Controllers.APIControllers
     [Route("api/[controller]/[action]")]
     public class TeacherController : Controller
     {
-        private readonly DailyDiaryDatasContext db;
+        private readonly IdentityContext db;
         private readonly UserManager<User> userManager;
-        public TeacherController(DailyDiaryDatasContext context, UserManager<User> userManager)
+        public TeacherController(IdentityContext context, UserManager<User> userManager)
         {
             this.userManager = userManager;
             this.db = context;
@@ -64,12 +64,12 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpPost]
         public async Task<IActionResult> CreateNew(NewTeacherViewModel model)
         { 
-            string Password = Services.GeneratorService.GenerateNewPassword();
-            string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
             if (ModelState.IsValid)
             {
                 try
                 {
+                    string Password = Services.GeneratorService.CreatePassword(12, model.LastName);
+                    string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
                     if (model.Rate < 0 || model.Salary < 2000
                         | model.Experience < 0 || model.Age < 0)
                     {
@@ -96,10 +96,34 @@ namespace DailyDiary.Controllers.APIControllers
                             Login = Login,
                             Passsword = Password
                         };
-                        Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
-                        db.Teachers.Add(teacher);
-                        await db.SaveChangesAsync();
-                        return Ok(teacher);
+                        string userName = model.Name + model.LastName;
+                        User user = new User
+                        {
+                            Email = model.Email,
+                            UserName = userName,
+                            Teacher = teacher,
+                            Student = null,
+                        };
+                        teacher.UserId = user.Id;
+                        try
+                        {
+                            var result = await userManager.CreateAsync(user, Password);
+                            if (result.Succeeded)
+                            {
+                                //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
+                                db.Teachers.Add(teacher);
+                                await db.SaveChangesAsync();
+                                return Ok(teacher);
+                            }
+                            else
+                            {
+                                Console.WriteLine(result.Errors);
+                            }
+                        } 
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
                     }
                 } 
                 catch(Exception ex)

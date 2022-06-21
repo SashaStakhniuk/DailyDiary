@@ -32,10 +32,10 @@ namespace DailyDiary.Models
         public string Email { get; set; }
         public string Base64URL { get; set; }
         public int? Rate { get; set; }
-        public int? UserId { get; set; }
+        public string UserId { get; set; }
         public int? GroupId { get; set; }
         public int? SubgroupId { get; set; }
-        public virtual User User { get; set; }
+        //public virtual User User { get; set; }
         public virtual Subgroup Subgroup { get; set; }
         public virtual Group Group { get; set; }
         public virtual ICollection<StudentClasswork> StudentClassworks { get; set; }
