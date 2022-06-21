@@ -1,19 +1,8 @@
 //import { UpdateToDoList } from '../actions/updateToDoList';
-import {GetCredentialsFromSessionStorage } from '../actions/GetCredentialsFromSessionStorage';
-import { SetOrUpdatePosts } from '../actions/SetOrUpdatePosts';
-import { GetPostsFromDB } from '../actions/GetPostsFromDB';
+// import {GetCredentialsFromSessionStorage } from '../actions/GetCredentialsFromSessionStorage';
 import { SetCredentials } from '../actions/SetCredentials';
+import { DECREMENT, GetApiData, INCREMENT } from '../action_creators/TEST_ACTION';
 
-
-// async function getPosts(){
-//   const response= await fetch('https://localhost:44361/api/useractions/GetAllPosts')
-//           let posts=[]
-//            if (response.ok === true) {
-//                  posts= await response.json()
-//                  console.log("post is ",posts)
-//            }
-//           return posts
-// }
 
 export default  function setCredentialsReducer(state,action){
    const token="access_token";
@@ -27,6 +16,7 @@ export default  function setCredentialsReducer(state,action){
 
         const tokenKey=state.credentials.tokenKey
         const userId=state.credentials.userId
+
         const credentials={
           tokenKey,userId
         }
@@ -35,54 +25,40 @@ export default  function setCredentialsReducer(state,action){
           credentials,
           posts:state.posts
         }
-      case GetCredentialsFromSessionStorage:
-        console.log(action)
-        console.log(state)
+        case DECREMENT:
+          console.log("DECREMENT");
+          console.log(state);
+         return {...state, count: state.count-=1};
 
-        // console.log(state.credentials)
-        // action.credentials.email
-        // action.credentials.tokenKey
-
-        const tokenKeyFromSession=sessionStorage.getItem(token)
-        const userIdFromSession=sessionStorage.getItem(user)
-
-        // const email=sessionStorage.getItem(userEmail)
-       
-        const credentialsFromSession={
-          tokenKey:tokenKeyFromSession,
-          userId:userIdFromSession
-        }
-        // console.log(credentials)
-        return {
-          credentials:credentialsFromSession,
-          posts:state.posts
-        }
+         case INCREMENT:
+          console.log("INCREMENT");
+          console.log(state);
+          return {...state, count: state.count+=1};
         
-        case SetOrUpdatePosts:
-          console.log(state.posts)
-          // const response= await fetch('https://localhost:44361/api/useractions/GetAllPosts')
-          // var posts=[]
-          //  if (response.ok === true) {
-          //        posts=await response.json()
-          //        console.log("post is ",posts)
-          //  }
-          // const posts = await getPosts()
-           //console.log(posts)
-          //  if(posts)
-          //  return {
-          //    credentials:state.credentials,
-          //      posts:posts
-          //   }
-            break;
-           case GetPostsFromDB:
-             console.log(state)
-              return{
-                state
+          case GetApiData:
+            console.log(state);
+            console.log(action);
+
+          return {...state,currentUser:{
+              credentials:{
+                userId:action.payload.id,
+                tokenKey:action.payload.title
               }
-            
+            }
+          }
+
+
       default:
         console.log('default')
-        //console.log(state)
-        return state
+        //return {...state}
+        return {...state, currentUser:{
+            credentials:{
+              userId:state.currentUser.credentials.userId=0,
+              tokenKey:state.currentUser.credentials.tokenKey="there are no token key"
+           },
+           student:state.currentUser.student,
+           teacher:state.currentUser.teacher
+        }
+          }
     }
   };

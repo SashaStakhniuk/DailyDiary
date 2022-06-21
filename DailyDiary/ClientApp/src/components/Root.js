@@ -34,125 +34,126 @@ import CreateNewStudyYear from './StudyYear/CreateNewStudyYear'
 import EditStudyPlan from './StudyPlan/EditStudyPlan'
 import Student from './Students/Student.js';
 import AboutStudent from './Students/AboutStudent.js';
+import ReduxTesting from './ReduxTesting.js';
 
 const Root = () => {
 
-    const [isStudent, setIsStudent] = useState(false)
-    const [isTeacher, setIsTeacher] = useState(true)
-    const [groups, setgroups] = useState(useSelector(state => state.groups))
+    // const [isStudent, setIsStudent] = useState(false)
+    // const [isTeacher, setIsTeacher] = useState(true)
+    // const [groups, setgroups] = useState(useSelector(state => state.groups))
 
-    async function grtNotReaadCountTeacherNews(){
-        var news = document.getElementById('news-badge-counter')
-        if(news){
-            news.innerText = ''
-            news.style.visibility = 'hidden'
-            news.style.opacity = 0
-        }
+    // async function grtNotReaadCountTeacherNews(){
+    //     var news = document.getElementById('news-badge-counter')
+    //     if(news){
+    //         news.innerText = ''
+    //         news.style.visibility = 'hidden'
+    //         news.style.opacity = 0
+    //     }
        
-        // Если залогинен преподаватель
-        // тут устанавливаю состояние оповещений об увидомлений
-        // ! буду передавать id = 1 преподавателя для отображения количества непрочитаных смс
-        // ! при зарегестрированом пользователе id пользователя будет подставляться автоматически  
-        // https://localhost:44364/api/News/GetNotReadNews/1
+    //     // Если залогинен преподаватель
+    //     // тут устанавливаю состояние оповещений об увидомлений
+    //     // ! буду передавать id = 1 преподавателя для отображения количества непрочитаных смс
+    //     // ! при зарегестрированом пользователе id пользователя будет подставляться автоматически  
+    //     // https://localhost:44364/api/News/GetNotReadNews/1
 
-        const response = await fetch(`https://localhost:44364/api/News/GetNotReadNews/1`)
-        const data = await response.json()
-        if(response.ok == true){
-            if(data > 0){
-                news.innerText = data
-                news.style.visibility = 'visible'
-                news.style.opacity = 1
-            } else {
-                news.innerText = ''
-                news.style.visibility = 'hidden'
-                news.style.opacity = 0
-            }
-        }
-    }
+    //     const response = await fetch(`https://localhost:44364/api/News/GetNotReadNews/1`)
+    //     const data = await response.json()
+    //     if(response.ok == true){
+    //         if(data > 0){
+    //             news.innerText = data
+    //             news.style.visibility = 'visible'
+    //             news.style.opacity = 1
+    //         } else {
+    //             news.innerText = ''
+    //             news.style.visibility = 'hidden'
+    //             news.style.opacity = 0
+    //         }
+    //     }
+    // }
 
-    async function grtNotReaadCountStudentNews(){
-        var news = document.getElementById('news-badge-counter')
+    // async function grtNotReaadCountStudentNews(){
+    //     var news = document.getElementById('news-badge-counter')
 
-        if(news){
-            news.innerText = ''
-            news.style.visibility = 'hidden'
-            news.style.opacity = 0
-        }
+    //     if(news){
+    //         news.innerText = ''
+    //         news.style.visibility = 'hidden'
+    //         news.style.opacity = 0
+    //     }
 
-        //const response_feedback = await fetch(`https://localhost:44364/api/Teacher/GetNotStudentReadNews/3`) 
+    //     //const response_feedback = await fetch(`https://localhost:44364/api/Teacher/GetNotStudentReadNews/3`) 
 
-        //  Тут передаю псевдо зареганого студента у которого ID 3
-        var StudentId = 6
-        const response = await fetch(`https://localhost:44364/api/News/GetNotStudentReadNews/${StudentId}`)
+    //     //  Тут передаю псевдо зареганого студента у которого ID 3
+    //     var StudentId = 6
+    //     const response = await fetch(`https://localhost:44364/api/News/GetNotStudentReadNews/${StudentId}`)
 
-        const data = await response.json()
-        if(response.ok == true){
-            if(data > 0){
-                if(news){
-                    news.innerText = data
-                    news.style.visibility = 'visible'
-                    news.style.opacity = 1
-                }
-            } else {
-                if(news){
-                    news.innerText = ''
-                    news.style.visibility = 'hidden'
-                    news.style.opacity = 0
-                }
-            }
-        }
+    //     const data = await response.json()
+    //     if(response.ok == true){
+    //         if(data > 0){
+    //             if(news){
+    //                 news.innerText = data
+    //                 news.style.visibility = 'visible'
+    //                 news.style.opacity = 1
+    //             }
+    //         } else {
+    //             if(news){
+    //                 news.innerText = ''
+    //                 news.style.visibility = 'hidden'
+    //                 news.style.opacity = 0
+    //             }
+    //         }
+    //     }
         
-    }
+    // }
 
-    async function grtNotReaadCountStudentFeedback(){
-        var feedback = document.getElementById('feedback-badge-counter')
+    // async function grtNotReaadCountStudentFeedback(){
+    //     var feedback = document.getElementById('feedback-badge-counter')
 
-        if(feedback){
-            feedback.innerText = ''
-            feedback.style.visibility = 'hidden'
-            feedback.style.opacity = 0
-        }
-        var StudentId = 6
-        const responsefeedbacks = await fetch(`https://localhost:44364/api/Student/GetNotreadFeedback/${StudentId}`)
-        const dataf = await responsefeedbacks.json()
-        if(responsefeedbacks.ok == true){
-            if(dataf > 0){
-                if(feedback){
-                    feedback.innerText = dataf
-                    feedback.style.visibility = 'visible'
-                    feedback.style.opacity = 1
-                }
+    //     if(feedback){
+    //         feedback.innerText = ''
+    //         feedback.style.visibility = 'hidden'
+    //         feedback.style.opacity = 0
+    //     }
+    //     var StudentId = 6
+    //     const responsefeedbacks = await fetch(`https://localhost:44364/api/Student/GetNotreadFeedback/${StudentId}`)
+    //     const dataf = await responsefeedbacks.json()
+    //     if(responsefeedbacks.ok == true){
+    //         if(dataf > 0){
+    //             if(feedback){
+    //                 feedback.innerText = dataf
+    //                 feedback.style.visibility = 'visible'
+    //                 feedback.style.opacity = 1
+    //             }
                 
-            } else {
-                if(feedback){
-                    feedback.innerText = ''
-                    feedback.style.visibility = 'hidden'
-                    feedback.style.opacity = 0
-                }
-            }
-        }
-    }
+    //         } else {
+    //             if(feedback){
+    //                 feedback.innerText = ''
+    //                 feedback.style.visibility = 'hidden'
+    //                 feedback.style.opacity = 0
+    //             }
+    //         }
+    //     }
+    // }
 
-    useEffect(() => {
-        //grtNotReaadCountTeacherNews()
+    // useEffect(() => {
+    //     //grtNotReaadCountTeacherNews()
 
-        grtNotReaadCountStudentNews()
-        grtNotReaadCountStudentFeedback()
+    //     grtNotReaadCountStudentNews()
+    //     grtNotReaadCountStudentFeedback()
 
-        // Если студент 
-        // if(isTeacher){
-        //     // Если залогинен преподаватель
-        //     grtNotReaadCountTeacherNews()
-        // } else if(isStudent){
+    //     // Если студент 
+    //     // if(isTeacher){
+    //     //     // Если залогинен преподаватель
+    //     //     grtNotReaadCountTeacherNews()
+    //     // } else if(isStudent){
 
-        //     // Если студент 
-        //     grtNotReaadCountStudentNews()
-        //     grtNotReaadCountStudentFeedback()
-        // } else {
-        //     // никто не логинился ))
-        // }
+    //     //     // Если студент 
+    //     //     grtNotReaadCountStudentNews()
+    //     //     grtNotReaadCountStudentFeedback()
+    //     // } else {
+    //     //     // никто не логинился ))
+    //     // }
 
-    }, [])
+    // }, [])
 
     
     return(
@@ -171,7 +172,8 @@ const Root = () => {
                     <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>
                     <Route exact path="/admin/new-group"><CreateNewGroup/></Route>
 
-                    <Route exact path="/admin/new-student"><CreateNewStudent groups={groups}/></Route>
+                    {/* <Route exact path="/admin/new-student"><CreateNewStudent groups={groups}/></Route> */}
+
                     <Route exact path="/admin/students"><Students/></Route>
                     <Route exact path="/admin/student-profil/:id"><StudentProfil/></Route>
                     <Route exact path="/admin/edit-student/:id"><EditFromStudent/></Route>
@@ -195,7 +197,8 @@ const Root = () => {
 					
                     <Route exact path="/student/feedback/:id" ><Feedback /></Route>
                     <Route exact path="/student/news-page/:id" ><NewsStudentPage /></Route>
-                    
+                    <Route exact path="/redux-testing" ><ReduxTesting /></Route>
+
                     <Route path='*' exact={true}><NotFound/></Route>
                 </Switch>
             </Router>

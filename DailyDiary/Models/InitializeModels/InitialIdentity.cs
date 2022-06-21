@@ -9,9 +9,14 @@ namespace DailyDiary.Models
     {
         public static void Initialize(IdentityContext db) 
         {
-            User student = new User { UserName = "Dnis"};
-            db.Users.Add(student);
-            db.SaveChanges();
+            if (!db.Users.Any())
+            {
+                User student = new User { UserName = "Denis Rachkovskiy" };
+                User student1 = new User { UserName = "Sasha Stakhniuk", Email = "sstahnuk@gmail.com"};
+                db.Users.AddRange(student,student1);
+                db.SaveChanges();
+            }
+         
         }
     }
 }

@@ -46,8 +46,9 @@ class Login extends React.Component{
                     returnUrl
                 })
             })
-            this.setState({loading: ""})
+            
             const data = await response.json()
+            
             if (response.ok === true) {
                 this.setState({loading:""})
                 console.log(data)
@@ -81,7 +82,8 @@ class Login extends React.Component{
         const {email, password} = e.target
         this.setState({
             email:email.value,
-            password:password.value
+            password:password.value,
+            loading:loadingAnimation
         }
         ,()=>this.makeRequest(email.value, password.value))
     }
