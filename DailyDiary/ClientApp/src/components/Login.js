@@ -1,4 +1,3 @@
-
 import '../styles/Login.css'
 import React from 'react';
 import $ from 'jquery'
@@ -48,7 +47,7 @@ class Login extends React.Component{
             })
             
             const data = await response.json()
-            
+
             if (response.ok === true) {
                 this.setState({loading:""})
                 console.log(data)

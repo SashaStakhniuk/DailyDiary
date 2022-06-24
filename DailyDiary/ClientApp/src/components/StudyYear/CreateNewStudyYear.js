@@ -35,7 +35,7 @@ function CreateNewStudyYear() {
     return(
         <>
              <div className="edit__container">
-                <h2 style={{ position: "absolute", top: 120}} className="title-edit">Create new study plan</h2>
+                <h2 style={{ position: "absolute", top: 120}} className="title-edit">Create new study year</h2>
                 <form onSubmit={e => onSubmit(e)} className='form-edit d-flex flex-column align-items-center'>
                     <div className="md-3">
                         <span className="span-text">Start Year</span>

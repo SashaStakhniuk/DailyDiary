@@ -193,7 +193,6 @@ body
 }
 .backgr{
   background: rgba(44, 51, 71, 0.8);
-  /* background: rgba( #007bff, #007bff, #007bff, 0.4); */
   position: absolute;
   top: 0;
   bottom: 0;
@@ -302,10 +301,6 @@ body
   font-size: 21px;
   border-bottom: 1px solid #fff;
 }
-
-.main-menu .share {
-}
-
 .main-menu :hover > .gray-phone{
   opacity: 1;
   visibility: visible;
