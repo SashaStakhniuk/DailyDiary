@@ -173,6 +173,8 @@ const Root = () => {
                     <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>
                     <Route exact path="/admin/new-group"><CreateNewGroup/></Route>
 
+                    <Route exact path="/admin/new-student"><CreateNewStudent/></Route> 
+                    
                     {/* <Route exact path="/admin/new-student"><CreateNewStudent groups={groups}/></Route> */}
 
                     <Route exact path="/admin/students"><Students/></Route>

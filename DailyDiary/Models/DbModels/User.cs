@@ -8,7 +8,7 @@ namespace DailyDiary.Models
 {
     public class User : IdentityUser
     {
-        public string TgNickName { get; set; }
+        public string? TgNickName { get; set; }
         public int? TeacherId { get; set; }
         public int? StudentId { get; set; }
         public virtual Teacher Teacher { get; set; }

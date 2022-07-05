@@ -9,7 +9,7 @@ namespace DailyDiary.Models
     public class StudyYearStudyPlan
     {
         [Key]
-        public int Id { get; set; }
+        public int StudyYearStudyPlanId { get; set; }
         public int StudyYearId { get; set; }
         public int StudyPlanId { get; set; }
         public virtual StudyPlan StudyPlan { get; set; }

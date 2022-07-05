@@ -40,9 +40,6 @@ function EditGroup(){
             body: JSON.stringify({
                 groupId,
                 title,
-                semester,
-                subjsId,
-                hours
             })
         })
         if(response.ok === true){

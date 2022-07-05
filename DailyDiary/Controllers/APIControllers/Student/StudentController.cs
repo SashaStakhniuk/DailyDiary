@@ -20,14 +20,16 @@ namespace DailyDiary.Controllers.APIControllers
         private readonly IdentityContext db;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        //private readonly RoleManager<User> roleManager;
+        private readonly RoleManager<User> roleManager;
         public StudentController(IdentityContext datasContext,
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            RoleManager<User> roleManager)
         {
             this.db = datasContext;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
@@ -139,7 +141,7 @@ namespace DailyDiary.Controllers.APIControllers
                     {
                         group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
                     }
-                    student = new Student
+                    student = new Student 
                     {
                         Name = model.Name,
                         LastName = model.LastName,
@@ -151,13 +153,14 @@ namespace DailyDiary.Controllers.APIControllers
                         Email = model.Email,
                         Group = group,
                         Order = order,
+                        
                     };
                     string userName = model.Name + model.LastName;
                     User user = new User
                     {
                         Email = model.Email,
                         UserName = userName,
-                        //Teacher = null,
+                        Teacher = null,
                         Student = student,
                     };
 

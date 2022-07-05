@@ -42,7 +42,7 @@ namespace DailyDiary.Models.ViewModels.Teacher
         public float Salary { get; set; }
         public int Rate { get; set; }
         public string Email { get; set; }
-
         public string Base64URL { get; set; }
+        public List<int> SubjectsId { get; set; }
     }
 }

@@ -11,17 +11,6 @@ namespace DailyDiary.Models
         {
             try
             {
-                Subject subject1 = new Subject { Title = "C#" };
-                Subject subject2 = new Subject { Title = "Math" };
-                Subject subject3 = new Subject { Title = "Health" };
-                Subject subject4 = new Subject { Title = "Art" };
-                Subject subject5 = new Subject { Title = "Music" };
-                Subject subject6 = new Subject { Title = "English" };
-                Subject subject7 = new Subject { Title = "Algebra" };
-                Subject subject8 = new Subject { Title = "Geometry" };
-                Subject subject9 = new Subject { Title = "Physical Science" };
-                Subject subject10 = new Subject { Title = "Geography" };
-                Subject subject11 = new Subject { Title = "Computer Science" };
 
                 Teacher teacher1 = new Teacher { Name = "Dmitry", LastName = "Chumack", Age = 28, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 2, Salary = 10000 };
                 Teacher teacher2 = new Teacher { Name = "Teacher2", LastName = "Alor", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 };
@@ -55,13 +44,10 @@ namespace DailyDiary.Models
 
                 SubjectsStudyPlan SubjectsStudyPlan1 = new SubjectsStudyPlan { StudyPlanId = 1, SubjectId = 1, Hours = 40 };
 
-                Feedback feedback1 = new Feedback { MainInformation = "Денис, поздравляю с успешным завершением курса PHP!)", IsRead = false, Teacher = teacher1, Subject = subject2, DataPublication = data.Date };
+                //Feedback feedback1 = new Feedback { MainInformation = "Денис, поздравляю с успешным завершением курса PHP!)", IsRead = false, Teacher = teacher1, Subject = subject2, DataPublication = data.Date };
 
                 if (!db.Subjects.Any())
                 {
-                    db.Subjects.AddRange(
-                    subject1, subject10, subject9, subject8, subject7, subject6, subject5, subject4, subject3, subject2, subject11
-                    );
                     db.SaveChanges();
                 }
 

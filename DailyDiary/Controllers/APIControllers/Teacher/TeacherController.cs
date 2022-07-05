@@ -96,6 +96,15 @@ namespace DailyDiary.Controllers.APIControllers
                             Login = Login,
                             Passsword = Password
                         };
+                        foreach(var subjectId in model.SubjectsId) {
+                            Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == subjectId);
+                            TeacherSubject teacherSubject = new TeacherSubject
+                            {
+                                Teacher = teacher,
+                                Subject = subject,
+                            };
+                            db.TeacherSubjects.Add(teacherSubject);
+                        }
                         string userName = model.Name + model.LastName;
                         User user = new User
                         {
