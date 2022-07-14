@@ -160,7 +160,6 @@ function CreateNewTeacher(){
             let reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => {
-
             baseURL = reader.result;
             resolve(baseURL);
             };
@@ -172,9 +171,6 @@ function CreateNewTeacher(){
         getBase64(file)
             .then(result => {
                 file["base64"] = result;
-
-                console.log("Url: " + file["base64"])
-                
                 setBase64URL(result)
             })
             .catch(err => {

@@ -54,7 +54,6 @@ function CreateNewStudent(){
                 AdmissionDate, 
                 groupId, 
                 Email,
-                phoneNumber
             })
         })
         if(request.ok === true){
