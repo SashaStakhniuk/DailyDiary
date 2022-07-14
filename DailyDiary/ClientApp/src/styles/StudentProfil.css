@@ -10,12 +10,10 @@
     height: 50px;
     transition: all 0.5s ease 0s;
 }
-
 .button-edit:hover{
     background-color:rgb(18, 235, 235);
     transition: all 0.5s ease 0s;
 }
-
 .cart-student{
     display: flex;
     flex-direction: row;

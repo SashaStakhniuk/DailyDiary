@@ -34,8 +34,8 @@ namespace DailyDiary.Models
         //[MaxLength(80)]
         public string Passsword { get; set; }
         public int Rate { get; set; }
-        public int? UserId { get; set; }
-        public virtual User User { get; set; }
+        public string UserId { get; set; }
+        //public virtual User User { get; set; }
         public virtual ICollection<GroupClasswork> GroupClassworks { get; set; }
         public virtual ICollection<GroupHomework> GroupHomeworks { get; set; }
         public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }

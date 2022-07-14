@@ -15,9 +15,9 @@ namespace DailyDiary.Controllers.APIControllers
     public class NewsController : Controller
     {
 
-        private readonly DailyDiaryDatasContext db;
+        private readonly IdentityContext db;
 
-        public NewsController(DailyDiaryDatasContext datasContext)
+        public NewsController(IdentityContext datasContext)
         {
             this.db = datasContext;
         }

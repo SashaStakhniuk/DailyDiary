@@ -8,6 +8,7 @@ function CreateNewStudent(){
     const [groups, setGroups] = useState([])
 
     const[name, setUserName] = useState("")
+    const[phoneNumber, setPhoneNumber] = useState("")
     const[lastName, setlastName] = useState("")
     const[Birthday, setBirthday] = useState()
     const[Email, setEmail] = useState()
@@ -52,7 +53,8 @@ function CreateNewStudent(){
                 age, 
                 AdmissionDate, 
                 groupId, 
-                Email
+                Email,
+                phoneNumber
             })
         })
         if(request.ok === true){
@@ -92,6 +94,10 @@ function CreateNewStudent(){
         setEmail(e.target.value)
     }
 
+    function onChangePhoneNuumber(e){
+        setPhoneNumber(e.target.value)
+    }
+
     return(
         <>
             <div className="edit__container">
@@ -123,6 +129,12 @@ function CreateNewStudent(){
                     </div>
 
                     <div className="container2">
+                        <div className='mb-3'>
+                            <span className="span-text">Phone Number</span>
+                            <div class="mb-3">
+                                <input type="phone" id="phone" value={phoneNumber} onChange={e => onChangePhoneNuumber(e)} />
+                            </div>
+                        </div>
                         <div className='mb-3'>
 
                             <div className="accordion-item">

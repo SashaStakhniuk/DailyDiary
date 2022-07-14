@@ -46,18 +46,23 @@ namespace DailyDiary.Services
             return str.ToString();
         }
 
-        public static string GenerateNewPassword()
+        public static string CreatePassword(int length = 0, string userName = "")
         {
-            StringBuilder password = new StringBuilder();
-            Random rand = new Random();
-            int nums = rand.Next(10, 100);
-            for (int i = 0; i < 6; i++)
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            const string chars = "@#$%&";
+            int size = 2;
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
             {
-                password.Append((char)rand.Next(50, 100));
-
+                res.Append(valid[rnd.Next(valid.Length)]);
+                while (0 < size--)
+                {
+                    res.Append(chars[rnd.Next(chars.Length)]);
+                }
             }
-            password.Insert(password.Length, nums.ToString(), 2);
-            return password.ToString();
+            res.Append(userName.ToUpper());
+            return res.ToString();
         }
     }
 }

@@ -37,30 +37,41 @@ namespace DailyDiary.Controllers.APIControllers
         //}
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await userManager.FindByEmailAsync(model.Email);
-                var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
+                var user = await userManager.FindByNameAsync(model.UserName);
+                if (user != null)
                 {
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
+                    if (result.Succeeded)
                     {
-                        return Redirect(model.ReturnUrl);
+                        if(user.Student != null)
+                        {
+
+                        } 
+                        else if(user.Teacher != null)
+                        {
+                            // JWT 
+                        }
+
+                        if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                        {
+                            return Redirect(model.ReturnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home"); // перенаправлення на сторінку входу
+
+                            //return RedirectToAction("Index", "Home");
+                        }
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home"); // перенаправлення на сторінку входу
-
-                        //return RedirectToAction("Index", "Home");
+                        ModelState.AddModelError("", "Invalid login or password");
+                        return BadRequest(ModelState);
                     }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid login or password");
-                    return BadRequest(ModelState);
                 }
             }
             return Ok(model);
@@ -132,7 +143,7 @@ namespace DailyDiary.Controllers.APIControllers
         {
             if (ModelState.IsValid)
             {
-                var user = await userManager.FindByEmailAsync(model.Email);
+                var user = await userManager.FindByEmailAsync(model.UserName);
                 //var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
                 if (user != null)
                 {

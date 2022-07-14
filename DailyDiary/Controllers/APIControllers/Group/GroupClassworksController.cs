@@ -16,8 +16,8 @@ namespace DailyDiary.Controllers.APIControllers
     //[Authorize(Roles = "MainAdmin,Admin,Teacher")]
     public class GroupClassworksController : Controller
     {              
-         private readonly DailyDiaryDatasContext db;
-         public GroupClassworksController(DailyDiaryDatasContext datasContext)
+         private readonly IdentityContext db;
+         public GroupClassworksController(IdentityContext datasContext)
          {
              this.db = datasContext;
          }

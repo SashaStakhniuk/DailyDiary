@@ -35,8 +35,12 @@ import EditStudyPlan from './StudyPlan/EditStudyPlan'
 import Student from './Students/Student.js';
 import AboutStudent from './Students/AboutStudent.js';
 import ReduxTesting from './ReduxTesting.js';
+<<<<<<< HEAD
 import ColorPicker from './EnvironmentStyle.js';
 
+=======
+import Header from './Header'
+>>>>>>> 61c426826673f305c06200b635d74ca6ebabab2e
 const Root = () => {
 
     // const [isStudent, setIsStudent] = useState(false)
@@ -158,9 +162,10 @@ const Root = () => {
 
     
     return(
-        <>
+        <> 
             <Router>
                 <Switch>
+                    <Route exact path="/header"><Header/></Route>
                     <Route exact path="/"><Login/></Route>
                     <Route exact path="/children-login"><LoginChildrens/></Route>
 

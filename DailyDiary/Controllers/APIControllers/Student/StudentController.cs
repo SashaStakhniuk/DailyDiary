@@ -1,11 +1,14 @@
 ﻿using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
 using DailyDiary.Models.ViewModels.Student;
+using DailyDiary.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DailyDiary.Controllers.APIControllers
@@ -14,17 +17,23 @@ namespace DailyDiary.Controllers.APIControllers
     [Route("api/[controller]/[action]")]
     public class StudentController : Controller
     {
-        private readonly DailyDiaryDatasContext db;
-
-        public StudentController(DailyDiaryDatasContext datasContext)
+        private readonly IdentityContext db;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+        //private readonly RoleManager<User> roleManager;
+        public StudentController(IdentityContext datasContext,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
             this.db = datasContext;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Student>>> Get()
         {
-           return await db.Students.ToListAsync();
+            return await db.Students.ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -122,7 +131,8 @@ namespace DailyDiary.Controllers.APIControllers
                 {
                     Student student = new Student();
                     string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
-                    string Password = Services.GeneratorService.GenerateNewPassword();
+                    string Password = GeneratorService.CreatePassword(12, model.LastName);
+
                     Group group = null;
                     int order = db.Students.Count() + 1;
                     if (model.GroupId != 0)
@@ -140,14 +150,34 @@ namespace DailyDiary.Controllers.APIControllers
                         Password = Password,
                         Email = model.Email,
                         Group = group,
-                        Order = order
+                        Order = order,
                     };
-                    //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
-                    db.Students.Add(student);
-                    await db.SaveChangesAsync();
-                    return Ok();
-                } 
-                catch(Exception ex)
+                    string userName = model.Name + model.LastName;
+                    User user = new User
+                    {
+                        Email = model.Email,
+                        UserName = userName,
+                        //Teacher = null,
+                        Student = student,
+                    };
+
+                    student.UserId = user.Id;
+
+                    var result = await userManager.CreateAsync(user, Password);
+
+                    if (result.Succeeded)
+                    {
+                        //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
+                        db.Students.Add(student);
+                        await db.SaveChangesAsync();
+                        return Ok();
+                    }
+                    else
+                    {
+                        Console.WriteLine(result.Errors);
+                    }
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
@@ -219,7 +249,7 @@ namespace DailyDiary.Controllers.APIControllers
                 {
                     feedbacks.Add(await db.Feedback.FirstOrDefaultAsync(x => x.Id == studentFeedback));
                 }
-                foreach(var feedback in feedbacks)
+                foreach (var feedback in feedbacks)
                 {
                     Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == feedback.SubjectId);
                     Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == feedback.TeacherId);
@@ -245,20 +275,20 @@ namespace DailyDiary.Controllers.APIControllers
         public async Task<ActionResult<int>> GetNotreadFeedback(int StudentId)
         {
             Student stuent = await db.Students.FirstOrDefaultAsync(x => x.StudentId == StudentId);
-            if(stuent != null)
+            if (stuent != null)
             {
                 int count = 0;
                 List<Feedback> feedbacks = new List<Feedback>();
                 List<int> studentsFeedbackIds = await db.StudentFeedback.Where(x => x.StudentId == StudentId).Select(x => x.FeedbackId).ToListAsync();
-                foreach(var studentsFeedbackId in studentsFeedbackIds)
+                foreach (var studentsFeedbackId in studentsFeedbackIds)
                 {
                     feedbacks.Add(await db.Feedback.FirstOrDefaultAsync(x => x.Id == studentsFeedbackId));
                 }
-                if(feedbacks.Count > 0)
+                if (feedbacks.Count > 0)
                 {
-                    foreach(var feedback in feedbacks)
+                    foreach (var feedback in feedbacks)
                     {
-                        if(feedback.IsRead == false)
+                        if (feedback.IsRead == false)
                         {
                             count++;
                         }
@@ -273,7 +303,7 @@ namespace DailyDiary.Controllers.APIControllers
         public async Task<ActionResult<IEnumerable<Student>>> GetStudentsByGroupId(int GroupId)
         {
             var students = await db.Students.Where(x => x.GroupId == GroupId).ToListAsync();
-            if(students.Count > 0)
+            if (students.Count > 0)
             {
                 return Ok(students);
             }
@@ -284,9 +314,9 @@ namespace DailyDiary.Controllers.APIControllers
         public async Task<ActionResult<bool>> IsReadAllStudentFeedbacks()
         {
             var feedbacks = await db.Feedback.ToListAsync();
-            foreach(var feedback in feedbacks)
+            foreach (var feedback in feedbacks)
             {
-                if(feedback.IsRead == false)
+                if (feedback.IsRead == false)
                 {
                     feedback.IsRead = true;
                 }
