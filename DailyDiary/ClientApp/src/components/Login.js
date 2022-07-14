@@ -42,12 +42,14 @@ class Login extends React.Component{
                     const data = await response.json()
                     if (response.ok === true) {
                         console.log(data)
-                         sessionStorage.setItem('access_token', data.access_token);
-                         sessionStorage.setItem('userId', data.userId);
+                        //  sessionStorage.setItem('access_token', data.access_token);
+                        //  sessionStorage.setItem('userId', data.userId);
                         //  sessionStorage.setItem('userEmail', data.userEmail);
                         //this.props.setCredentials(data.access_token,data.userId);
                         this.setState({error:""})
-                        window.location = '/'
+                        //window.location = '/'
+                        console.log('access_token = '+ data.access_token);
+                        console.log('userId = '+ data.userId);
                         // <AuthenticationRegistration authorized={true}></AuthenticationRegistration>
                     } else {
                         // window.location = '/authorization'

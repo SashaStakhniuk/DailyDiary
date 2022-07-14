@@ -3,4 +3,14 @@
     --blue: #1e90ff;
     --white: #ffffff;
     --orange: #FF3200;
+    --iconsColor:black;
+    --backgroundColor:#d3d3d3;
+    --examplePageBackgroundColor:#d3d3d3;
+    --examplePageTextColor:black;
+    --examplePageNavigationMenuColor:white;
+    --examplePageNavigationMenuIconsColor:black;
+    --exampleButtonsBackgroundColor:#a5a4a4;
+    --exampleButtonsTextColor:black;
+    --exampleButtonsHoverColor:#c5c5c5;
+
   }
