@@ -1,6 +1,6 @@
 //import { UpdateToDoList } from '../actions/updateToDoList';
 // import {GetCredentialsFromSessionStorage } from '../actions/GetCredentialsFromSessionStorage';
-import { SetCredentials } from '../actions/SetCredentials';
+import { SetCredentials } from '../action_creators/SetUserCredentials';
 import { DECREMENT, GetApiData, INCREMENT } from '../action_creators/TEST_ACTION';
 
 
@@ -9,22 +9,6 @@ export default  function setCredentialsReducer(state,action){
    const user="userId";
   // const userEmail="userEmail";
     switch(action.type){
-      case SetCredentials:
-
-        console.log(action)
-        console.log(state)
-
-        const tokenKey=state.credentials.tokenKey
-        const userId=state.credentials.userId
-
-        const credentials={
-          tokenKey,userId
-        }
-        // console.log(credentials)
-        return {
-          credentials,
-          posts:state.posts
-        }
         case DECREMENT:
           console.log("DECREMENT");
           console.log(state);
@@ -43,6 +27,15 @@ export default  function setCredentialsReducer(state,action){
               credentials:{
                 userId:action.payload.id,
                 tokenKey:action.payload.title
+              }
+            }
+          }
+          case SetCredentials:
+            return {...state,currentUser:{
+              credentials:{
+                id:action.payload.userId,
+                tokenKey:action.payload.tokenKey,
+                roles:action.payload.roles
               }
             }
           }

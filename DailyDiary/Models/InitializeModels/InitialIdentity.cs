@@ -2,21 +2,54 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DailyDiary.Models
 {
-    public static class InitialIdentity
+    public class InitialIdentity
     {
-        public static void Initialize(IdentityContext db) 
+        private static string mainAdminRoleName = "MainAdmin";
+        private static string mainAdminPassword = "Qwerty1!";
+
+        public static async Task Initialize(IServiceProvider serviceProvider)
         {
-            if (!db.Users.Any())
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+           
+            var rolesExist = await roleManager.Roles.ToListAsync();
+            if (rolesExist.Count() == 0)
             {
-                User student = new User { UserName = "Denis Rachkovskiy" };
-                User student1 = new User { UserName = "Sasha Stakhniuk", Email = "sstahnuk@gmail.com"};
-                db.Users.AddRange(student,student1);
-                db.SaveChanges();
+                await roleManager.CreateAsync(new IdentityRole(mainAdminRoleName));
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await roleManager.CreateAsync(new IdentityRole("Teacher"));
+                await roleManager.CreateAsync(new IdentityRole("Student"));
+                //await roleManager.CreateAsync(new IdentityRole("User"));
+                await roleManager.CreateAsync(new IdentityRole("Parrent"));
             }
-         
+            if (!userManager.Users.Any())
+            {
+                //var roles = await roleManager.Roles.ToListAsync();
+                List<User> users = new List<User>();
+                User admin1 = new User { UserName = "DenisRachkovskiy" };
+                User admin2 = new User { UserName = "SashaStakhniuk", Email = "sstahnuk@gmail.com" };
+                users.Add(admin1);
+                users.Add(admin2);
+                foreach (var user in users)
+                {
+                    var result = await userManager.CreateAsync(user,mainAdminPassword);
+                    if (result.Succeeded)
+                    {
+                        //foreach(var role in roles)
+                        //{
+                        //    await userManager.AddToRoleAsync(user, role.Name);
+                        //}
+                        await userManager.AddToRoleAsync(user, mainAdminRoleName);
+                    }
+                }
+            }
         }
     }
 }

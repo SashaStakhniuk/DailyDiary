@@ -1,5 +1,6 @@
 using DailyDiary.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,18 +20,19 @@ namespace DailyDiary
 
             using (var scope = host.Services.CreateScope())
             {
-                var servises = scope.ServiceProvider;
+                var services = scope.ServiceProvider;
                 try
                 {
-                    var context = servises.GetRequiredService<IdentityContext>();
-                    var identityContext = servises.GetRequiredService<IdentityContext>();
-                    
-                    InitialIdentity.Initialize(identityContext);
+                    var context = services.GetRequiredService<IdentityContext>();
+                    var identityContext = services.GetRequiredService<IdentityContext>();
+                    InitialIdentity.Initialize(services).Wait();
+
+                    //InitialIdentity.Initialize(identityContext);
                     InitialDatas.Initialize(context);
                 }
                 catch (Exception ex)
                 {
-                    var loger = servises.GetRequiredService<ILogger<Program>>();
+                    var loger = services.GetRequiredService<ILogger<Program>>();
                     loger.LogDebug(ex, "Db seting error");
                 }
             }

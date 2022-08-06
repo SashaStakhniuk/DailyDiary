@@ -1,13 +1,16 @@
-import {SetCredentials} from '../actions/SetCredentials';
+//import {SetCredentials} from '../actions/SetCredentials';
 
-export default function SetUserCredentials(tokenKey,userId){
+export const SetCredentials = "SetCredentials";
+
+export default function setUserCredentials(tokenKey,userId,roles){
     const credentials={
         tokenKey,
-        userId
+        userId,
+        roles
     }
-console.log(credentials)
+//console.log(credentials)
     return{
         type:SetCredentials,
-        credentials
+        payload:credentials
     }
 }

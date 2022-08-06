@@ -20,14 +20,17 @@ namespace DailyDiary.Controllers.APIControllers
         private readonly IdentityContext db;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        //private readonly RoleManager<User> roleManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         public StudentController(IdentityContext datasContext,
             UserManager<User> userManager,
-            SignInManager<User> signInManager)
+            SignInManager<User> signInManager,
+            RoleManager<IdentityRole> roleManager
+            )
         {
             this.db = datasContext;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
@@ -168,14 +171,24 @@ namespace DailyDiary.Controllers.APIControllers
                     if (result.Succeeded)
                     {
                         //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
+
+                        await userManager.AddToRoleAsync(user, "Student");
+                        await signInManager.SignInAsync(user, false);
+                        //return RedirectToAction("Index", "Home"); // перенаправити на сторінку входу
+
                         db.Students.Add(student);
                         await db.SaveChangesAsync();
                         return Ok();
                     }
                     else
                     {
-                        Console.WriteLine(result.Errors);
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        return BadRequest(ModelState);
                     }
+                       
                 }
                 catch (Exception ex)
                 {

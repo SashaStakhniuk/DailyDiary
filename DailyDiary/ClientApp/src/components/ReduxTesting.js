@@ -33,9 +33,9 @@ class ReduxTesting extends React.Component{
         );
       }
 }
-function mapStateToProps(state){
-    console.log("mapStateToProps ")
-    console.log(state)
+    function mapStateToProps(state){
+        console.log("mapStateToProps ")
+        console.log(state)
 
         return {
             credentials: state.currentUser.credentials,
