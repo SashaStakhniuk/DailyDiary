@@ -15,8 +15,8 @@ namespace DailyDiary.Controllers.APIControllers
     [Route("api/[controller]/[action]")]
     public class PlanEducationController : Controller
     {
-        private readonly IdentityContext db;
-        public PlanEducationController(IdentityContext db)
+        private readonly DailyDiaryDatasContext db;
+        public PlanEducationController(DailyDiaryDatasContext db)
         {
             this.db = db;
         }

@@ -12,10 +12,15 @@ namespace DailyDiary.Models.ViewModels.Teacher
         /*[Required(ErrorMessage = "Name is required")]
         [StringLength(100, ErrorMessage = "Name length must be less than 100 characters")]
         [MinLength(2,ErrorMessage = "Name must include more than 1 characters")]*/
+        [Required]
         public string Name { get; set; }
+        //[Required]
+        //public string MiddleName { get; set; }
+
         /*[Required]
         [StringLength(100, ErrorMessage = "LastName length must be less than 100 symbols")]
         [MinLength(2, ErrorMessage = "LastName must include more than 1 characters")]*/
+        [Required]
         public string LastName { get; set; }
         /*[DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]*/
@@ -25,24 +30,33 @@ namespace DailyDiary.Models.ViewModels.Teacher
         public int Age { get; set; }
         /*[Required]
         [StringLength(500)]*/
+        [Required]
         public string Specialty { get; set; } // вчителі початкових класів, вчителі-дефектологи,вихователі-методисти і т.п
-        //public string Subjects { get; set; } // математика, фізика, інформатика і т.п
+                                              //public string Subjects { get; set; } // математика, фізика, інформатика і т.п
         /* [Required]
         [StringLength(500)]*/
+        [Required]
         public string Category { get; set; }// "спеціаліст", "спеціаліст другої категорії", "спеціаліст першої категорії", "спеціаліст вищої категорії".
         /*[Required]
         [StringLength(100)]*/
+        [Required]
         public string Degree { get; set; }// бакалавр, магістр, кандидат, доктор, професор, доцент, академік
         /*[Required]
         [StringLength(100)]*/
+        [Required]
         public string Education { get; set; }// професійно-технічна, повна середня, вища і т.п
         [Required]
         public int Experience { get; set; }
         /*[Range(0.0, Double.MaxValue)]*/
         public float Salary { get; set; }
         public int Rate { get; set; }
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
+        public string TgNickName { get; set; }
 
+        [RegularExpression(@"^([\+]?380[-]?|[0])?[1-9][0-9]{8}$", ErrorMessage = "Check and enter phone number correctly")]
+        public string PhoneNumber { get; set; }
         public string Base64URL { get; set; }
     }
 }

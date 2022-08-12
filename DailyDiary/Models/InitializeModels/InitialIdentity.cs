@@ -10,8 +10,8 @@ namespace DailyDiary.Models
 {
     public class InitialIdentity
     {
-        private static string mainAdminRoleName = "MainAdmin";
-        private static string mainAdminPassword = "Qwerty1!";
+        private static string _mainAdminRoleName = "MainAdmin";
+        private static string _mainAdminPassword = "Qwerty1!";
 
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
@@ -22,7 +22,7 @@ namespace DailyDiary.Models
             var rolesExist = await roleManager.Roles.ToListAsync();
             if (rolesExist.Count() == 0)
             {
-                await roleManager.CreateAsync(new IdentityRole(mainAdminRoleName));
+                await roleManager.CreateAsync(new IdentityRole(_mainAdminRoleName));
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
                 await roleManager.CreateAsync(new IdentityRole("Teacher"));
                 await roleManager.CreateAsync(new IdentityRole("Student"));
@@ -33,20 +33,22 @@ namespace DailyDiary.Models
             {
                 //var roles = await roleManager.Roles.ToListAsync();
                 List<User> users = new List<User>();
-                User admin1 = new User { UserName = "DenisRachkovskiy" };
-                User admin2 = new User { UserName = "SashaStakhniuk", Email = "sstahnuk@gmail.com" };
+                // User admin1 = new User { UserName = "Denis",LastName = "Rachkovskiy"};
+                // User admin2 = new User { UserName = "Sasha",LastName="Stakhniuk", Email = "sstahnuk@gmail.com" };
+                 User admin1 = new User { UserName = "DenisLogin"};
+                 User admin2 = new User { UserName = "SashaLogin", Email = "sstahnuk@gmail.com" };
                 users.Add(admin1);
                 users.Add(admin2);
                 foreach (var user in users)
                 {
-                    var result = await userManager.CreateAsync(user,mainAdminPassword);
+                    var result = await userManager.CreateAsync(user,_mainAdminPassword);
                     if (result.Succeeded)
                     {
                         //foreach(var role in roles)
                         //{
                         //    await userManager.AddToRoleAsync(user, role.Name);
                         //}
-                        await userManager.AddToRoleAsync(user, mainAdminRoleName);
+                        await userManager.AddToRoleAsync(user, _mainAdminRoleName);
                     }
                 }
             }

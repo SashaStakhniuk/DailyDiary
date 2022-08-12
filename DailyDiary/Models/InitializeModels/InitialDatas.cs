@@ -7,7 +7,7 @@ namespace DailyDiary.Models
 {
     public class InitialDatas
     {
-        public static void Initialize(IdentityContext db)
+        public static void Initialize(DailyDiaryDatasContext db)
         {
             try
             {
@@ -30,18 +30,30 @@ namespace DailyDiary.Models
                 Teacher teacher5 = new Teacher { Name = "Teacher5", LastName = "Jena", Age = 25, Specialty = "Teacher", Category = "Specialist", Degree = "Master", Education = "Higher", Experience = 0, Salary = 12000 };
                 Teacher teacher6 = new Teacher { Name = "Teacher6", LastName = "Ong", Age = 44, Specialty = "Teacher", Category = "First category specialist", Degree = "Professor, PHD", Education = "Higher", Experience = 18, Salary = 16000 };
 
-                Student st1 = new Student { Order = 1, Email = "jonson@gmail.com", Password = "jonson", Login = "jonson", Name = "Denis", LastName = "Goolorev", Age = 14, YearOfStudy = 9, AdmissionDate = new DateTime(), Base64URL = "some url", Birthday = new DateTime(), Rate = 10 };
-                Student st2 = new Student { Order = 2, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Klar", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
-                Student st3 = new Student { Order = 3, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Stiv", LastName = "jobs", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
-                Student st4 = new Student { Order = 4, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Jon", LastName = "Oliver", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
-                Student st5 = new Student { Order = 5, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Bred", LastName = "Pit", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
-                Student st6 = new Student { Order = 6, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Santa", LastName = "Lichia", Age = 7, YearOfStudy = 2/* Group = group3*/ };
-                Student st7 = new Student { Order = 7, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Fill", LastName = "Gonson", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
-                Student st8 = new Student { Order = 8, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Angelina", LastName = "Joli", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
-                Student st9 = new Student { Order = 9, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Mishel", LastName = "Streach", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
-                Student st10 = new Student { Order = 10, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Paul", LastName = "Li", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
-                Student st11 = new Student { Order = 11, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Stedhem", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
-                Student st12 = new Student { Order = 12, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Jena", LastName = "Ops", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
+                //Student st1 = new Student { Order = 1, Email = "jonson@gmail.com", Password = "jonson", Login = "jonson", Name = "Denis", LastName = "Goolorev", Age = 14, YearOfStudy = 9, AdmissionDate = new DateTime(), Base64URL = "some url", Birthday = new DateTime(), Rate = 10 };
+                //Student st2 = new Student { Order = 2, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Klar", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+                //Student st3 = new Student { Order = 3, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Stiv", LastName = "jobs", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
+                //Student st4 = new Student { Order = 4, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Jon", LastName = "Oliver", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
+                //Student st5 = new Student { Order = 5, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Bred", LastName = "Pit", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+                //Student st6 = new Student { Order = 6, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Santa", LastName = "Lichia", Age = 7, YearOfStudy = 2/* Group = group3*/ };
+                //Student st7 = new Student { Order = 7, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Fill", LastName = "Gonson", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
+                //Student st8 = new Student { Order = 8, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Angelina", LastName = "Joli", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+                //Student st9 = new Student { Order = 9, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Mishel", LastName = "Streach", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
+                //Student st10 = new Student { Order = 10, Email = "denis@gmail.com", Password = "1111", Login = "login", Name = "Paul", LastName = "Li", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
+                //Student st11 = new Student { Order = 11, Email = "alex@gmail.com", Password = "1111", Login = "login", Name = "Alex", LastName = "Stedhem", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+                //Student st12 = new Student { Order = 12, Email = "stiv@gmail.com", Password = "1111", Login = "login", Name = "Jena", LastName = "Ops", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
+                Student st1 = new Student { Order = 1, Name = "Denis", LastName = "Goolorev", Age = 14, YearOfStudy = 9, AdmissionDate = new DateTime(), Base64URL = "some url", Birthday = new DateTime(), Rate = 10 };
+                Student st2 = new Student { Order = 2, Name = "Alex", LastName = "Klar", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+                Student st3 = new Student { Order = 3, Name = "Stiv", LastName = "jobs", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
+                Student st4 = new Student { Order = 4, Name = "Jon", LastName = "Oliver", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
+                Student st5 = new Student { Order = 5, Name = "Bred", LastName = "Pit", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+                Student st6 = new Student { Order = 6, Name = "Santa", LastName = "Lichia", Age = 7, YearOfStudy = 2/* Group = group3*/ };
+                Student st7 = new Student { Order = 7, Name = "Fill", LastName = "Gonson", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
+                Student st8 = new Student { Order = 8, Name = "Angelina", LastName = "Joli", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+                Student st9 = new Student { Order = 9, Name = "Mishel", LastName = "Streach", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
+                Student st10 = new Student { Order = 10, Name = "Paul", LastName = "Li", Age = 14, YearOfStudy = 9 /*Group = group5*/ };
+                Student st11 = new Student { Order = 11, Name = "Alex", LastName = "Stedhem", Age = 6, YearOfStudy = 1 /*Group = group2*/ };
+                Student st12 = new Student { Order = 12, Name = "Jena", LastName = "Ops", Age = 7, YearOfStudy = 2 /* Group = group3*/ };
 
                 DateTime data = new DateTime();
                 News news = new News { Title = "Майстер-клас «Монетизація навичок і досвіду під час війни» для студентів Академії ШАГ", DataPublication = data.Date, MainInfo = "Майстер-клас  «Монетизація навичок і досвіду під час війни» для студентів Академії ШАГ від засновників компанії BRAND PEOPLE.", Base64Url = null, Sender = "Admin", IsRed = false };
@@ -84,13 +96,13 @@ namespace DailyDiary.Models
                 //    db.SaveChanges();
                 //}
 
-                //if (!db.Groups.Any())
-                //{
-                //    db.Groups.AddRange(
-                //        group5, group4, group3, group2, group1
-                //    );
-                //    db.SaveChanges();
-                //}
+                if (!db.Groups.Any())
+                {
+                    db.Groups.AddRange(
+                        group5, group4, group3, group2, group1
+                    );
+                    db.SaveChanges();
+                }
                 //if (!db.SubjectsStudyPlans.Any())
                 //{
                 //    db.SubjectsStudyPlans.AddRange(

@@ -1,6 +1,7 @@
 ﻿using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
 using DailyDiary.Models.ViewModels.Teacher;
+using DailyDiary.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace DailyDiary.Controllers.APIControllers
     [Route("api/[controller]/[action]")]
     public class TeacherController : Controller
     {
-        private readonly IdentityContext db;
+        private readonly DailyDiaryDatasContext db;
         private readonly UserManager<User> userManager;
-        public TeacherController(IdentityContext context, UserManager<User> userManager)
+        public TeacherController(DailyDiaryDatasContext context, UserManager<User> userManager)
         {
             this.userManager = userManager;
             this.db = context;
@@ -68,16 +69,31 @@ namespace DailyDiary.Controllers.APIControllers
             {
                 try
                 {
-                    string Password = Services.GeneratorService.CreatePassword(12, model.LastName);
-                    string Login = Services.GeneratorService.GenerateNewLogin(model.Name);
-                    if (model.Rate < 0 || model.Salary < 2000
-                        | model.Experience < 0 || model.Age < 0)
-                    {
-                        return BadRequest("Vrong values");
-                    }
-
+                    //string Password = Services.GeneratorService.CreatePassword(12, model.LastName);       
                     if (model != null)
                     {
+                        if (model.Rate < 0 || model.Experience < 0 || model.Age <= 0)
+                        {
+                            return BadRequest(new { error = "Vrong values" });
+                        }
+                        if (await userManager.FindByEmailAsync(model.Email) != null) // перевірка чи іcнує такий е-mail
+                        {
+                            throw new Exception("Email already registered");
+                            //return BadRequest(new { error = "Email already registered" });
+                        } 
+                        GeneratorService generatorService = new GeneratorService(userManager);
+                        string password = await generatorService.GenerateNewLogin(model.LastName); // генерація логіну  
+                        string login = generatorService.CreatePassword(); 
+                        User user = new User
+                        {
+                            Email = model.Email,
+                            UserName = login,
+                            //Teacher = teacher,
+                            //Student = null,
+                            TgNickName = model.TgNickName,
+                            PhoneNumber = model.PhoneNumber
+                        };
+
                         Teacher teacher = new Teacher
                         {
                             Name = model.Name,
@@ -91,25 +107,18 @@ namespace DailyDiary.Controllers.APIControllers
                             Experience = model.Experience,
                             Salary = model.Salary,
                             Base64URL = model.Base64URL,
-                            Email = model.Email,
+                            //Email = model.Email,
                             Rate = model.Rate,
-                            Login = Login,
-                            Passsword = Password
+                           // Login = Login,
+                            //Passsword = Password
                         };
-                        string userName = model.Name + model.LastName;
-                        User user = new User
-                        {
-                            Email = model.Email,
-                            UserName = userName,
-                            Teacher = teacher,
-                            Student = null,
-                        };
-                        teacher.UserId = user.Id;
+                       
                         try
                         {
-                            var result = await userManager.CreateAsync(user, Password);
+                            var result = await userManager.CreateAsync(user, password);
                             if (result.Succeeded)
                             {
+                                await userManager.AddToRoleAsync(user, "Teacher");
                                 //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
                                 db.Teachers.Add(teacher);
                                 await db.SaveChangesAsync();
@@ -159,8 +168,8 @@ namespace DailyDiary.Controllers.APIControllers
                         teacer.Experience = model.Experience;
                         teacer.Salary = model.Salary;
                         teacer.Rate = model.Rate;
-                        teacer.Login = model.Login;
-                        teacer.Email = model.Email;
+                        //teacer.Login = model.Login;
+                        //teacer.Email = model.Email;
 
                         db.Teachers.Update(teacer);
                         await db.SaveChangesAsync();
@@ -247,11 +256,12 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpPost]
         public async Task<ActionResult> CreateLogin(CreateLoginViewModel model)
         {
-            var Login = Services.GeneratorService.GenerateNewLogin(model.Name);
+            GeneratorService generatorService = new GeneratorService(userManager);
+            string Login = await generatorService.GenerateNewLogin(model.Name); // генерація логіну
             Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.Id);
             if(teacher != null)
             {
-                teacher.Login = Login;
+               // teacher.Login = Login;
                 db.Teachers.Update(teacher);
                 await db.SaveChangesAsync();
                 return Ok(teacher);

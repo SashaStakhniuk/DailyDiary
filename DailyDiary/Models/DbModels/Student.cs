@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,26 +19,26 @@ namespace DailyDiary.Models
         }
 
         [Key]
-        public int StudentId { get; set; }
-        public int? Order { get; set; }
-        public int? YearOfStudy { get; set; } 
+        public int StudentId { get; set; } //id
+        public int? Order { get; set; }// для сортировки студента
+        public int? YearOfStudy { get; set; }//рік навчання
         // [DataType(DataType.Date)]
         // [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? AdmissionDate{ get; set; }
-        [MaxLength(80)]
-        public string Login { get; set; }
-        [MaxLength(80)]
-        public string Password { get; set; }
-        [MaxLength(80)]
-        public string Email { get; set; }
-        public string Base64URL { get; set; }
+        public DateTime? AdmissionDate{ get; set; }//дата вступу
+     
+        //[MaxLength(80)]
+        //public string Email { get; set; }
+        public string Base64URL { get; set; }//фото
         public int? Rate { get; set; }
-        public string UserId { get; set; }
         public int? GroupId { get; set; }
         public int? SubgroupId { get; set; }
-        //public virtual User User { get; set; }
+
+        [ForeignKey("UserId")]
+        public string UserId { get; set; }
+        public virtual User User { get; set; }//посилання на запис
         public virtual Subgroup Subgroup { get; set; }
         public virtual Group Group { get; set; }
+
         public virtual ICollection<StudentClasswork> StudentClassworks { get; set; }
         public virtual ICollection<StudentHomework> StudentHomeworks { get; set; }
         public virtual ICollection<StudentNews> StudentNews { get; set; }
