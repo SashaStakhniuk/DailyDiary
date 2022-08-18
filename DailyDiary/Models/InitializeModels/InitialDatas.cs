@@ -103,6 +103,13 @@ namespace DailyDiary.Models
                     );
                     db.SaveChanges();
                 }
+                if (!db.StudyYears.Any())
+                {
+                    db.StudyYears.Add(
+                        new StudyYear {Title="TestingSystemYear", StartYear = DateTime.Now, FinishYear = DateTime.Now.AddYears(1)}
+                    );
+                    db.SaveChanges();
+                }
                 //if (!db.SubjectsStudyPlans.Any())
                 //{
                 //    db.SubjectsStudyPlans.AddRange(

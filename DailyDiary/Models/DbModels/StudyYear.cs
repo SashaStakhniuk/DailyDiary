@@ -19,7 +19,7 @@ namespace DailyDiary.Models
         [Required]
         public string Title { get; set; }
         public DateTime? StartYear { get; set; }
-        public DateTime? FinishYea { get; set; }
+        public DateTime? FinishYear { get; set; }
         public virtual ICollection<StudyYearStudyPlan> StudyYearStudyPlans { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
     }

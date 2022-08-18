@@ -92,7 +92,7 @@ h2{
     transition: all 1s ease 0s;
     background-color:rgb(18, 235, 235);
 }
-[type='password'], [type='username'] {
+/* [type='password'], [type='username'] {
     padding: 12px 20px;
     font-size: 1rem;
     border-width: calc(var(--border-width) * 1px);
@@ -106,7 +106,7 @@ h2{
     min-height: 57px;
     border-radius: 30px;
     transition: border-color calc(var(--transition, 0.2) * 1s) ease;
-  }
+  } */
 .login-button {
     --size: 52;
     --lightness: 45;

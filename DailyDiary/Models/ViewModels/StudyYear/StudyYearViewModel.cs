@@ -8,6 +8,6 @@ namespace DailyDiary.Models.ViewModels.StudyYear
     public class StudyYearViewModel
     {
         public DateTime StartYear { get; set; }
-        public DateTime FinishYea { get; set; }
+        public DateTime FinishYear { get; set; }
     }
 }

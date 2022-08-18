@@ -21,7 +21,7 @@ namespace DailyDiary.Controllers.APIControllers
             this.db = db;
         }
 
-        public async Task<ActionResult<IEnumerable<Subject>>> Get() //Get all
+        public async Task<ActionResult<IEnumerable<Subject>>> GetAll() //Get all
         {
             return await db.Subjects.ToListAsync();
         }
