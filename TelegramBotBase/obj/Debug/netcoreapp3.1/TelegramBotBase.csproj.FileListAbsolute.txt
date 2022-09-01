@@ -1,0 +1,8 @@
+C:\Users\denis\Documents\TelegramBotFramework\TelegramBotBase\bin\Debug\netcoreapp3.1\TelegramBotBase.deps.json
+C:\Users\denis\Documents\TelegramBotFramework\TelegramBotBase\bin\Debug\netcoreapp3.1\TelegramBotBase.dll
+C:\Users\denis\Documents\TelegramBotFramework\TelegramBotBase\bin\Debug\netcoreapp3.1\TelegramBotBase.pdb
+C:\Users\denis\Documents\TelegramBotFramework\TelegramBotBase\obj\Debug\netcoreapp3.1\TelegramBotBase.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\denis\Documents\TelegramBotFramework\TelegramBotBase\obj\Debug\netcoreapp3.1\TelegramBotBase.csproj.CoreCompileInputs.cache
+C:\Users\denis\Documents\TelegramBotFramework\TelegramBotBase\obj\Debug\netcoreapp3.1\TelegramBotBase.sourcelink.json
+C:\Users\denis\Documents\TelegramBotFramework\TelegramBotBase\obj\Debug\netcoreapp3.1\TelegramBotBase.dll
+C:\Users\denis\Documents\TelegramBotFramework\TelegramBotBase\obj\Debug\netcoreapp3.1\TelegramBotBase.pdb
