@@ -33,21 +33,23 @@ class GroupEditing extends React.Component{
         // Array.from(document.styleSheets).forEach(sheet => sheet.disabled = true)
         //console.log(this.props)
         if (this.props.match && this.props.match.params.id) {
-        //console.log(this.props.match.params.id)
-        this.setState({
-            teacherId:1,
-            groupId:this.props.match.params.id
-        }   
-        //  ,()=> this.getSomeHomeworks()
-         // ,()=> this.getSomeClassworks()
-        );
-    } 
-   }
+            //console.log(this.props.match.params.id)
+            this.setState({
+                teacherId:1,
+                groupId:this.props.match.params.id
+            }   
+            //  ,()=> this.getSomeHomeworks()
+            // ,()=> this.getSomeClassworks()
+            );
+        }    
+    }
+
     getSomeHomeworksFromChild(){
        this.setState({
         homeworksToSkip:0
        },()=>this.getSomeHomeworks())
    }
+
    getSomeClassworksFromChild(){
     this.setState({
      classworksToSkip:0
@@ -56,53 +58,49 @@ class GroupEditing extends React.Component{
     async getSomeHomeworks() // кілька домашок групи за ід групи і ід вчителя
     {
         try{
-             console.log("Fetching the homeworks")
+            console.log("Fetching the homeworks")
             const response= await fetch(`https://localhost:44364/api/GroupHomeworks/GetSomeHomeworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
+            const data = await response.json();
+            console.log(data)
 
-             const data = await response.json();
-             console.log(data)
-
-             if (response.ok === true) {
-                // console.log("Got the homeworks")
-                    this.setState({
-                        // homeworks:[...this.state.homeworks,...data],
-                        homeworks:data,
-                        homeworksToSkip:data.length+this.state.homeworksToSkip
-                    }
-                    //,()=> console.log(this.state)
-                    )
-                     //console.log(data)  
-                
-             } else {
-                 console.log("error",data)
-             }
+            if (response.ok === true) {
+            // console.log("Got the homeworks")
+                this.setState({
+                    // homeworks:[...this.state.homeworks,...data],
+                    homeworks:data,
+                    homeworksToSkip:data.length+this.state.homeworksToSkip
+                }
+                //,()=> console.log(this.state)
+                )
+                    //console.log(data)  
+            } else {
+                console.log("error",data)
+            }
             }
         catch{
             console.log("getSomeHomeworks  ERROR !!!")
         }
     }
+
     async getMoreHomeworks() // кілька домашок групи за ід групи і ід вчителя
     {
         try{
-             console.log("Fetching the homeworks")
+            console.log("Fetching the homeworks")
             const response= await fetch(`https://localhost:44364/api/GroupHomeworks/GetSomeHomeworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
+            const data = await response.json();
+            console.log(data)
 
-             const data = await response.json();
-             console.log(data)
-
-             if (response.ok === true) {
-                // console.log("Got the homeworks")
-                if(data.length>0){
-                    this.setState({
-                        homeworks:[...this.state.homeworks,...data],
-                        homeworksToSkip:data.length+this.state.homeworksToSkip
-                    }
-                    //,()=> console.log(this.state)
-                    )
-                     //console.log(data)  
+            if (response.ok === true) {
+            // console.log("Got the homeworks")
+            if(data.length>0){
+                this.setState({
+                    homeworks:[...this.state.homeworks,...data],
+                    homeworksToSkip:data.length+this.state.homeworksToSkip
                 }
-                     
-                
+                //,()=> console.log(this.state)
+                )
+                    //console.log(data)  
+            }
              } else {
                  console.log("error",data)
              }
@@ -111,59 +109,54 @@ class GroupEditing extends React.Component{
             console.log("getMoreHomeworks  ERROR !!!")
         }
     }
+
     async getSomeClassworks() // кілька classworks групи за ід групи і ід вчителя
     {
         try{
             console.log("Fetching the classworks")
-
             const response= await fetch(`https://localhost:44364/api/GroupClassworks/GetSomeClassworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.classworksToSkip}&&take=${this.state.classworksToDisplay}`);
+            const data = await response.json();
 
-             const data = await response.json();
-
-             if (response.ok === true) {
-             console.log(data)
-                    this.setState({
-                        classworks:data,
-                        classworksToSkip:data.length+this.state.classworksToSkip
-                    }
-                    ,()=> console.log(this.state)
-                    )
-                     //console.log(data) 
-                      
-                
-             } else {
-                 console.log("error",data)
-             }
+            if (response.ok === true) {
+            console.log(data)
+            this.setState({
+                classworks:data,
+                classworksToSkip:data.length+this.state.classworksToSkip
             }
+            ,()=> console.log(this.state)
+            )
+            //console.log(data) 
+            } else {
+                console.log("error",data)
+            }
+        }
         catch{
             console.log("getSomeClassworks  ERROR !!!")
         }
     }
+
     async getMoreClassworks() // кілька домашок групи за ід групи і ід вчителя
     {
         try{
-             console.log("Fetching the classworks")
+            console.log("Fetching the classworks")
             const response= await fetch(`https://localhost:44364/api/GroupClassworks/GetSomeClassworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.classworksToSkip}&&take=${this.state.classworksToDisplay}`);
+            const data = await response.json();
+            console.log(data)
 
-             const data = await response.json();
-             console.log(data)
-
-             if (response.ok === true) {
-                if(data.length>0){
-                    this.setState({
-                        classworks:[...this.state.classworks,...data],
-                        classworksToSkip:data.length+this.state.classworksToSkip
-                    }
-                    //,()=> console.log(this.state)
-                    )
-                     //console.log(data)  
+            if (response.ok === true) {
+            if(data.length>0){
+                this.setState({
+                    classworks:[...this.state.classworks,...data],
+                    classworksToSkip:data.length+this.state.classworksToSkip
                 }
-                     
-                
-             } else {
-                 console.log("error",data)
-             }
+                //,()=> console.log(this.state)
+                )
+                    //console.log(data)  
             }
+            } else {
+                console.log("error",data)
+            }
+        }
         catch{
             console.log("getMoreClassworks  ERROR !!!")
         }
@@ -181,10 +174,10 @@ class GroupEditing extends React.Component{
         this.setState({
             addHomeworkForm: <AddHomeworkForm groupId={this.state.groupId} teacherId={this.state.teacherId} getSomeHomeworks={this.getSomeHomeworksFromChild}></AddHomeworkForm>
         })
-        homeworkForm.style.display = "block"
+            homeworkForm.style.display = "block"
        }
        else{
-        homeworkForm.style.display="none"
+            homeworkForm.style.display="none"
        }
     }
     async showClassworkForm(){
@@ -206,7 +199,6 @@ class GroupEditing extends React.Component{
        }
     }
     render(){
-        
         const homeworks = this.state.homeworks.length<=0?
         <div className="text-center" style={{color:"red"}}><h1>No homeworks yet...</h1>
         </div>
@@ -219,7 +211,6 @@ class GroupEditing extends React.Component{
             </div>  
             <button className="btn btn-secondary" onClick={()=>this.getMoreHomeworks()}>View more</button>                          
         </div>
-       
         const classworks = this.state.classworks.length<=0?
         <div className="text-center" style={{color:"red"}}>
             <h1>No classworks yet...</h1>
@@ -235,48 +226,43 @@ class GroupEditing extends React.Component{
         </div>
         return(
             <div> 
-<button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">Enable backdrop (default)</button>
+                <button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">Enable backdrop (default)</button>
 
-<div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel">
-  <div className="offcanvas-header">
-    <h5 className="offcanvas-title" id="offcanvasWithBackdropLabel">Offcanvas with backdrop</h5>
-    <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div className="offcanvas-body">
-      <div>
-       <button className='btn btn-primary' onClick={()=> this.showHomeworkForm()}>Add new homework</button>
-      </div>
-      <div>
-       <button className='btn btn-primary' onClick={()=> this.showClassworkForm()}>Add new classwork</button>
-      </div>
-      <div>
-       <button className='btn btn-primary' onClick={()=> this.getSomeHomeworks()}>Get homeworks</button>
-      </div>
-      <div>
-       <button className='btn btn-primary' onClick={()=> this.getSomeClassworks()}>Get classworks</button>
-      </div>
-      <div>
-      {/* <button className='btn btn-primary' onClick={()=> this.getHomeworks(this.state.groupId,this.state.teacherId)}>View Homeworks</button> */}
-      </div>
-  </div>
-</div>
-
-                    <div id="addHomeworkForm" style={{display:"none"}}>
-                        {this.state.addHomeworkForm}
-                    </div>                        
-                    <div id="addClassworkForm" style={{display:"none"}}>
-                        {this.state.addClassworkForm}
+                <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel">
+                <div className="offcanvas-header">
+                    <h5 className="offcanvas-title" id="offcanvasWithBackdropLabel">Offcanvas with backdrop</h5>
+                    <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div className="offcanvas-body">
+                    <div>
+                    <button className='btn btn-primary' onClick={()=> this.showHomeworkForm()}>Add new homework</button>
                     </div>
-
-
-                            <h1>Homeworks:</h1>
-                            {homeworks}
-                            
-
-                        <h1>Classworks:</h1>
-                        <div>
-                            {classworks}                         
-                        </div>         
+                    <div>
+                    <button className='btn btn-primary' onClick={()=> this.showClassworkForm()}>Add new classwork</button>
+                    </div>
+                    <div>
+                    <button className='btn btn-primary' onClick={()=> this.getSomeHomeworks()}>Get homeworks</button>
+                    </div>
+                    <div>
+                    <button className='btn btn-primary' onClick={()=> this.getSomeClassworks()}>Get classworks</button>
+                    </div>
+                    <div>
+                    {/* <button className='btn btn-primary' onClick={()=> this.getHomeworks(this.state.groupId,this.state.teacherId)}>View Homeworks</button> */}
+                    </div>
+                </div>
+                </div>
+                <div id="addHomeworkForm" style={{display:"none"}}>
+                    {this.state.addHomeworkForm}
+                </div>                        
+                <div id="addClassworkForm" style={{display:"none"}}>
+                    {this.state.addClassworkForm}
+                </div>
+                    <h1>Homeworks:</h1>
+                    {homeworks}
+                <h1>Classworks:</h1>
+                <div>
+                    {classworks}                         
+                </div>         
             </div>
         )
     }

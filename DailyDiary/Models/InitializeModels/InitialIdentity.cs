@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,12 +31,26 @@ namespace DailyDiary.Models
                     db.SaveChangesAsync();
                 }
 
-                User student = new User { UserName = "Denis Rachkovskiy" };
-                User student1 = new User { UserName = "Sasha Stakhniuk", Email = "sstahnuk@gmail.com"};
-                db.Users.AddRange(student,student1);
+                //RegistaratinAdmins(db);
                 db.SaveChanges();
             }
-         
+        }
+        private async static void RegistaratinAdmins(IdentityContext context)
+        {
+            var store = new UserStore<User>(context);
+            var manager = new UserManager<User>(store, null, null, null, null, null, null, null, null);
+
+            User admin1 = new User { UserName = "Denis Rachkovskiy" };
+            User admin2 = new User { UserName = "Sasha Stakhniuk", Email = "sstahnuk@gmail.com" };
+
+            IdentityResult result = await manager.CreateAsync(admin1, "DenisRachkovskyADMIN12345admin007");
+            IdentityResult result2 = await manager.CreateAsync(admin2, " SashaStakhniukADMIN12345admin007");
+
+            if(result.Succeeded & result2.Succeeded)
+            {
+                context.Users.AddRange(admin1, admin2);
+                context.SaveChanges();
+            }
         }
     }
 }

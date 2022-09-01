@@ -19,6 +19,7 @@ namespace DailyDiary.Controllers.APIControllers
     [Route("api/[controller]/[action]")]
     public class AccountController : Controller
     {
+
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
@@ -41,6 +42,10 @@ namespace DailyDiary.Controllers.APIControllers
         {
             if (ModelState.IsValid)
             {
+                foreach(var account in userManager.Users)
+                {
+
+                }
                 var user = await userManager.FindByNameAsync(model.UserName);
                 if (user != null)
                 {

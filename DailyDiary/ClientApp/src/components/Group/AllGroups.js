@@ -14,7 +14,7 @@ function AllGroups(){
     async function getAllGroups(){
         try
         {
-            const response = await fetch(`https://localhost:44364/api/Teacher/GetAllGroups`)
+            const response = await fetch(`https://localhost:44364/api/group/get`)
             const data = await response.json()
             if(response.ok === true){
                 setGroups(data)

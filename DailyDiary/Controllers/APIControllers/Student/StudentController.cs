@@ -20,16 +20,16 @@ namespace DailyDiary.Controllers.APIControllers
         private readonly IdentityContext db;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        private readonly RoleManager<User> roleManager;
+        //private readonly RoleManager<User> roleManager;
         public StudentController(IdentityContext datasContext,
             UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            RoleManager<User> roleManager)
+            SignInManager<User> signInManager
+            )
         {
             this.db = datasContext;
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.roleManager = roleManager;
+            //this.roleManager = roleManager;
         }
 
         [HttpGet]

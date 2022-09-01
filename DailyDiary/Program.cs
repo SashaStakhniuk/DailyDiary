@@ -25,7 +25,7 @@ namespace DailyDiary
                     var context = servises.GetRequiredService<IdentityContext>();
                     var identityContext = servises.GetRequiredService<IdentityContext>();
                     
-                    InitialIdentity.Initialize(identityContext);
+                    //InitialIdentity.Initialize(identityContext);
                     InitialDatas.Initialize(context);
                 }
                 catch (Exception ex)

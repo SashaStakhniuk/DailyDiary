@@ -172,11 +172,8 @@ const Root = () => {
                     <Route exact path="/admin/groups"><AllGroups/></Route>
                     <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>
                     <Route exact path="/admin/new-group"><CreateNewGroup/></Route>
-
                     <Route exact path="/admin/new-student"><CreateNewStudent/></Route> 
-                    
                     {/* <Route exact path="/admin/new-student"><CreateNewStudent groups={groups}/></Route> */}
-
                     <Route exact path="/admin/students"><Students/></Route>
                     <Route exact path="/admin/student-profil/:id"><StudentProfil/></Route>
                     <Route exact path="/admin/edit-student/:id"><EditFromStudent/></Route>
@@ -189,7 +186,7 @@ const Root = () => {
                     <Route exact path="/admin/add-image-teacher/:id"><TeacheImage/></Route>
                     <Route exact path="/admin/new-teacher"><CreateNewTeacher/></Route>
                     <Route exact path="/admin/send-message-for-student/:id"><SendMessageForStudent/></Route>
-                    
+                             
                     <Route exact path="/teacher-page"><TeacherPage/></Route>
                     <Route exact path="/teacher-page/send-feedback/:studentId/:teacherId/:subjectId/:studentName"><SandFeedback/></Route>
                     <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
