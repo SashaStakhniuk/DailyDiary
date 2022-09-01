@@ -7,7 +7,7 @@ namespace DailyDiary.Models
 {
     public class InitialDatas
     {
-        public static void Initialize(IdentityContext db)
+        public static void Initialize(DailyDiaryDatasContext db)
         {
             try
             {

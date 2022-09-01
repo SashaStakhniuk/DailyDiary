@@ -6,14 +6,17 @@ function CreateNewStudent(){
 
     //useSelector(state => state.groups)
     const [groups, setGroups] = useState([])
+    const [errors, setErrors] = useState([])
 
-    const[name, setUserName] = useState("")
-    const[phoneNumber, setPhoneNumber] = useState("")
-    const[lastName, setlastName] = useState("")
+    const[name, setUserName] = useState("SomeStudentName")
+    const[lastName, setlastName] = useState("SomeStudentLastName")
+    const[phoneNumber, setPhoneNumber] = useState("+380985655355")
+    const[yearOfStudy, setYearOfStudy] = useState(0)
     const[Birthday, setBirthday] = useState()
-    const[Email, setEmail] = useState()
+    const[Email, setEmail] = useState("someStudent@gmail.com")
+    const[telegramNick, setTelegramNick] = useState("tgNickName")
     const[AdmissionDate, setAdmissionDate] = useState()
-    const[Age, setAge] = useState(0)
+    const[Age, setAge] = useState(15)
 
     useEffect(() => {
         getAllGroups()
@@ -41,7 +44,7 @@ function CreateNewStudent(){
                 groupId = group.id
             }
         })
-        const request = await fetch('https://localhost:44364/api/student/CreateNew', {
+        const response  = await fetch('https://localhost:44364/api/student/CreateNew', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,13 +57,37 @@ function CreateNewStudent(){
                 AdmissionDate, 
                 groupId, 
                 Email,
+<<<<<<< HEAD
+=======
+                phoneNumber,
+                yearOfStudy,
+                telegramNick
+>>>>>>> b0310ccad75e70fc2b67db44dc495faf8a0ddaf6
             })
         })
-        if(request.ok === true){
+        if(response.ok === true){
             //window.location = '/admin'
+            window.alert("Student was created");
+
         }
         else{
-            console.log("Error feching data")
+            var data = await response.json();
+           // console.log(data)
+            if(data.errors!==undefined){
+                for (var key in data.errors) {
+                    console.log(data.errors[key]);
+                    //setErrors(errors => [...errors, <div><h2 style={{color: "red"}}>{data.errors[key]}</h2></div>]);
+                    // errors.map((error) =>
+                    // <div><h2 style={{color: "red"}}>{error[0]}</h2></div>)
+                }
+            }
+            if(data.error !== undefined){
+                window.alert(data.error);
+            }
+            else{
+                console.log(response.errorText);
+             console.log("Error feching data")
+            }
         }
     }
 
@@ -92,11 +119,15 @@ function CreateNewStudent(){
     function onChangeEmail(e){
         setEmail(e.target.value)
     }
-
+    function onChangeYearOfStudy(e){
+        setYearOfStudy(e.target.value)
+    }
     function onChangePhoneNuumber(e){
         setPhoneNumber(e.target.value)
     }
-
+    function onChangeTelegramNick(e){
+        setTelegramNick(e.target.value)
+    }
     return(
         <>
             <div className="edit__container">
@@ -105,33 +136,33 @@ function CreateNewStudent(){
 
                     <div className="container1">
                         <span className="span-text">UserName</span>
-                        <div class="mb-3">
-                            <input id="username" value={name} onChange={e => onChangeUserName(e)} type="text" placeholder="Enter student usrname" title="Your username" />
+                        <div className="mb-3">
+                            <input id="username" value={name} onChange={e => onChangeUserName(e)} type="text" placeholder="Enter student usrname" title="Your username" required />
                         </div>
                         
                         <span className="span-text">lastName</span>
-                        <div class="mb-3">
-                            <input type="text" id="lastName" value={lastName} onChange={e => onChangeLastName(e)}  placeholder="Enter student lastName" title="Your username" />
+                        <div className="mb-3">
+                            <input type="text" id="lastName" value={lastName} onChange={e => onChangeLastName(e)}  placeholder="Enter student lastName" title="Your username" required />
                         </div>
 
                         <span className="span-text">Birthday</span>
-                        <div class="mb-3">
-                            <span class="datepicker-toggle">
-                                <input type="date" id="birthday"  data-date-format="DD MMMM YYYY" value={Birthday} onChange={e => onChangeBirthday(e)} />
+                        <div className="mb-3">
+                            <span className="datepicker-toggle">
+                                <input type="date" id="birthday"  data-date-format="DD MMMM YYYY" value={Birthday} onChange={e => onChangeBirthday(e)} required />
                             </span>
                         </div>
 
                         <span className="span-text">Email</span>
-                        <div class="mb-3">
-                            <input type="email" id="email" value={Email} onChange={e => onChangeEmail(e)} />
+                        <div className="mb-3">
+                            <input type="email" id="email" value={Email} onChange={e => onChangeEmail(e)} required/>
                         </div>
                     </div>
 
                     <div className="container2">
                         <div className='mb-3'>
                             <span className="span-text">Phone Number</span>
-                            <div class="mb-3">
-                                <input type="phone" id="phone" value={phoneNumber} onChange={e => onChangePhoneNuumber(e)} />
+                            <div className="mb-3">
+                                <input type="phone" id="phone" value={phoneNumber} onChange={e => onChangePhoneNuumber(e)} required/>
                             </div>
                         </div>
                         <div className='mb-3'>
@@ -150,7 +181,7 @@ function CreateNewStudent(){
                                                 <>
                                                     <div key={i} className="w-100 d-flex flex-column">
                                                         <div className="d-flex flex-row w-100 align-items-center justify-content-center"> 
-                                                            <input style={{ marginRight: '5px' }} type="radio" id={`ro_${group.id}`} value={group.id} name="scales" placeholder={`hours for ${group.title}`}/>
+                                                            <input style={{ marginRight: '5px' }} type="radio" id={`ro_${group.id}`} value={group.id} name="scales" placeholder={`hours for ${group.title}`} required/>
                                                             <span>{group.title}</span>
                                                         </div>
                                                     </div>
@@ -162,18 +193,30 @@ function CreateNewStudent(){
                             </div>
                         </div>
                         <span className="span-text">Admission Date</span>
-                        <div class="mb-3">
-                            <span class="datepicker-toggle">
-                                <input type="date" id="admissionDate"  data-date-format="DD MMMM YYYY" value={AdmissionDate} onChange={e => onChangeAdmissionDate(e)} />
+                        <div className="mb-3">
+                            <span className="datepicker-toggle">
+                                <input type="date" id="admissionDate"  data-date-format="DD MMMM YYYY" value={AdmissionDate} onChange={e => onChangeAdmissionDate(e)} required />
                             </span>
                         </div>
 
                         <span className="span-text">Age</span>
-                        <div class="mb-3">
-                            <input id="age" type="number" value={Age} onChange={onChangeAge}/>
+                        <div className="mb-3">
+                            <input id="age" type="number" value={Age} onChange={onChangeAge} required/>
                         </div>
 
-                        <button type="submit" class="btn__edit align-self-end">Add</button>
+                          <span className="span-text">Year of study</span>
+                        <div className="mb-3">
+                            <input id="yearOfStudy" type="number" value={yearOfStudy} onChange={onChangeYearOfStudy} required/>
+                        </div>
+
+                        <span className="span-text">Telegram nick</span>
+                        <div className="mb-3">
+                            <input id="tgNick" type="text" value={telegramNick} onChange={onChangeTelegramNick} required/>
+                        </div>
+
+                        {errors}
+
+                        <button type="submit" className="btn__edit align-self-end">Add</button>
                     </div>
                 </form>
             </div>

@@ -17,19 +17,20 @@ namespace DailyDiary.Controllers.APIControllers
     [Route("api/[controller]/[action]")]
     public class StudentController : Controller
     {
-        private readonly IdentityContext db;
+        private readonly DailyDiaryDatasContext db;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        //private readonly RoleManager<User> roleManager;
-        public StudentController(IdentityContext datasContext,
+        private readonly RoleManager<IdentityRole> roleManager;
+        public StudentController(DailyDiaryDatasContext datasContext,
             UserManager<User> userManager,
-            SignInManager<User> signInManager
+            SignInManager<User> signInManager,
+            RoleManager<IdentityRole> roleManager
             )
         {
             this.db = datasContext;
             this.userManager = userManager;
             this.signInManager = signInManager;
-            //this.roleManager = roleManager;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
@@ -99,9 +100,10 @@ namespace DailyDiary.Controllers.APIControllers
                         Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
                         Subgroup subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == model.SubgroupId);
 
-                        student.Password = model.Password;
-                        student.Login = model.Login;
-                        student.Email = model.Email;
+                        //student.Password = model.Password;
+                        //student.Login = model.Login;
+                        //student.Email = model.Email;
+
                         student.Name = model.Name;
                         student.LastName = model.LastName;
                         student.Birthday = model.Birthday;
@@ -131,61 +133,74 @@ namespace DailyDiary.Controllers.APIControllers
             {
                 try
                 {
-                    Student student = new Student();
-                    string Login = Services.GeneratorService.GenerateNewLogin(model.LastName);
-                    string Password = GeneratorService.CreatePassword(12, model.LastName);
-
-                    Group group = null;
-                    int order = db.Students.Count() + 1;
-                    if (model.GroupId != 0)
+                    if (await userManager.FindByEmailAsync(model.Email) != null) // перевірка чи іcнує такий е-mail
                     {
-                        group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                        throw new Exception("Email already registered");
+                        //return BadRequest(new { error = "Email already registered" });
                     }
-                    student = new Student 
-                    {
-                        Name = model.Name,
-                        LastName = model.LastName,
-                        Birthday = model.Birthday,
-                        Age = model.Age,
-                        AdmissionDate = model.AdmissionDate,
-                        Login = Login,
-                        Password = Password,
-                        Email = model.Email,
-                        Group = group,
-                        Order = order,
-                        
-                    };
-                    string userName = model.Name + model.LastName;
+                    GeneratorService generatorService = new GeneratorService(userManager);
+                    string _login = await generatorService.GenerateNewLogin(model.LastName); // генерація логіну
+                                                                                             //string _password = GeneratorService.CreatePassword(12, model.LastName); // генерація паролю
+                    string _password = generatorService.CreatePassword(); // генерація паролю
                     User user = new User
                     {
                         Email = model.Email,
-                        UserName = userName,
-                        Teacher = null,
-                        Student = student,
+                        UserName = _login,
+                        //Name = model.Name,
+                        //LastName = model.LastName,
+                        //MiddleName = model.MiddleName,
+                        TgNickName = model.TgNickName,
+                        PhoneNumber = model.PhoneNumber
+                        //PhoneNumber = System.Text.RegularExpressions.Regex.IsMatch(model.PhoneNumber, @"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$")? model.PhoneNumber:null // валідація номеру
                     };
-
-                    student.UserId = user.Id;
-
-                    var result = await userManager.CreateAsync(user, Password);
-
+                    var result = await userManager.CreateAsync(user, _password);
                     if (result.Succeeded)
                     {
-                        //Services.MailService.SendLoginAndPassword(Login, Password, model.Email);
-                        db.Students.Add(student);
+                        await userManager.AddToRoleAsync(user, "Student");
+
+                        Group group = null;
+                        int order = db.Students.Count() + 1; //для сортировки студента
+                        if (model.GroupId != 0)
+                        {
+                            group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId); // шукаємо групу
+                            if (group == null)
+                            {
+                                return BadRequest(new { error = "Group not found"});
+                            }
+                        }
+
+                        db.Students.Add(new Student
+                        {
+                            User = user,
+                            Name = model.Name,
+                            LastName = model.LastName,
+                            Birthday = model.Birthday,
+                            Age = model.Age,
+                            AdmissionDate = model.AdmissionDate,
+                            YearOfStudy = model.YearOfStudy,
+                            Group = group,
+                            Order = order
+                        });
                         await db.SaveChangesAsync();
                         return Ok();
                     }
                     else
                     {
-                        Console.WriteLine(result.Errors);
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        return BadRequest(ModelState);
                     }
+                       
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    //Console.WriteLine(ex.Message);
+                    return BadRequest(new { error = ex.Message });
                 }
             }
-            return BadRequest();
+            return BadRequest(ModelState);
         }
 
         [HttpDelete("{id}")]

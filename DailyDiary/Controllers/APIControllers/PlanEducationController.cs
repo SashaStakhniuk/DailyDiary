@@ -15,8 +15,8 @@ namespace DailyDiary.Controllers.APIControllers
     [Route("api/[controller]/[action]")]
     public class PlanEducationController : Controller
     {
-        private readonly IdentityContext db;
-        public PlanEducationController(IdentityContext db)
+        private readonly DailyDiaryDatasContext db;
+        public PlanEducationController(DailyDiaryDatasContext db)
         {
             this.db = db;
         }
@@ -32,18 +32,18 @@ namespace DailyDiary.Controllers.APIControllers
         {
             try
             {
-                var st = await db.StudyYears.FirstOrDefaultAsync(x => x.StartYear == model.StartYear && x.FinishYea == model.FinishYea);
+                var st = await db.StudyYears.FirstOrDefaultAsync(x => x.StartYear == model.StartYear && x.FinishYear == model.FinishYear);
                 if (st == null)
                 {
-                    if (model.FinishYea > model.StartYear)
+                    if (model.FinishYear > model.StartYear)
                     {
-                        string title = model.StartYear.ToLongDateString() + " - " + model.FinishYea.ToLongDateString();
+                        string title = model.StartYear.ToLongDateString() + " - " + model.FinishYear.ToLongDateString();
 
                         StudyYear studyYear = new StudyYear
                         {
                             Title = title,
                             StartYear = model.StartYear,
-                            FinishYea = model.FinishYea
+                            FinishYear = model.FinishYear
                         };
                         db.StudyYears.Add(studyYear);
                         await db.SaveChangesAsync();

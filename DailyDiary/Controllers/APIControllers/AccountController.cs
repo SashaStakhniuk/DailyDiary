@@ -23,9 +23,11 @@ namespace DailyDiary.Controllers.APIControllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly IdentityContext db;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager,IdentityContext db)
         {
+            this.db = db;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
@@ -52,25 +54,44 @@ namespace DailyDiary.Controllers.APIControllers
                     var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
                     if (result.Succeeded)
                     {
-                        if(user.Student != null)
+                        var identity = await GetIdentity(user.Email, model.Password);
+                        if (identity == null)
                         {
-
-                        } 
-                        else if(user.Teacher != null)
-                        {
-                            // JWT 
+                            return BadRequest(new { error = "Invalid login or password" });
                         }
-
-                        if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                        var jwt = new JwtSecurityToken(
+                            issuer: AuthOptions.ISSURER,
+                            audience: AuthOptions.AUDIENCE,
+                            claims: identity.Claims,
+                            expires: DateTime.Now.AddMinutes(AuthOptions.LIFETIME),
+                            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+                            );
+                        var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+                        return Json(new
                         {
-                            return Redirect(model.ReturnUrl);
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "Home"); // перенаправлення на сторінку входу
+                            access_token = encodedJwt,
+                            userId = user.Id,
+                            roles = await userManager.GetRolesAsync(user)
+                        });
+                        //if (user.Student != null)
+                        //{
 
-                            //return RedirectToAction("Index", "Home");
-                        }
+                        //} 
+                        //else if(user.Teacher != null)
+                        //{
+                        //    // JWT 
+                        //}
+
+                        //if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                        //{
+                        //    return Redirect(model.ReturnUrl);
+                        //}
+                        //else
+                        //{
+                        //    return RedirectToAction("Index", "Home"); // перенаправлення на сторінку входу
+
+                        //    //return RedirectToAction("Index", "Home");
+                        //}
                     }
                     else
                     {
@@ -78,8 +99,9 @@ namespace DailyDiary.Controllers.APIControllers
                         return BadRequest(ModelState);
                     }
                 }
+                return BadRequest(new {error="User not found" });
             }
-            return Ok(model);
+            return BadRequest(model);
         }
         //public IActionResult Register()
         //{
@@ -143,42 +165,42 @@ namespace DailyDiary.Controllers.APIControllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Token(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await userManager.FindByEmailAsync(model.UserName);
-                //var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
-                if (user != null)
-                {
-                    var identity = await GetIdentity(user.Email, model.Password);
-                    if (identity == null)
-                    {
-                        return BadRequest(new { error = "Invalid login or password" });
-                    }
-                    var jwt = new JwtSecurityToken(
-                        issuer: AuthOptions.ISSURER,
-                        audience: AuthOptions.AUDIENCE,
-                        claims: identity.Claims,
-                        expires: DateTime.Now.AddMinutes(AuthOptions.LIFETIME),
-                        signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
-                        );
-                    var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-                    return Json(new
-                    {
-                        access_token = encodedJwt,
-                        userId = user.Id
-                    });
-                }
-                else
-                {
-                    //ModelState.AddModelError("errorText", "Invalid login or password");
-                    return BadRequest(new {errorText = "Invalid login or password" });
-                }
-            }
-            return View(model);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Token(LoginViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await userManager.FindByEmailAsync(model.UserName);
+        //        //var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
+        //        if (user != null)
+        //        {
+        //            var identity = await GetIdentity(user.Email, model.Password);
+        //            if (identity == null)
+        //            {
+        //                return BadRequest(new { error = "Invalid login or password" });
+        //            }
+        //            var jwt = new JwtSecurityToken(
+        //                issuer: AuthOptions.ISSURER,
+        //                audience: AuthOptions.AUDIENCE,
+        //                claims: identity.Claims,
+        //                expires: DateTime.Now.AddMinutes(AuthOptions.LIFETIME),
+        //                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+        //                );
+        //            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+        //            return Json(new
+        //            {
+        //                access_token = encodedJwt,
+        //                userId = user.Id
+        //            });
+        //        }
+        //        else
+        //        {
+        //            //ModelState.AddModelError("errorText", "Invalid login or password");
+        //            return BadRequest(new {errorText = "Invalid login or password" });
+        //        }
+        //    }
+        //    return View(model);
+        //}
         private async Task<ClaimsIdentity> GetIdentity(string email, string password)
         {
             var user = await userManager.FindByEmailAsync(email);

@@ -48,7 +48,7 @@ form {
 }
 
 
-[type='password'], [type='username'], 
+/* [type='password'], [type='username'], 
   [type='number'], [type='date'], 
   [type="text"], [type="email"]  {
   padding: 12px 20px;
@@ -61,8 +61,8 @@ form {
   width: 100%;
   border-radius: 30px;
   transition: border-color calc(var(--transition, 0.2) * 1s) ease;
-}
-[type='number']:valid, [type="text"]:valid, [type="email"]:valid{
+} */
+/* [type='number']:valid, [type="text"]:valid, [type="email"]:valid{
   --accent: #5f0;
 } 
 [type='date']:valid{
@@ -76,12 +76,16 @@ form {
 }
 [type='number'].invalid{
   border: rgba(255,43,0,0.5) 3px solid;
-}
+} */
+
+
 /* [type='password']:invalid, [type='username']:invalid, 
       [type='date']:invalid, [type="number"]:invalid, 
       [type="text"]:invalid, [type="email"]:invalid{
   --accent: rgba(255,43,0,0.5);
 } */
+
+/* 
 [type='password']:-moz-placeholder-shown, [type='username']:-moz-placeholder-shown, 
       [type='date']:-moz-placeholder-shown, [type="number"]:-moz-placeholder-shown,
       [type="text"]:-moz-placeholder-shown, [type="email"]:-moz-placeholder-shown{
@@ -96,7 +100,7 @@ form {
       [type="date"]:placeholder-shown , [type="number"]:placeholder-shown, 
       [type="text"]:placeholder-shown, [type="email"]:placeholder-shown {
   --accent: #fff;
-}
+} */
 .app {
   height: 100vh;
   width: 100vw;
@@ -111,13 +115,13 @@ form {
   transform: scale(var(--scale));
   transition: transform calc(var(--transition, 0.2) * 1s) ease;
 }
-[for='password'], [for='username'],
+/* [for='password'], [for='username'],
 #login {
   height: 0;
   width: 0;
   transform: scale(0);
   position: absolute;
-}
+} */
 .logout-button {
     border-radius: 30px;
   --size: 52;
@@ -358,7 +362,7 @@ form {
 #login:checked ~ .app {
   --scale: 1;
 }
-[type='password']:valid ~ #login,
+/* [type='password']:valid ~ #login,
 [type='password']:valid ~ [for='login'] {
   visibility: visible;
 }
@@ -401,7 +405,7 @@ form {
 [for='login'],
 .logout-message {
   visibility: hidden;
-}
+} */
 .app {
   --scale: 0;
 }

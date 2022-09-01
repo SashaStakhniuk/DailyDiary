@@ -7,11 +7,15 @@ namespace DailyDiary.Models.ViewModels
 {
     public class StudyPlanViewModel
     {
-        public string Title { get; set; }
+        public string PlanTitle { get; set; }
         public int Semester { get; set; }
-        public int StudyYearId { get; set; }
-        public Boolean CurrentStudyPlan { get; set; }
-        public List<int> Subjects { get; set; }
-        public List<int> ListHouts { get; set; }
+        public string StudyYear { get; set; }
+        public string YearOfStudy { get; set; }
+        public List<SubjectsToAdd> SubjectsToAdd { get; set; }
+    }
+    public class SubjectsToAdd
+    {
+        public string SubjectId { get; set; }
+        public string Hours { get; set; }
     }
 }

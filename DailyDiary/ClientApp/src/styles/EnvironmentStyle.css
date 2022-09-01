@@ -1,0 +1,557 @@
+/* @import url('Colors.css');
+
+.flex-container {
+    padding:3%;
+    width: 100%;
+    display: flex;
+    flex-direction: row; 
+    flex-wrap: nowrap;
+  }
+  
+  .first {
+    flex-grow: 1;
+  }
+  
+  .second {
+    position:relative;
+    margin-left: 10px;
+    flex-grow: 11;
+  }
+
+
+.mainExample{
+  position:absolute;
+  left:55px;
+  top:0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--examplePageBackgroundColor);
+  color:var(--examplePageTextColor);
+  padding: 50px;
+  z-index:0;
+}
+
+.topExample{
+    display: flex;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.imgExample{
+    width: 100%;
+    height: 100%;
+}
+.myImgExample{
+    width: 60%; 
+    height: 60%;
+}
+
+.topExample .infoExample{
+    display: flex;
+    flex-direction: column;
+}
+.topExample .infoExample p{
+    line-height: 1.5;
+}
+.myH1{
+    font-size: 50px;
+    font-weight: lighter;
+}
+
+
+.bottomExample{
+    display: flex;
+    justify-content: space-between;
+}
+
+.bottomExample .leftExample{
+    width: 500px;
+}
+.bottomExample .leftExample p{
+    margin-bottom: 20px;
+    line-height: 1.5;
+    font-size: 16px;
+}
+
+
+.containerExample{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-gap: 1rem;
+    margin: 20px ;
+}
+
+ 
+
+.containerExample .skillExample{
+    width :         200px;
+    cursor:          pointer;
+    transition:      ease-in 0.2s;
+    display:         flex;
+    flex-direction:  column;
+    text-align:      center;
+    align-items:     center;
+    justify-content: center;
+    border-radius:   20px;
+    background-color: var(--exampleButtonsBackgroundColor);
+}
+
+.containerExample .skillExample:hover{
+    box-shadow:       0px 0px 0px;
+    background-color: var(--exampleButtonsHoverColor);
+}
+
+.containerExample .skillExample i{
+    font-size:     40px;
+    margin-bottom: 10px;
+    color:        gray;
+    transition:    all ease-in 0.5s;
+}
+.containerExample .skillExample p{
+  color:var(--exampleButtonsTextColor);
+}
+.containerExample .skillExample:hover i{
+    color: black;
+}
+
+
+
+.navbody
+{
+  margin:0px;
+  padding:0px;
+	font-family: "Open Sans", arial;
+}
+
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
+
+.myLogo{
+  width: 100%;
+}
+
+.mySettings {
+  
+  height:73px; 
+  float:left;
+  background:url( https://s3.postimg.org/bqfooag4z/startific.jpg);
+  background-repeat:no-repeat;
+  width:250px;
+  margin:0px;
+ text-align: center;
+font-size:20px;
+font-family: 'Strait', sans-serif;
+
+}
+
+
+
+
+
+
+.myScrollbar
+{
+
+height: 90%;
+width: 100%;
+overflow-y: hidden;
+overflow-x: hidden;
+}
+
+.myScrollbar:hover
+{
+
+height: 90%;
+width: 100%;
+overflow-y: scroll;
+overflow-x: hidden;
+}
+
+
+
+
+#style-1::-webkit-myScrollbar-track
+{
+border-radius: 2px;
+}
+
+#style-1::-webkit-myScrollbar
+{
+width: 5px;
+background-color: #F7F7F7;
+}
+
+#style-1::-webkit-myScrollbar-thumb
+{
+border-radius: 10px;
+-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+background-color: #BFBFBF;
+}
+
+
+
+
+.fa-lg {
+font-size: 1em;
+  
+}
+.fa {
+position: relative;
+display: table-cell;
+width: 55px;
+height: 36px;
+text-align: center;
+top:12px; 
+font-size:20px;
+color:var(--exampleIconsColor);
+}
+
+
+
+.myMain-menu:hover, .myNav.myMain-menu.expanded {
+width:250px;
+overflow:hidden;
+opacity:1;
+}
+
+.myMain-menu {
+
+background:#F7F7F7;
+height:100%;
+width:55px;
+overflow:hidden;
+-webkit-transition:width .2s linear;
+transition:width .2s linear;
+-webkit-transform:translateZ(0) scale(1,1);
+box-shadow: 1px 0 15px rgba(0, 0, 0, 0.07);
+  opacity:1;
+  z-index: 100;
+}
+
+.myMain-menu>ul {
+margin:7px 0;
+
+}
+
+.myMain-menu li {
+position:relative;
+display:block;
+width:250px;
+  
+
+
+}
+
+.myMain-menu li>a {
+position:relative;
+width:255px;
+display:table;
+border-collapse:collapse;
+border-spacing:0;
+color:#8a8a8a;
+font-size: 13px;
+text-decoration:none;
+-webkit-transform:translateZ(0) scale(1,1);
+-webkit-transition:all .14s linear;
+transition:all .14s linear;
+font-family: 'Strait', sans-serif;
+border-top:1px solid #f2f2f2;
+
+text-shadow: 1px 1px 1px  #fff;  
+}
+
+
+
+.myMain-menu .nav-icon {
+  
+position:relative;
+display:table-cell;
+width:55px;
+height:36px;
+text-align:center;
+vertical-align:middle;
+font-size:18px;
+
+}
+
+.myMain-menu .myNav-text  {
+   
+position:relative;
+display:table-cell;
+vertical-align:middle;
+width:190px;
+font-family: 'Titillium Web', sans-serif;
+}
+
+.myMain-menu .share {
+}
+
+
+
+.myMain-menu .fb-like {
+
+left: 180px;
+position:absolute;
+top: 15px;
+}
+
+.myMain-menu>ul.myLogout {
+position:absolute;
+left:0;
+bottom:0;
+  
+}
+#ulMenuSelection{
+  background-color:var(--examplePageNavigationMenuColor);
+}
+.no-touch .scrollable.hover {
+overflow-y:hidden;
+
+}
+
+.no-touch .scrollable.hover:hover {
+overflow-y:auto;
+overflow:visible;
+  
+}
+
+
+
+
+.mySettings:hover, .mySettings:focus {   
+  background:url( https://s17.postimg.org/74cl7s05b/logo_hover.jpg);
+  -webkit-transition: all 0.2s ease-in-out, width 0, height 0, top 0, left 0;
+-moz-transition: all 0.2s ease-in-out, width 0, height 0, top 0, left 0;
+-o-transition: all 0.2s ease-in-out, width 0, height 0, top 0, left 0;
+transition: all 0.2s ease-in-out, width 0, height 0, top 0, left 0; 
+}
+
+.mySettings:active, .mySettings:focus {   
+  background:url( https://s3.postimg.org/bqfooag4z/startific.jpg);
+  -webkit-transition: all 0.1s ease-in-out, width 0, height 0, top 0, left 0;
+-moz-transition: all 0.1s ease-in-out, width 0, height 0, top 0, left 0;
+-o-transition: all 0.1s ease-in-out, width 0, height 0, top 0, left 0;
+transition: all 0.1s ease-in-out, width 0, height 0, top 0, left 0; 
+}
+
+
+a:hover,a:focus {
+text-decoration:none;
+border-left:0px solid #F7F7F7;
+
+
+
+}
+
+.myNav {
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+-o-user-select:none;
+user-select:none;
+  
+}
+
+.myNav ul, .myNav li {
+outline:0;
+margin:0;
+padding:0;
+text-transform: uppercase;
+}
+
+
+
+
+.myMain-menu li:hover>a,.myNav.myMain-menu li.active>a,.dropdown-menu>li>a:hover,.dropdown-menu>li>a:focus,.dropdown-menu>.active>a,.dropdown-menu>.active>a:hover,.dropdown-menu>.active>a:focus,.no-touch .dashboard-page .myNav.dashboard-menu ul li:hover a,.dashboard-page .myNav.dashboard-menu ul li.active a {
+color:#fff;
+background-color:#00bbbb;
+text-shadow: 0px 0px 0px; 
+}
+.area {
+float: left;
+background: #e2e2e2;
+width: 100%;
+height: 100%;
+}
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Titillium WebLight'), local('TitilliumWeb-Light'), url(http://themes.googleusercontent.com/static/fonts/titilliumweb/v2/anMUvcNT0H1YN4FII8wpr24bNCNEoFTpS2BTjF6FB5E.woff) format('woff');
+}
+
+
+
+@media only screen and (max-width: 1050px) {
+  .containerExample {
+      align-items: center;
+      text-align: center;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 20px;
+  }
+  .bottomExample{
+      display: flex;
+      flex-direction: column;
+  }
+  .bottomExample .leftExample{
+      width: 100%;
+      margin-bottom: 50px;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.flex-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.first{
+  display: flex;
+  justify-content: center;
+}
+.myMain-menu:hover, .myNav.myMain-menu.expanded {
+  width:55px;
+  overflow:hidden;
+  opacity:1;
+  }
+  
+.second {
+  margin-top: 10px;
+}
+  .containerExample {
+      align-items:           center;
+      text-align :           center;
+      grid-template-columns: repeat(2, 1fr);
+  }
+  .containerExample .skillExample{
+      width: 300px;
+      height: 200px;
+  }
+} 
+
+
+.buttonsContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.control-group {
+  display: inline-block;
+  vertical-align: top;
+  background: #fff;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  padding: 30px;
+  width: 300px;
+  height: 100%;
+  margin-top: 10px;
+}
+.control {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  font-size: 18px;
+}
+.control input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+.control__indicator {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background: #e6e6e6;
+}
+.control--radio .control__indicator {
+  border-radius: 50%;
+}
+.control:hover input ~ .control__indicator,
+.control input:focus ~ .control__indicator {
+  background: #ccc;
+}
+.control input:checked ~ .control__indicator {
+  background: #2aa1c0;
+}
+.control:hover input:not([disabled]):checked ~ .control__indicator,
+.control input:checked:focus ~ .control__indicator {
+  background: #0e647d;
+}
+.control input:disabled ~ .control__indicator {
+  background: #e6e6e6;
+  opacity: 0.6;
+  pointer-events: none;
+}
+.control__indicator:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+.control input:checked ~ .control__indicator:after {
+  display: block;
+}
+.control--checkbox .control__indicator:after {
+  left: 8px;
+  top: 4px;
+  width: 3px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.control--checkbox input:disabled ~ .control__indicator:after {
+  border-color: #7b7b7b;
+}
+.control--radio .control__indicator:after {
+  left: 7px;
+  top: 7px;
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+.control--radio input:disabled ~ .control__indicator:after {
+  background: #7b7b7b;
+}
+
+
+
+@media only screen and (max-width: 800px) {
+  .containerExample {
+      align-items:           center;
+      text-align :           center;
+      grid-template-columns: repeat(2, 1fr);
+  }
+  .containerExample .skillExample{
+      width:  250px;
+      height:  150px;
+  }
+  .topExample{
+      display: flex;
+      flex-direction: column;
+  }
+  
+}
+
+@media only screen and (max-width: 700px) {
+  .containerExample {
+      align-items:           center;
+      text-align :           center;
+      grid-template-columns: repeat(1, 1fr);
+  }
+  .containerExample .skillExample{
+      width:  100%;
+      height:  250px;
+  }
+} */

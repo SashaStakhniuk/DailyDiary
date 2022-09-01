@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DailyDiary.Models.ViewModels.StudyPlan;
+using System.Text.Json;
 
 namespace DailyDiary.Controllers.APIControllers
 {
@@ -16,65 +17,97 @@ namespace DailyDiary.Controllers.APIControllers
     [Route("api/[controller]/[action]")]
     public class StudyPlanController : Controller
     {
-        private readonly IdentityContext db;
-        public StudyPlanController(IdentityContext db)
+        private readonly DailyDiaryDatasContext db;
+        public StudyPlanController(DailyDiaryDatasContext db)
         {
             this.db = db;
         }
-
+        [HttpGet]
+        public async Task<ActionResult<StudyYear>> GetCurrentStudyYear()
+        {
+            var studyYear = await db.StudyYears.Where(x => x.StartYear.Value.Year.ToString() == DateTime.Now.Year.ToString()).FirstOrDefaultAsync();
+            if (studyYear != null)
+            {
+                return studyYear;
+            }
+            return NotFound();
+        }
+        //[HttpPost]
+        //public async Task<ActionResult<Boolean>> Create(StudyPlanViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var stYear = await db.StudyPlans.FirstOrDefaultAsync(x => x.Title == model.Title && x.Id == model.StudyYearId);
+        //        if (stYear == null)
+        //        {
+        //            DM.StudyYear studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.Id == model.StudyYearId);
+        //            StudyPlan studyPlan = new StudyPlan
+        //            {
+        //                Title = model.Title,
+        //                Semester = model.Semester,
+        //                CurrentStudyPlan = model.CurrentStudyPlan,
+        //            };
+        //            if (model.CurrentStudyPlan)
+        //            {
+        //                foreach (var sp in db.StudyPlans)
+        //                {
+        //                    if (sp.Title != studyPlan.Title)
+        //                    {
+        //                        sp.CurrentStudyPlan = false;
+        //                    }
+        //                }
+        //            }
+        //            for (int i = 0; i < model.Subjects.Count; i++)
+        //            {
+        //                for (int j = 0; j < model.ListHouts.Count; j++)
+        //                {
+        //                    if (i == j)
+        //                    {
+        //                        Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.Subjects[i]);
+        //                        SubjectsStudyPlan subjectsStudyPlan = new SubjectsStudyPlan
+        //                        {
+        //                            Subject = subject,
+        //                            StudyPlan = studyPlan,
+        //                            Hours = model.ListHouts[i]
+        //                        };
+        //                        db.SubjectsStudyPlans.Add(subjectsStudyPlan);
+        //                        studyPlan.SubjectsStudyPlans.Add(subjectsStudyPlan);
+        //                    }
+        //                }
+        //            }
+        //            StudyYearStudyPlan studyYearStudyPlan = new StudyYearStudyPlan
+        //            {
+        //                StudyPlan = studyPlan,
+        //                StudyYear = studyYear,
+        //            };
+        //            db.StudyPlans.Add(studyPlan);
+        //            db.StudyYearStudyPlans.Add(studyYearStudyPlan);
+        //            await db.SaveChangesAsync();
+        //            return Ok(true);
+        //        }
+        //    }
+        //    return BadRequest();
+        //}
         [HttpPost]
         public async Task<ActionResult<Boolean>> Create(StudyPlanViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var stYear = await db.StudyPlans.FirstOrDefaultAsync(x => x.Title == model.Title && x.Id == model.StudyYearId);
-                if (stYear == null)
-                {
-                    DM.StudyYear studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.Id == model.StudyYearId);
-                    StudyPlan studyPlan = new StudyPlan
-                    {
-                        Title = model.Title,
-                        Semester = model.Semester,
-                        CurrentStudyPlan = model.CurrentStudyPlan,
-                    };
-                    if (model.CurrentStudyPlan)
-                    {
-                        foreach (var sp in db.StudyPlans)
-                        {
-                            if (sp.Title != studyPlan.Title)
-                            {
-                                sp.CurrentStudyPlan = false;
-                            }
-                        }
-                    }
-                    for (int i = 0; i < model.Subjects.Count; i++)
-                    {
-                        for (int j = 0; j < model.ListHouts.Count; j++)
-                        {
-                            if (i == j)
-                            {
-                                Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.Subjects[i]);
-                                SubjectsStudyPlan subjectsStudyPlan = new SubjectsStudyPlan
-                                {
-                                    Subject = subject,
-                                    StudyPlan = studyPlan,
-                                    Hours = model.ListHouts[i]
-                                };
-                                db.SubjectsStudyPlans.Add(subjectsStudyPlan);
-                                studyPlan.SubjectsStudyPlans.Add(subjectsStudyPlan);
-                            }
-                        }
-                    }
-                    StudyYearStudyPlan studyYearStudyPlan = new StudyYearStudyPlan
-                    {
-                        StudyPlan = studyPlan,
-                        StudyYear = studyYear,
-                    };
-                    db.StudyPlans.Add(studyPlan);
-                    db.StudyYearStudyPlans.Add(studyYearStudyPlan);
-                    await db.SaveChangesAsync();
-                    return Ok(true);
-                }
+                //StudyPlan studyPlanToAdd;
+                //studyPlanToAdd = new StudyPlan {
+                //    Title = model.PlanTitle,
+                //    Semester=model.Semester,
+
+                //};
+
+                string yearOfStudy = model.YearOfStudy;
+                string studyYear = model.StudyYear;
+                int semester = model.Semester;
+                string planTitle = model.PlanTitle;
+                List<SubjectsToAdd> subjectsToAdd = model.SubjectsToAdd;
+                byte[] jsonUtf8Bytes = JsonSerializer.SerializeToUtf8Bytes(model);
+
+
             }
             return BadRequest();
         }
@@ -244,10 +277,10 @@ namespace DailyDiary.Controllers.APIControllers
 
                     model = new StudyPlanViewModel
                     {
-                        Semester = studyPlan.Semester,
-                        Title = studyPlan.Title,
-                        Subjects = subjectsId,
-                        ListHouts = hours
+                        //Semester = studyPlan.Semester,
+                        //Title = studyPlan.Title,
+                        //Subjects = subjectsId,
+                        //ListHouts = hours
                     };
 
                     return Ok(model);

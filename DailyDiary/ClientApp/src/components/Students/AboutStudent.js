@@ -1,7 +1,7 @@
 // import Header from '../Header'
 import React from 'react';
-// import '../../styles/App.css'
-// import '../../styles/AboutStudentPage.css'
+ //import '../../styles/App.css'
+ //import '../../styles/AboutStudentPage.css'
 import HomeworkClassworkView from '../GeneralComponents/HomeworkClassworkView';
 // import { render } from 'pug';
  import NavigationBar from '../NavigationBar'
@@ -86,9 +86,9 @@ class AboutStudent extends React.Component {
             <div className="info">
                 <h1>Personal Details</h1>
                 <p>
-                    <strong>Name: </strong>Amine
+                    <strong>Name: </strong>Some name
                      <br/>
-                    <strong>Date of birth: </strong>25.08.
+                    <strong>Date of birth: </strong>25.08.2000
                      <br/>
                     <strong>Work: </strong>Technicien Superieur En Electricite Industriel
                      <br/>

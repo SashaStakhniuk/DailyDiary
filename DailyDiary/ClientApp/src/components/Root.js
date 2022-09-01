@@ -35,6 +35,8 @@ import EditStudyPlan from './StudyPlan/EditStudyPlan'
 import Student from './Students/Student.js';
 import AboutStudent from './Students/AboutStudent.js';
 import ReduxTesting from './ReduxTesting.js';
+import ColorPicker from './EnvironmentStyle.js';
+
 import Header from './Header'
 const Root = () => {
 
@@ -165,6 +167,7 @@ const Root = () => {
                     <Route exact path="/children-login"><LoginChildrens/></Route>
 
                     <Route exact path="/admin"><Admin/></Route>
+                    <Route exact path="/admin/new-student"><CreateNewStudent/></Route>
                     <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route>
                     <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route>
                     <Route exact path="/admin/edit-study-plan/:id"><EditStudyPlan/></Route>
@@ -198,6 +201,7 @@ const Root = () => {
                     <Route exact path="/student/feedback/:id" ><Feedback /></Route>
                     <Route exact path="/student/news-page/:id" ><NewsStudentPage /></Route>
                     <Route exact path="/redux-testing" ><ReduxTesting /></Route>
+                    <Route exact path="/environment-style" ><ColorPicker /></Route>
 
                     <Route path='*' exact={true}><NotFound/></Route>
                 </Switch>

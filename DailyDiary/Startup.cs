@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,22 +26,37 @@ namespace DailyDiary
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityContext>();
+            var dailyDiaryDatasConfiguration = Configuration.GetConnectionString("DailyDiaryDatas");
+            services.AddDbContext<DailyDiaryDatasContext>(options => options.UseSqlServer(dailyDiaryDatasConfiguration));
 
             var identityConfiguration = Configuration.GetConnectionString("DailyDiaryUsers");
             services.AddDbContext<IdentityContext>(options => options.UseSqlServer(identityConfiguration));
 
-            var dailyDiaryDatasConfiguration = Configuration.GetConnectionString("DailyDiaryDatas");
-            services.AddDbContext<DailyDiaryDatasContext>(options => options.UseSqlServer(dailyDiaryDatasConfiguration));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
 
+            //services.AddIdentityCore<User>()
+            //.AddRoles<IdentityRole>()
+            //.AddEntityFrameworkStores<IdentityContext>()
+            //.AddSignInManager()
+            //.AddTokenProvider(TokenOptions.DefaultProvider, typeof(DataProtectorTokenProvider<User>))
+            //.AddTokenProvider(TokenOptions.DefaultEmailProvider, typeof(EmailTokenProvider<User>))
+            //.AddTokenProvider(TokenOptions.DefaultPhoneProvider, typeof(PhoneNumberTokenProvider<User>))
+            //.AddTokenProvider(TokenOptions.DefaultAuthenticatorProvider, typeof(AuthenticatorTokenProvider<User>));
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.User.AllowedUserNameCharacters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%^&*()=-._@+";
+            });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = new PathString("/Account/Login");
-                    options.AccessDeniedPath = new PathString("/Account/Login");
+                .AddCookie(
+                //options =>
+                //{
+                //    options.LoginPath = new PathString("/Account/Login");
+                //    options.AccessDeniedPath = new PathString("/Account/Login");
 
-                });
+                //}
+                );
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
