@@ -1,10 +1,14 @@
 import React from "react"
-import NavigationBar from '../NavigationBar'
+import AdminNavigationBar from '../AdminNavigationBar'
 import '../../styles/Students.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function CreateNewTeacher(){
     
+    useEffect(() => {
+        getSubjects()
+    }, [])
+
     const [dataSpecialty, setDayaSpecialty] = useState(["Teacher", "Pro Teacher"])
     const [dataCategory, setDataCategory] = useState(["Specialist", "First category specialist"])
     const [dataDegree, setDatDegree] = useState(["Master", "Profesional PHP"])
@@ -24,8 +28,28 @@ function CreateNewTeacher(){
     const [email, setEmail] = useState('Empty')
     const [base64URL, setBase64URL] = useState("")
     const [id, setId] = useState(0)
+    const [subjectsdate, setSubjects] = useState([])
+
+    async function getSubjects(){
+        try
+        {
+            const response = await fetch(`https://localhost:44364/api/subject/get`)
+            const data = await response.json()
+            if(response.ok === true){
+                setSubjects(data)
+            }
+        }catch{}
+    }
     
     async function add(){
+        var subjectsId = []
+        subjectsdate.forEach(subj => {
+            var checkbox = document.getElementById(`ch_${subj.id}`)            
+            if(checkbox.checked){
+                var subjectId = Number(checkbox.value)
+                subjectsId.push(subjectId); 
+            }
+        })
         var Specialty = document.getElementById('dataSpecialty').value
         var Category = document.getElementById('dataCategory').value
         var Degree = document.getElementById('dataDegree').value
@@ -64,7 +88,8 @@ function CreateNewTeacher(){
                 salary,
                 base64URL,
                 rate,
-                email
+                email, 
+                subjectsId
             })
         })
         const data = await response.json()
@@ -135,7 +160,6 @@ function CreateNewTeacher(){
             let reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => {
-
             baseURL = reader.result;
             resolve(baseURL);
             };
@@ -147,9 +171,6 @@ function CreateNewTeacher(){
         getBase64(file)
             .then(result => {
                 file["base64"] = result;
-
-                console.log("Url: " + file["base64"])
-                
                 setBase64URL(result)
             })
             .catch(err => {
@@ -160,7 +181,7 @@ function CreateNewTeacher(){
     return(
         <>
             <div key={id} className="edit__container">
-                <NavigationBar/>
+                <AdminNavigationBar/>
                 <h2 style={{ position: "absolute", top: 120}} className="title-edit">Create new Teacher</h2>
                 <form onSubmit={e => onSubmit(e)} className='form-edit'>
                     <div className="container1">
@@ -188,7 +209,31 @@ function CreateNewTeacher(){
                         <div className="mb-3">
                             <input id="username" value={email} onChange={e => onChangeEmail(e)} type="email" placeholder="Enter teacher email" title="" />
                         </div>
-                        
+                        <div className="mb-3">
+                            <div className="accordion-item">
+                                <h2 className="accordion-header" id="flush-headingOne">
+                                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Subgects
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <div className='w-100 d-flex flex-column align-items-center justify-content-start' style={{ margin: '14px 20px' }}>
+                                        {subjectsdate.map((subject, i) => {
+                                            return(
+                                                <>
+                                                    <div style={{ justifyContent: 'flex-start' }} className="d-flex flex-column">
+                                                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }} > 
+                                                            <input style={{ marginRight: '5px' }} type="checkbox" id={`ch_${subject.id}`} value={subject.id} name="scales" placeholder={`hours for ${subject.title}`}/>
+                                                            <span>{subject.title}</span>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                    
                     <div className="container2">

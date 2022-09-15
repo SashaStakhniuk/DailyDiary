@@ -58,5 +58,6 @@ namespace DailyDiary.Models.ViewModels.Teacher
         [RegularExpression(@"^([\+]?380[-]?|[0])?[1-9][0-9]{8}$", ErrorMessage = "Check and enter phone number correctly")]
         public string PhoneNumber { get; set; }
         public string Base64URL { get; set; }
+        public List<int> SubjectsId { get; set; }
     }
 }

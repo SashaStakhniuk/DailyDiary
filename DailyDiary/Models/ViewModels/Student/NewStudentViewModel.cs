@@ -19,7 +19,7 @@ namespace DailyDiary.Models.ViewModels.Student
         public DateTime Birthday { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "AdmissionDate field can't be empty")]
         public DateTime AdmissionDate { get; set; }
-        [Required]
+ 
         public int Age { get; set; }
         [Required]
         [Range(minimum:1,maximum:int.MaxValue, ErrorMessage = "Group wasn't appointed")]

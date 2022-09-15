@@ -1,5 +1,5 @@
 import React from "react"
-import "../styles/Navigation.css"
+import "../styles/Navigations/NavigatinBars.css"
 
 function NavigationBar()
 {
@@ -79,7 +79,6 @@ function NavigationBar()
   }
 
     return (
-     
       <div className="menu__container" style={{backgroundColor: 'gray'}}>        
         <div id="font_all_page" className="font_all_page"></div>
        

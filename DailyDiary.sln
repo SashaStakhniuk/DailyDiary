@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDiary", "DailyDiary\DailyDiary.csproj", "{64DB046F-A4E1-42E5-BF24-A05D001DA200}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DailyDiaryBotService", "DailyDiary_Bot\DailyDiaryBotService.csproj", "{AE1E746B-41E1-44DE-89AD-847A5251FA9F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBotBase", "..\..\Documents\TelegramBotFramework\TelegramBotBase\TelegramBotBase.csproj", "{B4AF96B5-E42B-4753-A4F3-6D71222A67D0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDTelegram_Bot", "..\..\Documents\TelegramBotFramework\TelegramBotBase.Test\DDTelegram_Bot.csproj", "{B9C88912-5983-42B8-ACF9-EA520556E2E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{64DB046F-A4E1-42E5-BF24-A05D001DA200}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64DB046F-A4E1-42E5-BF24-A05D001DA200}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64DB046F-A4E1-42E5-BF24-A05D001DA200}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE1E746B-41E1-44DE-89AD-847A5251FA9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE1E746B-41E1-44DE-89AD-847A5251FA9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE1E746B-41E1-44DE-89AD-847A5251FA9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE1E746B-41E1-44DE-89AD-847A5251FA9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4AF96B5-E42B-4753-A4F3-6D71222A67D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4AF96B5-E42B-4753-A4F3-6D71222A67D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4AF96B5-E42B-4753-A4F3-6D71222A67D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4AF96B5-E42B-4753-A4F3-6D71222A67D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9C88912-5983-42B8-ACF9-EA520556E2E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9C88912-5983-42B8-ACF9-EA520556E2E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9C88912-5983-42B8-ACF9-EA520556E2E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9C88912-5983-42B8-ACF9-EA520556E2E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import NavigationBar from '../NavigationBar'
+import AdminNavigationBar from '../AdminNavigationBar'
 
 function CreateNewGroup(){
     
@@ -239,7 +239,7 @@ function CreateNewGroup(){
     return(
         <>
         <div className="edit__container">
-                <NavigationBar/>
+                <AdminNavigationBar />
                 <h2 style={{ position: "absolute", top: 120}} className="title-edit">Create new Group</h2>
                 <form onSubmit={e => onSubmit(e)} className='form-edit d-flex flex-column'>
                     <div className="mb-3">

@@ -1,16 +1,23 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+<<<<<<< HEAD
 using DailyDiary.Models.DbModels;
 using DailyDiary.Models.IntermediateModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+=======
+>>>>>>> refs/remotes/origin/main
 
 namespace DailyDiary.Models
 {
-    public class InitialIdentity
+    public static class InitialIdentity
     {
         private static readonly string _mainAdminRoleName = "MainAdmin";
         private static readonly string _mainAdminPassword = "Qwerty1!";
@@ -22,6 +29,7 @@ namespace DailyDiary.Models
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
             var datasContext = serviceProvider.GetRequiredService<DailyDiaryDatasContext>();
 
+<<<<<<< HEAD
             try
             {
                 Subject csSubject = new Subject { Title = "C#", Priority = 1 };
@@ -63,6 +71,33 @@ namespace DailyDiary.Models
                     users.Add(admin1);
                     users.Add(admin2);
                     foreach (var user in users)
+=======
+
+            var rolesExist = await roleManager.Roles.ToListAsync();
+            if (rolesExist.Count() == 0)
+            {
+                await roleManager.CreateAsync(new IdentityRole(_mainAdminRoleName));
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await roleManager.CreateAsync(new IdentityRole("Teacher"));
+                await roleManager.CreateAsync(new IdentityRole("Student"));
+                //await roleManager.CreateAsync(new IdentityRole("User"));
+                await roleManager.CreateAsync(new IdentityRole("Parrent"));
+            }
+            if (!userManager.Users.Any())
+            {
+                //var roles = await roleManager.Roles.ToListAsync();
+                List<User> users = new List<User>();
+                // User admin1 = new User { UserName = "Denis",LastName = "Rachkovskiy"};
+                // User admin2 = new User { UserName = "Sasha",LastName="Stakhniuk", Email = "sstahnuk@gmail.com" };
+                User admin1 = new User { UserName = "DenisLogin" };
+                User admin2 = new User { UserName = "SashaLogin", Email = "sstahnuk@gmail.com" };
+                users.Add(admin1);
+                users.Add(admin2);
+                foreach (var user in users)
+                {
+                    var result = await userManager.CreateAsync(user, _mainAdminPassword);
+                    if (result.Succeeded)
+>>>>>>> refs/remotes/origin/main
                     {
                         var result = await userManager.CreateAsync(user, _mainAdminPassword);
                         if (result.Succeeded)
