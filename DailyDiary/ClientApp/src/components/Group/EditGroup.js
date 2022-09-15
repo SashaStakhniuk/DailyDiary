@@ -39,13 +39,7 @@ function EditGroup(){
             },
             body: JSON.stringify({
                 groupId,
-                title,
-<<<<<<< HEAD
-=======
-                // semester,
-                // subjsId,
-                // hours
->>>>>>> b0310ccad75e70fc2b67db44dc495faf8a0ddaf6
+                title
             })
         })
         if(response.ok === true){

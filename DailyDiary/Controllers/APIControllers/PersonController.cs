@@ -27,9 +27,9 @@ namespace DailyDiary.Controllers.APIControllers
             this.db = context;
         }
         [HttpGet("details")]
-        public async Task<ActionResult<PersonToEditViewModel>> GetDatasIfPersonWasInRoleErlier(int personId, string role)
+        public async Task<ActionResult<PersonViewModel>> GetDatasIfPersonWasInRoleErlier(int personId, string role)
         {
-            PersonToEditViewModel personDatas = null;
+            PersonViewModel personDatas = null;
 
             Person person = await db.Persons.FirstOrDefaultAsync(x => x.Id == personId);
             if (person == null)
@@ -68,7 +68,7 @@ namespace DailyDiary.Controllers.APIControllers
             }
             if (teacher != null)
             {
-                personDatas = new PersonToEditViewModel
+                personDatas = new PersonViewModel
                 {
                     Category = teacher.Category,
                     Degree = teacher.Degree,
@@ -79,7 +79,7 @@ namespace DailyDiary.Controllers.APIControllers
             }
             if (student != null)
             {
-                personDatas = new PersonToEditViewModel
+                personDatas = new PersonViewModel
                 {
                     AdmissionDate = student.AdmissionDate,
                     StudentId = student.Id
@@ -112,9 +112,9 @@ namespace DailyDiary.Controllers.APIControllers
             //return Ok(new string[] { user.UserName , user.Id});
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PersonToEditViewModel>>> GetAll()
+        public async Task<ActionResult<IEnumerable<PersonViewModel>>> GetAll()
         {
-            List<PersonToEditViewModel> personToDisplay = new List<PersonToEditViewModel>();
+            List<PersonViewModel> personToDisplay = new List<PersonViewModel>();
             List<Person> persons = await db.Persons.ToListAsync();
             foreach (Person person in persons)
             {
@@ -141,7 +141,7 @@ namespace DailyDiary.Controllers.APIControllers
                                 break;
                         }
                     }
-                    PersonToEditViewModel personToAdd = new PersonToEditViewModel
+                    PersonViewModel personToAdd = new PersonViewModel
                     {
                         PersonId = person.Id,
                         Name = person.Name,
@@ -174,7 +174,7 @@ namespace DailyDiary.Controllers.APIControllers
                     personToDisplay.Add(personToAdd);
                 }
             }
-            //PersonToEditViewModel personsToDisplay = new PersonToEditViewModel();
+            //PersonViewModel personsToDisplay = new PersonViewModel();
             //foreach(Person person in persons)
             //{
             //    personsToDisplay.
@@ -189,7 +189,7 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNew(PersonToAddViewModel model)
+        public async Task<IActionResult> CreateNew(PersonViewModel model)
         {
             try
             {
@@ -325,7 +325,7 @@ namespace DailyDiary.Controllers.APIControllers
             return BadRequest();
         }
         [HttpPut]
-        public async Task<IActionResult> EditPerson(PersonToEditViewModel model)
+        public async Task<IActionResult> EditPerson(PersonViewModel model)
         {
             try
             {

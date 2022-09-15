@@ -53,16 +53,7 @@ function CreateNewStudent(){
                 Birthday,
                 AdmissionDate, 
                 Email,
-<<<<<<< HEAD
                 phoneNumber
-=======
-<<<<<<< HEAD
-=======
-                phoneNumber,
-                yearOfStudy,
-                telegramNick
->>>>>>> b0310ccad75e70fc2b67db44dc495faf8a0ddaf6
->>>>>>> refs/remotes/origin/main
             })
         })
         if(response.ok === true){

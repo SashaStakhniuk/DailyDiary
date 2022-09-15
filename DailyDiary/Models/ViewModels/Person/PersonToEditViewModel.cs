@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DailyDiary.Models.ViewModels
 {
-    public class PersonToEditViewModel
+    public class PersonViewModel
     {
         [MaxLength(45)]
         [Required(ErrorMessage = "Login can't be empty")]
