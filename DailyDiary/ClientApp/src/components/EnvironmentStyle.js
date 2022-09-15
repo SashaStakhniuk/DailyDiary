@@ -44,23 +44,6 @@ class ColorPicker extends React.Component {
           buttonsHoverColor: computedStyle.getPropertyValue('--exampleButtonsHoverColor'),
          })
 
-        //var ulMenuSelection = document.getElementById("ulMenuSelection");
-        //  ulMenuSelection.addEventListener("mouseover", function( event ) {
-        //   // highlight the mouseover target
-        //   event.target.style.border = "1px solid red";
-        //   //reset the color after a short delay
-        //   // setTimeout(function() {
-        //   //   event.target.style.border = "";
-        //   // }, 300);
-        // },false);
-        // ulMenuSelection.addEventListener("mouseout", function( event ) {
-        //   // highlight the mouseover target
-        //   event.target.style.border = "";
-        //   //reset the color after a short delay
-        //   // setTimeout(function() {
-        //   //   event.target.style.border = "";
-        //   // }, 300);
-        // },false);
         const background = document.getElementsByClassName('mainExample');
         Array.from(background).forEach(function(element) {
           element.addEventListener("click", function( event ) {

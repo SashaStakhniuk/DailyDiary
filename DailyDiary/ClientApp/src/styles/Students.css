@@ -335,7 +335,7 @@
 /* ______________________________ */
 
 /* Customize the label (the container) */
-.container {
+/* .container {
     color: #000;
     display: block;
     position: relative;
@@ -348,15 +348,15 @@
     -ms-user-select: none;
     user-select: none;
   }
-  
+   */
   /* Hide the browser's default checkbox */
-  .container input {
+  /* .container input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
     height: 0;
     width: 0;
-  }
+  } */
   
   /* Create a custom checkbox */
   .checkmark {
@@ -374,9 +374,9 @@
   }
   
   /* When the checkbox is checked, add a blue background */
-  .container input:checked ~ .checkmark {
+  /* .container input:checked ~ .checkmark {
     background-color: #2196F3;
-  }
+  } */
   
   /* Create the checkmark/indicator (hidden when not checked) */
   .checkmark:after {
@@ -386,12 +386,12 @@
   }
   
   /* Show the checkmark when checked */
-  .container input:checked ~ .checkmark:after {
+  /* .container input:checked ~ .checkmark:after {
     display: block;
-  }
+  } */
   
   /* Style the checkmark/indicator */
-  .container .checkmark:after {
+  /* .container .checkmark:after {
     left: 9px;
     top: 5px;
     width: 5px;
@@ -401,7 +401,7 @@
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
-  }
+  } */
 
 
 .loader-container{

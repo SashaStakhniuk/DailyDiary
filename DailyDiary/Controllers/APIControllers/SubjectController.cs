@@ -91,7 +91,7 @@ namespace DailyDiary.Controllers.APIControllers
                 var teachers = new List<Teacher>();
                 foreach (var subjectId in subjectTeachersId)
                 {
-                    teachers.Add(await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == subjectId));
+                    teachers.Add(await db.Teachers.FirstOrDefaultAsync(x => x.Id == subjectId));
                 }
                 return Ok(teachers);
             }
@@ -101,15 +101,15 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<int>> GetSubjectId(int id)
         {
-            StudyPlan stydyPlan = null;//await db.StudyPlans.FirstOrDefaultAsync(x => x.GroupId == id);
-            if (stydyPlan != null)
-            {
-                SubjectsStudyPlan subjectsStudyPlan = await db.SubjectsStudyPlans.FirstOrDefaultAsync(x => x.StudyPlanId == stydyPlan.Id);
-                if (subjectsStudyPlan != null)
-                {
-                    return Ok(subjectsStudyPlan.SubjectId);
-                }
-            }
+            //StudyPlan stydyPlan = null;//await db.StudyPlans.FirstOrDefaultAsync(x => x.GroupId == id);
+            //if (stydyPlan != null)
+            //{
+            //    SubjectsStudyPlan subjectsStudyPlan = await db.SubjectsStudyPlans.FirstOrDefaultAsync(x => x.StudyPlanId == stydyPlan.Id);
+            //    if (subjectsStudyPlan != null)
+            //    {
+            //        return Ok(subjectsStudyPlan.SubjectId);
+            //    }
+            //}
 
             return NotFound();
         }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DailyDiary.Models.DbModels;
+using DailyDiary.Models.IntermediateModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,23 +14,35 @@ namespace DailyDiary.Models
         {
             Database.EnsureCreated();
         }
-
-        public virtual DbSet<Student> Students { get; set; }
-        public virtual DbSet<StudentHomework> StudentHomeworks { get; set; }
-        public virtual DbSet<StudentClasswork> StudentClassworks { get; set; }
-        public virtual DbSet<Teacher> Teachers { get; set; }
-        public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; }
-        public virtual DbSet<Group> Groups { get; set; }
-        public virtual DbSet<GroupHomework> GroupHomeworks { get; set; }
-        public virtual DbSet<GroupClasswork> GroupClassworks { get; set; }
-        public virtual DbSet<Subgroup> Subgroups { get; set; }
-        public virtual DbSet<Subject> Subjects { get; set; }
-        public virtual DbSet<StudyYear> StudyYears { get; set; }
+        public virtual DbSet<Person> Persons { get; set; }
+        public virtual DbSet<StudyYear> StudyYears { get; set; } // навчальний рік (2022/2023)
+        public virtual DbSet<YearOfStudy> YearOfStudy { get; set; } // рік навчання (1-11)
         public virtual DbSet<StudyPlan> StudyPlans { get; set; }
-        public virtual DbSet<StudyYearStudyPlan> StudyYearStudyPlans { get; set; }
-        public virtual DbSet<TeacherGroup> TeacherGroups { get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<Subgroup> Subgroups { get; set; }
+        public virtual DbSet<SubgroupBlock> SubgroupBlocks { get; set; }// принципи поділу груп на підгрупи
+        public virtual DbSet<Union> Unions { get; set; }
+        public virtual DbSet<UnionBlock> UnionBlocks { get; set; } // принципи поділу груп одного року навчання на підгрупи
+        public virtual DbSet<UnionsSubgroup> UnionsSubgroups { get; set; }
+        public virtual DbSet<Teacher> Teachers { get; set; } // викладачі
+        public virtual DbSet<Subject> Subjects { get; set; } // предмети
+        public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; } // які предмети можуть вести викладачі
+        public virtual DbSet<Student> Students { get; set; } // студенти
+        public virtual DbSet<Parent> Parents { get; set; } // батьки
+        public virtual DbSet<ParentStudent> ParentStudents { get; set; }
+        public virtual DbSet<StudentsBySubgroup> StudentsBySubgroups { get; set; } // розділення студентів по (групах) підгрупах
+        public virtual DbSet<AuditoryType> AuditoryType { get; set; }
+        public virtual DbSet<Auditory> Auditory { get; set; }
+        public virtual DbSet<LessonType> LessonType { get; set; }
+        public virtual DbSet<TaskType> TaskTypes { get; set; }
+        public virtual DbSet<DbModels.Task> Tasks { get; set; }
+        public virtual DbSet<StudentsWork> StudentsWorks { get; set; }
+        public virtual DbSet<StudyMaterial> StudyMaterials { get; set; }
+        public virtual DbSet<WorkPlan> WorkPlans { get; set; }
+        public virtual DbSet<LessonStudyMaterial> LessonStudyMaterials { get; set; }
+        public virtual DbSet<Shedule> Shedules { get; set; }
+        public virtual DbSet<TeacherSubgroupDistribution> TeacherSubgroupDistributions { get; set; }
         public virtual DbSet<TeacherNews> TeacherNews { get; set; }
-        public virtual DbSet<SubjectsStudyPlan> SubjectsStudyPlans { get; set; }
         public virtual DbSet<StudentNews> StudentNews { get; set; }
         public virtual DbSet<StudentFeedback> StudentFeedback { get; set; }
         public virtual DbSet<News> News { get; set; }
@@ -37,34 +51,70 @@ namespace DailyDiary.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            //  one-to-many Group & Student
+            builder.Entity<AuditoryType>().HasIndex(x => x.AuditoryTypeDescription).IsUnique();
+            builder.Entity<TaskType>().HasIndex(x => x.TaskTypeDescription).IsUnique();
+            builder.Entity<LessonType>().HasIndex(x => x.LessonTypeDescription).IsUnique();
+            //builder.Entity<Subject>().HasIndex(x => x.Title).IsUnique();
 
-            builder.Entity<Group>()
-                .HasMany<Student>(g => g.Students)
-                .WithOne(st => st.Group)
-                .HasForeignKey(st => st.GroupId);
 
-            //  one-to-many StudyYear & Group
+            builder.Entity<User>().HasIndex(x => x.Email).IsUnique();
 
-            builder.Entity<StudyYear>()
-                .HasMany<Group>(sy => sy.Groups)
-                .WithOne(g => g.StudyYear)
-                .HasForeignKey(g => g.StudyYearId);
+            builder.Entity<User>()
+                 .HasOne(p => p.Person)
+                 .WithOne(u => u.User)
+                 .HasForeignKey<Person>(p => p.UserId);
+            //_________________________________________________________________Many-to-Many_______Parents&Students____________________________________->
 
-            // MAny-to-many StudyYear and StudyPlan
+            builder.Entity<ParentStudent>()
+                .HasKey(ps => new { ps.ParentId, ps.StudentId });
+            builder.Entity<ParentStudent>()
+                .HasOne(p => p.Parent)
+                .WithMany(ps => ps.ParentStudents)
+                .HasForeignKey(p => p.ParentId);
+            builder.Entity<ParentStudent>()
+                .HasOne(s => s.Student)
+                .WithMany(ps => ps.ParentStudents)
+                .HasForeignKey(s => s.StudentId);
+            //<-_________________________________________________________________Many-to-Many_______Parents&Students____________________________________
 
-            builder.Entity<StudyYearStudyPlan>()
-                .HasKey(sy => new { sy.StudyYearId, sy.StudyPlanId });
+            //_________________________________________________________________Many-to-Many_______Subroup & Student____________________________________->
 
-            builder.Entity<StudyYearStudyPlan>()
-                .HasOne(sy => sy.StudyYear)
-                .WithMany(sp => sp.StudyYearStudyPlans)
-                .HasForeignKey(sp => sp.StudyYearId);
+            builder.Entity<StudentsBySubgroup>()
+                .HasKey(ss => new { ss.StudentId, ss.SubgroupId });
+            builder.Entity<StudentsBySubgroup>()
+                .HasOne(ss => ss.Student)
+                .WithMany(s => s.StudentsBySubgroups)
+                .HasForeignKey(ss => ss.StudentId);
+            builder.Entity<StudentsBySubgroup>()
+                .HasOne(ss => ss.Subgroup)
+                .WithMany(s => s.StudentsBySubgroups)
+                .HasForeignKey(ss => ss.SubgroupId);
+            //_________________________________________________________________Many-to-Many_______Subroup & Student____________________________________->
+            //_________________________________________________________________Many-to-Many_______Subroup & Unions____________________________________->
+            builder.Entity<UnionsSubgroup>()
+                .HasKey(us => new { us.UnionId, us.SubgroupId });
+            builder.Entity<UnionsSubgroup>()
+                .HasOne(us => us.Union)
+                .WithMany(u => u.UnionsSubgroups)
+                .HasForeignKey(us => us.UnionId);
+            builder.Entity<UnionsSubgroup>()
+                .HasOne(us => us.Subgroup)
+                .WithMany(s => s.UnionsSubgroups)
+                .HasForeignKey(us => us.SubgroupId);
+            //_________________________________________________________________Many-to-Many_______Subroup & Unions____________________________________->
 
-            builder.Entity<StudyYearStudyPlan>()
-                .HasOne(sp => sp.StudyPlan)
-                .WithMany(sy => sy.StudyYearStudyPlans)
-                .HasForeignKey(sp => sp.StudyPlanId);
+            //_________________________________________________________________Many-to-Many_______WorkPlan & StudyMaterial____________________________________->
+            builder.Entity<LessonStudyMaterial>()
+                .HasKey(lsm => new { lsm.StudyMaterialId, lsm.WorkPlanId });
+            builder.Entity<LessonStudyMaterial>()
+                .HasOne(lsm => lsm.StudyMaterial)
+                .WithMany(u => u.LessonStudyMaterials)
+                .HasForeignKey(lsm => lsm.StudyMaterialId);
+            builder.Entity<LessonStudyMaterial>()
+                .HasOne(lsm => lsm.WorkPlan)
+                .WithMany(s => s.LessonStudyMaterials)
+                .HasForeignKey(lsm => lsm.WorkPlanId);
+            //_________________________________________________________________Many-to-Many_______WorkPlan & StudyMaterial____________________________________->
 
 
             builder.Entity<StudentFeedback>()
@@ -113,7 +163,9 @@ namespace DailyDiary.Models
             //_________________________________________________________________Many-to-Many_______Teachers&Subjects____________________________________->
 
             builder.Entity<TeacherSubject>()
-                .HasKey(ts => new { ts.TeacherId, ts.SubjectId });
+                                //.HasKey(ts => new { ts.Id, ts.TeacherId, ts.SubjectId });
+              .HasKey(ts => new { ts.TeacherId, ts.SubjectId });
+
             builder.Entity<TeacherSubject>()
                 .HasOne(t => t.Teacher)
                 .WithMany(ts => ts.TeacherSubjects)
@@ -123,58 +175,7 @@ namespace DailyDiary.Models
                 .WithMany(ts => ts.TeacherSubjects)
                 .HasForeignKey(s => s.SubjectId);
             //<-_________________________________________________________________Many-to-Many_______Teachers&Subjects____________________________________
-            //_________________________________________________________________Many-to-Many_______Teachers&Groups____________________________________->
-            builder.Entity<TeacherGroup>()
-                .HasKey(tg => new { tg.TeacherId, tg.GroupId });
-            builder.Entity<TeacherGroup>()
-                .HasOne(t => t.Teacher)
-                .WithMany(tg => tg.TeacherGroups)
-                .HasForeignKey(t => t.TeacherId);
-            builder.Entity<TeacherGroup>()
-                .HasOne(s => s.Group)
-                .WithMany(tg => tg.TeacherGroups)
-                .HasForeignKey(s => s.GroupId);
-            //<-_________________________________________________________________Many-to-Many_______Teachers&Groups____________________________________
-            //_________________________________________________________________Many-to-Many_______Groups&Subjects____________________________________->
-            builder.Entity<SubjectsStudyPlan>()
-                .HasKey(ssp => new { ssp.StudyPlanId, ssp.SubjectId });
-            builder.Entity<SubjectsStudyPlan>()
-                .HasOne(s => s.Subject)
-                .WithMany(ssp => ssp.SubjectsStudyPlans)
-                .HasForeignKey(s => s.SubjectId);
-            builder.Entity<SubjectsStudyPlan>()
-                .HasOne(s => s.StudyPlan)
-                .WithMany(ssp => ssp.SubjectsStudyPlans)
-                .HasForeignKey(s => s.StudyPlanId);
-            //<-_________________________________________________________________Many-to-Many_______Groups&Subjects____________________________________
-
-            //_________________________________________________________________Many-to-Many_______ Student&Homework ____________________________________->
-
-            builder.Entity<StudentHomework>()
-                .HasKey(sh => new { sh.GroupHomeworkId, sh.StudentId });
-            builder.Entity<StudentHomework>()
-                .HasOne(gh => gh.GroupHomework)
-                .WithMany(sh => sh.StudentHomeworks)
-                .HasForeignKey(gh => gh.GroupHomeworkId);
-            builder.Entity<StudentHomework>()
-                .HasOne(s => s.Student)
-                .WithMany(sh => sh.StudentHomeworks)
-                .HasForeignKey(s => s.StudentId);
-            //<-_________________________________________________________________Many-to-Many_______ Student&Homework ____________________________________
-            //_________________________________________________________________Many-to-Many_______ Student&Classwork ____________________________________->
-
-            builder.Entity<StudentClasswork>()
-                .HasKey(sc => new { sc.GroupClassworkId, sc.StudentId });
-            builder.Entity<StudentClasswork>()
-                .HasOne(gc => gc.GroupClasswork)
-                .WithMany(sh => sh.StudentClassworks)
-                .HasForeignKey(gc => gc.GroupClassworkId);
-            builder.Entity<StudentClasswork>()
-                .HasOne(s => s.Student)
-                .WithMany(sc => sc.StudentClassworks)
-                .HasForeignKey(s => s.StudentId);
-            //<-_________________________________________________________________Many-to-Many_______ Student&Classwork ____________________________________
-
+           
         }
     }
 }

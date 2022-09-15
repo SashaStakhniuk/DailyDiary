@@ -38,6 +38,9 @@ import ReduxTesting from './ReduxTesting.js';
 import ColorPicker from './EnvironmentStyle.js';
 
 import Header from './Header'
+import TeachersDistribution from './Admin/TeachersDistribution.js';
+import CreateNewPerson from './Admin/CreateNewPerson.js';
+import EditPerson from './Admin/EditPerson.js';
 const Root = () => {
 
     // const [isStudent, setIsStudent] = useState(false)
@@ -167,10 +170,14 @@ const Root = () => {
                     <Route exact path="/children-login"><LoginChildrens/></Route>
 
                     <Route exact path="/admin"><Admin/></Route>
-                    <Route exact path="/admin/new-student"><CreateNewStudent/></Route>
-                    <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route>
-                    <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route>
-                    <Route exact path="/admin/edit-study-plan/:id"><EditStudyPlan/></Route>
+                    <Route exact path="/admin/new-person" component={CreateNewPerson}></Route> {/*додання персони*/}
+                    <Route exact path="/admin/edit-person"><EditPerson/></Route> {/*додання персони*/}
+
+                    <Route exact path="/admin/new-student"><CreateNewStudent/></Route> {/*додання студента*/}
+                    <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route> {/*створення навчального року*/}
+                    <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route> {/*створення навчального плану*/}
+                    <Route exact path="/admin/teachers-distribution"><TeachersDistribution/></Route> {/*розподілення викладачів по групах за предметами*/}
+                    <Route exact path="/admin/edit-study-plan/:id"><EditStudyPlan/></Route> {/*НЕ ПРАЦЮЄ!*/}
 
                     <Route exact path="/admin/groups"><AllGroups/></Route>
                     <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>

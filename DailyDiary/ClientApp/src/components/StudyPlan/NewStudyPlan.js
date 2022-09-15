@@ -20,8 +20,8 @@ class NewStudyPlan extends React.Component{
 
         this.state={
             planTitle:"",
-            semester:0,
-            studyYear:"", // 0-AllYear
+            semester:0, // 0-AllYear
+            studyYear:"", 
             yearOfStudy:0,
             studyPlanSubjects:[], 
             allSubjects:[],
@@ -43,7 +43,9 @@ async componentDidMount(){
             if(response.ok === true){
                 const data = await response.json();
                 console.log(data);
-                 this.setState({studyYear: new Date(data.startYear).getUTCFullYear() +"/"+ new Date(data.finishYear).getUTCFullYear()})
+                //  this.setState({studyYear: new Date(data.startYear).getUTCFullYear() +"/"+ new Date(data.finishYear).getUTCFullYear()})
+                this.setState({studyYear:data})
+
             }
             else{
                // window.alert(data.error);
@@ -68,7 +70,7 @@ async componentDidMount(){
     async create(datasToAdd){
         try
         {
-            const request = await fetch('https://localhost:44364/api/studyplan/create', {
+            const response = await fetch('https://localhost:44364/api/studyplan/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -77,11 +79,15 @@ async componentDidMount(){
                 datasToAdd
             )
         })
-        if(request.ok === true){
+        if(response.ok === true){
             alert("Plan was created");
            // window.location = `/admin/new-study-plan`
         }
         else{
+            console.log(response)
+            let data = await response.json()
+            console.log(data)
+            alert(data.error)
             alert("Something goes wrong. Check data then try again");
         }
         }catch(e) {
@@ -104,7 +110,10 @@ async componentDidMount(){
             let subject = e.target[`subject_${this.idExistingBlocksWithSubjects[i]+""}`];
             let hours = e.target[`hours_${this.idExistingBlocksWithSubjects[i]+""}`];
             if(subject!=null && hours!=null){
-                subjectsToAdd.push({subjectId:subject.value,hours:hours.value});
+                if(subject.value!=0) // якщо ід елементу != 0
+                {
+                        subjectsToAdd.push({subjectId:subject.value,hours:hours.value});
+                }
             }
         }
         const{ planTitle,semester,studyYear,yearOfStudy} = e.target;
@@ -116,16 +125,21 @@ async componentDidMount(){
         // }
         // ,
         // ()=>console.log(JSON.stringify(this.state.studyPlanSubjects)))
-        const datasToSend ={
-            planTitle:planTitle.value,
-            semester:semester.value,
-            studyYear:studyYear.value,
-            yearOfStudy:yearOfStudy.value,
-            subjectsToAdd
+        if(subjectsToAdd.length==0){
+            alert("No one subject was selected");
         }
-        console.log(JSON.stringify(datasToSend))
+        else{
+            const datasToSend ={
+                planTitle:planTitle.value,
+                semester:semester.value,
+                StudyYearId:studyYear.value,
+                yearOfStudy:yearOfStudy.value,
+                subjectsToAdd
+            }
+            console.log(JSON.stringify(datasToSend))
+            await this.create(datasToSend);
+        }
 
-        await this.create(datasToSend);
 }
         onSelectionChange(event){
             this.currentSelectedSubjectId = event.target.value;
@@ -256,8 +270,8 @@ render(){
                     </div> 
                         <div className="col-md-6">
                             <label htmlFor="studyYear" className="form-label">Study year</label>
-                            <select id="studyYear" name="studyYear" className="form-select" defaultValue={this.state.studyYear}>
-                                <option>{this.state.studyYear}</option>
+                            <select id="studyYear" name="studyYear" className="form-select" defaultValue={this.state.studyYear.id}>
+                                <option value={this.state.studyYear.id}>{new Date(this.state.studyYear.startYear).getUTCFullYear() +"/"+ new Date(this.state.studyYear.finishYear).getUTCFullYear()}</option>
                             </select>
                             </div>
                         <div className="col-md-6">
@@ -298,8 +312,8 @@ render(){
                         <div className='row' id={"subjectSelection_1"}>
                             <div className="col-md-6">
                                 <label htmlFor={"subject_1"} className="form-label">Subject</label>
-                                <select id={'subject_1'} name={"subject_"+this.subjectsAmount} className="form-select" defaultValue="Subjects" onChange={(e)=>this.onSelectionChange(e)}>
-                                    <option value="Subjects">Subjects</option>
+                                <select id={'subject_1'} name={"subject_"+this.subjectsAmount} className="form-select" defaultValue="0" onChange={(e)=>this.onSelectionChange(e)}>
+                                    <option value="0">Subjects</option>
                                     {this.state.allSubjects.map((subject) =>
                                         <option key={`subject_${subject.id}`} value={subject.id}>{subject.title}</option>
                                     )}

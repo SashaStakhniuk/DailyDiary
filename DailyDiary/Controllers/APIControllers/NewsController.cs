@@ -41,7 +41,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpPost]
         public async Task<ActionResult<bool>> SandMessageForStudent(StudentNewsViewModel model)
         {
-            Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.StudentId);
+            Student student = await db.Students.FirstOrDefaultAsync(x => x.Id == model.StudentId);
             if(student == null)
             {
                 return NotFound();
@@ -75,7 +75,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpPost]
         public async Task<ActionResult<bool>> SendMessageForTeacher(NewsViewModel model)
         {
-            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == model.TeacherId);
+            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.Id == model.TeacherId);
             if (teacher == null)
             {
                 return NotFound(false);
@@ -133,7 +133,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{StudentId}")]
         public async Task<ActionResult<int>> GetNotStudentReadNews(int StudentId)
         {
-            Student student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == StudentId);
+            Student student = await db.Students.FirstOrDefaultAsync(x => x.Id == StudentId);
             if(student == null)
             {
                 return NotFound();
@@ -180,7 +180,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{TeacherId}")]
         public async Task<ActionResult<int>> GetNotReadNews(int TeacherId)
         {
-            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.TeacherId == TeacherId);
+            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.Id == TeacherId);
             if (teacher == null)
             {
                 return NotFound();
@@ -189,7 +189,7 @@ namespace DailyDiary.Controllers.APIControllers
             {
                 int count = 0;
                 List<News> news = new List<News>();
-                var teachersNews = await db.TeacherNews.Where(x => x.TeacherId == TeacherId).Select(x => x.NewsId).ToListAsync();
+                var teachersNews = await db.TeacherNews.Where(x => x.Id == TeacherId).Select(x => x.NewsId).ToListAsync();
                 if (teachersNews.Count != 0)
                 {
                     foreach (var teacherNew in teachersNews)

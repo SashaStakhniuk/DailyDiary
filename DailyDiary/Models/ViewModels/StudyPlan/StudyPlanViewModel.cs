@@ -9,11 +9,11 @@ namespace DailyDiary.Models.ViewModels
     {
         public string PlanTitle { get; set; }
         public int Semester { get; set; }
-        public string StudyYear { get; set; }
-        public string YearOfStudy { get; set; }
-        public List<SubjectsToAdd> SubjectsToAdd { get; set; }
+        public int StudyYearId { get; set; }
+        public int YearOfStudy { get; set; }
+        public List<SubjectsHours> SubjectsToAdd { get; set; }
     }
-    public class SubjectsToAdd
+    public class SubjectsHours
     {
         public string SubjectId { get; set; }
         public string Hours { get; set; }
