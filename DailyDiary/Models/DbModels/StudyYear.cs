@@ -12,7 +12,7 @@ namespace DailyDiary.Models
     {
         public StudyYear()
         {
-            YearOfStudy = new HashSet<YearOfStudy>();
+            YearsOfStudy = new HashSet<YearOfStudy>();
         }
         [Key]
         public int Id { get; set; }
@@ -21,7 +21,7 @@ namespace DailyDiary.Models
         public DateTime? StartYear { get; set; }
         [Required]
         public DateTime? FinishYear { get; set; }
-        public virtual ICollection<YearOfStudy> YearOfStudy { get; set; }
+        public virtual ICollection<YearOfStudy> YearsOfStudy { get; set; }
     }
 
     //public class StudyYear

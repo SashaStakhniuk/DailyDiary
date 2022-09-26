@@ -24,6 +24,10 @@ namespace DailyDiary.Models
         public virtual DbSet<Union> Unions { get; set; }
         public virtual DbSet<UnionBlock> UnionBlocks { get; set; } // принципи поділу груп одного року навчання на підгрупи
         public virtual DbSet<UnionsSubgroup> UnionsSubgroups { get; set; }
+        public virtual DbSet<TeacherSpeciality> TeacherSpecialities { get; set; } // спеціальність викладачів
+        public virtual DbSet<TeacherCategory> TeacherCategories { get; set; } // категорії викладачів
+        public virtual DbSet<TeacherEducation> TeacherEducations { get; set; } //освіта викладачів
+        public virtual DbSet<TeacherDegree> TeacherDegrees { get; set; } // ступінь викладачів
         public virtual DbSet<Teacher> Teachers { get; set; } // викладачі
         public virtual DbSet<Subject> Subjects { get; set; } // предмети
         public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; } // які предмети можуть вести викладачі

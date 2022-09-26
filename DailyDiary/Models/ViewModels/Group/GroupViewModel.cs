@@ -11,7 +11,11 @@ namespace DailyDiary.Models.ViewModels
         public int Id { get; set; }
         [Required]
         public string Title { get; set; }
-        public int StudyYearId { get; set; }
-        public List<int> StudentsId { get; set; }
+        [Required]
+        public int YearOfStudyId { get; set; }
+        [Required]
+        public int StudyPlanId { get; set; }
+        public int PreferedAuditoryId { get; set; }
+        public int GroupId { get; set; }
     }
 }

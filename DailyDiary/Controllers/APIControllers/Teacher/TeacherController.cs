@@ -1,4 +1,5 @@
 ﻿using DailyDiary.Models;
+using DailyDiary.Models.DbModels;
 using DailyDiary.Models.ViewModels;
 using DailyDiary.Models.ViewModels.Teacher;
 using DailyDiary.Services;
@@ -25,6 +26,26 @@ namespace DailyDiary.Controllers.APIControllers
             this.db = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TeacherCategory>>> GetTeachersCategories()//GetAllTeachersCategories
+        {
+            return await db.TeacherCategories.ToListAsync();
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TeacherEducation>>> GetTeachersEducations()//GetAllTeachersEducations
+        {
+            return await db.TeacherEducations.ToListAsync();
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TeacherDegree>>> GetTeachersDegrees()//GetAllTeachersDegrees
+        {
+            return await db.TeacherDegrees.ToListAsync();
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TeacherSpeciality>>> GetTeachersSpecialities()//GetAllTeachersSpecialities
+        {
+            return await db.TeacherSpecialities.ToListAsync();
+        }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Teacher>>> Get()//GetAllTeachersAsync
         {

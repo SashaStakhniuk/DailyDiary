@@ -162,17 +162,59 @@ namespace DailyDiary.Models
                     // <---------------------------------Students--------------------------------
 
                     datasContext.Persons.AddRange(person1, person2, person3, person4, person5, person6, person7, person8, person9, person10, person11, person12, person13, person14, person15, person16, person17, person18, person19, person20, person21, person22, person23, person24, person25, person26, person27, person28, person29);
+                    await datasContext.SaveChangesAsync();
+                    // ---------------------------------TeachersAdditionalDatas-------------------------------->
+                    TeacherCategory teacherSpecialist = new TeacherCategory { Description = "Specialist" };
+                    TeacherCategory teacherFirstCategorySpecialist = new TeacherCategory { Description = "First category specialist" };
+
+                    if (!datasContext.TeacherCategories.Any())
+                    {
+                        datasContext.TeacherCategories.AddRange(teacherSpecialist, teacherFirstCategorySpecialist);
+                        await datasContext.SaveChangesAsync();
+                    }
+                    TeacherDegree teacherMaster = new TeacherDegree { Description = "Master" };
+                    TeacherDegree teacherPHD = new TeacherDegree { Description = "Professor, PHD" };
+
+                    if (!datasContext.TeacherDegrees.Any())
+                    {
+                        datasContext.TeacherDegrees.AddRange(teacherMaster, teacherPHD);
+                        await datasContext.SaveChangesAsync();
+                    }
+                    TeacherEducation teacherHigher = new TeacherEducation { Description = "Higher" };
+
+                    if (!datasContext.TeacherEducations.Any())
+                    {
+                        datasContext.TeacherEducations.Add(teacherHigher);
+                        await datasContext.SaveChangesAsync();
+                    }
+                    TeacherSpeciality teacherMathAndComputer = new TeacherSpeciality { Description = "Teacher of math and computer science" };
+                    TeacherSpeciality teacherGeography = new TeacherSpeciality { Description = "Teacher of geography" };
+                    TeacherSpeciality teacherComputer = new TeacherSpeciality { Description = "Teacher of C# and computer science" };
+                    TeacherSpeciality teacherMathPhysic = new TeacherSpeciality { Description = "Teacher of math and physic" };
+                    TeacherSpeciality teacherMusic = new TeacherSpeciality { Description = "Teacher of music" };
+                    TeacherSpeciality teacherEnglish = new TeacherSpeciality { Description = "Teacher of english" };
+                    TeacherSpeciality teacherHealth = new TeacherSpeciality { Description = "Teacher of health" };
+                    TeacherSpeciality teacherArt = new TeacherSpeciality { Description = "Teacher of art" };
+
+                    if (!datasContext.TeacherSpecialities.Any())
+                    {
+                        datasContext.TeacherSpecialities.AddRange(teacherMathAndComputer, teacherGeography, teacherComputer, teacherMathPhysic, teacherMusic, teacherEnglish, teacherHealth, teacherArt);
+                        await datasContext.SaveChangesAsync();
+                    }
+                    // <---------------------------------TeachersAdditionalDatas--------------------------------
+
 
                     // ---------------------------------Teachers-------------------------------->
 
-                    Teacher teacher1 = new Teacher { Person = person2, Category = "Specialist", Degree = "Master", Education = "Higher", Speciality = "Teacher of math and computer science", TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = mathSubject }, new TeacherSubject { Subject = computerScienceSubject } } };
-                    Teacher teacher2 = new Teacher { Person = person3, Category = "Specialist", Degree = "Master", Education = "Higher", Speciality = "Teacher of geography", TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = geographySubject } } };
-                    Teacher teacher3 = new Teacher { Person = person4, Category = "Specialist", Degree = "Master", Education = "Higher", Speciality = "Teacher of C# and computer science", Experience = 2, Salary = 10000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = csSubject }, new TeacherSubject { Subject = computerScienceSubject } } };
-                    Teacher teacher4 = new Teacher { Person = person5, Category = "Specialist", Degree = "Master", Education = "Higher", Speciality = "Teacher of math and physic", Experience = 0, Salary = 12000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = algebraSubject }, new TeacherSubject { Subject = geometrySubject }, new TeacherSubject { Subject = mathSubject }, new TeacherSubject { Subject = physicSubject } } };
-                    Teacher teacher5 = new Teacher { Person = person6, Category = "First category specialist", Degree = "Professor, PHD", Speciality = "Teacher of musik", Education = "Higher", Experience = 18, Salary = 16000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = musicSubject } } };
-                    Teacher teacher6 = new Teacher { Person = person7, Category = "Specialist", Degree = "Master", Education = "Higher", Speciality = "Teacher of english", Experience = 2, Salary = 10000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = englishSubject } } };
-                    Teacher teacher7 = new Teacher { Person = person8, Category = "Specialist", Degree = "Master", Education = "Higher", Speciality = "Teacher of health", Experience = 0, Salary = 12000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = healthSubject } } };
-                    Teacher teacher8 = new Teacher { Person = person9, Category = "First category specialist", Degree = "Professor, PHD", Speciality = "Teacher of art", Education = "Higher", Experience = 18, Salary = 16000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = healthSubject } } };
+                    Teacher teacher1 = new Teacher { Person = person2, Category = teacherSpecialist, Degree = teacherMaster, Education = teacherHigher, Speciality = teacherMathAndComputer, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = mathSubject }, new TeacherSubject { Subject = computerScienceSubject } } };
+                    Teacher teacher2 = new Teacher { Person = person3, Category = teacherSpecialist, Degree = teacherMaster, Education = teacherHigher, Speciality = teacherGeography, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = geographySubject } } };
+                    Teacher teacher3 = new Teacher { Person = person4, Category = teacherSpecialist, Degree = teacherMaster, Education = teacherHigher, Speciality = teacherComputer, Experience = 2, Salary = 10000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = csSubject }, new TeacherSubject { Subject = computerScienceSubject } } };
+                    Teacher teacher4 = new Teacher { Person = person5, Category = teacherSpecialist, Degree = teacherMaster, Education = teacherHigher, Speciality = teacherMathPhysic, Experience = 0, Salary = 12000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = algebraSubject }, new TeacherSubject { Subject = geometrySubject }, new TeacherSubject { Subject = mathSubject }, new TeacherSubject { Subject = physicSubject } } };
+                    Teacher teacher5 = new Teacher { Person = person6, Category = teacherFirstCategorySpecialist, Degree = teacherPHD, Education = teacherHigher, Speciality = teacherMusic, Experience = 18, Salary = 16000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = musicSubject } } };
+                    Teacher teacher6 = new Teacher { Person = person7, Category = teacherSpecialist, Degree = teacherMaster, Education = teacherHigher, Speciality = teacherEnglish, Experience = 2, Salary = 10000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = englishSubject } } };
+                    Teacher teacher7 = new Teacher { Person = person8, Category = teacherSpecialist, Degree = teacherMaster, Education = teacherHigher, Speciality = teacherHealth, Experience = 0, Salary = 12000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = healthSubject } } };
+                    Teacher teacher8 = new Teacher { Person = person9, Category = teacherFirstCategorySpecialist, Degree = teacherPHD, Education = teacherHigher, Speciality = teacherArt, Experience = 18, Salary = 16000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = healthSubject } } };
+                    
                     if (!datasContext.Teachers.Any())
                     {
                         datasContext.Teachers.AddRange(
@@ -183,30 +225,30 @@ namespace DailyDiary.Models
                     // <---------------------------------Teachers--------------------------------
 
                     // ---------------------------------Students-------------------------------->
+                    var dateTimeFirstSeptember = new DateTime(2022, 9, 1);
+                    Student student1 = new Student { Person = person10, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
+                    Student student2 = new Student { Person = person11, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
+                    Student student3 = new Student { Person = person12, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
+                    Student student4 = new Student { Person = person13, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
+                    Student student5 = new Student { Person = person14, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
 
-                    Student student1 = new Student { Person = person10, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
-                    Student student2 = new Student { Person = person11, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
-                    Student student3 = new Student { Person = person12, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
-                    Student student4 = new Student { Person = person13, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
-                    Student student5 = new Student { Person = person14, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
+                    Student student6 = new Student { Person = person15, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
+                    Student student7 = new Student { Person = person16, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
+                    Student student8 = new Student { Person = person17, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
+                    Student student9 = new Student { Person = person18, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
+                    Student student10 = new Student { Person = person19, AdmissionDate = dateTimeFirstSeptember.AddYears(-6) };
 
-                    Student student6 = new Student { Person = person15, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
-                    Student student7 = new Student { Person = person16, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
-                    Student student8 = new Student { Person = person17, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
-                    Student student9 = new Student { Person = person18, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
-                    Student student10 = new Student { Person = person19, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-6) };
-
-                    Student student11 = new Student { Person = person20, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
-                    Student student12 = new Student { Person = person21, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
-                    Student student13 = new Student { Person = person22, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
-                    Student student14 = new Student { Person = person23, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
-                    Student student15 = new Student { Person = person24, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
-
-                    Student student16 = new Student { Person = person25, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
-                    Student student17 = new Student { Person = person26, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
-                    Student student18 = new Student { Person = person27, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
-                    Student student19 = new Student { Person = person28, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
-                    Student student20 = new Student { Person = person29, AdmissionDate = new DateTime(2022, 9, 1).AddYears(-7) };
+                    Student student11 = new Student { Person = person20, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
+                    Student student12 = new Student { Person = person21, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
+                    Student student13 = new Student { Person = person22, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
+                    Student student14 = new Student { Person = person23, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
+                    Student student15 = new Student { Person = person24, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
+                                                                                         
+                    Student student16 = new Student { Person = person25, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
+                    Student student17 = new Student { Person = person26, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
+                    Student student18 = new Student { Person = person27, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
+                    Student student19 = new Student { Person = person28, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
+                    Student student20 = new Student { Person = person29, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
 
                     if (!datasContext.Students.Any())
                     {
@@ -238,12 +280,12 @@ namespace DailyDiary.Models
                     if (!datasContext.YearOfStudy.Any())
                     {
                         datasContext.YearOfStudy.AddRange(
-                        year1, year2, year3, year4, year5, year6, year7, year8, year9, year10, year11
-                        //year11, year10, year9, year8, year7, year6, year5, year4, year3, year2, year1
+                        //year1, year2, year3, year4, year5, year6, year7, year8, year9, year10, year11
+                        year11, year10, year9, year8, year7, year6, year5, year4, year3, year2, year1
                         );
                         await datasContext.SaveChangesAsync();
                     }
-                    StudyPlan studyPlanForFirstClasses = new StudyPlan { Title = "Study plan for 1 class", YearOfStudy = year1, Semester = 0, MaxAllowedLessonsPerDay = 3 };
+                    StudyPlan studyPlanForFirstClasses = new StudyPlan { Title = "Study plan for 1 class ", YearOfStudy = year1, Semester = 0, MaxAllowedLessonsPerDay = 3, SubjectsHoursCollection= "[{\"SubjectId\":\"9\",\"Hours\":\"10.5\"},{\"SubjectId\":\"8\",\"Hours\":\"20.5\"},{\"SubjectId\":\"7\",\"Hours\":\"30.5\"}]" };
 
                     if (!datasContext.StudyPlans.Any())
                     {
@@ -257,7 +299,7 @@ namespace DailyDiary.Models
 
                     if (!datasContext.SubgroupBlocks.Any())
                     {
-                        datasContext.SubgroupBlocks.AddRange(sb1, sb2, sb3);
+                        datasContext.SubgroupBlocks.AddRange(sb3, sb2, sb1);
                         await datasContext.SaveChangesAsync();
                     }
 

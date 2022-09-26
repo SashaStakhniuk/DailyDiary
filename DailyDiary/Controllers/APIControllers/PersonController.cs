@@ -27,7 +27,7 @@ namespace DailyDiary.Controllers.APIControllers
             this.db = context;
         }
         [HttpGet("details")]
-        public async Task<ActionResult<PersonViewModel>> GetDatasIfPersonWasInRoleErlier(int personId, string role)
+        public async Task<ActionResult<PersonViewModel>> GetDatasIfPersonWasInRoleErlier(int personId, string role) // умова, коли персона вже мала таку роль (викладач(звільнився, влаштувався знову) або студент(пішов в ПТУ, повернувся назад) або батьки(дитина закінчила школу, інша пішла в 1 клас)) вже існували, підтягуються їх дані з бази
         {
             PersonViewModel personDatas = null;
 
@@ -68,13 +68,18 @@ namespace DailyDiary.Controllers.APIControllers
             }
             if (teacher != null)
             {
+                TeacherCategory category = await db.TeacherCategories.FirstOrDefaultAsync(x => x.Id == teacher.CategoryId);
+                TeacherDegree degree = await db.TeacherDegrees.FirstOrDefaultAsync(x => x.Id==teacher.DegreeId);
+                TeacherEducation education = await db.TeacherEducations.FirstOrDefaultAsync(x => x.Id==teacher.EducationId);
+                TeacherSpeciality speciality = await db.TeacherSpecialities.FirstOrDefaultAsync(x => x.Id==teacher.SpecialityId);
+
                 personDatas = new PersonViewModel
                 {
-                    Category = teacher.Category,
-                    Degree = teacher.Degree,
-                    Education = teacher.Education,
-                    Speciality = teacher.Speciality,
-                    TeacherId = teacher.Id
+                    TeacherId = teacher.Id,
+                    Category = category.Description,
+                    Degree = degree.Description,
+                    Education = education.Description,
+                    Speciality = speciality.Description
                 };
             }
             if (student != null)
@@ -157,11 +162,16 @@ namespace DailyDiary.Controllers.APIControllers
 
                     if (teacher != null)
                     {
+                        var spec = await db.TeacherSpecialities.FirstOrDefaultAsync(x => x.Id == teacher.SpecialityId);
+                        var degree = await db.TeacherDegrees.FirstOrDefaultAsync(x => x.Id == teacher.DegreeId);
+                        var education = await db.TeacherEducations.FirstOrDefaultAsync(x => x.Id == teacher.EducationId);
+                        var category = await db.TeacherCategories.FirstOrDefaultAsync(x => x.Id == teacher.CategoryId);
+
                         personToAdd.TeacherId = teacher.Id;
-                        personToAdd.Speciality = teacher.Speciality;
-                        personToAdd.Category = teacher.Category;
-                        personToAdd.Degree = teacher.Degree;
-                        personToAdd.Education = teacher.Education;
+                        personToAdd.Speciality = spec.Description;
+                        personToAdd.Category = category.Description;
+                        personToAdd.Degree = degree.Description;
+                        personToAdd.Education = education.Description;
                     }
                     if (student != null)
                     {
@@ -174,13 +184,6 @@ namespace DailyDiary.Controllers.APIControllers
                     personToDisplay.Add(personToAdd);
                 }
             }
-            //PersonViewModel personsToDisplay = new PersonViewModel();
-            //foreach(Person person in persons)
-            //{
-            //    personsToDisplay.
-            //    var roles = await userManager.GetRolesAsync(await userManager.FindByIdAsync(person.UserId));
-
-            //}
             if (personToDisplay.Count() > 0)
             {
                 return personToDisplay;
@@ -262,20 +265,52 @@ namespace DailyDiary.Controllers.APIControllers
                                 {
                                     throw new Exception("Teacher education can't be empty.");
                                 }
-                                Teacher teacher = new Teacher // створюю Викладача
-                                {
-                                    Person = personToAdd, // роблю посилання на його запис в таблиці Person
-                                    Category = model.Category,
-                                    Degree = model.Degree,
-                                    Education = model.Education,
-                                    Speciality = model.Speciality
-                                };
+                               
                                 Teacher teacherExist = await db.Teachers.Where(x => x.Person == personToAdd).FirstOrDefaultAsync();
                                 if (teacherExist != null)
                                 {
-                                    throw new Exception("Teacher is already exist.");
+                                    throw new Exception("Teacher already exist.");
                                 }
-                                await db.Teachers.AddAsync(teacher);
+                                else
+                                {
+                                    TeacherCategory category = await db.TeacherCategories.FirstOrDefaultAsync(x=> x.Description.ToLower()==model.Category.ToLower());
+                                    if (category == null)
+                                    {
+                                        category = new TeacherCategory { Description = model.Category };
+                                        await db.TeacherCategories.AddAsync(category);
+                                        await db.SaveChangesAsync();
+                                    }
+                                    TeacherDegree degree = await db.TeacherDegrees.FirstOrDefaultAsync(x => x.Description.ToLower() == model.Degree.ToLower());
+                                    if (degree == null)
+                                    {
+                                        degree = new TeacherDegree { Description = model.Degree };
+                                        await db.TeacherDegrees.AddAsync(degree);
+                                        await db.SaveChangesAsync();
+                                    }
+                                    TeacherEducation education = await db.TeacherEducations.FirstOrDefaultAsync(x => x.Description.ToLower() == model.Education.ToLower());
+                                    if (education == null)
+                                    {
+                                        education = new TeacherEducation { Description = model.Education };
+                                        await db.TeacherEducations.AddAsync(education);
+                                        await db.SaveChangesAsync();
+                                    }
+                                    TeacherSpeciality speciality = await db.TeacherSpecialities.FirstOrDefaultAsync(x => x.Description.ToLower() == model.Speciality.ToLower());
+                                    if (speciality == null)
+                                    {
+                                        speciality = new TeacherSpeciality { Description = model.Speciality };
+                                        await db.TeacherSpecialities.AddAsync(speciality);
+                                        await db.SaveChangesAsync();
+                                    }
+                                    Teacher teacher = new Teacher // створюю Викладача
+                                    {
+                                        Person = personToAdd, // роблю посилання на його запис в таблиці Person
+                                        Category = category,
+                                        Degree = degree,
+                                        Education = education,
+                                        Speciality = speciality
+                                    };
+                                    await db.Teachers.AddAsync(teacher);
+                                }
                                 break;
                             case "Student": // якщо роль Student
                                 if (String.IsNullOrEmpty(model.AdmissionDate.ToString()))
@@ -286,29 +321,37 @@ namespace DailyDiary.Controllers.APIControllers
                                 {
                                     throw new Exception("AdmissionDate can't be erlier than 12 years before this year and later than 1 year after this year.");
                                 }
-                                Student student = new Student // cтворюю студента
-                                {
-                                    Person = personToAdd,// роблю посилання на його запис в таблиці Person
-                                    AdmissionDate = model.AdmissionDate
-                                };
+                               
                                 Student studentExist = await db.Students.Where(x => x.Person == personToAdd).FirstOrDefaultAsync();
                                 if (studentExist != null)
                                 {
                                     throw new Exception("Student is already exist.");
                                 }
-                                await db.Students.AddAsync(student);
+                                else
+                                {
+                                    Student student = new Student // cтворюю студента
+                                    {
+                                        Person = personToAdd,// роблю посилання на його запис в таблиці Person
+                                        AdmissionDate = model.AdmissionDate
+                                    };
+                                    await db.Students.AddAsync(student);
+                                }
                                 break;
                             case "Parrent":
-                                Parent parent = new Parent
-                                {
-                                    Person = personToAdd // роблю посилання на його запис в таблиці Person
-                                };// cтворюю студента
+                               
                                 Parent parentExist = await db.Parents.Where(x => x.Person == personToAdd).FirstOrDefaultAsync();
                                 if (parentExist != null)
                                 {
                                     throw new Exception("Parent is already exist.");
                                 }
-                                await db.Parents.AddAsync(parent);
+                                else
+                                {
+                                    Parent parent = new Parent
+                                    {
+                                        Person = personToAdd // роблю посилання на його запис в таблиці Person
+                                    };// cтворюю запис 
+                                    await db.Parents.AddAsync(parent);
+                                }
                                 break;
                         }
                     }
@@ -342,14 +385,12 @@ namespace DailyDiary.Controllers.APIControllers
                         throw new Exception("User not found");
                         //return BadRequest(new { error = "Email already registered" });
                     }
-                    if (String.IsNullOrEmpty(model.Address))
+                    if (model.Login == null) // перевірка чи іcнує Login
                     {
-                        throw new Exception("You have to enter the address");
+                        throw new Exception("Login can't be empty");
+                        //return BadRequest(new { error = "Email already registered" });
                     }
-                    if (model.Birthday < DateTime.Now.AddYears(-80) || model.Birthday >= DateTime.Now)
-                    {
-                        throw new Exception("Birthday date can't be erlier than 80 years before this year and later or equal this year.");
-                    }
+                   
                     userToEdit.Email = model.Email;
                     userToEdit.PhoneNumber = model.PhoneNumber;
                     userToEdit.UserName = model.Login;
@@ -365,6 +406,15 @@ namespace DailyDiary.Controllers.APIControllers
                     await userManager.RemoveFromRolesAsync(userToEdit, removedRoles); //видаляю зайві
                     await userManager.AddToRolesAsync(userToEdit, addedRoles); // додаю нові
 
+                    if (String.IsNullOrEmpty(model.Address))
+                    {
+                        throw new Exception("You have to enter the address");
+                    }
+                    if (model.Birthday < DateTime.Now.AddYears(-80) || model.Birthday >= DateTime.Now)
+                    {
+                        throw new Exception("Birthday date can't be erlier than 80 years before this year and later or equal current date.");
+                    }
+
                     personToEdit.Name = model.Name;
                     personToEdit.LastName = model.LastName;
                     personToEdit.MiddleName = model.MiddleName;
@@ -376,11 +426,6 @@ namespace DailyDiary.Controllers.APIControllers
 
                     foreach (string role in model.Roles) // для кожної ролі
                     {
-
-                        //if(! await userManager.IsInRoleAsync(userToEdit, role))
-                        // {
-
-                        // }
                         switch (role)
                         {
                             case "Teacher": // якщо роль 'Teacher'
@@ -402,30 +447,56 @@ namespace DailyDiary.Controllers.APIControllers
                                 {
                                     throw new Exception("Teacher education can't be empty.");
                                 }
+                                TeacherCategory category = await db.TeacherCategories.FirstOrDefaultAsync(x => x.Description.ToLower() == model.Category.ToLower());
+                                if (category == null)
+                                {
+                                    category = new TeacherCategory { Description = model.Category };
+                                    await db.TeacherCategories.AddAsync(category);
+                                    await db.SaveChangesAsync();
+                                }
+                                TeacherDegree degree = await db.TeacherDegrees.FirstOrDefaultAsync(x => x.Description.ToLower() == model.Degree.ToLower());
+                                if (degree == null)
+                                {
+                                    degree = new TeacherDegree { Description = model.Degree };
+                                    await db.TeacherDegrees.AddAsync(degree);
+                                    await db.SaveChangesAsync();
+                                }
+                                TeacherEducation education = await db.TeacherEducations.FirstOrDefaultAsync(x => x.Description.ToLower() == model.Education.ToLower());
+                                if (education == null)
+                                {
+                                    education = new TeacherEducation { Description = model.Education };
+                                    await db.TeacherEducations.AddAsync(education);
+                                    await db.SaveChangesAsync();
+                                }
+                                TeacherSpeciality speciality = await db.TeacherSpecialities.FirstOrDefaultAsync(x => x.Description.ToLower() == model.Speciality.ToLower());
+                                if (speciality == null)
+                                {
+                                    speciality = new TeacherSpeciality { Description = model.Speciality };
+                                    await db.TeacherSpecialities.AddAsync(speciality);
+                                    await db.SaveChangesAsync();
+                                }
                                 Teacher teacherExist = await db.Teachers.Where(x => x.Person == personToEdit).FirstOrDefaultAsync(); // запис, в якому ід персони = ід персони, що треба відредагувати
                                 if (teacherExist == null)
                                 {
                                     Teacher teacher = new Teacher // створюю Викладача
                                     {
                                         Person = personToEdit, // роблю посилання на його запис в таблиці Person
-                                        Category = model.Category,
-                                        Degree = model.Degree,
-                                        Education = model.Education,
-                                        Speciality = model.Speciality
+                                        Category = category,
+                                        Degree = degree,
+                                        Education = education,
+                                        Speciality = speciality
                                     };
                                     await db.Teachers.AddAsync(teacher);
                                 }
                                 else
                                 {
                                     teacherExist.Person = personToEdit; // роблю посилання на його запис в таблиці Person
-                                    teacherExist.Category = model.Category;
-                                    teacherExist.Degree = model.Degree;
-                                    teacherExist.Education = model.Education;
-                                    teacherExist.Speciality = model.Speciality;
+                                    teacherExist.Category = category;
+                                    teacherExist.Degree = degree;
+                                    teacherExist.Education = education;
+                                    teacherExist.Speciality = speciality;
                                     db.Teachers.Update(teacherExist);
                                 }
-
-
                                 break;
                             case "Student": // якщо роль Student
                                 if (String.IsNullOrEmpty(model.AdmissionDate.ToString()))
@@ -436,14 +507,15 @@ namespace DailyDiary.Controllers.APIControllers
                                 {
                                     throw new Exception("AdmissionDate can't be erlier than 12 years before this year and later than 1 year after this year.");
                                 }
-                                Student student = new Student // cтворюю студента
-                                {
-                                    //Person = personToEdit,// роблю посилання на його запис в таблиці Person
-                                    AdmissionDate = model.AdmissionDate
-                                };
+                              
                                 Student studentExist = await db.Students.Where(x => x.Person == personToEdit).FirstOrDefaultAsync();
                                 if (studentExist == null)
                                 {
+                                    Student student = new Student // cтворюю студента
+                                    {
+                                        //Person = personToEdit,// роблю посилання на його запис в таблиці Person
+                                        AdmissionDate = model.AdmissionDate
+                                    };
                                     await db.Students.AddAsync(student);
                                 }
                                 else
@@ -454,13 +526,14 @@ namespace DailyDiary.Controllers.APIControllers
                                 }
                                 break;
                             case "Parrent":
-                                Parent parent = new Parent
-                                {
-                                    Person = personToEdit // роблю посилання на його запис в таблиці Person
-                                };// cтворюю студента
+                               
                                 Parent parentExist = await db.Parents.Where(x => x.Person == personToEdit).FirstOrDefaultAsync();
                                 if (parentExist == null)
                                 {
+                                    Parent parent = new Parent
+                                    {
+                                        Person = personToEdit // роблю посилання на його запис в таблиці Person
+                                    };
                                     await db.Parents.AddAsync(parent);
                                 }
                                 else

@@ -31,7 +31,7 @@ import EditGroup from './Group/EditGroup'
 import CreateNewGroup from './Group/CreateNewGroup'
 import { useSelector } from 'react-redux'
 import CreateNewStudyYear from './StudyYear/CreateNewStudyYear'
-import EditStudyPlan from './StudyPlan/EditStudyPlan'
+import CreateOrEditStudyPlan from './StudyPlan/CreateOrEditStudyPlan'
 import Student from './Students/Student.js';
 import AboutStudent from './Students/AboutStudent.js';
 import ReduxTesting from './ReduxTesting.js';
@@ -177,7 +177,10 @@ const Root = () => {
                     <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route> {/*створення навчального року*/}
                     <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route> {/*створення навчального плану*/}
                     <Route exact path="/admin/teachers-distribution"><TeachersDistribution/></Route> {/*розподілення викладачів по групах за предметами*/}
-                    <Route exact path="/admin/edit-study-plan/:id"><EditStudyPlan/></Route> {/*НЕ ПРАЦЮЄ!*/}
+                    <Route exact path="/admin/edit-study-plan"><CreateOrEditStudyPlan/></Route> {/*ПРАЦЮЄ!*/}
+
+                    {/* <Route exact path="/admin/edit-study-plan"><EditStudyPlan1_DoesntWork/></Route> НЕ ПРАЦЮЄ! при виборі предмету, в наступних блоках він не відображається*/}
+
 
                     <Route exact path="/admin/groups"><AllGroups/></Route>
                     <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>

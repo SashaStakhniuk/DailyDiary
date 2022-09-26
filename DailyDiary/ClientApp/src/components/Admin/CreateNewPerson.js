@@ -11,6 +11,12 @@ class CreateNewPerson extends React.Component {
         this.getDatasIfPersonWasInRoleErlier = this.getDatasIfPersonWasInRoleErlier.bind(this)
         this.createNewPerson = this.createNewPerson.bind(this)
         this.editPerson = this.editPerson.bind(this)
+
+        this.getTeacherCategories = this.getTeacherCategories.bind(this)
+        this.getTeacherSpecialities = this.getTeacherSpecialities.bind(this)
+        this.getTeacherDegrees = this.getTeacherDegrees.bind(this)
+        this.getTeacherEducations = this.getTeacherEducations.bind(this)
+
         this.errors = "";
         this.state = {
             personId: 0,
@@ -28,8 +34,12 @@ class CreateNewPerson extends React.Component {
             photoBase64: "",
             birthday: "2000-01-01",
             admissionDate: "2022-09-01",
+            edit: false,
             roles: [],
-            edit: false
+            teacherCategories: [],
+            teacherEducations: [],
+            teacherDegrees: [],
+            teacherSpecialities: []
         }
     }
     componentDidMount() {
@@ -56,6 +66,12 @@ class CreateNewPerson extends React.Component {
             }
                 , () => console.log(this.state)
             )
+            if (this.props.location.state.person.roles.indexOf(Role.Teacher) != -1) {
+                this.getTeacherCategories();
+                this.getTeacherEducations();
+                this.getTeacherSpecialities();
+                this.getTeacherDegrees();
+            }
         }
         else {
             this.setState({
@@ -81,6 +97,67 @@ class CreateNewPerson extends React.Component {
         //     teacherInfo.style.display = 'block'
         // }
 
+    }
+    async getTeacherCategories() {
+        try {
+            const response = await fetch(`${Host}/api/teacher/getTeachersCategories`);
+            if (response.ok === true) {
+                const data = await response.json()
+                this.setState({ teacherCategories: data })
+            }
+            else {
+                window.alert("getTeacherCategories some error");
+            }
+        }
+        catch (e) {
+            window.alert(e);
+        }
+    }
+    async getTeacherDegrees() {
+        try {
+            const response = await fetch(`${Host}/api/teacher/getTeachersDegrees`);
+            if (response.ok === true) {
+                const data = await response.json()
+                this.setState({ teacherDegrees: data })
+            }
+            else {
+                window.alert("getTeacherDegrees some error");
+            }
+        }
+        catch (e) {
+            window.alert(e);
+        }
+    }
+    async getTeacherEducations() {
+        try {
+            const response = await fetch(`${Host}/api/teacher/getTeachersEducations`);
+            if (response.ok === true) {
+                const data = await response.json()
+                this.setState({ teacherEducations: data })
+            }
+            else {
+                window.alert("getTeacherEducations some error");
+            }
+        }
+        catch (e) {
+            window.alert(e);
+        }
+    }
+    async getTeacherSpecialities() {
+        try {
+            const response = await fetch(`${Host}/api/teacher/getTeachersSpecialities`);
+
+            if (response.ok === true) {
+                const data = await response.json()
+                this.setState({ teacherSpecialities: data })
+            }
+            else {
+                window.alert("getTeacherSpecialities some error");
+            }
+        }
+        catch (e) {
+            window.alert(e);
+        }
     }
     async getAdditionalPersonDatas(personId) {
         try {
@@ -234,14 +311,14 @@ class CreateNewPerson extends React.Component {
             , () => this.state.edit === true ? this.editPerson() : this.createNewPerson()
         )
     }
-     onCheckBoxChange(e) {
+    onCheckBoxChange(e) {
         let teacherInfo = document.getElementById('teacherInfo');
         let studentInfo = document.getElementById('studentInfo');
 
         var arrayOfRoles = this.state.roles;
         if (e.target.checked) {
 
-             this.getDatasIfPersonWasInRoleErlier(e.target.value);
+            this.getDatasIfPersonWasInRoleErlier(e.target.value);
 
             if (arrayOfRoles.indexOf(e.target.value) === -1) {
                 arrayOfRoles.push(e.target.value)
@@ -250,6 +327,18 @@ class CreateNewPerson extends React.Component {
                 studentInfo.style.display = 'block'
             }
             if (e.target.value == Role.Teacher) {
+                if (this.state.teacherCategories.length == 0) {
+                    this.getTeacherCategories();
+                }
+                if (this.state.teacherEducations.length == 0) {
+                    this.getTeacherEducations();
+                }
+                if (this.state.teacherSpecialities.length == 0) {
+                    this.getTeacherSpecialities();
+                }
+                if (this.state.teacherDegrees.length == 0) {
+                    this.getTeacherDegrees();
+                }
                 teacherInfo.style.display = 'block'
             }
             //console.log(this.state.roles)
@@ -380,13 +469,32 @@ class CreateNewPerson extends React.Component {
 
                             <div className="col-md">
                                 <div className="form-floating">
-                                    <input type="text" className="form-control" id="speciality" name='speciality' placeholder="Speciality" defaultValue={this.state.speciality} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                    {/* <input type="text" className="form-control" id="speciality" name='speciality' placeholder="Speciality" defaultValue={this.state.speciality} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                    <label htmlFor="speciality">Speciality</label> */}
+                                    <select id="speciality" name="speciality" className="form-select" defaultValue={this.state.speciality} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
+                                        {this.state.teacherSpecialities.map(speciality =>
+                                            this.state.speciality != speciality.description ?
+                                            <option key={"speciality" + speciality.id} value={speciality.description}>{speciality.description}</option>
+                                            :
+                                            <option key={"speciality" + speciality.id} selected value={speciality.description}>{speciality.description}</option>
+                                        )}
+                                    </select>
                                     <label htmlFor="speciality">Speciality</label>
                                 </div>
                             </div>
                             <div className="col-md">
                                 <div className="form-floating">
-                                    <input type="text" className="form-control" id="education" name='education' placeholder="Education" defaultValue={this.state.education} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                    {/* <input type="text" className="form-control" id="education" name='education' placeholder="Education" defaultValue={this.state.education} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                    <label htmlFor="education">Education</label> */}
+
+                                    <select id="education" name="education" className="form-select" defaultValue={this.state.education} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
+                                        {this.state.teacherEducations.map(education =>
+                                            this.state.education != education.description ?
+                                                <option key={"education" + education.id} value={education.description}>{education.description}</option>
+                                                :
+                                                <option key={"education" + education.id} selected value={education.description}>{education.description}</option>
+                                        )}
+                                    </select>
                                     <label htmlFor="education">Education</label>
                                 </div>
                             </div>
@@ -394,13 +502,31 @@ class CreateNewPerson extends React.Component {
                         <div className="row g-2">
                             <div className="col-md">
                                 <div className="form-floating">
-                                    <input type="text" className="form-control" id="category" name='category' placeholder="Category" defaultValue={this.state.category} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                    {/* <input type="text" className="form-control" id="category" name='category' placeholder="Category" defaultValue={this.state.category} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                    <label htmlFor="category">Category</label> */}
+                                    <select id="category" name="category" className="form-select" required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
+                                        {this.state.teacherCategories.map(category =>
+                                            this.state.category != category.description ?
+                                                <option key={"category" + category.id} value={category.description}>{category.description}</option>
+                                                :
+                                                <option key={"category" + category.id} selected value={category.description}>{category.description}</option>
+                                        )}
+                                    </select>
                                     <label htmlFor="category">Category</label>
                                 </div>
                             </div>
                             <div className="col-md">
                                 <div className="form-floating">
-                                    <input type="text" className="form-control" id="degree" name='degree' placeholder="Degree" defaultValue={this.state.degree} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                    {/* <input type="text" className="form-control" id="degree" name='degree' placeholder="Degree" required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                    <label htmlFor="degree">Degree</label> */}
+                                    <select id="degree" name="degree" className="form-select" required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
+                                        {this.state.teacherDegrees.map(degree =>
+                                            this.state.degree != degree.description ?
+                                                <option key={"degree" + degree.id} value={degree.description}>{degree.description}</option>
+                                                :
+                                                <option key={"degree" + degree.id} selected value={degree.description}>{degree.description}</option>
+                                        )}
+                                    </select>
                                     <label htmlFor="degree">Degree</label>
                                 </div>
                             </div>

@@ -9,7 +9,7 @@ namespace DailyDiary.Models.ViewModels
     public class PersonViewModel
     {
         [MaxLength(45)]
-        [Required(ErrorMessage = "Login can't be empty")]
+        //[Required(ErrorMessage = "Login can't be empty")]
         public string Login { get; set; }
         [MaxLength(45)]
         [EmailAddress]
@@ -49,6 +49,13 @@ namespace DailyDiary.Models.ViewModels
         public int TeacherId { get; set; }
         public int StudentId { get; set; }
         public int ParentId { get; set; }
-
+        //[MaxLength(45)]
+        //public TeacherSpeciality Speciality { get; set; }
+        //[MaxLength(45)]
+        //public TeacherCategory Category { get; set; }
+        //[MaxLength(45)]
+        //public TeacherDegree Degree { get; set; }
+        //[MaxLength(45)]
+        //public TeacherEducation Education { get; set; }
     }
 }
