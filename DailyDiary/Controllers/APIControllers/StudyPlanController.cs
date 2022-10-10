@@ -24,14 +24,42 @@ namespace DailyDiary.Controllers.APIControllers
         {
             this.db = db;
         }
-        
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StudyPlan>>> GetAll()
+        {
+            return await db.StudyPlans.ToListAsync();
+        }
+        public async Task<ActionResult<IEnumerable<int>>> GetAllStudyPlansIdOfCurrentStudyYear()
+        {
+            YearOfStudyController yearOfStudyController = new YearOfStudyController(db);
+            var allYearsOfStudyOfCurrentStudyYear = await yearOfStudyController.GetYearsOfStudyByCurrentStudyYear(); // всі роки навчання теперішнього навчального року
+            if (allYearsOfStudyOfCurrentStudyYear != null)
+            {
+                var currentYearsOfStudy = allYearsOfStudyOfCurrentStudyYear.Value.ToList();
+                if (currentYearsOfStudy.Count > 0)
+                {
+                    var studyPlansId = new List<int>();
+                    foreach (var currentYearOfStudy in currentYearsOfStudy)
+                    {
+                        var studyPlanId = await db.StudyPlans.Where(x => x.YearOfStudyId == currentYearOfStudy.Id).Select(x => x.Id).FirstOrDefaultAsync();
+                        if (studyPlanId > 0)
+                        {
+                            studyPlansId.Add(studyPlanId);
+                        }
+                    }
+                    return studyPlansId;
+                }
+            }
+            return null;
+        }
+
         [HttpGet("{yearOfStudyId}")]
         public async Task<ActionResult<IEnumerable<StudyPlan>>> GetAllStudyPlansByYearOfStudyId(int yearOfStudyId)
         {
             try
             {
-
-                var yearOfStudy = await db.YearOfStudy.FirstOrDefaultAsync(x=> x.Id== yearOfStudyId);
+                var yearOfStudy = await db.YearOfStudy.FirstOrDefaultAsync(x => x.Id == yearOfStudyId);
                 if (yearOfStudy == null)
                 {
                     return NotFound("Year of study not found");
@@ -70,10 +98,11 @@ namespace DailyDiary.Controllers.APIControllers
         {
             try
             {
-                var studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.StartYear.Value.Year.ToString() == DateTime.Now.Year.ToString());
+                var currentDate = DateTime.Today; // 26.09.2022 0:00:00
+                var studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.StartYear <= currentDate && x.FinishYear >= currentDate);
                 if (studyYear == null)
                 {
-                    throw new Exception($"Study year started with {DateTime.Now.Year} not found.");
+                    throw new Exception($"Study year that include {currentDate.ToShortDateString()} not found.");
                 }
                 var yearsOfStudy = await db.YearOfStudy.Where(x => x.StudyYearId == studyYear.Id).ToListAsync();
                 if (yearsOfStudy == null)
@@ -105,13 +134,15 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet]
         public async Task<ActionResult<StudyYear>> GetCurrentStudyYear()
         {
-            var studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.StartYear.Value.Year.ToString() == DateTime.Now.Year.ToString());
+            var currentDate = DateTime.Today; // 26.09.2022 0:00:00
+            var studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.StartYear <= currentDate && x.FinishYear >= currentDate);
             if (studyYear != null)
             {
                 return studyYear;
             }
-            return NotFound();
+            return NotFound($"Study year that include {currentDate.ToShortDateString()} not found");
         }
+
         [HttpGet("{yearOfStudyId}")]
         public async Task<ActionResult<StudyPlanViewModel>> GetExistingStudyPlan(int yearOfStudyId)
         {
@@ -142,16 +173,6 @@ namespace DailyDiary.Controllers.APIControllers
                 return BadRequest(new { error = e.Message });
             }
         }
-        //[HttpGet("{studyYearId}")]
-        //public async Task<ActionResult<IEnumerable<YearOfStudy>>> GetYearsOfStudyByStudyYear(int studyYearId)
-        //{
-        //    var yearsOfStudy = await db.YearOfStudy.Where(x => x.StudyYearId == studyYearId).ToListAsync();
-        //    if (yearsOfStudy != null)
-        //    {
-        //        return yearsOfStudy;
-        //    }
-        //    return NotFound();
-        //}
         [HttpGet]
         public async Task<ActionResult<List<StudyYear>>> GetAllStudyYearsThatIncludeCurrent()
         {
@@ -249,94 +270,6 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Edit(EditStudyPlanViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                StudyPlan studyPlan = await db.StudyPlans.FirstOrDefaultAsync(x => x.Id == model.Id);
-                if (studyPlan != null)
-                {
-
-                    studyPlan = await removeSubjects(studyPlan, model);
-
-                    studyPlan = await updateSubjectsAndHours(studyPlan, model);
-
-                    studyPlan.Title = model.Title;
-                    //studyPlan.CurrentStudyPlan = model.CurrentStudyPlan;
-                    studyPlan.Semester = model.Semester;
-                    db.StudyPlans.Update(studyPlan);
-                    await db.SaveChangesAsync();
-                    return Ok();
-                }
-                return NotFound();
-            }
-            return BadRequest();
-        }
-
-        private async Task<StudyPlan> removeSubjects(StudyPlan studyPlan, EditStudyPlanViewModel model)
-        {
-            //if (model.SubjsId.Count == 0)
-            //{
-            //    if (model.Hours.Count == 0)
-            //    {
-            //        var subjests = await db.SubjectsStudyPlans.Where(x => x.StudyPlanId == studyPlan.Id).ToListAsync();
-            //        foreach (var subject in subjests)
-            //        {
-            //            db.SubjectsStudyPlans.Remove(subject);
-            //        }
-            //    }
-            //}
-            //foreach (var subjectStPl in db.SubjectsStudyPlans)
-            //{
-            //    for (int i = 0; i < model.SubjsId.Count; i++)
-            //    {
-            //        if (subjectStPl.SubjectId != model.SubjsId[i] && subjectStPl.StudyPlanId == studyPlan.Id)
-            //        {
-            //            db.SubjectsStudyPlans.Remove(subjectStPl);
-            //        }
-            //    }
-            //}
-            return studyPlan;
-        }
-
-        private async Task<StudyPlan> updateSubjectsAndHours(StudyPlan studyPlan, EditStudyPlanViewModel model)
-        {
-            //for (int i = 0; i < model.SubjsId.Count; i++)
-            //{
-            //    for (int j = 0; j < model.Hours.Count; j++)
-            //    {
-            //        if (i == j)
-            //        {
-            //            if (model.Hours[i] > 10)
-            //            {
-            //                Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.SubjsId[i]);
-            //                SubjectsStudyPlan subjectsStudyPlan = await db.SubjectsStudyPlans.FirstOrDefaultAsync(x => x.SubjectId == subject.Id && x.StudyPlanId == studyPlan.Id);
-            //                if (subjectsStudyPlan != null)
-            //                {
-            //                    subjectsStudyPlan.Hours = model.Hours[i];
-            //                    db.SubjectsStudyPlans.Update(subjectsStudyPlan);
-            //                }
-            //                else if (subjectsStudyPlan == null)
-            //                {
-            //                    SubjectsStudyPlan newSubjectsStudyPlan = new SubjectsStudyPlan
-            //                    {
-            //                        Subject = subject,
-            //                        SubjectId = model.SubjsId[i],
-            //                        StudyPlan = studyPlan,
-            //                        StudyPlanId = studyPlan.Id,
-            //                        Hours = model.Hours[i]
-            //                    };
-            //                    db.SubjectsStudyPlans.Add(newSubjectsStudyPlan);
-            //                    //studyPlan.SubjectsStudyPlans.Add(newSubjectsStudyPlan);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            return studyPlan;
-        }
-
         [HttpGet("{studyPlanId}")]
         public async Task<ActionResult<GroupSubjectsHours>> GetStudyPlan(int studyPlanId)
         {
@@ -426,12 +359,6 @@ namespace DailyDiary.Controllers.APIControllers
             //    }
             //}
             return NotFound();
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudyPlan>>> Get()
-        {
-            return await db.StudyPlans.ToListAsync();
         }
     }
 }

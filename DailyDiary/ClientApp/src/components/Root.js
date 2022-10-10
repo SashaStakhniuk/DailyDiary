@@ -41,6 +41,9 @@ import Header from './Header'
 import TeachersDistribution from './Admin/TeachersDistribution.js';
 import CreateNewPerson from './Admin/CreateNewPerson.js';
 import EditPerson from './Admin/EditPerson.js';
+// import StudentsByGroupsDistribution from './Admin/StudentsByGroupsDistribution.js';
+// import StudentsBySubgroupsDistribution from './Admin/StudentsBySubgroupsDistribution.js';
+import FullGroupEditing from './Admin/FullGroupEditing.js';
 const Root = () => {
 
     // const [isStudent, setIsStudent] = useState(false)
@@ -170,24 +173,30 @@ const Root = () => {
                     <Route exact path="/children-login"><LoginChildrens/></Route>
 
                     <Route exact path="/admin"><Admin/></Route>
-                    <Route exact path="/admin/new-person" component={CreateNewPerson}></Route> {/*додання персони*/}
-                    <Route exact path="/admin/edit-person"><EditPerson/></Route> {/*додання персони*/}
+                    <Route exact path="/admin/new-person" component={CreateNewPerson}></Route> {/*додання персони ДОРОБИТИ-> "присвоєння" дітей батькам*/}
+                    <Route exact path="/admin/edit-person"><EditPerson/></Route> {/*редагування персони*/}
 
                     <Route exact path="/admin/new-student"><CreateNewStudent/></Route> {/*додання студента*/}
                     <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route> {/*створення навчального року*/}
-                    <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route> {/*створення навчального плану*/}
+                    {/* <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route> створення навчального плану */}
                     <Route exact path="/admin/teachers-distribution"><TeachersDistribution/></Route> {/*розподілення викладачів по групах за предметами*/}
-                    <Route exact path="/admin/edit-study-plan"><CreateOrEditStudyPlan/></Route> {/*ПРАЦЮЄ!*/}
+                    <Route exact path="/admin/new-study-plan"><CreateOrEditStudyPlan/></Route> {/* створення нового та редагування існуючого навчального плану */}
 
                     {/* <Route exact path="/admin/edit-study-plan"><EditStudyPlan1_DoesntWork/></Route> НЕ ПРАЦЮЄ! при виборі предмету, в наступних блоках він не відображається*/}
 
 
                     <Route exact path="/admin/groups"><AllGroups/></Route>
-                    <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>
-                    <Route exact path="/admin/new-group"><CreateNewGroup/></Route>
+                    <Route exact path="/admin/edit-group"><EditGroup/></Route> {/*Список усіх груп із необхідними даними теперішнього навчального року*/}
+
+                    <Route exact path="/admin/edit-groups"><FullGroupEditing/></Route> {/* додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах 
+                    ДОРОБИТИ!!!!! -> видалення студентів з групи або підгрупи, видалення підгрупи з групи*/}
+
+                    <Route exact path="/admin/new-group" component={CreateNewGroup}></Route> {/* створення нової/редагування існуючої групи */}
                     <Route exact path="/admin/new-student"><CreateNewStudent/></Route> 
-                    {/* <Route exact path="/admin/new-student"><CreateNewStudent groups={groups}/></Route> */}
+
                     <Route exact path="/admin/students"><Students/></Route>
+                    {/* <Route exact path="/admin/students-groups-distribution"><StudentsByGroupsDistribution/></Route>
+                    <Route exact path="/admin/students-subgroups-distribution"><StudentsBySubgroupsDistribution/></Route> */}
                     <Route exact path="/admin/student-profil/:id"><StudentProfil/></Route>
                     <Route exact path="/admin/edit-student/:id"><EditFromStudent/></Route>
                     <Route exact path="/admin/add-image-student/:id"><StudentImage/></Route>

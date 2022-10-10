@@ -24,6 +24,7 @@ namespace DailyDiary.Controllers.APIControllers
         {
             this.db = db;
         }
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Auditory>>> GetAllAuditories()
         {
@@ -40,14 +41,57 @@ namespace DailyDiary.Controllers.APIControllers
                     auditory.AuditoryType = new AuditoryType { Id = auditoryType.Id, AuditoryTypeDescription = auditoryType.AuditoryTypeDescription };
                 }
                 return auditories;
-
-                //var auditories = db.Auditory.Include(x => x.AuditoryType).ToListAsync();
-                //var audTypes = db.AuditoryType.Include(x => x.Auditories).ToList();
-                //if (audTypes == null || audTypes.Count() == 0)
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Auditory>>> GetFreeAuditories()
+        {
+            try
+            {
+                List<int?> busyAuditoriesId = null;
+                //YearOfStudyController yearOfStudyController = new YearOfStudyController(db);
+                //var allYearsOfStudyOfCurrentStudyYear = await yearOfStudyController.GetYearsOfStudyByCurrentStudyYear(); // всі роки навчання теперішнього навчального року
+                //if (allYearsOfStudyOfCurrentStudyYear != null)
                 //{
-                //    throw new Exception($"No one auditory type found.");
+                //    var studyPlansId = new List<int>();// ід навчальних планів усіх років навчання теперішнього навчального року
+                //    allYearsOfStudyOfCurrentStudyYear.Value?.ToList().ForEach(yearOfStudy => studyPlansId.AddRange(db.StudyPlans.Where(x => x.YearOfStudyId == yearOfStudy.Id).Select(x => x.Id).ToList()));
+                //    studyPlansId?.ForEach(studyPlanId => busyAuditoriesId.AddRange(db.Groups.Where(x=> x.StudyPlanId == studyPlanId && x.PreferedAuditoryId!=null).Select(x => x.PreferedAuditoryId).ToList()));
                 //}
-                //return audTypes;
+                //else
+                //{
+                    busyAuditoriesId = await db.Groups.Where(x=> x.PreferedAuditoryId!=null).Select(x => x.PreferedAuditoryId).ToListAsync(); //шукаю ід аудиторій в які вже розподілені класи 
+                //}
+                var auditories = new List<Auditory>(); // список аудиторій для виводу
+
+                if (busyAuditoriesId.Count == 0) // якщо зайнятих аудиторій немає
+                {
+                    auditories = await db.Auditory.ToListAsync(); //повертаю усі
+                }
+                else
+                {
+                    List<Auditory> busyAuditories = new List<Auditory>(); // список зайнятих аудиторій
+                    busyAuditoriesId?.ForEach(busyAuditoryId => busyAuditories.Add(db.Auditory.FirstOrDefault(x=> x.Id==busyAuditoryId)));// усі зайняті аудиторії
+                    auditories = await db.Auditory.ToListAsync(); // список усіх аудиторій
+                    auditories = auditories.Except(busyAuditories).ToList(); // список усіх аудиторій, окрім зайнятих
+
+                }
+                if (auditories.Count() == 0) // якщо немає аудиторій
+                {
+                    return NotFound("No one auditory found.");
+                }
+                foreach (var auditory in auditories)
+                {
+                    var auditoryType = await db.AuditoryType.FirstOrDefaultAsync(x => x.Id == auditory.AuditoryTypeId);
+                    if (auditoryType != null)
+                    {
+                        auditory.AuditoryType = new AuditoryType { Id = auditoryType.Id, AuditoryTypeDescription = auditoryType.AuditoryTypeDescription };
+                    }
+                }
+                return auditories;
             }
             catch (Exception e)
             {

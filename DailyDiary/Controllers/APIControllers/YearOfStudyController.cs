@@ -34,26 +34,49 @@ namespace DailyDiary.Controllers.APIControllers
                 if (yearsOfStudy != null)
                 {
                     List<YearOfStudy> yearsOfStudyToView = new List<YearOfStudy>();
-                    yearsOfStudy.ForEach((yearOfStudy) => yearsOfStudyToView.Add(new YearOfStudy { Id=yearOfStudy.Id, YearStudy = yearOfStudy.YearStudy })) ;
-
+                    yearsOfStudy.ForEach((yearOfStudy) => yearsOfStudyToView.Add(new YearOfStudy { Id = yearOfStudy.Id, YearStudy = yearOfStudy.YearStudy }));
                     return yearsOfStudyToView;
                 }
                 else
                 {
-                    return NotFound("YearsOfStudy of current study year not found");
+                    return NotFound("Years of study of current study year not found");
                 }
             }
             return NotFound("Current study year not found");
         }
+
         [HttpGet("{studyYearId}")]
         public async Task<ActionResult<IEnumerable<YearOfStudy>>> GetYearsOfStudyByStudyYear(int studyYearId)
         {
-            var yearsOfStudy = await db.YearOfStudy.Where(x => x.StudyYearId == studyYearId).ToListAsync();
-            if (yearsOfStudy != null)
+            try
             {
-                return yearsOfStudy;
+                if (studyYearId <= 0)
+                {
+                    return BadRequest("Study year id can't be <= 0");
+                }
+                var studyYear = await db.StudyYears.FirstOrDefaultAsync(x => x.Id == studyYearId);
+                {
+                    if (studyYear == null)
+                    {
+                        return NotFound("Selected study year not found");
+                    }
+                    var yearsOfStudy = await db.YearOfStudy.Where(x => x.StudyYearId == studyYearId).ToListAsync();
+                    if (yearsOfStudy != null)
+                    {
+                        List<YearOfStudy> yearsOfStudyToDisplay = new List<YearOfStudy>();
+                        foreach (var yearOfStudy in yearsOfStudy)
+                        {
+                            yearsOfStudyToDisplay.Add(new YearOfStudy { Id = yearOfStudy.Id, YearStudy = yearOfStudy.YearStudy });
+                        }
+                        return yearsOfStudyToDisplay;
+                    }
+                    return NotFound("No one year of study of selected study year found");
+                }
             }
-            return NotFound();
+            catch(Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

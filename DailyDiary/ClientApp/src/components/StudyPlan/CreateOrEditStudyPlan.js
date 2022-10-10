@@ -36,7 +36,6 @@ class EditStudyPlan extends React.Component {
             studyYears: [],//навчальні роки, які співпадають з теперішнім
             yearsOfStudy: [],//роки навчання певного навчального року
             currentStudyPlan: [],//якщо навчальний план вже існує,
-            currentPlanToDisplay: <></>
         }
     }
 
@@ -54,9 +53,9 @@ class EditStudyPlan extends React.Component {
                     studyYears: data,
                     studyYearId: data[0].id
                 }
-                    , () => this.getYearsOfStudyByStudyYear(this.state.studyYearId)
+                    // , () => this.getYearsOfStudyByStudyYear(this.state.studyYearId)
                 );
-                // this.getYearsOfStudyByStudyYear(data[0].id); // отримую роки навчання конкретного навчального року
+                this.getYearsOfStudyByStudyYear(data[0].id); // отримую роки навчання конкретного навчального року
                 //this.getExistingStudyPlan(1);  // отримую навчальний план 1 групи із списку певного року навчання
             }
             else {
@@ -99,23 +98,23 @@ class EditStudyPlan extends React.Component {
     }
     async getExistingStudyPlan(yearOfStudyId) {
         try {
-            this.setState({
-                currentPlanToDisplay: <></>
-            })
+            let subjectSelection = document.getElementById("subjectSelection");
+            subjectSelection.innerHTML = "";
+
             this.subjectsAmount = 0;
             this.selectedSubjects = [];
             this.currentSelectedSubjectId = -1; // останній обраний предмет,
-            this.idExistingBlocksWithSubjects=[];
+            this.idExistingBlocksWithSubjects = [];
 
             const response = await fetch(`${Host}/api/StudyPlan/GetExistingStudyPlan/${yearOfStudyId}`)
             if (response.ok === true) {
                 const data = await response.json();
                 //console.log(data);
-                console.log( 
-                    "this.subjectsAmount: "+this.subjectsAmount,
-                    "this.idExistingBlocksWithSubjects" +this.idExistingBlocksWithSubjects,
-                    "this.selectedSubjects" +this.selectedSubjects
-                    )
+                console.log(
+                    "this.subjectsAmount: " + this.subjectsAmount,
+                    "this.idExistingBlocksWithSubjects" + this.idExistingBlocksWithSubjects,
+                    "this.selectedSubjects" + this.selectedSubjects
+                )
                 this.setState({
                     maxAllowedLessonsPerDay: data.maxAllowedLessonsPerDay,
                     currentStudyPlan: data,
@@ -123,39 +122,16 @@ class EditStudyPlan extends React.Component {
                     planTitle: data.planTitle,
                     semester: data.semester,
                     message: <div style={{ color: "green" }}>Study plan alredy exist</div>,
-                    edit: true,
-                    currentPlanToDisplay:
-                        data.subjectsToAdd.map(subjectFromDB => (
-                            this.subjectsAmount += 1,
-                            this.idExistingBlocksWithSubjects.push(this.subjectsAmount),
-                            this.selectedSubjects.push(subjectFromDB.subjectId),
-                            // console.log(this.selectedSubjects),
-                            <div key={"subjectSelection_" + this.subjectsAmount} className='row' id={"subjectSelection_" + this.subjectsAmount}>
-                                <div className="col-md-6">
-                                    <label htmlFor={"subject_" + this.subjectsAmount} className="form-label">Subject</label>
-                                    <select id={'subject_' + this.subjectsAmount} name={"subject_" + this.subjectsAmount} className="form-select" defaultValue={subjectFromDB.subjectId} onChange={this.onSelectionChange}>
-                                        {this.state.allSubjects.map((subject) =>
-                                            <option key={`subject_${subject.id}`} value={subject.id}>{subject.title}</option>
-                                        )}
-                                    </select>
-                                </div>
-                                <div className="col-md-4">
-                                    <label htmlFor={"hours_" + this.subjectsAmount} className="form-label">Hours</label>
-                                    <input id={"hours_" + this.subjectsAmount} type="number" step="0.25" className="form-control" min="0" defaultValue={subjectFromDB.hours} />
-                                </div>
-                                <div className="col-md-2">
-                                    <label htmlFor={"delete_" + this.subjectsAmount} className="form-label">Delete</label>
-                                    <button type="button" id={"delete_" + this.subjectsAmount} value={this.subjectsAmount} onClick={(e) => this.deleteSubjectFromList(e)} className="btn btn-danger">Delete</button>
-                                </div>
-                            </div>
-                        ))
+                    edit: true
                 }
-                ,()=> console.log( 
-                    "this.subjectsAmount: "+this.subjectsAmount,
-                    "this.idExistingBlocksWithSubjects" +this.idExistingBlocksWithSubjects,
-                    "this.selectedSubjects" +this.selectedSubjects
+                    , () => console.log(
+                        "this.subjectsAmount: " + this.subjectsAmount,
+                        "this.idExistingBlocksWithSubjects" + this.idExistingBlocksWithSubjects,
+                        "this.selectedSubjects" + this.selectedSubjects
                     )
                 )
+
+                data.subjectsToAdd.map(subjectFromDB => this.appendSubject(subjectFromDB));
             }
             else {
                 const studyYear = this.state.studyYears.find(x => x.id == this.state.studyYearId);
@@ -168,30 +144,7 @@ class EditStudyPlan extends React.Component {
                     message: <div style={{ color: "red" }}>Study plan doesn't exist</div>,
                     currentStudyPlan: [],
                     maxAllowedLessonsPerDay: 8,
-                    edit: false,
-                    currentPlanToDisplay: 
-                    (
-                        this.subjectsAmount += 1,
-                        this.idExistingBlocksWithSubjects.push(this.subjectsAmount),
-                        <div className='row' id={"subjectSelection_" + this.subjectsAmount}>
-                        <div className="col-md-6">
-                            <label htmlFor={"subject_" + this.subjectsAmount} className="form-label">Subject</label>
-                            <select id={'subject_' + this.subjectsAmount} name={"subject_" + this.subjectsAmount} className="form-select" onChange={this.onSelectionChange}>
-                                {this.state.allSubjects.map((subject) =>
-                                    <option key={`subject_${subject.id}`} value={subject.id}>{subject.title}</option>
-                                )}
-                            </select>
-                        </div>
-                        <div className="col-md-4">
-                            <label htmlFor={"hours_" + this.subjectsAmount} className="form-label">Hours</label>
-                            <input id={"hours_" + this.subjectsAmount} type="number" step="0.25" className="form-control" min="0" defaultValue={0} />
-                        </div>
-                        <div className="col-md-2">
-                            <label htmlFor={"delete_" + this.subjectsAmount} className="form-label">Delete</label>
-                            <button type="button" id={"delete_" + this.subjectsAmount} value={this.subjectsAmount} onClick={(e) => this.deleteSubjectFromList(e)} className="btn btn-danger">Delete</button>
-                        </div>
-                    </div>
-                    )
+                    edit: false
                 })
                 //const data = await response.text();
                 //window.alert(data);
@@ -229,7 +182,7 @@ class EditStudyPlan extends React.Component {
                     message: <div style={{ color: "green" }}>Study plan alredy exist</div>,
                     edit: true
                 }
-                ,()=> alert("Plan was created")
+                    , () => alert("Plan was created")
                 )
                 // window.location = `/admin/new-study-plan`
             }
@@ -245,7 +198,7 @@ class EditStudyPlan extends React.Component {
         }
     }
 
-    async onSubmit(e) {
+    onSubmit(e) {
         e.preventDefault()
         if (this.currentSelectedSubjectId >= 0) { //якщо останній вибраний предмет існує
             if (!this.selectedSubjects.find((elem) => elem == this.currentSelectedSubjectId)) // і його ще немає в списку
@@ -253,16 +206,27 @@ class EditStudyPlan extends React.Component {
             console.log("selectedSubjects=" + this.selectedSubjects)
         }
 
-        let subjectsToAdd = new Array();
+        let subjectsToAdd = new Array(); // масив ключ - значення (предмет : к-сть годин)
         console.log("this.idExistingBlocksWithSubjects: " + this.idExistingBlocksWithSubjects)
-        for (let i = 0; i < this.idExistingBlocksWithSubjects.length; i++) {
-            console.log(this.idExistingBlocksWithSubjects[i]);
-            let subject = e.target[`subject_${this.idExistingBlocksWithSubjects[i] + ""}`];
-            let hours = e.target[`hours_${this.idExistingBlocksWithSubjects[i] + ""}`];
-            if (subject != null && hours != null) {
-                if (subject.value != 0 && hours.value > 0) // якщо ід елементу != 0
+        for (let i = 0; i < this.idExistingBlocksWithSubjects.length; i++) { // для кожного згенерованого блоку предмету (предмет - години - видалити)
+            console.log(this.idExistingBlocksWithSubjects[i]); // перевіряю ід об'єктів
+            let subject = e.target[`subject_${this.idExistingBlocksWithSubjects[i] + ""}`]; // шукаю предмет
+            let hours = e.target[`hours_${this.idExistingBlocksWithSubjects[i] + ""}`]; // шукаю години
+            if (subject != null && hours != null)  // якщо обидва існують
+            {
+                if (subject.value > 0 && hours.value > 0) // якщо ід елементу != 0
                 {
-                    subjectsToAdd.push({ subjectId: subject.value, hours: hours.value });
+                    // console.log("ід предмету: " + subject.value + "\n",
+                    //     "масив предметів: ", subjectsToAdd, "\n",
+                    //     "предмет існує?: " , subjectsToAdd.find(x => x.subjectId == subject.value)); // перевіряю чи предмет вже додано в масив
+
+                    if (subjectsToAdd.find(x => x.subjectId == subject.value) !== undefined) { // якщо елемент вже існує в масиві
+                        window.alert(` Subject "${this.state.allSubjects.find(x => x.id == subject.value).title}" already exist!!!\n You can't add the same subject twice`);
+                        return 0;
+                    }
+                    else {
+                        subjectsToAdd.push({ subjectId: subject.value, hours: hours.value });
+                    }
                 }
                 else {
                     window.alert("Hours amount must be > 0");
@@ -270,7 +234,7 @@ class EditStudyPlan extends React.Component {
                 }
             }
         }
-        console.log("subjectsToAdd: " , subjectsToAdd)
+        console.log("subjectsToAdd: ", subjectsToAdd)
         const { planTitle, semester, yearOfStudy, maxAllowedLessonsPerDay } = e.target;
         console.log("datas to send: " + planTitle.value, semester.value, yearOfStudy.value, maxAllowedLessonsPerDay.value)
 
@@ -286,7 +250,7 @@ class EditStudyPlan extends React.Component {
                 subjectsToAdd
             }
             console.log(JSON.stringify(datasToSend))
-            await this.create(datasToSend);
+            //await this.create(datasToSend);
         }
 
     }
@@ -296,7 +260,12 @@ class EditStudyPlan extends React.Component {
         this.selectedSubjects.push(this.currentSelectedSubjectId);// додаю значення в масив
     }
 
-    appendSubject() {
+
+
+
+    appendSubject(subjectToEdit) {
+        console.log(subjectToEdit)
+
         if (this.currentSelectedSubjectId >= 0) {
             if (!this.selectedSubjects.find((elem) => elem == this.currentSelectedSubjectId))
                 this.selectedSubjects.push(this.currentSelectedSubjectId); //додаю предмет в масив обраних предметів
@@ -332,15 +301,30 @@ class EditStudyPlan extends React.Component {
         select.setAttribute('class', 'form-select');
         select.setAttribute('value', 'Subjects');
 
+        if (subjectToEdit !== undefined) {
 
-        select.innerHTML = `
+            select.innerHTML = `
             ${this.state.allSubjects.map((subject) =>
-            `<option key={"subject_"${subject.id}} value=${subject.id}>${subject.title}</option>`
-        )}`;
-        div1.appendChild(select);
-        div2.innerHTML = `
+                subject.id == subjectToEdit.subjectId ?
+                    `<option key={"subject_"${subject.id}} selected value=${subject.id}>${subject.title}</option>`
+                    :
+                    `<option key={"subject_"${subject.id}} value=${subject.id}>${subject.title}</option>`
+            )}`;
+            div1.appendChild(select);
+            div2.innerHTML = `
+        <input type="number" class="form-control" id=${"hours_" + this.subjectsAmount} step="0.25" min="0" value="${subjectToEdit.hours}"/>
+        `;
+        }
+        else {
+            select.innerHTML = `
+            ${this.state.allSubjects.map((subject) =>
+                `<option key={"subject_"${subject.id}} value=${subject.id}>${subject.title}</option>`
+            )}`;
+            div1.appendChild(select);
+            div2.innerHTML = `
         <input type="number" class="form-control" id=${"hours_" + this.subjectsAmount} step="0.25" min="0" value="0"/>
         `;
+        }
         div3.append(button);
         parrentDiv.appendChild(div1);
         parrentDiv.appendChild(div2);
@@ -350,6 +334,7 @@ class EditStudyPlan extends React.Component {
             parrentDiv
         );
     }
+
     deleteSubjectFromList(event) {
         event.preventDefault();
         console.log("SelectedBlockId=" + event.target.value);
@@ -397,7 +382,7 @@ class EditStudyPlan extends React.Component {
                     </div>
                     <h2 style={{ position: "absolute", top: 120 }} className="title-edit">Create new study plan</h2>
 
-                    <form onSubmit={e => this.onSubmit(e)} className='form-edit d-flex flex-column align-items-center justify-content-center'>
+                    <form onSubmit={this.onSubmit} className='form-edit d-flex flex-column align-items-center justify-content-center'>
 
                         <div className="row g-3" id="formView">
                             <div className="col-md-12">
@@ -455,7 +440,6 @@ class EditStudyPlan extends React.Component {
                         </div>
                         <div className='text-center'>{this.state.message}</div>
                         <div id="subjectSelection">
-                           {this.state.currentPlanToDisplay}
                         </div>
                         <div className='btn btn-primary' onClick={() => this.appendSubject()}>Add one more subject</div>
                         {this.state.edit === true ?

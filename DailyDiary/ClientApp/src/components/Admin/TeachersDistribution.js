@@ -8,6 +8,7 @@ class TeachersDistribution extends React.Component{
         this.onSelectionChange = this.onSelectionChange.bind(this);
         this.getAllSubjects = this.getAllSubjects.bind(this);
         this.getTeachersBySubjects = this.getTeachersBySubjects.bind(this);
+        this.getGroupSubjects = this.getGroupSubjects.bind(this);
         this.state={
            selectedGroupId:0,
            allSubjects:[],
@@ -22,12 +23,13 @@ async componentDidMount(){
 }
  
 async getAllGroups(){ // отримую список усіх груп
-    const response = await fetch("https://localhost:44364/api/group/get");
+    const response = await fetch("https://localhost:44364/api/group/getAllGroupsDatasOfCurrentStudyYear");
     if(response.ok===true){
         //console.log(response)
         const data = await response.json();
         console.log(data)
         this.setState({groups:data})
+        this.getGroupSubjects(data[0].groupId)
     }
     else{
         alert("Some error");
@@ -46,15 +48,15 @@ async getAllSubjects(){ // отримую список усіх предметі
         }
     }catch{}
 }
-async getGroupSubjects(){// отримую список усіх предметів навчального плану для групи, в якої рік навчання == року навчання, для якого був створений навчальний план
-    const response = await fetch(`https://localhost:44364/api/group/GetGroupSubjectsById/${this.state.selectedGroupId}`);
+async getGroupSubjects(groupId){// отримую список усіх предметів навчального плану для групи, в якої рік навчання == року навчання, для якого був створений навчальний план
+    const response = await fetch(`https://localhost:44364/api/group/GetGroupSubjectsById/${groupId}`);
     const data = await response.json();
     if(response.ok===true){
         //console.log(response)
         console.log(data)
-        this.setState({groupStudyPlan:data})
-           // ,()=>this.getTeachersBySubjects())
-        await this.getTeachersBySubjects()
+        this.setState({groupStudyPlan:data}
+            ,()=>this.getTeachersBySubjects());
+        // await this.getTeachersBySubjects()
     }
     else{
         this.setState({groupStudyPlan:[]})
@@ -85,11 +87,13 @@ async getTeachersBySubjects(){ // отримую список викладачі
         alert(data.error);
     }
 }
-async onSelectionChange(event){
-    console.log(event.target.value)
-    this.setState({selectedGroupId:event.target.value},()=>
-    this.getGroupSubjects());
-    ;
+onSelectionChange(e){
+    e.preventDefault();
+    console.log(e.target.value)
+    this.setState({
+        selectedGroupId:e.target.value
+    });
+    this.getGroupSubjects(e.target.value)
 }
 render(){
     let table = this.state.groupStudyPlan.length>0 && this.state.allSubjects.length>0 && this.state.teachers.length>0?
@@ -113,7 +117,7 @@ render(){
                             {this.state.teachers.map((teacher) =>
                                 
                                 teacher.teacherSubjects.find(x=> x.subjectId==subject.subjectId)!==undefined?
-                                <option key={`teacher_${teacher.id}`} value={teacher.id}>{teacher.name} {teacher.lastName}</option>
+                                <option key={`teacher_${teacher.teacherId}`} value={teacher.teacherId}>{teacher.name} {teacher.lastName}</option>
                                 :
                                 <></>
                                 //<option key={`teacherNotFound_${teacher.id}`} value={-1}>Teachers that can teach that subject not found</option>
@@ -142,9 +146,9 @@ render(){
        <div className="container">
            <div className="col-md-6">
                 <label htmlFor="group" className="form-label">Group</label>
-                <select id='group' name='group' className="form-select" defaultValue="0" onChange={(e)=>this.onSelectionChange(e)}>
+                <select id='group' name='group' className="form-select" onChange={this.onSelectionChange}>
                     {this.state.groups.map((group) =>
-                        <option key={`group_${group.id}`} value={group.id}>{group.title}</option>
+                        <option key={`group_${group.groupId}`} value={group.groupId}>{group.groupTitle}</option>
                     )}
                 </select>
             </div>

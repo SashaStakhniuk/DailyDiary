@@ -1,6 +1,7 @@
 ﻿using DailyDiary.Models.DbModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace DailyDiary.Models
         [MaxLength(45)]
         public string Title { get; set; }
         public int DefSubgroupId { get; set; }// основна підгрупа, для подальшої роботи з розкладом, зменшення к-сті таблиць, всі студенти групи знаходяться в підгрупах
+        
         [ForeignKey("Auditory")]
         public int? PreferedAuditoryId { get; set; }
         [ForeignKey("StudyPlan")]

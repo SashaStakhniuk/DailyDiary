@@ -168,7 +168,7 @@ namespace DailyDiary.Models
 
             builder.Entity<TeacherSubject>()
                                 //.HasKey(ts => new { ts.Id, ts.TeacherId, ts.SubjectId });
-              .HasKey(ts => new { ts.TeacherId, ts.SubjectId });
+              .HasKey(ts => new {ts.Id, ts.TeacherId, ts.SubjectId });
 
             builder.Entity<TeacherSubject>()
                 .HasOne(t => t.Teacher)

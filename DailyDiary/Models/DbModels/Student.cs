@@ -35,29 +35,4 @@ namespace DailyDiary.Models
         public virtual ICollection<StudentFeedback> StudentFeedback { get; set; }
         public virtual ICollection<ParentStudent> ParentStudents { get; set; }
     }
-    //public class Student : Person
-    //{
-    //    public Student()
-    //    {
-    //        this.StudentsBySubgroups = new HashSet<StudentsBySubgroup>();
-    //        StudentClassworks = new HashSet<StudentClasswork>();
-    //        StudentHomeworks = new HashSet<StudentHomework>();
-    //        StudentNews = new HashSet<StudentNews>();
-    //        StudentFeedback = new HashSet<StudentFeedback>();
-    //    }
-
-    //    [Key]
-    //    public int StudentId { get; set; } //id
-    //    public string Base64URL { get; set; }//фото
-    //    public int? Rate { get; set; }
-
-    //    [ForeignKey("User")]
-    //    public string UserId { get; set; }
-    //    public virtual User User { get; set; }//посилання на запис
-    //    public virtual ICollection<StudentsBySubgroup> StudentsBySubgroups { get; set; }
-    //    public virtual ICollection<StudentClasswork> StudentClassworks { get; set; }
-    //    public virtual ICollection<StudentHomework> StudentHomeworks { get; set; }
-    //    public virtual ICollection<StudentNews> StudentNews { get; set; }
-    //    public virtual ICollection<StudentFeedback> StudentFeedback { get; set; }
-    //}
 }

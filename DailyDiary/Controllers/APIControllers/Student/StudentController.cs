@@ -1,4 +1,5 @@
 ﻿using DailyDiary.Models;
+using DailyDiary.Models.DbModels;
 using DailyDiary.Models.ViewModels;
 using DailyDiary.Models.ViewModels.Student;
 using DailyDiary.Services;
@@ -19,28 +20,21 @@ namespace DailyDiary.Controllers.APIControllers
     {
         private readonly DailyDiaryDatasContext db;
         private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
-        private readonly RoleManager<IdentityRole> roleManager;
+        //private readonly SignInManager<User> signInManager;
+        //private readonly RoleManager<IdentityRole> roleManager;
         public StudentController(DailyDiaryDatasContext datasContext,
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager
+            UserManager<User> userManager
+            //SignInManager<User> signInManager,
+            //RoleManager<IdentityRole> roleManager
             )
         {
             this.db = datasContext;
             this.userManager = userManager;
-            this.signInManager = signInManager;
-            this.roleManager = roleManager;
+            //this.signInManager = signInManager;
+            //this.roleManager = roleManager;
         }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> Get()
-        {
-            return await db.Students.ToListAsync();
-        }
-
         [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> Get(int id)
+        public async Task<ActionResult<Student>> Get(int id) // отримати студента по ід
         {
             var student = await db.Students.FirstOrDefaultAsync(x => x.Id == id);
             if (student == null)
@@ -48,6 +42,219 @@ namespace DailyDiary.Controllers.APIControllers
                 return NotFound();
             }
             return Ok(student);
+        }
+        private async Task<List<StudentToDisplayViewModel>> GetStudentsAllDataByStudentsId(List<int> studentsId) // функція отримання списку даних про студентів по їх ід
+        {
+            List<StudentToDisplayViewModel> studentsToDisplay = new List<StudentToDisplayViewModel>();
+            foreach (var studentId in studentsId)
+            {
+                var studentToDisplay = new StudentToDisplayViewModel();
+                var student = await db.Students.Include(x => x.Person).FirstOrDefaultAsync(x => x.Id == studentId);
+                if (student != null)
+                {
+                    studentToDisplay.StudentId = student.Id;
+                    studentToDisplay.AdmissionDate = student.AdmissionDate;
+                    studentToDisplay.AdditionalInfo = student.AdditionalInfo;
+
+                    if (student.Person != null)
+                    {
+                        studentToDisplay.PersonId = student.Person.Id;
+                        studentToDisplay.Name = student.Person.Name;
+                        studentToDisplay.MiddleName = student.Person.MiddleName;
+                        studentToDisplay.LastName = student.Person.LastName;
+                        studentToDisplay.UserId = student.Person.UserId;
+                        studentToDisplay.Address = student.Person.Address;
+                        studentToDisplay.Birthday = student.Person.Birthday;
+                        studentToDisplay.Base64URL = student.Person.Base64URL;
+
+                        var user = await userManager.FindByIdAsync(student.Person.UserId);
+                        if (user != null)
+                        {
+                            studentToDisplay.PhoneNumber = user.PhoneNumber;
+                            studentToDisplay.Email = user.Email;
+                        }
+                    }
+                    studentsToDisplay.Add(studentToDisplay);
+                }
+
+            }
+            if (studentsToDisplay.Count > 0)
+            {
+                return studentsToDisplay;
+            }
+            return null;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Student>>> GetAll() // отримання усіх студентів
+        {
+            return await db.Students.ToListAsync();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StudentToDisplayViewModel>>> GetAllStudentsWithoutGroupThisStudyYear() //отримання списку студентів теперішнього року навчання, які ще не розподілені по групах
+        {
+            var allStudentsId = await db.Students.Select(x => x.Id).ToListAsync();
+            if (allStudentsId == null)
+            {
+                return NotFound("No one student found.");
+            }
+
+            StudyPlanController studyPlanController = new StudyPlanController(db);
+            var currentYearStudyPlansId = await studyPlanController.GetAllStudyPlansIdOfCurrentStudyYear(); // усі навчальні плани теперішнього навчального року
+            if (currentYearStudyPlansId == null)
+            {
+                return NotFound("No one study plan exist for current study year. Students doesn't distributed by groups.");
+            }
+            var studyPlansId = currentYearStudyPlansId.Value.ToList();
+            List<int> defSubgroupsId = new List<int>(); // ід підгруп, де знаходяться студенти груп
+            foreach (var studyPlanId in studyPlansId)
+            {
+                List<int> subgroupsIdToAdd = await db.Groups.Where(x => x.StudyPlanId == studyPlanId).Select(x => x.DefSubgroupId).ToListAsync();//всі підгрупи, де навчальний план = навчальному плану групи
+                if (subgroupsIdToAdd != null)
+                {
+                    defSubgroupsId.AddRange(subgroupsIdToAdd);
+                }
+            }
+            if (defSubgroupsId.Count == 0) // якщо не існує підгруп
+            {
+                return NotFound("No one subgroup found.");
+            }
+            List<int> studentsInGroupId = new List<int>(); // ід студентів, розподілених по групах
+
+            foreach (var subgroupId in defSubgroupsId)
+            {
+                List<int> studentsId = await db.StudentsBySubgroups.Where(x => x.SubgroupId == subgroupId).Select(x => x.StudentId).ToListAsync();// ід студентів по підгрупі
+                if (studentsId != null)
+                {
+                    studentsInGroupId.AddRange(studentsId);
+                }
+            }
+
+            //List<StudentToDisplayViewModel> studentsToDisplay = new List<StudentToDisplayViewModel>();
+            if (studentsInGroupId.Count > 0)// якщо розподілені по групах студенти існують 
+            {
+                allStudentsId = allStudentsId.Except(studentsInGroupId).ToList(); // список ід студентів, яким не назначена група
+            }
+            if (allStudentsId.Count == 0)
+            {
+                return NotFound("All students distributed by groups");
+            }
+            //foreach (var studentId in allStudentsId)
+            //{
+            //    var studentToDisplay = new StudentToDisplayViewModel();
+            //    var student = await db.Students.Include(x => x.Person).FirstOrDefaultAsync(x => x.Id == studentId);
+            //    if (student != null)
+            //    {
+            //        studentToDisplay.StudentId = student.Id;
+            //        studentToDisplay.AdmissionDate = student.AdmissionDate;
+            //        studentToDisplay.AdditionalInfo = student.AdditionalInfo;
+
+            //        if (student.Person != null)
+            //        {
+            //            studentToDisplay.PersonId = student.Person.Id;
+            //            studentToDisplay.Name = student.Person.Name;
+            //            studentToDisplay.MiddleName = student.Person.MiddleName;
+            //            studentToDisplay.LastName = student.Person.LastName;
+            //            studentToDisplay.UserId = student.Person.UserId;
+            //            studentToDisplay.Address = student.Person.Address;
+            //            studentToDisplay.Birthday = student.Person.Birthday;
+            //            studentToDisplay.Base64URL = student.Person.Base64URL;
+
+            //            var user = await userManager.FindByIdAsync(student.Person.UserId);
+            //            if (user != null)
+            //            {
+            //                studentToDisplay.PhoneNumber = user.PhoneNumber;
+            //                studentToDisplay.Email = user.Email;
+            //            }
+            //        }
+            //        studentsToDisplay.Add(studentToDisplay);
+            //    }
+
+            //}
+            //if (studentsToDisplay.Count > 0)
+            //{
+            //    return studentsToDisplay;
+            //}
+            var studentsData = await GetStudentsAllDataByStudentsId(allStudentsId);
+            if (studentsData != null)
+            {
+                return studentsData;
+            }
+            return NotFound("No one student information found");
+        }
+
+        [HttpGet("{groupId}")]
+        public async Task<ActionResult<IEnumerable<StudentToDisplayViewModel>>> GetAllByGroupId(int groupId)
+        {
+            try
+            {
+                if (groupId <= 0)
+                {
+                    return BadRequest("GroupId should be >= 0");
+                }
+                var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+                if (group == null)
+                {
+                    return NotFound("Group not found");
+                }
+                var subgroupId = await db.Subgroups.Where(x => x.Id == group.DefSubgroupId).Select(x => x.Id).FirstOrDefaultAsync(); // шукаю ід підгрупи, де знаходяться усі студенти
+                if (subgroupId == 0)
+                {
+                    return NotFound("Default subgroup not found");
+                }
+                var studentsIdBySubgroup = await db.StudentsBySubgroups.Where(x => x.SubgroupId == subgroupId).Select(x => x.StudentId).ToListAsync(); // ід студентів що навчаються в групі
+                if (studentsIdBySubgroup == null)
+                {
+                    return NotFound("No one student found");
+                }
+                var students = await GetStudentsAllDataByStudentsId(studentsIdBySubgroup);
+
+                if (students != null)
+                {
+                    return students;
+                }
+                else
+                {
+                    return NotFound("Students datas not found");
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpGet("{subgroupId}")]
+        public async Task<ActionResult<IEnumerable<StudentToDisplayViewModel>>> GetAllBySubroupId(int subgroupId)
+        {
+            try
+            {
+                if (subgroupId <= 0) // якщо ід підгрупи <=0
+                {
+                    return BadRequest("Subgroup id should be >= 0");
+                }
+                var subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == subgroupId);// шукаю підгрупу
+                if (subgroup == null) // якщо не існує
+                {
+                    return NotFound("Subgroup not found");
+                }
+                var studentsIdBySubgroup = await db.StudentsBySubgroups.Where(x => x.SubgroupId == subgroupId).Select(x => x.StudentId).ToListAsync(); // всі ід студентів з підгрупи
+                if (studentsIdBySubgroup == null || studentsIdBySubgroup.Count == 0) // якщо немає ніодного запису
+                {
+                    return NotFound("No one student in this subgroup found");
+                }
+
+                var studentsToDisplay = await GetStudentsAllDataByStudentsId(studentsIdBySubgroup);
+                if (studentsToDisplay != null)
+                {
+                    return studentsToDisplay;
+                }
+                return StatusCode(500);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("{studentsSkip}")]
@@ -63,7 +270,44 @@ namespace DailyDiary.Controllers.APIControllers
                 return Ok(false);
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> AddStudentsIntoGroup(StudentsByGroupsDistributionViewModel model)
+        {
+            if (model.GroupId <= 0)
+            {
+                return BadRequest("GroupId can't be <= 0");
+            }
+            if (model.StudentsId == null || model.StudentsId.Count == 0)
+            {
+                return BadRequest("No one student selected");
+            }
+            var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+            if (group == null)
+            {
+                return NotFound("Group not found");
+            }
+            var subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == group.DefSubgroupId);
+            if (subgroup == null)
+            {
+                return NotFound("Subgroup not found");
+            }
+            List<StudentsBySubgroup> studentsSubgroups = new List<StudentsBySubgroup>();
+            foreach (var studentId in model.StudentsId)
+            {
+                var student = await db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
+                if (student != null)
+                {
+                    await db.StudentsBySubgroups.AddAsync(new StudentsBySubgroup { Subgroup = subgroup, Student = student });
+                }
+            }
+            var result = await db.SaveChangesAsync();
+            if (result > 0)
+            {
+                return Ok();
+            }
+            return StatusCode(500);
 
+        }
         [HttpPost]
         public async Task<ActionResult> AddBase64(Base64ViewModel model)
         {
@@ -77,128 +321,6 @@ namespace DailyDiary.Controllers.APIControllers
             return Ok();
         }
 
-        //[HttpGet("{lastName}")]
-        //public async Task<ActionResult<IEnumerable<Student>>> GetByName(string lastName)
-        //{
-        //    if (lastName == null)
-        //    {
-        //        return await db.Students.ToListAsync();
-        //    }
-        //    return await db.Students.Where(s => s.LastName.Contains(lastName)).ToListAsync();
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(StudentViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (model != null)
-        //        {
-        //            var student = await db.Students.FirstOrDefaultAsync(x => x.StudentId == model.Id);
-        //            if (student != null)
-        //            {
-        //                Group group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
-        //                Subgroup subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == model.SubgroupId);
-
-        //                //student.Password = model.Password;
-        //                //student.Login = model.Login;
-        //                //student.Email = model.Email;
-
-        //                student.Name = model.Name;
-        //                student.LastName = model.LastName;
-        //                student.Birthday = model.Birthday;
-        //                //student.YearOfStudy = model.StudyYear;
-        //                student.Group = group;
-        //                student.Subgroup = subgroup;
-        //                student.AdmissionDate = model.AdmissionDate;
-
-        //                db.Students.Update(student);
-        //                await db.SaveChangesAsync();
-        //                return Ok();
-
-        //            }
-        //            return Ok(student);
-        //        }
-        //    }
-        //    return BadRequest(ModelState);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateNew(NewStudentViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            if (await userManager.FindByEmailAsync(model.Email) != null) // перевірка чи іcнує такий е-mail
-        //            {
-        //                throw new Exception("Email already registered");
-        //                //return BadRequest(new { error = "Email already registered" });
-        //            }
-        //            GeneratorService generatorService = new GeneratorService(userManager);
-        //            string _login = await generatorService.GenerateNewLogin(model.LastName); // генерація логіну
-        //                                                                                     //string _password = GeneratorService.CreatePassword(12, model.LastName); // генерація паролю
-        //            string _password = generatorService.CreatePassword(); // генерація паролю
-        //            User user = new User
-        //            {
-        //                Email = model.Email,
-        //                UserName = _login,
-        //                //Name = model.Name,
-        //                //LastName = model.LastName,
-        //                //MiddleName = model.MiddleName,
-        //                TgNickName = model.TgNickName,
-        //                PhoneNumber = model.PhoneNumber
-        //                //PhoneNumber = System.Text.RegularExpressions.Regex.IsMatch(model.PhoneNumber, @"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$")? model.PhoneNumber:null // валідація номеру
-        //            };
-        //            var result = await userManager.CreateAsync(user, _password);
-        //            if (result.Succeeded)
-        //            {
-        //                await userManager.AddToRoleAsync(user, "Student");
-
-        //                Group group = null;
-        //                int order = db.Students.Count() + 1; //для сортировки студента
-        //                if (model.GroupId != 0)
-        //                {
-        //                    group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId); // шукаємо групу
-        //                    if (group == null)
-        //                    {
-        //                        return BadRequest(new { error = "Group not found"});
-        //                    }
-        //                }
-
-        //                db.Students.Add(new Student
-        //                {
-        //                    User = user,
-        //                    Name = model.Name,
-        //                    LastName = model.LastName,
-        //                    Birthday = model.Birthday,
-        //                    Age = model.Age,
-        //                    AdmissionDate = model.AdmissionDate,
-        //                    //YearOfStudy = model.YearOfStudy,
-        //                    Group = group,
-        //                });
-        //                await db.SaveChangesAsync();
-        //                return Ok();
-        //            }
-        //            else
-        //            {
-        //                foreach (var error in result.Errors)
-        //                {
-        //                    ModelState.AddModelError("", error.Description);
-        //                }
-        //                return BadRequest(ModelState);
-        //            }
-                       
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            //Console.WriteLine(ex.Message);
-        //            return BadRequest(new { error = ex.Message });
-        //        }
-        //    }
-        //    return BadRequest(ModelState);
-        //}
-
         [HttpDelete("{id}")]
         public async Task<ActionResult<Student>> Delete(int id)
         {
@@ -211,7 +333,106 @@ namespace DailyDiary.Controllers.APIControllers
             await db.SaveChangesAsync();
             return Ok(student);
         }
+        [HttpDelete("{details}")]
+        public async Task<IActionResult> DeleteStudentFromGroup(int studentId, int groupId)
+        {
+            try
+            {
+                if (studentId <= 0)
+                {
+                    return BadRequest("studentId can't be <= 0");
+                }
+                if (groupId <= 0)
+                {
+                    return BadRequest("groupId can't be <= 0");
+                }
+                var student = await db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
+                if (student == null)
+                {
+                    return NotFound("Student not found");
+                }
+                var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+                if (group == null)
+                {
+                    return NotFound("Group not found");
+                }
+                List<int> groupSubgroupsId = await db.Subgroups.Where(x => x.GroupId == group.Id).Select(x => x.Id).ToListAsync(); // шукаю усі підгрупи групи, де може бути студент
+                if (groupSubgroupsId == null) // якщо ні однієї підгрупи не знайдено
+                {
+                    return NotFound("Student doesn't exist in this group");
+                }
 
+                foreach (var subgroupId in groupSubgroupsId)
+                {
+                    var studentBySubgroup = await db.StudentsBySubgroups.FirstOrDefaultAsync(x => x.SubgroupId == subgroupId && x.StudentId == studentId);// усі підгрупи, де знаходиться студент
+                    if (studentBySubgroup != null) // якщо підгрупа із таким студентом існує
+                    {
+                        db.StudentsBySubgroups.Remove(studentBySubgroup); // видаляю запис з таблиці (студента з підгрупи)
+                    }
+                }
+                var result = await db.SaveChangesAsync();
+                if (result > 0)
+                {
+                    return Ok("The student was removed succesfully from group (include group subgroups)");
+                }
+                return BadRequest("The student wasn't removed from group (include group subgroups)"); ;
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+
+        }
+        [HttpDelete("{details}")]
+        public async Task<IActionResult> DeleteStudentFromSubgroup(int studentId, int subgroupId)
+        {
+            try
+            {
+                if (studentId <= 0)
+                {
+                    return BadRequest("Student Id can't be <= 0");
+                }
+                if (subgroupId <= 0)
+                {
+                    return BadRequest("Subgroup id can't be <= 0");
+                }
+                var student = await db.Students.FirstOrDefaultAsync(x => x.Id == studentId);
+                if (student == null)
+                {
+                    return NotFound("Student not found");
+                }
+                var subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Id == subgroupId);
+                if (subgroup == null)
+                {
+                    return NotFound("Subgroup not found");
+                }
+
+                var studentBySubgroup = await db.StudentsBySubgroups.FirstOrDefaultAsync(x => x.SubgroupId == subgroupId && x.StudentId == studentId);// підгрупа, де знаходиться студент
+                if (studentBySubgroup != null) // якщо підгрупа із таким студентом існує
+                {
+                    db.StudentsBySubgroups.Remove(studentBySubgroup); // видаляю запис з таблиці (студента з підгрупи)
+                    var result = await db.SaveChangesAsync();
+                    if (result > 0)
+                    {
+                        return Ok("The student was removed succesfully from subgroup");
+                    }
+                    else
+                    {
+                        return BadRequest("The student wasn't removed from subgroup");
+                    }
+                }
+                else
+                {
+                    return NotFound("Student not found in this subgroup");
+                }
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+
+        }
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Group>> GetStudentGroupByIdAsync(int id)//GetStudentGroupByIdAsync
         //{
