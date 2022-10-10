@@ -30,11 +30,11 @@ namespace DailyDiary.Controllers.APIControllers
         {
             return await db.StudyPlans.ToListAsync();
         }
-        public async Task<ActionResult<IEnumerable<int>>> GetAllStudyPlansIdOfCurrentStudyYear()
+        public async Task<IEnumerable<int>> GetAllStudyPlansIdOfCurrentStudyYear()
         {
             YearOfStudyController yearOfStudyController = new YearOfStudyController(db);
             var allYearsOfStudyOfCurrentStudyYear = await yearOfStudyController.GetYearsOfStudyByCurrentStudyYear(); // всі роки навчання теперішнього навчального року
-            if (allYearsOfStudyOfCurrentStudyYear != null)
+            if (allYearsOfStudyOfCurrentStudyYear.Value != null)
             {
                 var currentYearsOfStudy = allYearsOfStudyOfCurrentStudyYear.Value.ToList();
                 if (currentYearsOfStudy.Count > 0)

@@ -106,7 +106,7 @@ namespace DailyDiary.Controllers.APIControllers
             {
                 return NotFound("No one study plan exist for current study year. Students doesn't distributed by groups.");
             }
-            var studyPlansId = currentYearStudyPlansId.Value.ToList();
+            var studyPlansId = currentYearStudyPlansId.ToList();
             List<int> defSubgroupsId = new List<int>(); // ід підгруп, де знаходяться студенти груп
             foreach (var studyPlanId in studyPlansId)
             {

@@ -178,18 +178,17 @@ const Root = () => {
 
                     <Route exact path="/admin/new-student"><CreateNewStudent/></Route> {/*додання студента*/}
                     <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route> {/*створення навчального року*/}
-                    {/* <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route> створення навчального плану */}
                     <Route exact path="/admin/teachers-distribution"><TeachersDistribution/></Route> {/*розподілення викладачів по групах за предметами*/}
                     <Route exact path="/admin/new-study-plan"><CreateOrEditStudyPlan/></Route> {/* створення нового та редагування існуючого навчального плану */}
-
+                   
+                    {/* <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route> створення навчального плану */}
                     {/* <Route exact path="/admin/edit-study-plan"><EditStudyPlan1_DoesntWork/></Route> НЕ ПРАЦЮЄ! при виборі предмету, в наступних блоках він не відображається*/}
 
 
                     <Route exact path="/admin/groups"><AllGroups/></Route>
                     <Route exact path="/admin/edit-group"><EditGroup/></Route> {/*Список усіх груп із необхідними даними теперішнього навчального року*/}
 
-                    <Route exact path="/admin/edit-groups"><FullGroupEditing/></Route> {/* додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах 
-                    ДОРОБИТИ!!!!! -> видалення студентів з групи або підгрупи, видалення підгрупи з групи*/}
+                    <Route exact path="/admin/edit-groups"><FullGroupEditing/></Route> {/* додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах */}
 
                     <Route exact path="/admin/new-group" component={CreateNewGroup}></Route> {/* створення нової/редагування існуючої групи */}
                     <Route exact path="/admin/new-student"><CreateNewStudent/></Route> 

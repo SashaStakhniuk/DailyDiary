@@ -250,7 +250,7 @@ class EditStudyPlan extends React.Component {
                 subjectsToAdd
             }
             console.log(JSON.stringify(datasToSend))
-            //await this.create(datasToSend);
+            this.create(datasToSend);
         }
 
     }

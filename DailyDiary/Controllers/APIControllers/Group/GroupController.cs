@@ -47,7 +47,7 @@ namespace DailyDiary.Controllers.APIControllers
             var studyPlansIds = await studyPlanController.GetAllStudyPlansIdOfCurrentStudyYear();
             if (studyPlansIds != null)
             {
-                var studyPlansId = studyPlansIds.Value.ToList();
+                var studyPlansId = studyPlansIds.ToList();
                 var groups = new List<Group>();
                 foreach (var studyPlanId in studyPlansId)
                 {
@@ -118,7 +118,7 @@ namespace DailyDiary.Controllers.APIControllers
             var studyPlansIds = await studyPlanController.GetAllStudyPlansIdOfCurrentStudyYear();
             if (studyPlansIds != null)
             {
-                var studyPlansId = studyPlansIds.Value.ToList();
+                var studyPlansId = studyPlansIds.ToList();
                 var groupsAuditories = new List<GroupAuditoryViewModel>();
                 foreach (var studyPlanId in studyPlansId)
                 {

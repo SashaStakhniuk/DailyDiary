@@ -17,18 +17,18 @@ namespace DailyDiary.Models.DbModels
         [Key]
         public int Id { get; set; }
         [ForeignKey("Subgroup")]
-        public int? SubgroupId { get; set; } // яка підгрупа. може бути або тільки підгрупа або тільки юніон
+        public int? SubgroupId { get; set; } // яка підгрупа. може бути або тільки підгрупа або тільки юніон (замість групи вказується її дефолтна підгрупа)
 
         [ForeignKey("Teacher")]
-        public int TeacherId { get; set; } // викладач
+        public int? TeacherId { get; set; } // викладач
         [ForeignKey("Subject")]
         public int SubjectId { get; set; } // предмет
 
         [ForeignKey("Union")]
         public int? UnionId { get; set; } // або тільки юніон.  може бути або тільки підгрупа або тільки юніон
         [ForeignKey("AuditoryType")]
-        public int AuditoryTypeId { get; set; } // в якому типі аудиторії необхідно провести пару
-        public float AdditionalHours { get; set; } //якщо це предмет на який виділяються додаткові години (для підгруп)
+        public int? AuditoryTypeId { get; set; } // в якому типі аудиторії необхідно провести пару
+        public float? AdditionalHours { get; set; } //якщо це предмет на який виділяються додаткові години (для підгруп)
         public virtual Subgroup Subgroup { get;set;}
         public virtual Teacher Teacher { get; set; }
         public virtual Subject Subject { get; set; }
