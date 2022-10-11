@@ -171,7 +171,7 @@ namespace DailyDiary.Controllers.APIControllers
 
                         db.Students.Add(new Student
                         {
-                            User = user,
+                            //User = user,
                             Name = model.Name,
                             LastName = model.LastName,
                             Birthday = model.Birthday,

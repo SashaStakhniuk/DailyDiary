@@ -36,8 +36,13 @@ import Student from './Students/Student.js';
 import AboutStudent from './Students/AboutStudent.js';
 import ReduxTesting from './ReduxTesting.js';
 import ColorPicker from './EnvironmentStyle.js';
-
+import News from './News'
 import Header from './Header'
+import ResetPasswordRoot from './ResetPasswordRoot'
+import Profil from './Students/Profil.jsx'
+import Review from './Students/Review.jsx';
+import MainPage from './Students/MainPage'
+
 const Root = () => {
 
     // const [isStudent, setIsStudent] = useState(false)
@@ -163,9 +168,16 @@ const Root = () => {
             <Router>
                 <Switch>
                     <Route exact path="/header"><Header/></Route>
+                    <Route exact path="/student/main-page"><MainPage/></Route>
+                    <Route exact path="/profil"><Profil/></Route>
                     <Route exact path="/"><Login/></Route>
                     <Route exact path="/children-login"><LoginChildrens/></Route>
 
+                    <Route exact path="/student/main-page"><MainPage/></Route>
+                    <Route exact path="/student/review"><Review/></Route>
+                    <Route exact path="/students/news"><News/></Route>
+                    <Route exact path="/student/profil"><Profil/></Route>
+                    <Route exact path="/reset-password"><ResetPasswordRoot/></Route>
                     <Route exact path="/admin"><Admin/></Route>
                     <Route exact path="/admin/new-student"><CreateNewStudent/></Route>
                     <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route>

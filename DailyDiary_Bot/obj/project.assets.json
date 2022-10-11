@@ -8149,9 +8149,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary_Bot\\DailyDiary_Bot.csproj",
-      "projectName": "DailyDiary_Bot",
-      "projectPath": "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary_Bot\\DailyDiary_Bot.csproj",
+      "projectUniqueName": "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary_Bot\\DailyDiaryBotService.csproj",
+      "projectName": "DailyDiaryBotService",
+      "projectPath": "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary_Bot\\DailyDiaryBotService.csproj",
       "packagesPath": "C:\\Users\\denis\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary_Bot\\obj\\",
       "projectStyle": "PackageReference",

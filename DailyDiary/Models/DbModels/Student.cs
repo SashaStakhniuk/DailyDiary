@@ -32,10 +32,9 @@ namespace DailyDiary.Models
         public int? Rate { get; set; }
         public int? GroupId { get; set; }
         public int? SubgroupId { get; set; }
-
         [ForeignKey("UserId")]
         public string UserId { get; set; }
-        public virtual User User { get; set; }//посилання на запис
+        //public virtual User User { get; set; }//посилання на запис
         public virtual Subgroup Subgroup { get; set; }
         public virtual Group Group { get; set; }
 

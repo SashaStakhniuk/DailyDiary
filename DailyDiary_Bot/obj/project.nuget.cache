@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ObsdHSQCnTT5a/3YHg6kLHBdKPkN+QO5MVr0rgNLKA0k11P5McXx91NArbS9MvqcTopwdq+YzZ476Q1TENML1w==",
+  "dgSpecHash": "mL8EblPwgu7XPSrPYIOcoSZbBSn55dJ66CW56H6zSHwT0GcD/BjnFR5NzaCjc3dJa/QyoZ3TFwHIaPmGlqsU0A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary_Bot\\DailyDiary_Bot.csproj",
+  "projectFilePath": "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary_Bot\\DailyDiaryBotService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\denis\\.nuget\\packages\\microsoft.aspnet.webapi.client\\4.0.20710\\microsoft.aspnet.webapi.client.4.0.20710.nupkg.sha512",
     "C:\\Users\\denis\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.0\\microsoft.aspnetcore.authentication.jwtbearer.3.1.0.nupkg.sha512",

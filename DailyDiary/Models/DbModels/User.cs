@@ -13,7 +13,7 @@ namespace DailyDiary.Models
         public int? StudentId { get; set; }
         public virtual Teacher Teacher { get; set; }
         public virtual Student Student { get; set; }
-    
+
         //UserName = Login
         //public string Name { get; set; } 
         //public string LastName { get; set; }

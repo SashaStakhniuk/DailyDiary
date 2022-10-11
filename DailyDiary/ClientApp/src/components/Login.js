@@ -2,7 +2,7 @@ import '../styles/Login.css'
 import React from 'react';
 import { connect } from "react-redux";
 import setUserCredentials from '../redux/action_creators/SetUserCredentials';
-
+import {} from 'i18next'
 import loadingAnimation from "../images/Loading_icon.gif"
 
 class Login extends React.Component{
@@ -21,6 +21,7 @@ class Login extends React.Component{
             loading:""
         }
     }
+
     onClickPasswordVisible(e){
         e.preventDefault()
         var inp_password = document.getElementById('password')
@@ -146,11 +147,11 @@ class Login extends React.Component{
                     <div className="form__container">
                         <form onSubmit={this.handleForm} className='d-flec flex-column justify-content-center align-items-center' style={{position: "relative"}}>
                             <div className="mb-3">
-                                <input id="username" type="username" placeholder="Enter your username" required="required" title="Your username" name = "userName" />
+                                <input id="username" className="" type="username" placeholder="Enter your username" required="required" title="Your username" name = "userName" />
                             </div>
                             <div className="mb-3">
                                 <div className="password-wrapper">
-                                    <input id="password" type="password" value="Qwerty1!"  placeholder="Enter your password" required="required" title="Your password" name = "password" />
+                                    <input id="password" className="" type="password" value="Qwerty1!"  placeholder="Enter your password" required="required" title="Your password" name = "password" />
                                     <div onClick={e => this.onClickPasswordVisible(e)} className="eye"></div>
                                 </div>
                             </div>

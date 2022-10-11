@@ -57,12 +57,9 @@ function CreateNewStudent(){
                 AdmissionDate, 
                 groupId, 
                 Email,
-<<<<<<< HEAD
-=======
                 phoneNumber,
                 yearOfStudy,
                 telegramNick
->>>>>>> b0310ccad75e70fc2b67db44dc495faf8a0ddaf6
             })
         })
         if(response.ok === true){

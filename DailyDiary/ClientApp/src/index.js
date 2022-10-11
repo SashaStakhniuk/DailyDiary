@@ -5,6 +5,39 @@ import Root from './components/Root';
 // import { createStore }  from 'redux'
 import { Provider } from 'react-redux';
 import store from './redux/store/store';
+import i18next, { t } from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import './styles/index.css'
+
+i18next
+  .use(initReactI18next)
+  .init({
+  lng: document.querySelector('html').lang, 
+  debug: true,
+  resources: {
+    en: {
+      translation: {
+        "key": "hello world"
+      }
+    },
+    fr: {
+      translation: {
+        "key": "Bonjour le monde"
+      }
+    }
+  }
+});
+
+export function RootMain() {
+  const { trans } = useTranslation();
+
+  return(
+    <>
+      <h2>{ trans('key') }</h2>
+    </>
+  )
+}
 
 // async function GetAllGroups(){
 //   const response = await fetch(`https://localhost:44364/api/group/get`)
