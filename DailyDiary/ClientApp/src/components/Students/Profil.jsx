@@ -23,7 +23,7 @@ export const Profil = ({}) => {
       console.log("Data newRemainItems: ", data.newRemainItems)
       console.log("Data newCurrentItems: ", data.newCurrentItems)
       setRemainItems(data.newRemainItems)
-      setCurrentItems(data.newCurrentItems) 
+      setCurrentItems(data.newCurrentItems)
     }
   }
 
