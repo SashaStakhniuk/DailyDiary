@@ -48,13 +48,13 @@ class StudentsTable extends React.Component { // розподілення сту
     }
 
     onTableClick(studentId) {
-        console.log(studentId)
+        // console.log(studentId)
         const indexOfExistingStudentId = this.state.studentsToAdd.indexOf(studentId);
         if (indexOfExistingStudentId === -1) {
             this.setState({
                 studentsToAdd: [...this.state.studentsToAdd, studentId]
             }
-                , () => console.log(this.state.studentsToAdd)
+                // , () => console.log(this.state.studentsToAdd)
             );
         }
         else {
@@ -63,7 +63,7 @@ class StudentsTable extends React.Component { // розподілення сту
                     return id !== studentId;
                 })
             }
-                , () => console.log(this.state.studentsToAdd)
+                // , () => console.log(this.state.studentsToAdd)
             );
         }
     }

@@ -98,5 +98,22 @@ namespace DailyDiary.Controllers.APIControllers
                 return BadRequest(e);
             }
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<AuditoryType>>> GetAllAuditoriesTypes()
+        {
+            try
+            {
+                var auditoriesTypes = await db.AuditoryType.ToListAsync();
+                if (auditoriesTypes == null || auditoriesTypes.Count() == 0)
+                {
+                    return NotFound($"No one auditory type found.");
+                }
+                return Ok(auditoriesTypes);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500,e.Message);
+            }
+        }
     }
 }
