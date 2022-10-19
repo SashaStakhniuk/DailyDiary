@@ -51,6 +51,43 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return NotFound("No one subgroup found");
         }
+        [HttpGet("{details}")]
+        public async Task<ActionResult<IEnumerable<Subgroup>>> GetByGroupIdAndSubgroupBlockId(int groupId, int subgroupBlockId)
+        {
+            try
+            {
+                if (groupId <= 0)
+                {
+                    return BadRequest("Group id can't be <= 0");
+                }
+                if (subgroupBlockId <= 0)
+                {
+                    return BadRequest("Subgroup block id can't be <= 0");
+                }
+                var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+                if (group == null)
+                {
+                    return NotFound("Group not found");
+                }
+                var subgroupBlock = await db.SubgroupBlocks.FirstOrDefaultAsync(x => x.Id == subgroupBlockId);
+                if (subgroupBlock == null)
+                {
+                    return NotFound("Subgroup block id not found");
+                }
+
+                var subroups = await db.Subgroups.AsNoTracking().Where(x => x.Id != group.DefSubgroupId && x.GroupId == groupId && x.SubgroupBlockId == subgroupBlock.Id).ToListAsync();
+                if (subroups != null)
+                {
+                    return Ok(subroups);
+                }
+                return NotFound("No one subgroup found");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         [HttpGet("{groupId}")]
         public async Task<ActionResult<IEnumerable<Subgroup>>> GetAllExceptDefaultByGroupId(int groupId)
         {
@@ -79,7 +116,7 @@ namespace DailyDiary.Controllers.APIControllers
                 if (model.StudentsId.Count == 0) // якщо не обрано ніодного студента
                 {
                     return NotFound("No one student selected");
-                } 
+                }
 
                 var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == model.GroupId); // шукаю групу
                 if (group == null)
@@ -114,7 +151,7 @@ namespace DailyDiary.Controllers.APIControllers
                     var studentToAdd = await db.Students.FirstOrDefaultAsync(x => x.Id == studentId); // шукаю студента
                     if (studentToAdd != null) // якщо існує
                     {
-                        foreach(int subgroupId in otherSubgroupsIdTheSameDistributeBlock) // перевіряю чи існує цей студент в будь-якій іншій підгрупі цього ж блоку (студент може одночасно знаходитись в тільки в одній підгрупі певного блоку поділу
+                        foreach (int subgroupId in otherSubgroupsIdTheSameDistributeBlock) // перевіряю чи існує цей студент в будь-якій іншій підгрупі цього ж блоку (студент може одночасно знаходитись в тільки в одній підгрупі певного блоку поділу
                         {
                             var studentInSubgroupExist = await db.StudentsBySubgroups.FirstOrDefaultAsync(x => x.StudentId == studentId && x.SubgroupId == subgroupId); // шукаю чи в підгрупі студент вже існує
                             if (studentInSubgroupExist != null)
@@ -186,7 +223,7 @@ namespace DailyDiary.Controllers.APIControllers
                     await db.SubgroupBlocks.AddAsync(new SubgroupBlock { SubgroupBlockTitle = model.SubgroupBlockTitle });
                     await db.SaveChangesAsync();
                 }
-                await db.Subgroups.AddAsync(new Subgroup { Title =  model.SubgroupTitle.Replace(" ", "_"), Group = group, SubgroupBlock = subgroupBlock});
+                await db.Subgroups.AddAsync(new Subgroup { Title = model.SubgroupTitle.Replace(" ", "_"), Group = group, SubgroupBlock = subgroupBlock });
                 var result = await db.SaveChangesAsync();
                 if (result > 0)
                 {
@@ -194,7 +231,7 @@ namespace DailyDiary.Controllers.APIControllers
                 }
                 else
                 {
-                    return StatusCode(500,"Subgroup wasn't added");
+                    return StatusCode(500, "Subgroup wasn't added");
                 }
             }
             catch (Exception e)

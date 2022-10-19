@@ -40,6 +40,46 @@ namespace DailyDiary.Controllers.APIControllers
         {
             return await db.Groups.ToListAsync();
         }
+
+        [HttpGet("{groupId:int}")]
+        public async Task<ActionResult<IEnumerable<SubgroupBlock>>> GetSubgroupsPrinciplesOfSeparationByGroupId(int groupId)
+        {
+            try
+            {
+                if (groupId <= 0)
+                {
+                    return BadRequest("Group id can't be <= 0");
+                }
+                var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+                if (group == null)
+                {
+                    return NotFound("Group not found");
+                }
+                var subgroupsBlocksId = await db.Subgroups.Where(x => x.Id!=group.DefSubgroupId && x.GroupId == group.Id).Select(x => x.SubgroupBlockId).ToListAsync(); // шукаю усі можливі блоки розподілення для підгруп групи
+                if (subgroupsBlocksId.Count > 0)
+                {
+                    subgroupsBlocksId = subgroupsBlocksId.Distinct().ToList(); // видаляю можливі повтори
+                    List<SubgroupBlock> subgroupBlocks = new List<SubgroupBlock>();
+                    foreach (var blockId in subgroupsBlocksId)
+                    {
+                        var subgroupBlock = await db.SubgroupBlocks.FirstOrDefaultAsync(x => x.Id == blockId);
+                        if (subgroupBlock != null)
+                        {
+                            subgroupBlocks.Add(subgroupBlock);
+                        }
+                    }
+                    if (subgroupBlocks.Count > 0)
+                    {
+                        return Ok(subgroupBlocks);
+                    }
+                }
+                return NotFound("No one subgroup separation block found ");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Group>>> GetAllGroupsOfCurrentStudyYear()
         {
@@ -165,18 +205,6 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
-
-
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Group>> GetStudents(int id)
-        //{
-        //    var groups = await db.Groups
-        //            .Include(c => c.Students)
-        //            .ToListAsync();
-        //    Group group = groups.FirstOrDefault(x => x.Id == id);
-        //    return Ok(group);
-        //}
-
         [HttpPost]
         public async Task<ActionResult<Group>> Create(GroupViewModel model) // не коректно працює з аудиторіями (необхідно перевіряти аудиторії усіх груп теперішнього навчального року)
         {
@@ -191,6 +219,9 @@ namespace DailyDiary.Controllers.APIControllers
                     }
 
                     Group group = await db.Groups.FirstOrDefaultAsync(x => x.StudyPlanId == studyPlan.Id && x.Title.ToLower() == model.Title.ToLower()); // група де навчальний план = вказаному і назва написаній
+                    //Group group = await db.Groups.FirstOrDefaultAsync(x => x.StudyPlanId == studyPlan.Id && x.Title.ToLower().Equals(model.Title.ToLower())); // група де навчальний план = вказаному і назва написаній
+                    //Group group = await db.Groups.FirstOrDefaultAsync(x => x.StudyPlanId == studyPlan.Id && x.Title.ToLower().Contains(model.Title.ToLower())); // група де навчальний план = вказаному і назва написаній
+
                     if (group == null) // якщо не існує
                     {
                         group = new Group // створюю
