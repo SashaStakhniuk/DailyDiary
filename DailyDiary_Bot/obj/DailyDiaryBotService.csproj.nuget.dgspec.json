@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary_Bot\\DailyDiaryBotService.csproj": {}
   },
   "projects": {
@@ -22,6 +23,23 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+=======
+    "D:\\Diploma\\DailyDiary\\DailyDiary_Bot\\DailyDiaryBotService.csproj": {}
+  },
+  "projects": {
+    "D:\\Diploma\\DailyDiary\\DailyDiary\\DailyDiary.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Diploma\\DailyDiary\\DailyDiary\\DailyDiary.csproj",
+        "projectName": "DailyDiary",
+        "projectPath": "D:\\Diploma\\DailyDiary\\DailyDiary\\DailyDiary.csproj",
+        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+        "outputPath": "D:\\Diploma\\DailyDiary\\DailyDiary\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+>>>>>>> 664b404680a9c77426614000a6eac7022cea5a85
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -101,6 +119,7 @@
               "privateAssets": "all"
             }
           },
+<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.408\\RuntimeIdentifierGraph.json"
         }
       }
@@ -123,6 +142,24 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+=======
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Diploma\\DailyDiary\\DailyDiary_Bot\\DailyDiaryBotService.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Diploma\\DailyDiary\\DailyDiary_Bot\\DailyDiaryBotService.csproj",
+        "projectName": "DailyDiaryBotService",
+        "projectPath": "D:\\Diploma\\DailyDiary\\DailyDiary_Bot\\DailyDiaryBotService.csproj",
+        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+        "outputPath": "D:\\Diploma\\DailyDiary\\DailyDiary_Bot\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+>>>>>>> 664b404680a9c77426614000a6eac7022cea5a85
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -135,8 +172,13 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
+<<<<<<< HEAD
               "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary\\DailyDiary.csproj": {
                 "projectPath": "C:\\Users\\denis\\Pictures\\DailyDiary\\DailyDiary\\DailyDiary.csproj"
+=======
+              "D:\\Diploma\\DailyDiary\\DailyDiary\\DailyDiary.csproj": {
+                "projectPath": "D:\\Diploma\\DailyDiary\\DailyDiary\\DailyDiary.csproj"
+>>>>>>> 664b404680a9c77426614000a6eac7022cea5a85
               }
             }
           }
@@ -191,7 +233,11 @@
               "privateAssets": "all"
             }
           },
+<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.408\\RuntimeIdentifierGraph.json"
+=======
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+>>>>>>> 664b404680a9c77426614000a6eac7022cea5a85
         }
       }
     }

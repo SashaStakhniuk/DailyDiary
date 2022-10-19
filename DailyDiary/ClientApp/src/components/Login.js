@@ -2,7 +2,7 @@ import '../styles/Login.css'
 import React from 'react';
 import { connect } from "react-redux";
 import setUserCredentials from '../redux/action_creators/SetUserCredentials';
-import {} from 'i18next'
+import { Role } from './Role'
 import loadingAnimation from "../images/Loading_icon.gif"
 
 class Login extends React.Component{
@@ -96,9 +96,11 @@ class Login extends React.Component{
                         // this.setState({error:"",loading:""})
                         this.setState({error:""})
                         this.props.setCredentials(data.access_token,data.userId,data.roles);
-                        if(data.role[0] == "MainAdmin"){
-                         window.location = '/admin'
-                        }
+                        data.roles.forEach(role=>{
+                            if(role==Role.MainAdmin || role==Role.Admin){
+                                window.location = '/admin'                          
+                            }
+                        })                      
                         // else{
                         //     window.location = `/student-page/${data.userId}`
                         // }

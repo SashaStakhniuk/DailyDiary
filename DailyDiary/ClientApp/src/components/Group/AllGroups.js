@@ -1,8 +1,9 @@
 import React from "react"
 import NavigationBar from "../NavigationBar"
 import '../../styles/Students.css'
-import CartGroup from "./CartGroup"
+import CartGroup from "./CardGroup"
 import { useState, useEffect } from 'react'
+import { Host } from "../Host"
 
 function AllGroups(){
     const [groups, setGroups] = useState([])
@@ -12,16 +13,20 @@ function AllGroups(){
     }, [])
 
     async function getAllGroups(){
-        try
-        {
-            const response = await fetch(`https://localhost:44364/api/group/get`)
-            const data = await response.json()
-            if(response.ok === true){
+        try {
+            const response = await fetch(`${Host}/api/group/getAllGroupsDatasOfCurrentStudyYear`)  
+            if (response.ok === true) {
+                const data = await response.json();
                 setGroups(data)
-            }else{
-                console.log('Error ', data)
             }
-        }catch{}
+            else {
+                const data = await response.text();
+                window.alert(data);
+            }
+        }
+        catch (e) {
+            window.alert(e);
+        }
     }
 
     return(

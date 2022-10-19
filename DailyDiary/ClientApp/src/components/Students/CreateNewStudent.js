@@ -9,14 +9,12 @@ function CreateNewStudent(){
     const [errors, setErrors] = useState([])
 
     const[name, setUserName] = useState("SomeStudentName")
-    const[lastName, setlastName] = useState("SomeStudentLastName")
+    const[middleName, setMiddleName] = useState("SomeStudentMiddleName")
+    const[lastName, setLastName] = useState("SomeStudentLastName")
     const[phoneNumber, setPhoneNumber] = useState("+380985655355")
-    const[yearOfStudy, setYearOfStudy] = useState(0)
-    const[Birthday, setBirthday] = useState()
+    const[Birthday, setBirthday] = useState("2000.09.01")
     const[Email, setEmail] = useState("someStudent@gmail.com")
-    const[telegramNick, setTelegramNick] = useState("tgNickName")
-    const[AdmissionDate, setAdmissionDate] = useState()
-    const[Age, setAge] = useState(15)
+    const[AdmissionDate, setAdmissionDate] = useState("2022.09.01")
 
     useEffect(() => {
         getAllGroups()
@@ -36,7 +34,6 @@ function CreateNewStudent(){
     }
 
     async function add(){
-        var age = Number(Age)
         var groupId = 0;
         groups.forEach(group => {
             var radio = document.getElementById(`ro_${group.id}`)
@@ -51,15 +48,12 @@ function CreateNewStudent(){
             },
             body: JSON.stringify({
                 name,
+                middleName, 
                 lastName, 
                 Birthday,
-                age, 
                 AdmissionDate, 
-                groupId, 
                 Email,
-                phoneNumber,
-                yearOfStudy,
-                telegramNick
+                phoneNumber
             })
         })
         if(response.ok === true){
@@ -96,9 +90,11 @@ function CreateNewStudent(){
     function onChangeUserName(e){
         setUserName(e.target.value)
     }
-
+    function onChangeMiddleName(e){
+        setMiddleName(e.target.value)
+    }
     function onChangeLastName(e){
-        setlastName(e.target.value)
+        setLastName(e.target.value)
     }
 
     function onChangeBirthday(e){
@@ -109,22 +105,14 @@ function CreateNewStudent(){
         setAdmissionDate(e.target.value)
     }
 
-    function onChangeAge(e){
-        setAge(e.target.value)
-    }
-
     function onChangeEmail(e){
         setEmail(e.target.value)
     }
-    function onChangeYearOfStudy(e){
-        setYearOfStudy(e.target.value)
-    }
+
     function onChangePhoneNuumber(e){
         setPhoneNumber(e.target.value)
     }
-    function onChangeTelegramNick(e){
-        setTelegramNick(e.target.value)
-    }
+
     return(
         <>
             <div className="edit__container">
@@ -132,26 +120,29 @@ function CreateNewStudent(){
                 <form onSubmit={e => onSubmit(e)} className='form-edit'>
 
                     <div className="container1">
-                        <span className="span-text">UserName</span>
+                        <span className="span-text">FirstName</span>
                         <div className="mb-3">
-                            <input id="username" value={name} onChange={e => onChangeUserName(e)} type="text" placeholder="Enter student usrname" title="Your username" required />
+                            <input id="username" value={name} onChange={e => onChangeUserName(e)} type="text" placeholder="Enter student username" title="Your username" required />
                         </div>
-                        
-                        <span className="span-text">lastName</span>
+                        <span className="span-text">MiddleName</span>
                         <div className="mb-3">
-                            <input type="text" id="lastName" value={lastName} onChange={e => onChangeLastName(e)}  placeholder="Enter student lastName" title="Your username" required />
+                            <input id="middlename" value={middleName} onChange={e => onChangeMiddleName(e)} type="text" placeholder="Enter student middlename" title="Your middlename" />
+                        </div>
+                        <span className="span-text">LastName</span>
+                        <div className="mb-3">
+                            <input type="text" id="lastName" value={lastName} onChange={e => onChangeLastName(e)}  placeholder="Enter student lastName" title="Your lastname" required />
                         </div>
 
                         <span className="span-text">Birthday</span>
                         <div className="mb-3">
                             <span className="datepicker-toggle">
-                                <input type="date" id="birthday"  data-date-format="DD MMMM YYYY" value={Birthday} onChange={e => onChangeBirthday(e)} required />
+                                <input type="date" id="birthday"  data-date-format="DD MMMM YYYY" defaultValue={Birthday} onChange={e => onChangeBirthday(e)} required />
                             </span>
                         </div>
 
                         <span className="span-text">Email</span>
                         <div className="mb-3">
-                            <input type="email" id="email" value={Email} onChange={e => onChangeEmail(e)} required/>
+                            <input type="email" id="email" defaultValue={Email} onChange={e => onChangeEmail(e)} required/>
                         </div>
                     </div>
 
@@ -159,19 +150,19 @@ function CreateNewStudent(){
                         <div className='mb-3'>
                             <span className="span-text">Phone Number</span>
                             <div className="mb-3">
-                                <input type="phone" id="phone" value={phoneNumber} onChange={e => onChangePhoneNuumber(e)} required/>
+                                <input type="phone" id="phone" defaultValue={phoneNumber} onChange={e => onChangePhoneNuumber(e)} required/>
                             </div>
                         </div>
                         <div className='mb-3'>
 
-                            <div className="accordion-item">
+                            {/* <div className="accordion-item">
                                 <h2 className="accordion-header" id="flush-headingOne">
                                     <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                                         Group
                                     </button>
                                 </h2>
 
-                                <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                 <div id="flush-collapseOne" className="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                     <div className=' d-flex flex-column align-items-center justify-content-start' style={{ margin: '14px 20px', width: '100px' }}>
                                         {groups.map((group, i) => {
                                             return(
@@ -186,29 +177,14 @@ function CreateNewStudent(){
                                             )
                                         })}
                                     </div>
-                                </div>
-                            </div>
+                                </div> 
+                            </div> */}
                         </div>
                         <span className="span-text">Admission Date</span>
                         <div className="mb-3">
                             <span className="datepicker-toggle">
-                                <input type="date" id="admissionDate"  data-date-format="DD MMMM YYYY" value={AdmissionDate} onChange={e => onChangeAdmissionDate(e)} required />
+                                <input type="date" id="admissionDate" defaultValue={AdmissionDate} onChange={e => onChangeAdmissionDate(e)} required />
                             </span>
-                        </div>
-
-                        <span className="span-text">Age</span>
-                        <div className="mb-3">
-                            <input id="age" type="number" value={Age} onChange={onChangeAge} required/>
-                        </div>
-
-                          <span className="span-text">Year of study</span>
-                        <div className="mb-3">
-                            <input id="yearOfStudy" type="number" value={yearOfStudy} onChange={onChangeYearOfStudy} required/>
-                        </div>
-
-                        <span className="span-text">Telegram nick</span>
-                        <div className="mb-3">
-                            <input id="tgNick" type="text" value={telegramNick} onChange={onChangeTelegramNick} required/>
                         </div>
 
                         {errors}

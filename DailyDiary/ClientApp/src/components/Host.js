@@ -1,0 +1,1 @@
+export const Host = 'https://localhost:44364'

@@ -1,78 +1,89 @@
-import React from "react"
-import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom';
+import { Host } from '../Host'
+class EditGroup extends React.Component {
+    constructor(props) {
+        super(props);
 
-function EditGroup(){
-
-    let { id } = useParams()
-    const [group, setGroup] = useState({})
-    const [groupId, setGroupId] = useState(id)
-    const [title, setTitle] = useState("")
-
-    useEffect(() => {
-        getGroupById()
-    }, [groupId])
-
-    useEffect(() => {
-        getGroupById()
-    }, [])
-
-    async function getGroupById(){
-        try{
-            var groupId = id
-            const request = await fetch(`https://localhost:44364/api/group/get/${groupId}`)
-            if(request.ok === true){
-                const date = await request.json()
-                setGroup(date)
-                setGroupId(date.id)
-                setTitle(date.title)
-            }
-        }catch{}
+        this.getAllGroupsDatasOfCurrentStudyYear = this.getAllGroupsDatasOfCurrentStudyYear.bind(this);
+        this.state = {
+            groups: []
+        }
+    };
+    componentDidMount() {
+        // this.getAllStudyPlansByYearOfStudyId();
+        this.getAllGroupsDatasOfCurrentStudyYear();
     }
+    async getAllGroupsDatasOfCurrentStudyYear() {
+        try {
+            const response = await fetch(`${Host}/api/group/GetAllGroupsDatasOfCurrentStudyYear`);
+            if (response.ok === true) {
+                const data = await response.json();
+                console.log("recieved groups: ", data)
+                this.setState({
+                    groups: data
+                })
+            }
+            else {
+                const data = await response.text();
+                window.alert(data);
 
-    async function edit() {
-
-        const response = await fetch('https://localhost:44364/api/Group/Edit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                groupId,
-                title,
-                // semester,
-                // subjsId,
-                // hours
-            })
-        })
-        if(response.ok === true){
-            window.location = `/admin/edit-group/${groupId}`
+            }
+        }
+        catch (e) {
+            window.alert(e);
         }
     }
-    
-    async function onSubmit(e) {
-        e.preventDefault()
-        await edit()
-    }
-
-    function onChangeTitle(e) {
-        setTitle(e.target.value)
-    }
-
-    return (
-        <>
-            <div className="edit__container">
-                <h2 style={{ position: "absolute", top: 120}} className="title-edit">Edit group: {group.title} </h2>
-                <form onSubmit={e => onSubmit(e)} className='form-edit d-flex flex-column justify-content-center align-items-center'>
-                    <div className="mb-3">
-                        <input style={{ width: '250px' }} type="text" id="title" value={title} onChange={e => onChangeTitle(e)} />
-                    </div>
-                    
-                    <button type="submit" className="btn btn-primary">Edit</button>
-                </form>
+    render() {
+        return (
+            <div>
+                <div className='container'>
+                    <div>Усі групи теперішнього навчального року:</div>
+                    <table className='table'>
+                        <thead>
+                            <tr>
+                                <th>Group:</th>
+                                <th>Year of study:</th>
+                                <th>Amount of students:</th>
+                                <th>Auditory:</th>
+                                <th>Edit:</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.groups.map(group =>
+                                <tr key={"groupToEdit_" + group.groupId}>
+                                    <td>
+                                        {group.groupTitle}
+                                    </td>
+                                    <td>
+                                        {group.yearOfStudy}
+                                    </td>
+                                    <td>
+                                        {group.amountOfStudents}
+                                    </td>
+                                    <td>
+                                        {group.auditoryTitle == undefined ? "Не призначено" : group.auditoryTitle}
+                                    </td>
+                                    <td>
+                                        {/* {"groupId_"+group.groupId} */}
+                                        <Link
+                                            className="btn btn-outline-warning m-1"
+                                            style={{ textDecoration: "none", color: "black" }}
+                                            to={{
+                                                pathname: "/admin/new-group",
+                                                state: { group: group }
+                                            }}
+                                            exact="true">
+                                            Edit
+                                        </Link>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </>
-    )
+        )
+    }
 }
-
-export default EditGroup
+export default EditGroup;

@@ -23,15 +23,7 @@ namespace DailyDiary
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<IdentityContext>();
-                    var identityContext = services.GetRequiredService<IdentityContext>();
-                    
-                    //InitialIdentity.Initialize(identityContext);
-                    //InitialDatas.Initialize(context);
-                    var datasContext = services.GetRequiredService<DailyDiaryDatasContext>();
-                    //var identityContext = services.GetRequiredService<IdentityContext>();
                     InitialIdentity.Initialize(services).Wait();
-                    InitialDatas.Initialize(datasContext);
                 }
                 catch (Exception ex)
                 {

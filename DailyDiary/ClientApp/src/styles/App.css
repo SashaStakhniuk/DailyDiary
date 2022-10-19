@@ -211,7 +211,7 @@ body{
     --form-control-color: rgb(18, 235, 235);
     --form-control-disabled: #959495;
     }
-  
+/*   
   input[type="checkbox"], input[type="radio"] {
     -webkit-appearance: none;
     appearance: none;
@@ -226,8 +226,8 @@ body{
     transform: translateY(-0.075em);
     display: grid;
     place-content: center;
-  }
-  
+  } */
+/*   
   input[type="checkbox"]::before, input[type="radio"]::before {
     content: "";
     width: 0.47em;
@@ -248,4 +248,4 @@ body{
     --form-control-color: var(--form-control-disabled);
     color: var(--form-control-disabled);
     cursor: not-allowed;
-  }
+  } */

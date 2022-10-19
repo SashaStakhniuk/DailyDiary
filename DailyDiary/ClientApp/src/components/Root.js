@@ -31,17 +31,22 @@ import EditGroup from './Group/EditGroup'
 import CreateNewGroup from './Group/CreateNewGroup'
 import { useSelector } from 'react-redux'
 import CreateNewStudyYear from './StudyYear/CreateNewStudyYear'
-import EditStudyPlan from './StudyPlan/EditStudyPlan'
+import CreateOrEditStudyPlan from './StudyPlan/CreateOrEditStudyPlan'
 import Student from './Students/Student.js';
 import AboutStudent from './Students/AboutStudent.js';
 import ReduxTesting from './ReduxTesting.js';
 import ColorPicker from './EnvironmentStyle.js';
-import News from './News'
+
 import Header from './Header'
-import ResetPasswordRoot from './ResetPasswordRoot'
-import Profil from './Students/Profil.jsx'
+import TeachersDistribution from './Admin/TeachersDistribution.js';
+import CreateNewPerson from './Admin/CreateNewPerson.js';
+import EditPerson from './Admin/EditPerson.js';
+// import StudentsByGroupsDistribution from './Admin/StudentsByGroupsDistribution.js';
+// import StudentsBySubgroupsDistribution from './Admin/StudentsBySubgroupsDistribution.js';
+import FullGroupEditing from './Admin/FullGroupEditing.js';
+import Profil from './Students/Profil.jsx';
 import Review from './Students/Review.jsx';
-import MainPage from './Students/MainPage'
+import MainPage from './Students/MainPage.jsx';
 
 const Root = () => {
 
@@ -168,28 +173,36 @@ const Root = () => {
             <Router>
                 <Switch>
                     <Route exact path="/header"><Header/></Route>
-                    <Route exact path="/student/main-page"><MainPage/></Route>
-                    <Route exact path="/profil"><Profil/></Route>
                     <Route exact path="/"><Login/></Route>
-                    <Route exact path="/children-login"><LoginChildrens/></Route>
-
-                    <Route exact path="/student/main-page"><MainPage/></Route>
+                   
                     <Route exact path="/student/review"><Review/></Route>
-                    <Route exact path="/students/news"><News/></Route>
                     <Route exact path="/student/profil"><Profil/></Route>
-                    <Route exact path="/reset-password"><ResetPasswordRoot/></Route>
+                    <Route exact path="/children-login"><LoginChildrens/></Route>
+                    <Route exact path="/student/main-page"><MainPage/></Route>
                     <Route exact path="/admin"><Admin/></Route>
-                    <Route exact path="/admin/new-student"><CreateNewStudent/></Route>
-                    <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route>
-                    <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route>
-                    <Route exact path="/admin/edit-study-plan/:id"><EditStudyPlan/></Route>
+                    <Route exact path="/admin/new-person" component={CreateNewPerson}></Route> {/*додання персони ДОРОБИТИ-> "присвоєння" дітей батькам*/}
+                    <Route exact path="/admin/edit-person"><EditPerson/></Route> {/*редагування персони*/}
+
+                    <Route exact path="/admin/new-student"><CreateNewStudent/></Route> {/*додання студента*/}
+                    <Route exact path="/admin/new-study-year"><CreateNewStudyYear/></Route> {/*створення навчального року*/}
+                    <Route exact path="/admin/teachers-distribution"><TeachersDistribution/></Route> {/*розподілення викладачів по групах за предметами*/}
+                    <Route exact path="/admin/new-study-plan"><CreateOrEditStudyPlan/></Route> {/* створення нового та редагування існуючого навчального плану */}
+                   
+                    {/* <Route exact path="/admin/new-study-plan"><NewStudyPlan/></Route> створення навчального плану */}
+                    {/* <Route exact path="/admin/edit-study-plan"><EditStudyPlan1_DoesntWork/></Route> НЕ ПРАЦЮЄ! при виборі предмету, в наступних блоках він не відображається*/}
+
 
                     <Route exact path="/admin/groups"><AllGroups/></Route>
-                    <Route exact path="/admin/edit-group/:id"><EditGroup/></Route>
-                    <Route exact path="/admin/new-group"><CreateNewGroup/></Route>
+                    <Route exact path="/admin/edit-group"><EditGroup/></Route> {/*Список усіх груп із необхідними даними теперішнього навчального року*/}
+
+                    <Route exact path="/admin/edit-groups"><FullGroupEditing/></Route> {/* додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах */}
+
+                    <Route exact path="/admin/new-group" component={CreateNewGroup}></Route> {/* створення нової/редагування існуючої групи */}
                     <Route exact path="/admin/new-student"><CreateNewStudent/></Route> 
-                    {/* <Route exact path="/admin/new-student"><CreateNewStudent groups={groups}/></Route> */}
+
                     <Route exact path="/admin/students"><Students/></Route>
+                    {/* <Route exact path="/admin/students-groups-distribution"><StudentsByGroupsDistribution/></Route>
+                    <Route exact path="/admin/students-subgroups-distribution"><StudentsBySubgroupsDistribution/></Route> */}
                     <Route exact path="/admin/student-profil/:id"><StudentProfil/></Route>
                     <Route exact path="/admin/edit-student/:id"><EditFromStudent/></Route>
                     <Route exact path="/admin/add-image-student/:id"><StudentImage/></Route>
