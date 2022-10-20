@@ -85,7 +85,33 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return null;
         }
-        [HttpGet]
+        //[HttpGet("{teacherId:int}")]
+        //public async Task<ActionResult<TeacherToDisplayViewModel>> GetFullNameById( int teacherId)
+        //{
+        //    if (teacherId <= 0)
+        //    {
+        //        return BadRequest("Teacher id can't be <= 0");
+        //    }
+        //    var teacher = await db.Teachers.AsNoTracking().FirstOrDefaultAsync(x=> x.Id==teacherId);
+        //    if (teacher == null)
+        //    {
+        //        return NotFound("Teacher not found");
+        //    }
+        //    var teacherAllData = await GetTeachersAllDataByTeachersId(new List<int> { teacher.Id});
+        //    if (teacherAllData != null)
+        //    {
+        //        TeacherToDisplayViewModel teacherToReturn = teacherAllData.FirstOrDefault();
+        //        return new TeacherToDisplayViewModel
+        //        {
+        //            TeacherId = teacherToReturn.TeacherId,
+        //            Name = teacherToReturn.Name,
+        //            LastName = teacherToReturn.LastName,
+        //            MiddleName = teacherToReturn.MiddleName
+        //        };
+        //    }
+        //    return NotFound("Teacher datas not found");
+        //}
+            [HttpGet]
         public async Task<ActionResult<IEnumerable<TeacherToDisplayViewModel>>> GetTeachersBySubjectsId([FromQuery] int[] subjectsIdArray)
         {
             if (subjectsIdArray.Count() > 0)
@@ -147,7 +173,7 @@ namespace DailyDiary.Controllers.APIControllers
             return await db.TeacherSpecialities.ToListAsync();
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Teacher>>> Get()//GetAllTeachersAsync
+        public async Task<ActionResult<IEnumerable<Teacher>>> GetAll()//GetAllTeachersAsync
         {
             return await db.Teachers.ToListAsync();
         }
@@ -172,16 +198,16 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Teacher>> Get(int id)
-        {
-            var teacher = await db.Teachers.FirstOrDefaultAsync(x => x.Id == id);
-            if (teacher == null)
-            {
-                return NotFound();
-            }
-            return Ok(teacher);
-        }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Teacher>> Get(int id)
+        //{
+        //    var teacher = await db.Teachers.FirstOrDefaultAsync(x => x.Id == id);
+        //    if (teacher == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(teacher);
+        //}
         
         [HttpDelete("{id}")]
         //[Authorize(Roles = "MainAdmin,Admin")]

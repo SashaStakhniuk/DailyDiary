@@ -1,4 +1,4 @@
-import '../styles/App.css';
+// import '../styles/App.css';
 import React from 'react';
 import {Switch,NavLink,Route, BrowserRouter as Router} from "react-router-dom"
 import Login from './Login.js'

@@ -11,14 +11,19 @@ namespace DailyDiary.Models.DbModels
     {
         [Key]
         public int Id { get; set; }
-        public int WeekId { get; set; } // парний-непарний тиждень
-        public int DayId { get; set; } // день тижня 1-понеділок, 7-неділя
-        public int LessonNumber { get; set; } // номер уроку
+        public int WeekId { get; set; } // парний-непарний тиждень 0 - без розподілення по тижнях, 1 - непарний тиждень, 2 - парний тиждень
+        [ForeignKey("DayOfWeek")]
+        public int? DayId { get; set; } // день тижня
+
+        [ForeignKey("LessonShedule")]
+        public int? LessonId { get; set; } // номер уроку
         [ForeignKey("TeacherSubgroupDistribution")]
         public int? TeacherSubgroupDistributionId { get; set; }
         [ForeignKey("Auditory")]
-        public int AuditoryId { get; set; }
+        public int? AuditoryId { get; set; }
+        public virtual DayOfWeek DayOfWeek { get; set; }
         public virtual Auditory Auditory { get; set; }
+        public virtual LessonShedule LessonShedule { get; set; }
         public virtual TeacherSubgroupDistribution TeacherSubgroupDistribution { get; set; }
 
     }

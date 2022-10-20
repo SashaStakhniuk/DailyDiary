@@ -1,9 +1,9 @@
 import React from "react"
-import '../../styles/Students.css'
+// import '../../styles/Students.css'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import NavigationBar from '../NavigationBar'
+ import NavigationBar from '../NavigationBar'
 
 function Feedback(){
 

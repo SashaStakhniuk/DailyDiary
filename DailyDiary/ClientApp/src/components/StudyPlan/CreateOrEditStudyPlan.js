@@ -1,6 +1,6 @@
 import { throws } from 'assert';
 import React from 'react'
-import '../../styles/Students.css'
+// import '../../styles/Students.css'
 import { Host } from '../Host'
 
 class EditStudyPlan extends React.Component {

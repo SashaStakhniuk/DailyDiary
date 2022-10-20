@@ -214,7 +214,7 @@ namespace DailyDiary.Models
                     Teacher teacher6 = new Teacher { Person = person7, Category = teacherSpecialist, Degree = teacherMaster, Education = teacherHigher, Speciality = teacherEnglish, Experience = 2, Salary = 10000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = englishSubject } } };
                     Teacher teacher7 = new Teacher { Person = person8, Category = teacherSpecialist, Degree = teacherMaster, Education = teacherHigher, Speciality = teacherHealth, Experience = 0, Salary = 12000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = healthSubject } } };
                     Teacher teacher8 = new Teacher { Person = person9, Category = teacherFirstCategorySpecialist, Degree = teacherPHD, Education = teacherHigher, Speciality = teacherArt, Experience = 18, Salary = 16000, TeacherSubjects = new List<TeacherSubject>() { new TeacherSubject { Subject = healthSubject } } };
-                    
+
                     if (!datasContext.Teachers.Any())
                     {
                         datasContext.Teachers.AddRange(
@@ -243,7 +243,7 @@ namespace DailyDiary.Models
                     Student student13 = new Student { Person = person22, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
                     Student student14 = new Student { Person = person23, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
                     Student student15 = new Student { Person = person24, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
-                                                                                         
+
                     Student student16 = new Student { Person = person25, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
                     Student student17 = new Student { Person = person26, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
                     Student student18 = new Student { Person = person27, AdmissionDate = dateTimeFirstSeptember.AddYears(-7) };
@@ -285,7 +285,7 @@ namespace DailyDiary.Models
                         );
                         await datasContext.SaveChangesAsync();
                     }
-                    StudyPlan studyPlanForFirstClasses = new StudyPlan { Title = "Study plan for 1 class ", YearOfStudy = year1, Semester = 0, MaxAllowedLessonsPerDay = 3, SubjectsHoursCollection= "[{\"SubjectId\":\"9\",\"Hours\":\"10.5\"},{\"SubjectId\":\"8\",\"Hours\":\"20.5\"},{\"SubjectId\":\"7\",\"Hours\":\"30.5\"}]" };
+                    StudyPlan studyPlanForFirstClasses = new StudyPlan { Title = "Study plan for 1 class ", YearOfStudy = year1, Semester = 0, MaxAllowedLessonsPerDay = 3, SubjectsHoursCollection = "[{\"SubjectId\":\"9\",\"Hours\":\"10.5\"},{\"SubjectId\":\"8\",\"Hours\":\"20.5\"},{\"SubjectId\":\"7\",\"Hours\":\"30.5\"}]" };
 
                     if (!datasContext.StudyPlans.Any())
                     {
@@ -441,9 +441,9 @@ namespace DailyDiary.Models
                     AuditoryType assemblyAuditory = new AuditoryType { AuditoryTypeDescription = "Assembly hall" };
                     AuditoryType gymAuditory = new AuditoryType { AuditoryTypeDescription = "Gym" };
 
-                    if (!datasContext.AuditoryType.Any())
+                    if (!datasContext.AuditoryTypes.Any())
                     {
-                        await datasContext.AuditoryType.AddRangeAsync(teachersAuditory, mathAuditory, physicsAuditory, chemistryAuditory, historyAuditory, assemblyAuditory, gymAuditory);
+                        await datasContext.AuditoryTypes.AddRangeAsync(teachersAuditory, mathAuditory, physicsAuditory, chemistryAuditory, historyAuditory, assemblyAuditory, gymAuditory);
                         await datasContext.SaveChangesAsync();
                     }
 
@@ -459,6 +459,96 @@ namespace DailyDiary.Models
                     if (!datasContext.Auditory.Any())
                     {
                         await datasContext.Auditory.AddRangeAsync(mathCab1, mathCab2, teachersCab, physicsCab, chemistryCab, historyCab, assemblyHall, gym);
+                        await datasContext.SaveChangesAsync();
+                    }
+
+                    if (!datasContext.DaysOfWeek.Any())
+                    {
+                        //await datasContext.DaysOfWeek.AddRangeAsync(
+                        //    new DbModels.DayOfWeek { EngTitle = "Sunday" },
+                        //    new DbModels.DayOfWeek { EngTitle = "Monday" },
+                        //    new DbModels.DayOfWeek { EngTitle = "Tuesday" },
+                        //    new DbModels.DayOfWeek { EngTitle = "Wednesday" },
+                        //    new DbModels.DayOfWeek { EngTitle = "Thursday" },
+                        //    new DbModels.DayOfWeek { EngTitle = "Friday" },
+                        //    new DbModels.DayOfWeek { EngTitle = "Saturday" }
+                        //    );
+                        await datasContext.DaysOfWeek.AddRangeAsync(
+                          new DbModels.DayOfWeek { EngTitle = "Saturday" },
+                          new DbModels.DayOfWeek { EngTitle = "Friday" },
+                          new DbModels.DayOfWeek { EngTitle = "Thursday" },
+                          new DbModels.DayOfWeek { EngTitle = "Wednesday" },
+                          new DbModels.DayOfWeek { EngTitle = "Tuesday" },
+                          new DbModels.DayOfWeek { EngTitle = "Monday" },
+                          new DbModels.DayOfWeek { EngTitle = "Sunday" }
+                          );
+                        await datasContext.SaveChangesAsync();
+                        //await datasContext.DaysOfWeek.AddRangeAsync(
+                        //  new DbModels.DayOfWeek { EngTitle = "Saturday", EngShortTitle = "Sat", UaTitle = "Субота", UaShortTitle = "Сб" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Friday", EngShortTitle = "Fri", UaTitle = "П'ятниця", UaShortTitle = "Пт" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Thursday", EngShortTitle = "Thu", UaTitle = "Четвер", UaShortTitle = "Чт" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Wednesday", EngShortTitle = "Wed", UaTitle = "Середа", UaShortTitle = "Ср" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Tuesday", EngShortTitle = "Tue", UaTitle = "Вівторок", UaShortTitle = "Вт" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Monday", EngShortTitle = "Mon", UaTitle = "Понеділок", UaShortTitle = "Пн" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Sunday", EngShortTitle = "Sun", UaTitle = "Неділя", UaShortTitle = "Нд" }
+                        //  );
+                        //System.DayOfWeek.Thursday;
+                    }
+                    if (!datasContext.LessonsShedule.Any())
+                    {
+                        DateTime dateTime = DateTime.Today;
+
+                        await datasContext.LessonsShedule.AddRangeAsync(
+                        new LessonShedule
+                        {
+                            LessonNumber = 8,
+                            StartTime = dateTime.AddHours(15).AddMinutes(15).ToShortTimeString(),
+                            EndTime = dateTime.AddHours(16).ToShortTimeString()
+                        },
+                        new LessonShedule
+                        {
+                            LessonNumber = 7,
+                            StartTime = dateTime.AddHours(14).AddMinutes(20).ToShortTimeString(),
+                            EndTime = dateTime.AddHours(15).AddMinutes(5).ToShortTimeString()
+                        },
+                        new LessonShedule
+                        {
+                            LessonNumber = 6,
+                            StartTime = dateTime.AddHours(13).AddMinutes(25).ToShortTimeString(),
+                            EndTime = dateTime.AddHours(14).AddMinutes(10).ToShortTimeString()
+                        },
+                        new LessonShedule
+                        {
+                            LessonNumber = 5,
+                            StartTime = dateTime.AddHours(12).AddMinutes(30).ToShortTimeString(),
+                            EndTime = dateTime.AddHours(13).AddMinutes(15).ToShortTimeString()
+                        },
+                        new LessonShedule
+                        {
+                            LessonNumber = 4,
+                            StartTime = dateTime.AddHours(11).AddMinutes(35).ToShortTimeString(),
+                            EndTime = dateTime.AddHours(12).AddMinutes(20).ToShortTimeString()
+                        },
+                        new LessonShedule
+                        {
+                            LessonNumber = 3,
+                            StartTime = dateTime.AddHours(10).AddMinutes(30).ToShortTimeString(),
+                            EndTime = dateTime.AddHours(11).AddMinutes(15).ToShortTimeString()
+                        },
+                        new LessonShedule
+                        {
+                            LessonNumber = 2,
+                            StartTime = dateTime.AddHours(9).AddMinutes(25).ToShortTimeString(),
+                            EndTime = dateTime.AddHours(10).AddMinutes(10).ToShortTimeString()
+                        },
+                        new LessonShedule
+                        {
+                            LessonNumber = 1,
+                            StartTime = dateTime.AddHours(8).AddMinutes(30).ToShortTimeString(),
+                            EndTime = dateTime.AddHours(9).AddMinutes(15).ToShortTimeString()
+                        }
+                            );
+
                         await datasContext.SaveChangesAsync();
                     }
 

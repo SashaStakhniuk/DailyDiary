@@ -16,7 +16,7 @@ class Student extends React.Component {
             groupHomeworkId: 0,
             studentComment: "",
             performedHomeworkBase64: "",
-            homeworksToView:"",
+            homeworksToView: "",
             // homeworksToView: <div className="text-center" style={{ color: "red" }}>
             //                      <h1>No homeworks yet...</h1>
             //                  </div>,
@@ -89,42 +89,42 @@ class Student extends React.Component {
         //         </div>
         // })
 
-            
-                    this.state.homeworks.map((homework) =>
-                        this.checkHomeworkDone(homework.groupHomeworkId, homework)
-                    )
-               
+
+        this.state.homeworks.map((homework) =>
+            this.checkHomeworkDone(homework.groupHomeworkId, homework)
+        )
+
     }
     async checkHomeworkDone(groupHomeworkId, homework) {
         try {
             const response = await fetch(`https://localhost:44364/api/studentsHomeworks/GetByStudentAndHomeworkId/details?studentId=${this.state.studentId}&&id=${groupHomeworkId}`)
             const data = await response.json();
 
-               const gethomeworksToView = data?
-                    <HomeworkClassworkView
-                        key={'homework_' + homework.groupHomeworkId}
-                        homeworksViewStatus={"on-checking"}
-                        task={homework}
-                        accessLevel="student"
-                        getSomeHomeworks={this.getSomeHomeworksFromChild}
-                        setHomeworkToUploadId={this.setHomeworkToUploadId}
-                        homework={true}
-                    />
-                    :
-                    <HomeworkClassworkView
-                        key={'homework_' + homework.groupHomeworkId}
-                        homeworksViewStatus={"not-passed"}
-                        task={homework}
-                        accessLevel="student"
-                        getSomeHomeworks={this.getSomeHomeworksFromChild}
-                        setHomeworkToUploadId={this.setHomeworkToUploadId}
-                        homework={true}
-                    />
+            const gethomeworksToView = data ?
+                <HomeworkClassworkView
+                    key={'homework_' + homework.groupHomeworkId}
+                    homeworksViewStatus={"on-checking"}
+                    task={homework}
+                    accessLevel="student"
+                    getSomeHomeworks={this.getSomeHomeworksFromChild}
+                    setHomeworkToUploadId={this.setHomeworkToUploadId}
+                    homework={true}
+                />
+                :
+                <HomeworkClassworkView
+                    key={'homework_' + homework.groupHomeworkId}
+                    homeworksViewStatus={"not-passed"}
+                    task={homework}
+                    accessLevel="student"
+                    getSomeHomeworks={this.getSomeHomeworksFromChild}
+                    setHomeworkToUploadId={this.setHomeworkToUploadId}
+                    homework={true}
+                />
 
             this.setState({
-                 homeworksToView: [...this.state.homeworksToView, gethomeworksToView],
+                homeworksToView: [...this.state.homeworksToView, gethomeworksToView],
             }
-            //,()=>console.log(this.state.homeworksToView)
+                //,()=>console.log(this.state.homeworksToView)
             )
 
             // fetch(`https://localhost:44364/api/studentsHomeworks/GetByStudentAndHomeworkId/details?studentId=${this.state.studentId}&&id=${groupHomeworkId}`) 
@@ -138,7 +138,7 @@ class Student extends React.Component {
         }
         catch {
             console.log("error")
-         }
+        }
     }
     getBase64 = file => {
         return new Promise(resolve => {
@@ -341,11 +341,11 @@ class Student extends React.Component {
                 <NavigationBar />
                 <div>Homeworks:</div>
                 <div className="my-container">
-                <div className="cards">
-                {this.state.homeworksToView}
+                    <div className="cards">
+                        {this.state.homeworksToView}
+                    </div>
+                    <button className="btn btn-secondary" onClick={() => this.getMoreHomeworks()}>View more</button>
                 </div>
-                <button className="btn btn-secondary" onClick={() => this.getMoreHomeworks()}>View more</button>
-            </div>
 
                 <div className="modal fade" id="modal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">

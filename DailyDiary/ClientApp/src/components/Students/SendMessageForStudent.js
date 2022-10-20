@@ -2,7 +2,7 @@ import React from "react"
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import $ from 'jquery'
-import '../../styles/Students.css'
+// import '../../styles/Students.css'
 import NavigationBar from "../NavigationBar"
 
 function SendMessageForStudent(){

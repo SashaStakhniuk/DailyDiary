@@ -35,8 +35,9 @@ namespace DailyDiary.Models
         public virtual DbSet<Parent> Parents { get; set; } // батьки
         public virtual DbSet<ParentStudent> ParentStudents { get; set; }
         public virtual DbSet<StudentsBySubgroup> StudentsBySubgroups { get; set; } // розділення студентів по (групах) підгрупах
-        public virtual DbSet<AuditoryType> AuditoryType { get; set; }
+        public virtual DbSet<AuditoryType> AuditoryTypes { get; set; }
         public virtual DbSet<Auditory> Auditory { get; set; }
+        public virtual DbSet<LessonShedule> LessonsShedule { get; set; }
         public virtual DbSet<LessonType> LessonType { get; set; }
         public virtual DbSet<TaskType> TaskTypes { get; set; }
         public virtual DbSet<DbModels.Task> Tasks { get; set; }
@@ -51,6 +52,7 @@ namespace DailyDiary.Models
         public virtual DbSet<StudentFeedback> StudentFeedback { get; set; }
         public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Feedback> Feedback { get; set; }
+        public virtual DbSet<DailyDiary.Models.DbModels.DayOfWeek> DaysOfWeek { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

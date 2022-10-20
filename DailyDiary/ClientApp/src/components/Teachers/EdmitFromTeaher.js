@@ -1,5 +1,5 @@
 import React from "react"
-import '../../styles/Students.css'
+// import '../../styles/Students.css'
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import $ from 'jquery'

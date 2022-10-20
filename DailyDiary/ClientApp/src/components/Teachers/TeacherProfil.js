@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import '../../styles/Students.css'
+// import '../../styles/Students.css'
 import { useParams } from "react-router-dom"
 import NavigationBar from '../NavigationBar'
 import $ from 'jquery'

@@ -3,7 +3,7 @@ import { useState } from "react"
 import NavigationBar from '../NavigationBar'
 import { useEffect } from "react"
 import { useParams } from "react-router-dom"
-import "../../styles/StudentProfil.css"
+// import "../../styles/StudentProfil.css"
 
 function StudentProfil(props){
     const [student, setStudent] = useState({})

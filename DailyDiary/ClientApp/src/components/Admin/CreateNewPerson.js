@@ -1,5 +1,6 @@
 import React from 'react';
 import { Role } from '../Role'
+import { connect } from "react-redux";
 import { Host } from '../Host'
 class CreateNewPerson extends React.Component {
 
@@ -43,6 +44,7 @@ class CreateNewPerson extends React.Component {
         }
     }
     componentDidMount() {
+        // console.log(this.props)
         if (this.props.location.state != undefined) {
             console.log(this.props.location.state)
             this.getAdditionalPersonDatas(this.props.location.state.person.personId);
@@ -214,11 +216,14 @@ class CreateNewPerson extends React.Component {
     }
     async createNewPerson() {
         try {
+            // console.log(this.props)
+            // console.log(this.state)
             this.errors = "";
             const response = await fetch(`${Host}/api/person/createnew`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'bearer ' + this.props.credentials.tokenKey
                 },
                 body: JSON.stringify(this.state)
             })
@@ -474,9 +479,9 @@ class CreateNewPerson extends React.Component {
                                     <select id="speciality" name="speciality" className="form-select" defaultValue={this.state.speciality} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
                                         {this.state.teacherSpecialities.map(speciality =>
                                             this.state.speciality != speciality.description ?
-                                            <option key={"speciality" + speciality.id} value={speciality.description}>{speciality.description}</option>
-                                            :
-                                            <option key={"speciality" + speciality.id} selected value={speciality.description}>{speciality.description}</option>
+                                                <option key={"speciality" + speciality.id} value={speciality.description}>{speciality.description}</option>
+                                                :
+                                                <option key={"speciality" + speciality.id} selected value={speciality.description}>{speciality.description}</option>
                                         )}
                                     </select>
                                     <label htmlFor="speciality">Speciality</label>
@@ -546,5 +551,19 @@ class CreateNewPerson extends React.Component {
         )
     }
 }
+function mapStateToProps(state) {
+    console.log("mapStateToProps ")
+    console.log(state)
 
-export default CreateNewPerson;
+    return {
+        credentials: state.currentUser.credentials,
+    }
+}
+// function mapDispatchToProps(dispatch){
+//     return{
+//         setCredentials:(userId,tokenKey,roles)=>dispatch(setUserCredentials(userId,tokenKey,roles)),
+//     }
+//   };
+// export default connect(mapStateToProps,mapDispatchToProps)(Admin);
+export default connect(mapStateToProps)(CreateNewPerson);
+// export default CreateNewPerson;

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import '../../styles/Teachers.css'
+// import '../../styles/Teachers.css'
 import NavigationBar from '../NavigationBar'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'

@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../styles/Teachers.css'
+// import '../../styles/Teachers.css'
 import NavigationBar from '../NavigationBar'
 import { useState, useEffect } from 'react'
 import axios from 'axios'

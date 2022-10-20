@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import '../../styles/Students.css'
+// import '../../styles/Students.css'
 import NavigationBar from "../NavigationBar"
 import $ from 'jquery'
 import { useParams } from 'react-router-dom'

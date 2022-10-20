@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import '../../styles/Students.css'
+// import '../../styles/Students.css'
 import { useSelector } from 'react-redux'
 
 function CreateNewStudent(){ 

@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/Navigations/NavigatinBars.css'
+// import '../styles/Navigations/NavigatinBars.css'
 
 function AdminNavigationBar() {
     return(

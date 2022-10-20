@@ -25,7 +25,7 @@ namespace DailyDiary.Controllers.APIControllers
             this.db = db;
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Group>> Get(int id)
+        public async Task<ActionResult<Group>> Get(int id) // отримати групу за ід
         {
             var group = await db.Groups.FirstOrDefaultAsync(x => x.Id == id);
             if (group != null)
@@ -42,7 +42,7 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet("{groupId:int}")]
-        public async Task<ActionResult<IEnumerable<SubgroupBlock>>> GetSubgroupsPrinciplesOfSeparationByGroupId(int groupId)
+        public async Task<ActionResult<IEnumerable<SubgroupBlock>>> GetSubgroupsPrinciplesOfSeparationByGroupId(int groupId) // отримати усі принципи поділу підгруп групи за ід групи
         {
             try
             {
@@ -81,7 +81,7 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroupsOfCurrentStudyYear()
+        public async Task<ActionResult<IEnumerable<Group>>> GetAllGroupsOfCurrentStudyYear() // отримую усі групи теперішнього навчального року
         {
             StudyPlanController studyPlanController = new StudyPlanController(db);
             var studyPlansIds = await studyPlanController.GetAllStudyPlansIdOfCurrentStudyYear();
@@ -152,7 +152,7 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GroupAuditoryViewModel>>> GetGroupsAuditories()
+        public async Task<ActionResult<IEnumerable<GroupAuditoryViewModel>>> GetGroupsAuditories() // основні класи для груп
         {
             StudyPlanController studyPlanController = new StudyPlanController(db);
             var studyPlansIds = await studyPlanController.GetAllStudyPlansIdOfCurrentStudyYear();
@@ -172,7 +172,7 @@ namespace DailyDiary.Controllers.APIControllers
                                 var auditory = await db.Auditory.FirstOrDefaultAsync(x => x.Id == group.PreferedAuditoryId);
                                 if (auditory != null)
                                 {
-                                    var auditoryType = await db.AuditoryType.FirstOrDefaultAsync(x => x.Id == auditory.AuditoryTypeId);
+                                    var auditoryType = await db.AuditoryTypes.FirstOrDefaultAsync(x => x.Id == auditory.AuditoryTypeId);
                                     if (auditoryType != null)
                                     {
                                         groupsAuditories.Add(new GroupAuditoryViewModel
@@ -358,7 +358,7 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet("{groupId}")]
-        public async Task<ActionResult<IEnumerable<SubjectsHours>>> GetGroupSubjectsById(int groupId)
+        public async Task<ActionResult<IEnumerable<SubjectsHours>>> GetGroupSubjectsById(int groupId) // отримати предмети з навчального плану групи
         {
             try
             {
@@ -372,7 +372,7 @@ namespace DailyDiary.Controllers.APIControllers
                     //YearOfStudyController yscontroller = new YearOfStudyController(db);
                     //var yearsOfStudy = await yscontroller.GetYearsOfStudyByCurrentStudyYear(); // навчальні роки теперішнього навчального року
 
-                    //Додати умови знаходження конкретної групи за навчальним роком і т.п !!!!! Відображення не зовсім коректне. Для тесту->
+                    //В групи може бути кілька навчальних планів (різні для кожного семестру), необхідно додати перевірку на те, який зараз семестр !!!!! Відображення не зовсім коректне.  Якщо навчальний план для всього навчального року, Для тесту->
                     var studyPlanSubjectsCollection = await db.StudyPlans.Where(x => x.Id == group.StudyPlanId).Select(x => x.SubjectsHoursCollection).FirstOrDefaultAsync();
                     if (studyPlanSubjectsCollection != null && !String.IsNullOrEmpty(studyPlanSubjectsCollection))
                     {

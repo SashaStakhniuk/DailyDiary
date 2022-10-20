@@ -37,7 +37,7 @@ namespace DailyDiary.Controllers.APIControllers
                 }
                 foreach (var auditory in auditories)
                 {
-                    var auditoryType = await db.AuditoryType.FirstOrDefaultAsync(x=> x.Id == auditory.AuditoryTypeId);
+                    var auditoryType = await db.AuditoryTypes.FirstOrDefaultAsync(x=> x.Id == auditory.AuditoryTypeId);
                     auditory.AuditoryType = new AuditoryType { Id = auditoryType.Id, AuditoryTypeDescription = auditoryType.AuditoryTypeDescription };
                 }
                 return auditories;
@@ -85,7 +85,7 @@ namespace DailyDiary.Controllers.APIControllers
                 }
                 foreach (var auditory in auditories)
                 {
-                    var auditoryType = await db.AuditoryType.FirstOrDefaultAsync(x => x.Id == auditory.AuditoryTypeId);
+                    var auditoryType = await db.AuditoryTypes.FirstOrDefaultAsync(x => x.Id == auditory.AuditoryTypeId);
                     if (auditoryType != null)
                     {
                         auditory.AuditoryType = new AuditoryType { Id = auditoryType.Id, AuditoryTypeDescription = auditoryType.AuditoryTypeDescription };
@@ -103,7 +103,7 @@ namespace DailyDiary.Controllers.APIControllers
         {
             try
             {
-                var auditoriesTypes = await db.AuditoryType.ToListAsync();
+                var auditoriesTypes = await db.AuditoryTypes.ToListAsync();
                 if (auditoriesTypes == null || auditoriesTypes.Count() == 0)
                 {
                     return NotFound($"No one auditory type found.");
@@ -113,6 +113,31 @@ namespace DailyDiary.Controllers.APIControllers
             catch (Exception e)
             {
                 return StatusCode(500,e.Message);
+            }
+        }
+        [HttpGet("{auditoryTypeId:int}")]
+        public async Task<ActionResult<IEnumerable<Auditory>>> GetAllAuditoriesByTypeId(int auditoryTypeId)
+        {
+            try
+            {
+                if(auditoryTypeId <= 0){
+                    return BadRequest("Auditory type id can't be <= 0");
+                }
+                var auditoryType = await db.AuditoryTypes.FirstOrDefaultAsync(x=> x.Id==auditoryTypeId);
+                if (auditoryType == null)
+                {
+                    return NotFound($"Auditory type not found.");
+                }
+                var auditories = await db.Auditory.AsNoTracking().Where(x=> x.AuditoryTypeId== auditoryType.Id).ToListAsync();
+                if (auditories != null)
+                {
+                    return Ok(auditories);
+                }
+                return NotFound("No one auditory found");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
             }
         }
     }

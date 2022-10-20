@@ -128,15 +128,16 @@ class FullGroupEditing extends React.Component { //розбиття студен
                 },
                 body: JSON.stringify(datasToSend)
             });
-            if (response.ok === true) {
-                window.alert("Added");
-                const data = await response.text();
-                window.alert(data);
-            }
-            else {
-                const data = await response.text();
-                window.alert(data);
-            }
+            const data = await response.text();
+            window.alert(data);
+            // if (response.ok === true) {
+            //     const data = await response.text();
+            //     window.alert(data);
+            // }
+            // else {
+            //     const data = await response.text();
+            //     window.alert(data);
+            // }
         }
         catch (e) {
             window.alert(e);
@@ -350,7 +351,7 @@ class FullGroupEditing extends React.Component { //розбиття студен
     }
     async deleteGroup(groupId) {
         try {
-            if(groupId<=0){
+            if (groupId <= 0) {
                 alert("Group id can't be <= 0");
                 return 0;
             }
@@ -371,7 +372,7 @@ class FullGroupEditing extends React.Component { //розбиття студен
     }
     async deleteSubgroup(subgroupId) {
         try {
-            if(subgroupId<=0){
+            if (subgroupId <= 0) {
                 alert("Subgroup id can't be <= 0");
                 return 0;
             }

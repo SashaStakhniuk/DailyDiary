@@ -2,7 +2,7 @@ import React from "react"
 import NavigationBar from "../NavigationBar"
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import '../../styles/Students.css'
+// import '../../styles/Students.css'
 
 function StudentImage(){
 

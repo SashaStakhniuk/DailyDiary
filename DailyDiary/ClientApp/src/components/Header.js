@@ -1,5 +1,5 @@
 import '../scripts/header.js'
-import '../styles/Header.css'
+// import '../styles/Header.css'
 import { useEffect } from 'react'
 import useMediaQuery from '../scripts/useMediaQuery'
 import React from 'react';

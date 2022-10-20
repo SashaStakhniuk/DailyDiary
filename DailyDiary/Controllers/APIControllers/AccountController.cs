@@ -40,14 +40,15 @@ namespace DailyDiary.Controllers.APIControllers
         //}
 
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                foreach(var account in userManager.Users)
-                {
+                //foreach(var account in userManager.Users)
+                //{
 
-                }
+                //}
                 var user = await userManager.FindByNameAsync(model.UserName);
                 if (user != null)
                 {

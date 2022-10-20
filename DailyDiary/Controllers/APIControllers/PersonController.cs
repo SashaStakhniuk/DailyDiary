@@ -2,12 +2,16 @@
 using DailyDiary.Models.DbModels;
 using DailyDiary.Models.ViewModels;
 using DailyDiary.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DailyDiary.Controllers.APIControllers
@@ -192,6 +196,8 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "MainAdmin,Admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateNew(PersonViewModel model)
         {
             try
@@ -219,6 +225,26 @@ namespace DailyDiary.Controllers.APIControllers
 
                 if (userCreated.Succeeded)
                 {
+                    FileStream? fstream = null;
+                    try
+                    {
+                        string text = model.Name + " " + model.LastName + "\t" + model.Email + "\t" + login + "\t" + password;
+                        fstream = new FileStream("userDatas.txt", FileMode.Append);
+
+                        byte[] buffer = Encoding.Default.GetBytes(text);
+                        // запись массива байтов в файл
+                        await fstream.WriteAsync(buffer, 0, buffer.Length);
+                        Console.WriteLine("Текст додано в файл");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    finally
+                    {
+                        fstream?.Close();
+                    }
+
                     IdentityResult roleAdded = await userManager.AddToRolesAsync(user, model.Roles); // додаю роль юзеру
                     if (!roleAdded.Succeeded)
                     {
