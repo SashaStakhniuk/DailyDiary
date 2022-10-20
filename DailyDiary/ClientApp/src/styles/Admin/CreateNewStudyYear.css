@@ -24,7 +24,6 @@
     margin: 0;
 }
 .mainpage__container_ button {
-  margin-top: 25px;
   align-self: center;
 }
 .mainpage__container_ button svg {
@@ -86,6 +85,7 @@
   display: flex;
   justify-content: flex-start;
 }
+
 .main__cart-content__container {
   width: 100%;
   height: auto;
@@ -268,6 +268,7 @@
     order: 1;
     flex-grow: 0;
     cursor: pointer;
+    margin-top: 0;
 }
 
 

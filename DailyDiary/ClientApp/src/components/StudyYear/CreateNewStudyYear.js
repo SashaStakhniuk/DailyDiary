@@ -4,12 +4,11 @@ import StudentHeader from "../Headers/StudentHeader";
 import NavigationBarForStudent from "../Navigations/NavigationBarForStudent";
 import '../../styles/Admin/CreateNewStudyYear.css'
 import logon from '../../images/Photo.png'
-import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from "constants";
 
 function CreateNewStudyYear() {
 
     useEffect(() => {
-        getAllYears()
+        NextPage()
     }, [])
 
     var yyyy = new Date().getFullYear();
@@ -29,19 +28,6 @@ function CreateNewStudyYear() {
 
     const [takeItems, setTakeItems] = useState(6)
     const [skipItems, setSkipItems] = useState(0)
-
-    async function getAllYears() {
-        const response = await fetch(`https://localhost:44364/api/planEducation/GetRung/${takeItems}/${skipItems}`, {
-            method: 'GET'
-        })
-        if (response.ok === true) {
-            const data = await response.json();
-            var skip = takeItems
-            setTakeItems(takeItems+6)
-            setSkipItems(skip)
-            setYearsData(data)
-        }
-    }
 
     async function NextPage() {
         const response = await fetch(`https://localhost:44364/api/planEducation/GetRung/${takeItems}/${skipItems}`, {
@@ -106,7 +92,6 @@ function CreateNewStudyYear() {
         popup.style.transition = "all 0.5s";
     }
 
-
     async function popupLoginCliseClick(){
         let popup = document.getElementById('popup')
         let popup_content = document.getElementById('popup__content')
@@ -123,7 +108,6 @@ function CreateNewStudyYear() {
             img_new.src = ''
         }
     }
-
 
     function osSelectMousEnter(e) {
         console.log("hover");
@@ -267,6 +251,7 @@ function CreateNewStudyYear() {
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </>

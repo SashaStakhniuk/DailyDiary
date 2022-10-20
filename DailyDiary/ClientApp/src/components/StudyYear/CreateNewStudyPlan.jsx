@@ -4,7 +4,7 @@ function CreateNewStudyPlan() {
 
     return(
         <>
-
+            
         </>
     )
 }

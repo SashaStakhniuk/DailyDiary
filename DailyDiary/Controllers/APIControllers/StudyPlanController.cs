@@ -12,6 +12,7 @@ using DailyDiary.Models.ViewModels.StudyPlan;
 using System.Text.Json;
 using DailyDiary.Models.DbModels;
 using System.Globalization;
+using System.Security.Policy;
 
 namespace DailyDiary.Controllers.APIControllers
 {
@@ -30,6 +31,7 @@ namespace DailyDiary.Controllers.APIControllers
         {
             return await db.StudyPlans.ToListAsync();
         }
+
         public async Task<IEnumerable<int>> GetAllStudyPlansIdOfCurrentStudyYear()
         {
             YearOfStudyController yearOfStudyController = new YearOfStudyController(db);
@@ -173,10 +175,27 @@ namespace DailyDiary.Controllers.APIControllers
                 return BadRequest(new { error = e.Message });
             }
         }
+
         [HttpGet]
         public async Task<ActionResult<List<StudyYear>>> GetAllStudyYearsThatIncludeCurrent()
         {
             var studyYears = await db.StudyYears.Where(x => x.StartYear.Value.Year.ToString() == DateTime.Now.Year.ToString()).ToListAsync();
+            if (studyYears != null)
+            {
+                return studyYears;
+            }
+            return NotFound();
+        }
+        public class RungViewModel
+        {
+            public int take { get; set; }
+            public int skip { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<StudyPlan>>> GetRung(RungViewModel model)
+        {
+            var studyYears = model.take < db.StudyPlans.Count() ? await db.StudyPlans.Skip(model.skip).Take(model.take).ToListAsync() : await db.StudyPlans.Skip(model.skip).ToListAsync();
             if (studyYears != null)
             {
                 return studyYears;

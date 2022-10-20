@@ -9,6 +9,17 @@ export const Profil = ({}) => {
 
   const[isHover, setIsHover] = useState(false)
 
+  async function fielldataBisCompany (e) {
+    console.log('Fetching ...')
+    const response = await fetch(`https://b2bdataservice-api-dev.azurewebsites.net/api/set-biscompany/comps`, {
+      method: 'GET'
+    })
+    if(response.ok === true){
+      const data = await response.json()
+      console.log("Data details: ", data)
+    }
+  }
+
   async function getDetailInformation (e) {
     const response = await fetch(`https://b2bdataservice-api-dev.azurewebsites.net/api/bis/v1/3275172-2`, {
       method: 'GET'
@@ -50,8 +61,8 @@ export const Profil = ({}) => {
       })
     })
     if(response.ok === true){
-      const data = await response.json()
-      console.log("Data details: ", data)
+      //const data = await response
+      console.log("Data details: ", response)
     }
   }
 
@@ -229,7 +240,7 @@ export const Profil = ({}) => {
                 <path d="M2.15039 16H3.40039L12.6504 6.74995L11.4254 5.49995L2.15039 14.775V16ZM15.8504 5.64995L12.4754 2.29995L13.8004 0.999951C14.0837 0.716618 14.4381 0.574951 14.8634 0.574951C15.2881 0.574951 15.6421 0.716618 15.9254 0.999951L17.1504 2.22495C17.4337 2.52495 17.5837 2.87895 17.6004 3.28695C17.6171 3.69562 17.4754 4.04162 17.1754 4.32495L15.8504 5.64995ZM1.55039 17.5C1.30039 17.5 1.08806 17.4126 0.913391 17.238C0.738057 17.0626 0.650391 16.85 0.650391 16.6V14.5C0.650391 14.3833 0.671391 14.271 0.713391 14.163C0.754724 14.0543 0.82539 13.95 0.92539 13.85L11.4004 3.37495L14.7754 6.74995L4.30039 17.225C4.20039 17.325 4.09639 17.396 3.98839 17.438C3.87972 17.4793 3.76706 17.5 3.65039 17.5H1.55039ZM12.0254 6.12495L11.4254 5.49995L12.6504 6.74995L12.0254 6.12495Z" fill="#F2982A"/>
               </svg>
             </div>
-            <button className="btn" onClick={e => FindCompanyByOption(e)}>Rquest</button>
+            <button className="btn" onClick={e => fielldataBisCompany(e)}>fielldataBisCompany</button>
             <button className="btn" onClick={e => NextPage(e)}>Next</button>
             <button className="btn" onClick={e => test(e)}>GetDetail info</button> 
           </div>

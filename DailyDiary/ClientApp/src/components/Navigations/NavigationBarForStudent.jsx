@@ -85,7 +85,7 @@ function NavigationBarForStudent() {
 
     return(
         <>
-            <div style={{zIndex:"6", position: 'fixed', minHeight: '100%', bacbackground: '#92a0e5;'}} className="navigation" onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnterHendler} onLoadStart={onMouseLeave}>
+            <div style={{zIndex:"6", position: 'fixed', minHeight: '100%' }} className="navigation" onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnterHendler} onLoadStart={onMouseLeave}>
                 <a href='/student/main-page' id="menu__item" className="menu__item">
                     <svg id="perpel__swg" className="perpel__swg" width="20" height="23" viewBox="0 0 20 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2 20.3333H6.46667V12.3999H13.5333V20.3333H18V8.33325L10 2.29992L2 8.33325V20.3333ZM2 22.3333C1.44444 22.3333 0.972445 22.1386 0.584 21.7493C0.194667 21.3608 0 20.8888 0 20.3333V8.33325C0 8.02214 0.0720002 7.72214 0.216 7.43325C0.360889 7.14436 0.555555 6.91103 0.8 6.73325L8.8 0.699919C8.97778 0.566585 9.16667 0.471918 9.36667 0.415918C9.56667 0.360807 9.77778 0.333252 10 0.333252C10.2222 0.333252 10.4333 0.360807 10.6333 0.415918C10.8333 0.471918 11.0222 0.566585 11.2 0.699919L19.2 6.73325C19.4444 6.91103 19.6387 7.14436 19.7827 7.43325C19.9276 7.72214 20 8.02214 20 8.33325V20.3333C20 20.8888 19.8053 21.3608 19.416 21.7493C19.0276 22.1386 18.5556 22.3333 18 22.3333H11.5333V14.3999H8.46667V22.3333H2Z" fill="#AEB9F1"/>
