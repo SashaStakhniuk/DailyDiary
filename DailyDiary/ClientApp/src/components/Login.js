@@ -21,6 +21,7 @@ class Login extends React.Component {
             loading: ""
         }
     }
+
     onClickPasswordVisible(e) {
         e.preventDefault()
         var inp_password = document.getElementById('password')
@@ -30,7 +31,7 @@ class Login extends React.Component {
             inp_password.type = 'password'
         }
     }
-    async makeRequest(username, password) {
+    async makeRequest(userNameValue, passwordValue) {
         // try{
         //     var userName = username
         //     var password = password
@@ -77,13 +78,22 @@ class Login extends React.Component {
         // }
         try {
 
+            // console.log(userNameValue, passwordValue);
+
+            if (userNameValue === undefined || passwordValue === undefined) {
+                return 0;
+            }
+            const datasToSend = {
+                username: userNameValue,
+                password: passwordValue
+            }
 
             const response = await fetch('https://localhost:44364/api/account/Login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(this.state)
+                body: JSON.stringify(datasToSend)
             })
 
             const data = await response.json()
@@ -130,14 +140,19 @@ class Login extends React.Component {
     handleForm(e) {
         e.preventDefault()
         this.setState({ loading: loadingAnimation })
-        //console.log(e.target)
+        console.log(e.target)
         const { userName, password } = e.target
+        const userNameValue = userName.value;
+        const passwordValue = password.value;
+        console.log(userNameValue, passwordValue);
         this.setState({
-            userName: userName.value,
-            password: password.value,
+            userName: userNameValue,
+            password: passwordValue,
             loading: loadingAnimation
         }
-            , () => this.makeRequest(userName.value, password.value))
+        )
+       this.makeRequest(userNameValue, passwordValue);
+
     }
     render() {
         var animation = ""
@@ -159,7 +174,8 @@ class Login extends React.Component {
                             </div>
                             <div className="mb-3">
                                 <div className="password-wrapper">
-                                    <input id="password" type="password" defaultValue="Qwerty1!" placeholder="Enter your password" required="required" title="Your password" name="password" />
+                                    <input id="password" type="password" defaultValue={"Qwerty1!"} placeholder="Enter your password" required="required" title="Your password" name="password" />
+
                                     <div onClick={e => this.onClickPasswordVisible(e)} className="eye"></div>
                                 </div>
                             </div>

@@ -40,7 +40,6 @@ namespace DailyDiary.Models
         public int Experience { get; set; } // ?
         public float Salary { get; set; }
         public int Rate { get; set; }
-
         public int? PersonId { get; set; }
         [ForeignKey("PersonId")]
         public virtual Person Person { get; set; }

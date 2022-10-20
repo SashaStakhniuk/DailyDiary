@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react'
 import StudentHeader from "../Headers/StudentHeader";
 import NavigationBarForStudent from "../Navigations/NavigationBarForStudent";
 import "../../styles/Admin/CreateNewStudyYear.css"
+
 import logon from '../../images/Photo.png'
 
 function CreateNewStudyYear() {
 
     useEffect(() => {
         getAllYears()
+        NextPage()
     }, [])
 
     var yyyy = new Date().getFullYear();
@@ -41,6 +43,7 @@ function CreateNewStudyYear() {
             setYearsData(data)
         }
     }
+
 
     async function NextPage() {
         const response = await fetch(`https://localhost:44364/api/planEducation/GetRung/${takeItems}/${skipItems}`, {
@@ -168,6 +171,7 @@ function CreateNewStudyYear() {
                                     <ul className="list">
                                         <li className="item">
                                         <label htmlFor="item1">
+
                                             Item 1
                                             <span></span>
                                         </label>
@@ -183,18 +187,20 @@ function CreateNewStudyYear() {
                                         </li>
                                         <li className="item">
                                         <label htmlFor="item5">Item 5</label>
+
                                         </li>
                                     </ul>
                                 </details>
                             </div>
                         </div>
                         <div className="search__container">
-                            <div className="serach__input__container">
+
+                            <dic className="serach__input__container">
                                 <svg className="search__image" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" clipRule="evenodd" d="M7 13C3.68629 13 1 10.3137 1 7C1 3.68629 3.68629 1 7 1C10.3137 1 13 3.68629 13 7C13 8.29583 12.5892 9.49572 11.8907 10.4765L15.7071 14.2929L14.2929 15.7071L10.4765 11.8907C9.49572 12.5892 8.29583 13 7 13ZM7 11C9.20914 11 11 9.20914 11 7C11 4.79086 9.20914 3 7 3C4.79086 3 3 4.79086 3 7C3 9.20914 4.79086 11 7 11Z" fill="#5F6B7A"/>
                                 </svg>
                                 <textarea className="serach__input" placeholder="Find instances"/>
-                            </div>
+                            </dic>
                             <div className="pagination__container">
                                 <div className="pages__numbers__container">
                                     <span className="page__number">1</span>
@@ -243,7 +249,8 @@ function CreateNewStudyYear() {
 
                     <div style={{xIndex: '200'}} className="popup" id="popup">
                         <div className="popup__body">
-                            <div style={{position: 'relative'}} id="popup__content" className="popup__content">
+
+                            <div style={{position: 'relative'}} id="popup__content" class="popup__content">
                                 <h2 className="popup__title">Створити навчальній рік</h2>
                                 <a className="popup__close" onClick={popupLoginCliseClick} >X</a>
                                 <form onSubmit={e => onSubmit(e)} className='form-edit d-flex flex-column align-items-center'>

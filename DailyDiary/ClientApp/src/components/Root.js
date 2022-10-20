@@ -44,6 +44,10 @@ import EditPerson from './Admin/EditPerson.js';
 // import StudentsBySubgroupsDistribution from './Admin/StudentsBySubgroupsDistribution.js';
 import FullGroupEditing from './Admin/FullGroupEditing.js';
 import CreateOdEditShedule from './Admin/CreateOrEditShedule.js';
+import Profil from './Students/Profil.jsx';
+import Review from './Students/Review.jsx';
+import MainPage from './Students/MainPage.jsx';
+
 const Root = () => {
     
     return(
@@ -53,7 +57,12 @@ const Root = () => {
                     <Route exact path="/header"><Header/></Route>
                     <Route exact path="/"><Login/></Route>
 
-                    <Route exact path="/admin" component={Admin}></Route>
+                   
+                    <Route exact path="/student/review"><Review/></Route>
+                    <Route exact path="/student/profil"><Profil/></Route>
+                    {/* <Route exact path="/children-login"><LoginChildrens/></Route> */}
+                    <Route exact path="/student/main-page"><MainPage/></Route>
+                    <Route exact path="/admin"><Admin/></Route>
                     <Route exact path="/admin/new-person" component={CreateNewPerson}></Route> {/*додання персони ДОРОБИТИ-> "присвоєння" дітей батькам*/}
                     <Route exact path="/admin/edit-person"><EditPerson/></Route> {/*редагування персони*/}
 

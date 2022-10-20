@@ -30,6 +30,12 @@ namespace DailyDiary.Controllers.APIControllers
             return await db.StudyYears.ToListAsync();
         }
 
+        [HttpGet("{take:int}/{skkip:int}")]
+        public async Task<ActionResult<IEnumerable<StudyYear>>> GetRung(int take, int skkip)
+        {
+            return (take < db.StudyYears.Count() ? await db.StudyYears.Skip(skkip).Take(take).ToListAsync() : await db.StudyYears.Skip(skkip).ToListAsync());
+        }
+
         [HttpGet("{subgroupId:int}")]
         public async Task<ActionResult<IEnumerable<TeachersSubjectsId>>> GetTeachersSubjectsDistributionBySubgroupId(int subgroupId)
         {
@@ -98,6 +104,7 @@ namespace DailyDiary.Controllers.APIControllers
                 return StatusCode(500, e.Message);
             }
         }
+
         [HttpGet("{groupId:int}")]
         public async Task<ActionResult<IEnumerable<TeachersSubjectsId>>> GetTeachersSubjectsDistributionByGroupId(int groupId)
         {

@@ -8,7 +8,6 @@ namespace DailyDiary.Models
 {
     public class User : IdentityUser
     {
-       //public int PersonId { get; set; }
        public virtual Person Person { get; set; }
     }
 }

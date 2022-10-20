@@ -150,9 +150,6 @@ body::-webkit-scrollbar {
   }
   
   /* Scrollbar Style */ 
-  
-  
-  
   #style-1::-webkit-scrollbar-track
   {
     border-radius: 2px;
