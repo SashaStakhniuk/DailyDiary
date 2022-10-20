@@ -228,7 +228,7 @@ function CreateNewStudyYear() {
                                         </div>
                                         <div className="title-cart__container">
                                             <h3 className="title__cart__study-tear">{item.title}</h3>
-                                            <span className="description__cart__study-tear">ST.y: {item.startYear}<br/>F.y: {item.finishYear}</span >
+                                            <span className="description__cart__study-tear">ST.y: {new Date(item.startYear).toLocaleDateString()}<br/>F.y: {new Date(item.finishYear).toLocaleDateString()}</span >
                                         </div>
                                         <div lang="info__cart__cintainer">
                                             <svg className="svg__info" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

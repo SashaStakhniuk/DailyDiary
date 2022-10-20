@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux'
 import {Switch,NavLink,Route, BrowserRouter as Router} from "react-router-dom"
-import Login from './Login.js'
+import Login from './Account/Login'
 import NotFound from './NotFound'
 import StudentProfil, {} from './Students/StudentProfil'
 import Students from './Students/Students'
@@ -47,6 +47,7 @@ import CreateOdEditShedule from './Admin/CreateOrEditShedule.js';
 import Profil from './Students/Profil.jsx';
 import Review from './Students/Review.jsx';
 import MainPage from './Students/MainPage.jsx';
+import ResetPassword from './Account/ResetPassword.js';
 
 const Root = () => {
     
@@ -56,6 +57,7 @@ const Root = () => {
                 <Switch>
                     <Route exact path="/header"><Header/></Route>
                     <Route exact path="/"><Login/></Route>
+                    <Route path="/passwordreset" component={ResetPassword}></Route>
 
                    
                     <Route exact path="/student/review"><Review/></Route>

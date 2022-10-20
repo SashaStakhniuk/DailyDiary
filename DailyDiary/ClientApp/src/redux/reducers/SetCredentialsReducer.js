@@ -52,9 +52,12 @@ export default function setCredentialsReducer(state, action) {
       const roles = sessionStorage.getItem("roles");
       if (tokenKey == null || tokenKey == undefined || userId == null || userId == undefined) { // якщо неіснує ключа або ід користувача, тобто, якщо користувач не залогінений
         // console.log(window.location)
-        if (window.location.href != window.location.origin + '/') { // і він знаходиться не на сторінці логіну
-          window.location = window.location.origin; // перекидаю на сторінку логіну
-        }
+        // if(window.location.href != window.location.origin + '/passwordreset'){
+
+        // }
+        // else if (window.location.href != window.location.origin + '/') { // і він знаходиться не на сторінці логіну
+        //   window.location = window.location.origin; // перекидаю на сторінку логіну
+        // }
       }
       //  console.log(tokenKey);
       return {

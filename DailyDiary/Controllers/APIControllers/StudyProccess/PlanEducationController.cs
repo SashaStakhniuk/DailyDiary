@@ -33,7 +33,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpGet("{take:int}/{skkip:int}")]
         public async Task<ActionResult<IEnumerable<StudyYear>>> GetRung(int take, int skkip)
         {
-            return (take < db.StudyYears.Count() ? await db.StudyYears.Skip(skkip).Take(take).ToListAsync() : await db.StudyYears.Skip(skkip).ToListAsync());
+            return (take < db.StudyYears.Count() ? await db.StudyYears.AsNoTracking().OrderByDescending(x=> x.Id).Skip(skkip).Take(take).ToListAsync() : await db.StudyYears.AsNoTracking().OrderByDescending(x => x.Id).Skip(skkip).ToListAsync());
         }
 
         [HttpGet("{subgroupId:int}")]

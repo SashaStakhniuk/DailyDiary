@@ -1,6 +1,7 @@
 ﻿using DailyDiary.JWTConfig;
 using DailyDiary.Models;
 using DailyDiary.Models.ViewModels;
+using DailyDiary.Models.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -58,7 +59,7 @@ namespace DailyDiary.Controllers.APIControllers
                         var identity = await GetIdentity(user.Email, model.Password);
                         if (identity == null)
                         {
-                            return BadRequest(new { error = "Invalid login or password" });
+                            return BadRequest("Invalid login or password");
                         }
                         var jwt = new JwtSecurityToken(
                             issuer: AuthOptions.ISSURER,
@@ -222,5 +223,97 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return null;
         }
+        /*___________________________________________________________Change Password____________________________________________________*/
+
+        [HttpPost]
+        public async Task<IActionResult> CheckEmail(ChangePasswordViewModel model)
+        {
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                return Ok();
+            }
+            return NotFound("User not found");
+        }
+        [HttpPost]
+        public async Task<IActionResult> CheckUserByEmailAsync(ChangePasswordViewModel model) // для скидання паролю через пошту
+        {
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                var token = await userManager.GeneratePasswordResetTokenAsync(user);
+                var confirmationLink = Url.Action("ResetPassword", "Account", new { token, email = user.Email }, Request.Scheme);
+                //EmailTwoFactor emailHelper = new EmailTwoFactor();
+                bool emailResponse = EmailTwoFactor.SendEmailTwoFactorCode(user.Email, confirmationLink, "Confirm password changing", "Click on link to confirm password changing");
+                if (emailResponse)
+                {
+                    return Ok("We sent an email on this address, check your messages and click on link to reset your password");
+                }
+                else
+                {
+                    return StatusCode(500,"Email sending error");
+                }
+            }
+            return NotFound("Such user doesn't exist");
+        }
+        public IActionResult ResetPassword(string token = null, string email = null) // повертається після переходу на лінк
+        {
+            if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(email))
+            {
+                return RedirectPermanent($"https://localhost:44364/passwordreset/?email={email}&token={token}");
+            }
+            return Redirect($"https://localhost:44364/passwordreset/");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ChangePasswordViewModel model) // для скидання паролю
+        {
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                var result = await userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+                if (result.Succeeded)
+                    return Ok("Password changed successfully");
+                else
+                {
+                    return BadRequest("Invalid token");
+                }
+            }
+            return BadRequest("Password wasn't changed");
+        }
+
+        //[HttpPost]
+        public async Task<IActionResult> ConfirmPasswordChanging(string token, string email, string oldPassword, string newPassword)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest(new { error = "Error" });
+            var result = await userManager.ResetPasswordAsync(user, token, oldPassword);
+            if (result.Succeeded)
+            {
+                var passwordChangeResult = await userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+                if (passwordChangeResult.Succeeded)
+                {
+                    //return Ok(new { message = "Password was changed" });
+                    return Redirect($"http://localhost:44364/userdatassettings/success");
+
+                }
+                else
+                {
+                    //return BadRequest(new { error = passwordChangeResult.Errors });
+                    var error = passwordChangeResult.Errors.ToList().FirstOrDefault().Description;
+                    return Redirect($"http://localhost:44364/userdatassettings/{error}");
+                }
+
+
+            }
+            else
+            {
+                //return BadRequest(new { error = "Password wasn't changed" });
+                return Redirect($"http://localhost:44364/userdatassettings/failure");
+
+            }
+            //return Redirect("http://localhost:44364/");
+        }
+        /*_______________________________________________________________________________________________________________________*/
     }
 }
