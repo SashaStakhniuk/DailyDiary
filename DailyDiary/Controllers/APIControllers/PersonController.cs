@@ -30,6 +30,35 @@ namespace DailyDiary.Controllers.APIControllers
             this.roleManager = roleManager;
             this.db = context;
         }
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<PersonViewModel>> GetByUserId(string userId)
+        {
+            try
+            {
+                var user = await userManager.FindByIdAsync(userId);
+                if (user != null)
+                {
+                    var person = await db.Persons.AsNoTracking().FirstOrDefaultAsync(x=> x.UserId==user.Id);
+                    if (person != null)
+                    {
+                        PersonViewModel personToView = new PersonViewModel
+                        {
+                            Name = person.Name,
+                            LastName = person.LastName
+                        };
+                        return Ok(personToView);
+                    }
+                    return NotFound("Person not found");
+                }
+                return NotFound("User not found");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+
+        }
+
         [HttpGet("details")]
         public async Task<ActionResult<PersonViewModel>> GetDatasIfPersonWasInRoleErlier(int personId, string role) // умова, коли персона вже мала таку роль (викладач(звільнився, влаштувався знову) або студент(пішов в ПТУ, повернувся назад) або батьки(дитина закінчила школу, інша пішла в 1 клас)) вже існували, підтягуються їх дані з бази
         {
@@ -73,9 +102,9 @@ namespace DailyDiary.Controllers.APIControllers
             if (teacher != null)
             {
                 TeacherCategory category = await db.TeacherCategories.FirstOrDefaultAsync(x => x.Id == teacher.CategoryId);
-                TeacherDegree degree = await db.TeacherDegrees.FirstOrDefaultAsync(x => x.Id==teacher.DegreeId);
-                TeacherEducation education = await db.TeacherEducations.FirstOrDefaultAsync(x => x.Id==teacher.EducationId);
-                TeacherSpeciality speciality = await db.TeacherSpecialities.FirstOrDefaultAsync(x => x.Id==teacher.SpecialityId);
+                TeacherDegree degree = await db.TeacherDegrees.FirstOrDefaultAsync(x => x.Id == teacher.DegreeId);
+                TeacherEducation education = await db.TeacherEducations.FirstOrDefaultAsync(x => x.Id == teacher.EducationId);
+                TeacherSpeciality speciality = await db.TeacherSpecialities.FirstOrDefaultAsync(x => x.Id == teacher.SpecialityId);
 
                 personDatas = new PersonViewModel
                 {
@@ -93,7 +122,7 @@ namespace DailyDiary.Controllers.APIControllers
                     AdmissionDate = student.AdmissionDate,
                     StudentId = student.Id
                 };
-            
+
             }
             if (personDatas != null)
             {
@@ -228,7 +257,7 @@ namespace DailyDiary.Controllers.APIControllers
                     FileStream? fstream = null;
                     try
                     {
-                        string text = model.Name + " " + model.LastName + "\t" + model.Email + "\t" + login + "\t" + password;
+                        string text = model.Name + " " + model.LastName + "\t" + model.Email + "\t" + login + "\t" + password +"\n";
                         fstream = new FileStream("userDatas.txt", FileMode.Append);
 
                         byte[] buffer = Encoding.Default.GetBytes(text);
@@ -291,7 +320,7 @@ namespace DailyDiary.Controllers.APIControllers
                                 {
                                     throw new Exception("Teacher education can't be empty.");
                                 }
-                               
+
                                 Teacher teacherExist = await db.Teachers.Where(x => x.Person == personToAdd).FirstOrDefaultAsync();
                                 if (teacherExist != null)
                                 {
@@ -299,7 +328,7 @@ namespace DailyDiary.Controllers.APIControllers
                                 }
                                 else
                                 {
-                                    TeacherCategory category = await db.TeacherCategories.FirstOrDefaultAsync(x=> x.Description.ToLower()==model.Category.ToLower());
+                                    TeacherCategory category = await db.TeacherCategories.FirstOrDefaultAsync(x => x.Description.ToLower() == model.Category.ToLower());
                                     if (category == null)
                                     {
                                         category = new TeacherCategory { Description = model.Category };
@@ -347,7 +376,7 @@ namespace DailyDiary.Controllers.APIControllers
                                 {
                                     throw new Exception("AdmissionDate can't be erlier than 12 years before this year and later than 1 year after this year.");
                                 }
-                               
+
                                 Student studentExist = await db.Students.Where(x => x.Person == personToAdd).FirstOrDefaultAsync();
                                 if (studentExist != null)
                                 {
@@ -364,7 +393,7 @@ namespace DailyDiary.Controllers.APIControllers
                                 }
                                 break;
                             case "Parrent":
-                               
+
                                 Parent parentExist = await db.Parents.Where(x => x.Person == personToAdd).FirstOrDefaultAsync();
                                 if (parentExist != null)
                                 {
@@ -416,7 +445,7 @@ namespace DailyDiary.Controllers.APIControllers
                         throw new Exception("Login can't be empty");
                         //return BadRequest(new { error = "Email already registered" });
                     }
-                   
+
                     userToEdit.Email = model.Email;
                     userToEdit.PhoneNumber = model.PhoneNumber;
                     userToEdit.UserName = model.Login;
@@ -533,7 +562,7 @@ namespace DailyDiary.Controllers.APIControllers
                                 {
                                     throw new Exception("AdmissionDate can't be erlier than 12 years before this year and later than 1 year after this year.");
                                 }
-                              
+
                                 Student studentExist = await db.Students.Where(x => x.Person == personToEdit).FirstOrDefaultAsync();
                                 if (studentExist == null)
                                 {
@@ -552,7 +581,7 @@ namespace DailyDiary.Controllers.APIControllers
                                 }
                                 break;
                             case "Parrent":
-                               
+
                                 Parent parentExist = await db.Parents.Where(x => x.Person == personToEdit).FirstOrDefaultAsync();
                                 if (parentExist == null)
                                 {

@@ -48,6 +48,8 @@ import Profil from './Students/Profil.jsx';
 import Review from './Students/Review.jsx';
 import MainPage from './Students/MainPage.jsx';
 import ResetPassword from './Account/ResetPassword.js';
+import Tasks from './Teachers/Tasks';
+import HomeTasks from './Teachers/HomeTasks';
 
 const Root = () => {
     
@@ -103,6 +105,9 @@ const Root = () => {
                     <Route exact path="/admin/send-message-for-student/:id"><SendMessageForStudent/></Route>
                              
                     <Route exact path="/teacher-page"><TeacherPage/></Route>
+                    <Route exact path="/teacher-page/tasks"><Tasks/></Route>
+                    <Route exact path="/teacher-page/home-tasks"><HomeTasks/></Route>
+                    
                     <Route exact path="/teacher-page/send-feedback/:studentId/:teacherId/:subjectId/:studentName"><SandFeedback/></Route>
                     <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
                     <Route exact path="/teacher/news-page/:id" ><NewsPage /></Route>

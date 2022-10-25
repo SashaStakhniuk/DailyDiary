@@ -22,7 +22,7 @@ class ResetPassword extends React.Component {
             token:"",
             error: "",
             loading: "",
-            message: "",
+            message: "Будь ласка, введіть ваші дані",
             emailConfirmed:false
         }
     }
@@ -52,7 +52,8 @@ class ResetPassword extends React.Component {
             this.setState({
                 email,
                 token,
-                emailConfirmed:true
+                emailConfirmed:true,
+                message:"Особу підтвердженно.\nВведіть новий пароль."
             }
             // ,()=>console.log(this.state)
             )
@@ -61,7 +62,8 @@ class ResetPassword extends React.Component {
             this.setState({
                 email:"",
                 token:"",
-                emailConfirmed:false
+                emailConfirmed:false,
+                message:"Будь ласка, введіть ваші дані"
             }
             // ,()=>console.log(this.state)
             )
@@ -103,7 +105,8 @@ class ResetPassword extends React.Component {
                 console.log(data)
                 this.setState({
                     error: "",
-                    message: data,
+                    // message: data,
+                    message:"Посилання для відновлення паролю надіслано на пошту.",
                     loading: ""
                 })
 
@@ -137,7 +140,8 @@ class ResetPassword extends React.Component {
                 console.log(data)
                 this.setState({
                     error: "",
-                    message: data,
+                    // message: data,
+                    message: "Пароль змінено успішно",
                     loading: ""
                 }
                 ,()=> setTimeout(()=> window.location = '/', 2500)
@@ -196,10 +200,10 @@ class ResetPassword extends React.Component {
                     </div>
                    
                    
+                    <div style={{ marginBottom: "20px" }}>{this.state.message}</div>
 
                     {this.state.emailConfirmed?
                     <>
-                    <div style={{ marginBottom: "20px" }}>Будь ласка, введіть ваші дані</div>
                     <div className="form-input">
                         <div>Пошта</div>
                         <input id="email" type="email" className="inputForm" disabled defaultValue={this.state.email} placeholder="JohnDoe@gmail.com" required="required" title="Your email" name="email" />
@@ -213,13 +217,10 @@ class ResetPassword extends React.Component {
                     </div>
                     </>
                    :
-                   <>
-                   <div style={{ marginBottom: "20px" }}>Будь ласка, введіть ваші дані</div>
                    <div className="form-input">
                        <div>Пошта</div>
                        <input id="email" type="email" className="inputForm" defaultValue={this.state.email} placeholder="JohnDoe@gmail.com" required="required" title="Your email" name="email" />
                    </div>
-                   </>
                     }
 
                     <span className="text-center">
@@ -227,7 +228,7 @@ class ResetPassword extends React.Component {
                     </span>
                     <span className="text-center">
                         <div style={{ color: "red" }} className="text-center"><h3 style={{ fontSize: "0.8em" }}>{this.state.error}</h3></div>
-                        <div style={{ color: "green" }} className="text-center"><h3 style={{ fontSize: "0.8em" }}>{this.state.message}</h3></div>
+                         {/* <div style={{ color: "green" }} className="text-center"><h3 style={{ fontSize: "0.8em" }}>{this.state.message}</h3></div> */}
                     </span>
 
                     <div>

@@ -1,46 +1,4 @@
-@import url('Colors.css');
-.form-input div{
-    font-size: 0.95em;
-}
-.inputForm {
-    width: 450px;
-    line-height: 40px;
-    border: 1px solid lightgray;
-    box-sizing: border-box;
-    border-radius: 15px;
-    padding-left: 15px;
-    font-size: 0.9em;
-}
-.inputForm:focus{
-    outline: none;
-    border: 1px solid var(--violet);
-}
-.general-button{
-    transition: all 0.4s ease 0s;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 40px;
-    gap: 4px;
-    min-width: 180px;
-    width: 450px;
-    height: 52px;
-    max-height: 80px;
-    background: #AEB9F1;
-    border-radius: 16px;
-    border: none;
-    color: #FFFFFF;
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 20px;
-}
-.general-button:hover {
-    background: #92a0e5;
-}
+
 /* .inputForm:hover {
     transition: transform ease-in-out 100ms
 } */

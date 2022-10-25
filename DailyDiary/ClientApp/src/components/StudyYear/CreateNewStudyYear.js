@@ -168,7 +168,7 @@ function CreateNewStudyYear() {
                                         <input className="default__selected-item" type="radio" name="item" id="item4" title="Item 4" />
                                         <input className="default__selected-item" type="radio" name="item" id="item5" title="Item 5" />
                                     </summary>
-                                    <ul className="list">
+                                    <ul className=" ul list">
                                         <li className="item">
                                         <label htmlFor="item1">
 

@@ -339,7 +339,7 @@ details {
 
 
   
-  ul {
+  .ul {
     width: 100%;
     background: #ddd;
     position: absolute;
@@ -356,8 +356,8 @@ details {
     opacity: 1;
     display: block;
   }
-  
-  li {
+  .ul>li
+  {
     transition: all 0.4s ease 0s;
     margin: 0;
     display: flex;

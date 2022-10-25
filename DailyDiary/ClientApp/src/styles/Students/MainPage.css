@@ -26,10 +26,12 @@
 }
 
 body {
-    overflow:auto;
-    cursor: auto;
+    /* overflow:auto;
+    cursor: auto; */
     background: #F5F5F5;
     font: normal 400 130%/1.5 -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+    width: 100%;
 }
 .main__container {
     position: relative;
