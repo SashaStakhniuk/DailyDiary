@@ -12,6 +12,7 @@ namespace DailyDiary.Models.DbModels
         public TeacherSubgroupDistribution()
         {
             this.WorkPlans = new HashSet<WorkPlan>();
+            this.Tasks = new HashSet<Task>(); // тимчасово // завдання необхідно додавати через робочий план, але оскільки його поки немає, роблю зв'язок напряму із Tasks
             this.Shedules = new HashSet<Shedule>();
         }
         [Key]
@@ -35,6 +36,9 @@ namespace DailyDiary.Models.DbModels
         public virtual Union Union { get; set; }
         public virtual AuditoryType AuditoryType { get; set; }
         public virtual ICollection<WorkPlan> WorkPlans { get; set; }
+
+        public virtual ICollection<Task> Tasks { get; set; } // тимчасово
+
         public virtual ICollection<Shedule> Shedules { get; set; }
 
     }

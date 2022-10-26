@@ -1,6 +1,9 @@
-import { throws } from 'assert';
 import React from 'react'
+import GeneralHeader from '../Headers/GeneralHeader';
+import { connect } from "react-redux";
+
 import { Host } from '../Host'
+import GeneralNavigationBar from '../Navigations/GeneralNavigationBar';
 import SubgroupTeachersSubjectDistribution from './SubgroupTeachersSubjectDistribution';
 
 class TeachersDistribution extends React.Component {
@@ -30,8 +33,8 @@ class TeachersDistribution extends React.Component {
     }
     async componentDidMount() {
         await this.getAllGroups();
-         this.getAllSubjects();
-         this.getAllAuditoriesTypes();
+        this.getAllSubjects();
+        this.getAllAuditoriesTypes();
     }
 
     async getAllGroups() { // отримую список усіх груп
@@ -220,14 +223,14 @@ class TeachersDistribution extends React.Component {
                 }
                 teacherId = '0';
             }
-            if (auditoryTypeId == undefined ) {
-                auditoryTypeId=null;
+            if (auditoryTypeId == undefined) {
+                auditoryTypeId = null;
             }
-            else if (auditoryTypeId < 0 ) {
+            else if (auditoryTypeId < 0) {
                 alert("AuditoryTypeId can't be < 0");
                 return 0;
             }
-            arrayOfKeys.push({ "teacherId": teacherId, "subjectId": subjectId, "auditoryTypeId" : auditoryTypeId})
+            arrayOfKeys.push({ "teacherId": teacherId, "subjectId": subjectId, "auditoryTypeId": auditoryTypeId })
             // var cellLength = oCells.length;
             // for (var j = 0; j < cellLength; j++) {
             //     // get your cell info here
@@ -306,23 +309,42 @@ class TeachersDistribution extends React.Component {
             this.state.groupStudyPlan.length == 0 ? <div style={{ color: "red" }}>Study plan not found</div> :
                 <></>
         return (
-            <div className="container">
-                <div className="col-md-6">
-                    <label htmlFor="group" className="form-label">Group</label>
-                    <select id='group' name='group' className="form-select" onChange={this.onSelectionChange}>
-                        {this.state.groups.map((group) =>
-                            <option key={`group_${group.groupId}`} value={group.groupId}>{group.groupTitle}</option>
-                        )}
-                    </select>
+            <>
+                <GeneralHeader></GeneralHeader>
+
+                <div className="flex-container">
+                    <div className="navigationSide">
+                        <GeneralNavigationBar role={this.props.credentials.roles} />
+                    </div>
+                    <div className="generalSide">
+                        <div className="col-md-6">
+                            <label htmlFor="group" className="form-label">Group</label>
+                            <select id='group' name='group' className="form-select" onChange={this.onSelectionChange}>
+                                {this.state.groups.map((group) =>
+                                    <option key={`group_${group.groupId}`} value={group.groupId}>{group.groupTitle}</option>
+                                )}
+                            </select>
+                        </div>
+                        {groupTeachersSubjectsDistributionTable}
+                        <div>Subgroups: </div>
+                        <div id="groupSubgroupsTeachersSubjectDistribution">
+                            <SubgroupTeachersSubjectDistribution allSubjects={this.state.allSubjects} auditoriesTypes={this.state.auditoriesTypes} groupId={this.state.selectedGroupId}></SubgroupTeachersSubjectDistribution>
+                        </div>
+                    </div>
                 </div>
-                {groupTeachersSubjectsDistributionTable}
-                <div>Subgroups: </div>
-                <div id="groupSubgroupsTeachersSubjectDistribution">
-                    <SubgroupTeachersSubjectDistribution allSubjects={this.state.allSubjects} auditoriesTypes={this.state.auditoriesTypes} groupId={this.state.selectedGroupId}></SubgroupTeachersSubjectDistribution>
-                </div>
-            </div>
+            </>
         )
     }
 }
 
-export default TeachersDistribution
+function mapStateToProps(state) {
+    console.log("mapStateToProps ")
+    console.log(state)
+
+    return {
+        credentials: state.currentUser.credentials,
+    }
+}
+
+export default connect(mapStateToProps)(TeachersDistribution);
+// export default TeachersDistribution

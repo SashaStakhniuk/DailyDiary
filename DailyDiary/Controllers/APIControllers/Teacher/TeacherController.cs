@@ -31,7 +31,7 @@ namespace DailyDiary.Controllers.APIControllers
             foreach (var teacherId in teachersId)
             {
                 var teacherToDisplay = new TeacherToDisplayViewModel();
-                var teacher = await db.Teachers.Include(x => x.Person).Include(x=> x.Category).Include(x => x.Degree).Include(x => x.Speciality).Include(x => x.Education).FirstOrDefaultAsync(x => x.Id == teacherId);
+                var teacher = await db.Teachers.Include(x => x.Person).Include(x => x.Category).Include(x => x.Degree).Include(x => x.Speciality).Include(x => x.Education).FirstOrDefaultAsync(x => x.Id == teacherId);
                 if (teacher != null)
                 {
                     teacherToDisplay.TeacherId = teacher.Id;
@@ -111,7 +111,7 @@ namespace DailyDiary.Controllers.APIControllers
         //    }
         //    return NotFound("Teacher datas not found");
         //}
-            [HttpGet]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<TeacherToDisplayViewModel>>> GetTeachersBySubjectsId([FromQuery] int[] subjectsIdArray)
         {
             if (subjectsIdArray.Count() > 0)
@@ -119,7 +119,7 @@ namespace DailyDiary.Controllers.APIControllers
                 List<Teacher> teachersList = new List<Teacher>(); // список викладачів, що ведуть ці предмети
                 foreach (var subjectId in subjectsIdArray) // перебираю ід усіх предметів
                 {
-                    var teachersListBySubjectId = await db.TeacherSubjects.Where(x => x.SubjectId == subjectId).Include(x=> x.Teacher).ThenInclude(x=> x.Person).Select(x => x.Teacher).ToListAsync(); //шукаю усіх викладачів, які можуть вести цей предмет
+                    var teachersListBySubjectId = await db.TeacherSubjects.Where(x => x.SubjectId == subjectId).Include(x => x.Teacher).ThenInclude(x => x.Person).Select(x => x.Teacher).ToListAsync(); //шукаю усіх викладачів, які можуть вести цей предмет
                     //teachersList = (List<Teacher>)teachersList.Concat(teacherListBySubjectId);
                     foreach (var teacher in teachersListBySubjectId)
                     {
@@ -132,9 +132,10 @@ namespace DailyDiary.Controllers.APIControllers
                     teachersList = teachersList.Distinct().ToList(); //Видаляю можливі дублікати
                     var teachersToDisplay = new List<TeacherToDisplayViewModel>();
 
-                    foreach(var teacher in teachersList)
+                    foreach (var teacher in teachersList)
                     {
-                        var teacherToDisplay = new TeacherToDisplayViewModel { 
+                        var teacherToDisplay = new TeacherToDisplayViewModel
+                        {
                             TeacherId = teacher.Id,
                             PersonId = (int)teacher.PersonId,
                             Name = teacher.Person.Name,
@@ -208,7 +209,7 @@ namespace DailyDiary.Controllers.APIControllers
         //    }
         //    return Ok(teacher);
         //}
-        
+
         [HttpDelete("{id}")]
         //[Authorize(Roles = "MainAdmin,Admin")]
         public async Task<ActionResult<Teacher>> Delete(int id)
@@ -238,54 +239,197 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return NotFound();
         }
-
-        [HttpPost]
-        public async Task<ActionResult> CreateLogin(CreateLoginViewModel model)
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<Subject>>> GetTeacherSubjectsByUserId(string userId)
         {
-            GeneratorService generatorService = new GeneratorService(userManager);
-            string Login = await generatorService.GenerateNewLogin(model.Name); // генерація логіну
-            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.Id == model.Id);
-            if (teacher != null)
+            var teacher = await db.Teachers.Include(x => x.Person).FirstOrDefaultAsync(x => x.Person.UserId == userId);
+            if (teacher == null)
             {
-                // teacher.Login = Login;
-                db.Teachers.Update(teacher);
-                await db.SaveChangesAsync();
-                return Ok(teacher);
+                return NotFound("Teacher not found");
             }
-            else
+            var teacherSubjectsId = await db.TeacherSubjects.Where(x => x.TeacherId == teacher.Id).Select(x => x.SubjectId).Distinct().ToListAsync(); // можливі повтори!!!
+            if (teacherSubjectsId != null)
             {
-                return NotFound();
+                var subjects = new List<Subject>();
+                foreach (var subjectId in teacherSubjectsId)
+                {
+                    subjects.Add(await db.Subjects.FirstOrDefaultAsync(x => x.Id == subjectId));
+                }
+                return Ok(subjects);
+            }
+            return NotFound();
+        }
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<Subgroup>>> GetTeacherSubgroupsByUserId(string userId)
+        {
+            try
+            {
+                var teacher = await db.Teachers.Include(x => x.Person).FirstOrDefaultAsync(x => x.Person.UserId == userId);
+                if (teacher == null)
+                {
+                    return NotFound("Teacher not found");
+                }
+                GroupController groupController = new GroupController(db);
+                var allcurrentYearGroups = await groupController.GetAllGroupsOfCurrentStudyYear(); // усі групи тепершінього навчального року
+                if (allcurrentYearGroups != null)
+                {
+                    var allGroups = allcurrentYearGroups.Value.ToList();
+                    if (allGroups.Count > 0)
+                    {
+                        //var subgroups = allGroups.Select(x=> x.DefSubgroupId); // ід усіх дефолтних підгруп
+                        var subgroupsToView = new List<Subgroup>();
+                        foreach (var group in allGroups) // для кожно
+                        {
+                            var subgroups = await db.Subgroups.AsNoTracking().Where(x => x.GroupId == group.Id).ToListAsync();// шукаю усі підгрупи групи
+                            foreach (var subgroup in subgroups) // перебираю усі підгрупи щоб знайти в яких веде викладач
+                            {
+                                var teacherSubgroup = await db.TeacherSubgroupDistributions.AsNoTracking().FirstOrDefaultAsync(x => x.SubgroupId == subgroup.Id); // шукаю чи викладач веде предмети в цій підгрупі
+                                if (teacherSubgroup != null) //якщо так
+                                {
+                                    if (subgroup.Id == group.DefSubgroupId)// якщо це дефолтна підгрупа групи
+                                    {
+                                        subgroup.Title = group.Title; // назва = назві групи
+                                    }
+                                    subgroupsToView.Add(subgroup);
+                                }
+                            }
+                        }
+                        if (subgroupsToView.Count > 0)
+                        {
+                            subgroupsToView = subgroupsToView.OrderBy(x=> x.Id).ToList();
+                            return Ok(subgroupsToView);
+                        }
+                        else
+                        {
+                            return NotFound("No one group (this teacher have lessons) found");
+                        }
+                    }
+                    else
+                    {
+                        return NotFound("No one group of current study year found");
+                    }
+                }
+                else
+                {
+                    return NotFound("No one group of current study year found");
+                }
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500,e.Message);
             }
         }
-
-        [HttpPost]
-        public async Task<ActionResult> SendFeedback(SendFeedbackViewModel model)
+        [HttpGet("{details}")]
+        public async Task<ActionResult<IEnumerable<Subgroup>>> GetTeacherSubgroupsByTeacherSubject(string userId, int subjectId) // список груп, у яких викладач веде обраний предмет
         {
+            try
+            {
+                if (subjectId <=0)
+                {
+                    return BadRequest("SubjectId can't be <= 0");
+                }
+                var teacher = await db.Teachers.Include(x => x.Person).FirstOrDefaultAsync(x => x.Person.UserId == userId);
+                if (teacher == null)
+                {
+                    return NotFound("Teacher not found");
+                }
+                GroupController groupController = new GroupController(db);
+                var allcurrentYearGroups = await groupController.GetAllGroupsOfCurrentStudyYear(); // усі групи тепершінього навчального року
+                if (allcurrentYearGroups != null)
+                {
+                    var allGroups = allcurrentYearGroups.Value.ToList();
+                    if (allGroups.Count > 0)
+                    {
+                        //var subgroups = allGroups.Select(x=> x.DefSubgroupId); // ід усіх дефолтних підгруп
+                        var subgroupsToView = new List<Subgroup>();
+                        foreach (var group in allGroups) // для кожно
+                        {
+                            var subgroups = await db.Subgroups.AsNoTracking().Where(x => x.GroupId == group.Id).ToListAsync();// шукаю усі підгрупи групи
+                            foreach (var subgroup in subgroups) // перебираю усі підгрупи щоб знайти в яких веде викладач
+                            {
+                                var teacherSubgroup = await db.TeacherSubgroupDistributions.AsNoTracking().FirstOrDefaultAsync(x => x.SubgroupId == subgroup.Id && x.SubjectId==subjectId); // шукаю чи викладач веде предмети в цій підгрупі
+                                if (teacherSubgroup != null) //якщо так
+                                {
+                                    if (subgroup.Id == group.DefSubgroupId)// якщо це дефолтна підгрупа групи
+                                    {
+                                        subgroup.Title = group.Title; // назва = назві групи
+                                    }
+                                    subgroupsToView.Add(subgroup);
+                                }
+                            }
+                        }
+                        if (subgroupsToView.Count > 0)
+                        {
+                            subgroupsToView = subgroupsToView.OrderBy(x => x.Id).ToList();
+                            return Ok(subgroupsToView);
+                        }
+                        else
+                        {
+                            return NotFound("No one group (this teacher have lessons) found");
+                        }
+                    }
+                    else
+                    {
+                        return NotFound("No one group of current study year found");
+                    }
+                }
+                else
+                {
+                    return NotFound("No one group of current study year found");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+        [HttpPost]
+            public async Task<ActionResult> CreateLogin(CreateLoginViewModel model)
+            {
+                GeneratorService generatorService = new GeneratorService(userManager);
+                string Login = await generatorService.GenerateNewLogin(model.Name); // генерація логіну
+                Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.Id == model.Id);
+                if (teacher != null)
+                {
+                    // teacher.Login = Login;
+                    db.Teachers.Update(teacher);
+                    await db.SaveChangesAsync();
+                    return Ok(teacher);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
 
-            Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.SubjectId);
-            Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.Id == model.TeacherId);
-            Student student = await db.Students.FirstOrDefaultAsync(x => x.Id == model.StudentId);
-            Feedback feedback = new Feedback
+            [HttpPost]
+            public async Task<ActionResult> SendFeedback(SendFeedbackViewModel model)
             {
-                IsRead = false,
-                DataPublication = model.DataPublication,
-                MainInformation = model.MainInformation,
-                SubjectId = model.SubjectId,
-                Subject = subject,
-                TeacherId = model.TeacherId,
-                Teacher = teacher,
-            };
-            db.Feedback.Add(feedback);
-            StudentFeedback studentFeedback = new StudentFeedback
-            {
-                Feedback = feedback,
-                FeedbackId = feedback.Id,
-                Student = student,
-                StudentId = student.Id
-            };
-            db.StudentFeedback.Add(studentFeedback);
-            await db.SaveChangesAsync();
-            return Ok();
+
+                Subject subject = await db.Subjects.FirstOrDefaultAsync(x => x.Id == model.SubjectId);
+                Teacher teacher = await db.Teachers.FirstOrDefaultAsync(x => x.Id == model.TeacherId);
+                Student student = await db.Students.FirstOrDefaultAsync(x => x.Id == model.StudentId);
+                Feedback feedback = new Feedback
+                {
+                    IsRead = false,
+                    DataPublication = model.DataPublication,
+                    MainInformation = model.MainInformation,
+                    SubjectId = model.SubjectId,
+                    Subject = subject,
+                    TeacherId = model.TeacherId,
+                    Teacher = teacher,
+                };
+                db.Feedback.Add(feedback);
+                StudentFeedback studentFeedback = new StudentFeedback
+                {
+                    Feedback = feedback,
+                    FeedbackId = feedback.Id,
+                    Student = student,
+                    StudentId = student.Id
+                };
+                db.StudentFeedback.Add(studentFeedback);
+                await db.SaveChangesAsync();
+                return Ok();
+            }
         }
     }
-}

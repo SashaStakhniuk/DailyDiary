@@ -17,17 +17,17 @@ namespace DailyDiary.Models.DbModels
         }
         [Key]
         public int Id { get; set; }
-        public DateTime LessonDate { get; set; }
+        public DateTime? LessonDate { get; set; } // дата проведення уроку
         [ForeignKey("LessonType")]
-        public int LessonTypeId { get; set; }
+        public int? LessonTypeId { get; set; } // тип заняття
         public virtual LessonType LessonType { get; set; }
         [ForeignKey("TeacherSubgroupDistribution")]
-        public int TeacherSubgroupDistributionId { get; set; }
+        public int TeacherSubgroupDistributionId { get; set; } // викладач-група-предмет
         public virtual TeacherSubgroupDistribution TeacherSubgroupDistribution { get; set; }
         [MaxLength(100)]
-        public string Thema { get; set; }
+        public string Theme { get; set; } // тема уроку
         [MaxLength(100)]
-        public string Comment { get; set; }
+        public string Comment { get; set; } // коментар до уроку
         public virtual ICollection<Task> Tasks { get; set; }
         public virtual ICollection<LessonStudyMaterial> LessonStudyMaterials { get; set; }
 

@@ -1,27 +1,82 @@
-﻿//using DailyDiary.Models;
-//using DailyDiary.Models.ViewModels;
-//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore;
-//using System;
-//using System.Collections.Generic;
-//using System.IO;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using DailyDiary.Models;
+using DailyDiary.Models.ViewModels;
+using DailyDiary.Models.ViewModels.WorkWithFiles;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace DailyDiary.Controllers.APIControllers
-//{
-//    [ApiController]
-//    [Route("api/[controller]/[action]")]
-//    //[Authorize(Roles = "MainAdmin,Admin,Teacher")]
-//    public class GroupHomeworksController : Controller
-//    {              
-//         private readonly DailyDiaryDatasContext db;
-//         public GroupHomeworksController(DailyDiaryDatasContext datasContext)
-//         {
-//             this.db = datasContext;
-//         }
+namespace DailyDiary.Controllers.APIControllers
+{
+    [ApiController]
+    [Route("api/[controller]/[action]")]
+    //[Authorize(Roles = "MainAdmin,Admin,Teacher")]
+    public class GroupHomeworksController : Controller
+    {
+        private readonly DailyDiaryDatasContext db;
+        public GroupHomeworksController(DailyDiaryDatasContext datasContext)
+        {
+            this.db = datasContext;
+        }
+        [HttpGet("{studentId}")]
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult<IEnumerable<HomeworkTaskViewModel>>> GetHomeworksByStudentId(int studentId)
+        {
+            try
+            {
+                var student = await db.Students.AsNoTracking().FirstOrDefaultAsync(x => x.Id == studentId);
+                if (student == null)
+                {
+                    return NotFound("Student not found");
+                }
+                var subgroupsId = await db.StudentsBySubgroups.Where(x => x.StudentId == student.Id).Select(x=> x.SubgroupId).ToListAsync(); // усі підгрупи, в яких навчається студент
+                if (subgroupsId.Count == 0)
+                {
+                    return NotFound("No one student subgroup found");
+                }
+                var taskType = await db.TaskTypes.AsNoTracking().FirstOrDefaultAsync(x=> x.TaskTypeDescription.ToLower()=="homework");
+                if (taskType == null)
+                {
+                    return NotFound("Can't find 'homework' task type");
+                }
+                List<HomeworkTaskViewModel> homeworks = new List<HomeworkTaskViewModel>();
+                foreach (var subgroupId in subgroupsId)
+                {
+                    var teacherSubgroupsId = await db.TeacherSubgroupDistributions.AsNoTracking().Where(x => x.SubgroupId==subgroupId).Select(x=> x.Id).ToListAsync();// усі можливі задані завдання викладачами
+                    foreach(var teacherSubgroupId in teacherSubgroupsId)
+                    {
+                        var allTasks = await db.Tasks.AsNoTracking()
+                            .Where(x=> x.TeacherSubgroupDistributionId == teacherSubgroupId)
+                            .Select(x=> new HomeworkTaskViewModel 
+                            { 
+                                Id=x.Id,
+                                PublishDate = x.PublishDate,
+                                Deadline = x.Deadline,
+                                Theme=x.Theme,
+                                Comment = x.Comment
+                            }).ToListAsync(); // всі завдання, що були задані групі
+                        homeworks.AddRange(allTasks);
+                    }
+                }
+                if (homeworks.Count > 0)
+                {
+                    return Ok(homeworks);
+                }
+                return NotFound("No one new homework found");
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500,e.Message);
+            }
+            //return student == null ? NotFound("Student not found") : Ok(student.Id);
+        }
+    }
+}
 //        [HttpGet]
 //        public async Task<ActionResult<IEnumerable<GroupHomework>>> Get()
 //        {
@@ -59,7 +114,7 @@
 //                        homework.HomeworkInBytes = null;
 //                        homework.Teacher.GroupHomeworks = null;
 //                        homework.Subject.GroupHomeworks = null;
-                        
+
 //                        //var teacher = await db.Teachers.FindAsync(homework.TeacherId);
 //                        homework.Teacher = new Teacher {  Name=homework.Teacher.Name, LastName = homework.Teacher.LastName};
 //                        homework.Subject = new Subject { Title = homework.Subject.Title };
@@ -148,7 +203,7 @@
 //                //db.GroupHomeworks.Update(homeworkDatasToEdit);
 //                //db.SaveChanges();
 
-                
+
 //                    }
 //            return BadRequest(ModelState);
 //        }
@@ -273,7 +328,7 @@
 //                return Ok(homeworks);
 //            return NotFound();
 //        }
-        
+
 //        [HttpGet("id")]
 //        public async Task<ActionResult<IEnumerable<GroupHomework>>> GetByGroupId(int id)
 //        {

@@ -20,7 +20,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    font: normal 400 130%/1.5 -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    /* font: normal 400 130%/1.5 -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -29,7 +29,16 @@ body {
     /* overflow:auto;
     cursor: auto; */
     background: #ffffff;
-    font: normal 400 130%/1.5 -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    /* font: bold 400 1.25em -apple-system, BlinkMacSystemFont, , Arial, sans-serif; */
+    /* font-weight:bold;
+    font-size: 1em;
+    font-family: 'Open Sans'; */
+
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    /* font-size: 1.25em;
+    line-height: 1.25em; */
     overflow-x: hidden;
     width: 100%;
 }

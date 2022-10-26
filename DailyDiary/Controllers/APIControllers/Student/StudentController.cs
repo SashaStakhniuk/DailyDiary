@@ -33,6 +33,25 @@ namespace DailyDiary.Controllers.APIControllers
             //this.signInManager = signInManager;
             //this.roleManager = roleManager;
         }
+        [HttpGet("{userId}")]
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult<int>> GetStudentIdByUserId(string userId)
+        {
+            try
+            {
+                var student = await db.Students.Include(x => x.Person).FirstOrDefaultAsync(x => x.Person.UserId == userId);
+                if (student != null)
+                {
+                    return Ok(student.Id);
+                }
+                return NotFound("Student not found");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+            //return student == null ? NotFound("Student not found") : Ok(student.Id);
+        }
         [HttpGet("{id}")]
         public async Task<ActionResult<Student>> Get(int id) // отримати студента по ід
         {

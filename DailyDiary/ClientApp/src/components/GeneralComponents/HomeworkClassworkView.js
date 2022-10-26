@@ -267,11 +267,13 @@ class HomeworkClassworkView extends React.Component {
 
                     <div className="d-flex justify-content-around">
                         <div className="subjectView">
-                            {this.props.accessLevel === "student" ?
+                            {/* {this.props.accessLevel === "student" ?
                                 this.props.task.subject.title
                                 :
                                 <></>
-                            }
+                            } */}
+                          
+                               Subject.title
                         </div>
                         <div className="infoicon">
                             <div className="icon">
@@ -291,7 +293,9 @@ class HomeworkClassworkView extends React.Component {
                                                 <label htmlFor="teacher">Teacher:</label>
                                             </div>
                                             <div id="teacher" className="form-group col-md-6">
-                                                <div style={{ color: "black", textAlign: "left" }}>{this.props.task.teacher.name} {this.props.task.teacher.lastName}</div>
+                                                {/* <div style={{ color: "black", textAlign: "left" }}>{this.props.task.teacher.name} {this.props.task.teacher.lastName}</div> */}
+                                                <div style={{ color: "black", textAlign: "left" }}>TeacherName TeacherLastName</div>
+
                                             </div>
                                         </div>
                                         :
@@ -311,7 +315,7 @@ class HomeworkClassworkView extends React.Component {
                         <div className="date-item">
                             <span>Published:</span>
                             <div className="date-display">
-                                <span id="published" style={{ color: "black" }}>{new Date(this.props.task.published).toLocaleDateString()}</span>
+                                <span id="published" style={{ color: "black" }}>{new Date(this.props.task.publishDate).toLocaleDateString()}</span>
                             </div>
                         </div>
                         <div className="date-item">

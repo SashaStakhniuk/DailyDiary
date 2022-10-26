@@ -551,7 +551,11 @@ namespace DailyDiary.Models
 
                         await datasContext.SaveChangesAsync();
                     }
-
+                    if (!datasContext.TaskTypes.Any())
+                    {
+                        await datasContext.TaskTypes.AddRangeAsync(new TaskType { TaskTypeDescription="Homework" },new TaskType { TaskTypeDescription="Classwork" });
+                        await datasContext.SaveChangesAsync();
+                    }
                     //DateTime data = new DateTime();
                     //News news = new News { Title = "Майстер-клас «Монетизація навичок і досвіду під час війни» для студентів Академії ШАГ", DataPublication = data.Date, MainInfo = "Майстер-клас  «Монетизація навичок і досвіду під час війни» для студентів Академії ШАГ від засновників компанії BRAND PEOPLE.", Base64Url = null, Sender = "Admin", IsRed = false };
                     //News news2 = new News { Title = "Безкоштовні майстер класи", DataPublication = data.Date, MainInfo = "Друзі, Комп'ютерна Академія ШАГ в умовах воєнного стану запускає серію онлайн майстер-класів і тематичних зустрічей для дітей 7-14 років.В період з 01.03 - 07.03 щодня будуть проходити цікаві майстер - класи, зустрічі з психологом.", Base64Url = null, Sender = "Adm", IsRed = false };

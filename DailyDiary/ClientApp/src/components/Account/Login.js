@@ -147,11 +147,10 @@ class Login extends React.Component {
         // console.log(userNameValue, passwordValue);
         this.setState({
             userName: userNameValue,
-            password: passwordValue,
-            loading: loadingAnimation
+            password: passwordValue
         }
+        ,()=> this.makeRequest(userNameValue, passwordValue)
         )
-        this.makeRequest(userNameValue, passwordValue);
 
     }
     render() {
