@@ -1,31 +1,39 @@
 /* навігаційне меню */
-.general-nav-bar { 
+.general-nav-bar {
     z-index: 2;
-    position: fixed;
     transition: all 0.5s ease 0s;
-    cursor:default;
+    cursor: default;
+
+    position: fixed;
     left: 0;
     top: 0;
     height: 100%;
     width: 70px;
+
     border: 1px solid #DADADA;
     background-color: #ffff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    
+    /* display: flex;
+    flex-direction: column; */
+    /* align-items: center; */
     /* justify-content: flex-start; */
 
     overflow-y: visible;
     overflow-x: hidden;
 }
+
 /* ul-список */
 
 .general-menu-ul {
-    height: 100vh;
+    /* height: 100vh; */
 
     list-style: none;
     margin: 0;
     padding: 0;
+  
+    position: relative;
+    top: 60px;
+
     width: 100%;
 
     display: flex;
@@ -35,10 +43,11 @@
 
     border-radius: 5px;
 
-    overflow-y: auto;
+    overflow-y: visible;
     overflow-x: hidden;
     visibility: visible;
 }
+
 /* ul>li */
 
 .general-menu-ul>li {
@@ -46,13 +55,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+    /* position: relative;
+    top: 60px; */
+    /* position: relative;
+    top: 0;
+    left:0; */
     transition: all 0.4s ease 0s;
 
-    margin: 5px;
+    margin: 4px;
 
     width: 226px;
-    height: 45px;
+    height: 40px;
 
     border-radius: 16px;
 
@@ -92,14 +105,15 @@
 
 .general-menu-ul>li>a>span {
     text-align: start;
-    color:var(--violet);
+    color: var(--violet);
     display: none;
     visibility: hidden;
 }
 
+/*_________________________________________________Max-width______________________*/
 /* general-nav-bar hover */
 
-.general-nav-bar:hover { 
+.general-nav-bar:hover {
     width: 274px;
 }
 
@@ -114,7 +128,8 @@
 .general-nav-bar:hover>.general-menu-ul>li>a>span {
     visibility: visible;
     display: inline-block;
-} 
+}
+
 /* .general-nav-bar:hover>.general-menu-ul>li>a>svg {
     width:24px;
     height:24px;
@@ -126,10 +141,12 @@
     background-color: var(--violet);
     color: #DADADA;
 }
+
 .general-menu-ul>li:active {
     background-color: var(--orange);
     color: #DADADA;
 }
+
 /* .general-menu-ul>li:hover>a {
    
 } */
@@ -137,10 +154,42 @@
 .general-menu-ul>li:hover>a>svg {
     fill: var(--background);
     color: var(--background);
-    width:32px;
-    height:32px;
+    width: 32px;
+    height: 32px;
 }
+
 .general-menu-ul>li:hover>a>span {
     color: var(--background);
 }
 
+/*_________________________________________________Max-width______________________*/
+/*_________________________________________________Max-width 600px______________________*/
+@media screen and (max-width: 600px) {
+
+    .general-nav-bar:hover {
+        width: 70px;
+    }
+    .general-menu-ul>li {
+        width: 60px;
+        border-radius: 5px;
+     }
+    .general-nav-bar:hover>.general-menu-ul>li>a {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        text-decoration: none;
+    }
+
+    .general-nav-bar:hover>.general-menu-ul>li>a>span {
+        visibility: hidden;
+        display: none;
+    }
+    .general-menu-ul>li:hover>a>svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/*_________________________________________________Max-width 600px______________________*/

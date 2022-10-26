@@ -49,6 +49,28 @@
     outline: none;
     border: 1px solid var(--violet);
 }
+.password-wrapper{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.eye {
+    position: absolute;
+    transition: all 0.3s;
+    cursor: pointer;
+    right: 13px;
+    width: 19px;
+    height: 50px;
+    z-index: 1000;
+    font-size: 73px;
+    z-index: 200;
+    background: url('https://mystat.itstep.org/assets/resources/eye-regular-grey.svg?v=2e4d4257ead50d95ffcf4682176d89be') no-repeat 50% 50%;
+    opacity: 0.7;
+}
+
+.eye:hover {
+    opacity: 1;
+}
 
 .general-button {
     transition: all 0.4s ease 0s;

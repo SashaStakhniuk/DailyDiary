@@ -160,7 +160,7 @@ color: #FF9F2D;
   color: rgb(8, 8, 8);
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
-.modal-content{
+.my-modal-content{
   transition: all 1s ease 0s;
   position: relative;
   display: -ms-flexbox;

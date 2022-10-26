@@ -212,7 +212,7 @@ class ResetPassword extends React.Component {
                         <div>Новий пароль</div>
                         <div className="password-wrapper">
                             <input id="password" type="password" className="inputForm" placeholder="*************" required="required" title="Your password" name="password" />
-                            {/* <div onClick={e => this.onClickPasswordVisible(e)} className="eye"></div>  */}
+                            <div onClick={e => this.onClickPasswordVisible(e)} className="eye"></div> 
                         </div>
                     </div>
                     </>

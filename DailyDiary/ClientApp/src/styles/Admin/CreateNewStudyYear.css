@@ -407,7 +407,7 @@ details {
     font-size: 1rem;
   }
 
-  label {
+  .label {
     width: 100%;
     display: flex;
     cursor: pointer;
@@ -415,7 +415,7 @@ details {
     padding-left: 20px;
   }
   
-  label span {
+  .label span {
     --display: none;
     display: var(--display);
     width: 1rem;

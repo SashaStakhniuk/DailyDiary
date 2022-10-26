@@ -1,0 +1,66 @@
+@import url('../Colors.css');
+
+.task-link {
+    background-color: var(--white);
+
+    position: relative;
+    top: 0;
+    transition: top ease 0.5s;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-gray);
+
+
+    width: 360px;
+    height: 260px;
+
+    border-radius: 16px;
+    box-shadow: 0px 2px 2px 2px var(--text-gray);
+    /* border: 1px solid var(--text-gray); */
+    text-decoration: none;
+
+}
+
+.task-link>span {
+    color: var(--text-gray);
+    text-decoration: none;
+}
+
+.task-link:hover {
+    top: -3px;
+}
+
+.task-link:hover>span {
+    color: var(--almostBlack);
+    text-decoration: none;
+}
+
+.links-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+@media screen and (max-width: 600px) {
+    .task-link {
+        width: 260px;
+        height: 160px;
+    }
+
+    .links-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 2%
+    }
+
+    .links-container>div {
+        margin: 2%;
+    }
+}

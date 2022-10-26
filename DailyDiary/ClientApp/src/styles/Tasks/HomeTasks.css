@@ -1,0 +1,14 @@
+.modal-body-content{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.modal-body-content>div{
+    margin: 10px;
+    position: relative;
+    top:0;
+    left:0;
+}
+.modal-body-content div label{
+    padding-left: 0px;
+}
