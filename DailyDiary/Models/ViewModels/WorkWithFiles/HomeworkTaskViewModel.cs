@@ -10,6 +10,7 @@ namespace DailyDiary.Models.ViewModels.WorkWithFiles
     {
         public int Id { get; set; } // taskId
         public string FileName { get; set; } // назва файлу
+        public string FileType { get; set; } // тип файлу
         public IFormFile FormFile { get; set; } // файл
         public List<IFormFile> FormFiles { get; set; } // для масиву файлів
         public DateTime PublishDate { get; set; } // дата публікації

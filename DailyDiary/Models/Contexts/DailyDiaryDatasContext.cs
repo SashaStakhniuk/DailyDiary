@@ -12,7 +12,8 @@ namespace DailyDiary.Models
     {
         public DailyDiaryDatasContext(DbContextOptions<DailyDiaryDatasContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureDeleted(); // видаляє бд зі старою схемою
+            Database.EnsureCreated(); // створює бд з новою схемою
         }
         public virtual DbSet<Person> Persons { get; set; }
         public virtual DbSet<StudyYear> StudyYears { get; set; } // навчальний рік (2022/2023)

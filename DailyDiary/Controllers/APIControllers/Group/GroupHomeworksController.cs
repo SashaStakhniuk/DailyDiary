@@ -25,7 +25,7 @@ namespace DailyDiary.Controllers.APIControllers
         }
         [HttpGet("{studentId}")]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult<IEnumerable<HomeworkTaskViewModel>>> GetHomeworksByStudentId(int studentId)
+        public async Task<ActionResult<IEnumerable<TaskFullDataViewModel>>> GetHomeworksByStudentId(int studentId)
         {
             try
             {
@@ -34,33 +34,50 @@ namespace DailyDiary.Controllers.APIControllers
                 {
                     return NotFound("Student not found");
                 }
-                var subgroupsId = await db.StudentsBySubgroups.Where(x => x.StudentId == student.Id).Select(x=> x.SubgroupId).ToListAsync(); // усі підгрупи, в яких навчається студент
+                var subgroupsId = await db.StudentsBySubgroups.Where(x => x.StudentId == student.Id).Select(x => x.SubgroupId).ToListAsync(); // усі підгрупи, в яких навчається студент
                 if (subgroupsId.Count == 0)
                 {
                     return NotFound("No one student subgroup found");
                 }
-                var taskType = await db.TaskTypes.AsNoTracking().FirstOrDefaultAsync(x=> x.TaskTypeDescription.ToLower()=="homework");
+                var taskType = await db.TaskTypes.AsNoTracking().FirstOrDefaultAsync(x => x.TaskTypeDescription.ToLower() == "homework");
                 if (taskType == null)
                 {
                     return NotFound("Can't find 'homework' task type");
                 }
-                List<HomeworkTaskViewModel> homeworks = new List<HomeworkTaskViewModel>();
+                List<TaskFullDataViewModel> homeworks = new List<TaskFullDataViewModel>();
+                //TaskFullDataViewModel taskToDisplay = null;
                 foreach (var subgroupId in subgroupsId)
                 {
-                    var teacherSubgroupsId = await db.TeacherSubgroupDistributions.AsNoTracking().Where(x => x.SubgroupId==subgroupId).Select(x=> x.Id).ToListAsync();// усі можливі задані завдання викладачами
-                    foreach(var teacherSubgroupId in teacherSubgroupsId)
+                    var teacherSubgroupsId = await db.TeacherSubgroupDistributions.AsNoTracking().Where(x => x.SubgroupId == subgroupId && x.TeacherId!=null).Select(x => x.Id).ToListAsync();// усі можливі задані завдання викладачами
+                    foreach (var teacherSubgroupId in teacherSubgroupsId)
                     {
-                        var allTasks = await db.Tasks.AsNoTracking()
-                            .Where(x=> x.TeacherSubgroupDistributionId == teacherSubgroupId)
-                            .Select(x=> new HomeworkTaskViewModel 
-                            { 
-                                Id=x.Id,
-                                PublishDate = x.PublishDate,
-                                Deadline = x.Deadline,
-                                Theme=x.Theme,
-                                Comment = x.Comment
-                            }).ToListAsync(); // всі завдання, що були задані групі
-                        homeworks.AddRange(allTasks);
+                        //taskToDisplay = new TaskFullDataViewModel();
+                        var teacherSubgroupDistribution = await db.TeacherSubgroupDistributions.Include(x => x.Teacher).ThenInclude(x => x.Person).Include(x => x.Subject).FirstOrDefaultAsync(x => x.Id == teacherSubgroupId);
+                        if (teacherSubgroupDistribution != null)
+                        {
+                            //taskToDisplay.TeacherData.TeacherId = (int)teacherSubgroupDistribution.TeacherId;
+                            //taskToDisplay.TeacherData.TeacherFullName = teacherSubgroupDistribution.Teacher.Person.Name + " " + teacherSubgroupDistribution.Teacher.Person.LastName;
+                            //taskToDisplay.Subject.Id = teacherSubgroupDistribution.SubjectId;
+                            //taskToDisplay.Subject.Title = teacherSubgroupDistribution.Subject.Title;
+
+                            
+                            var teacherData = new TeacherData { TeacherId = (int)teacherSubgroupDistribution.TeacherId, TeacherFullName = teacherSubgroupDistribution.Teacher.Person.Name + " " + teacherSubgroupDistribution.Teacher.Person.LastName };
+                            var subject = new Subject { Id = teacherSubgroupDistribution.SubjectId, Title = teacherSubgroupDistribution.Subject.Title };
+                            var allTasks = await db.Tasks.AsNoTracking()
+                                .Where(x => x.TeacherSubgroupDistributionId == teacherSubgroupId)
+                                .Select(x => new TaskFullDataViewModel
+                                {
+                                    Id = x.Id,
+                                    PublishDate = x.PublishDate,
+                                    Deadline = x.Deadline,
+                                    Theme = x.Theme,
+                                    Comment = x.Comment,
+                                    TeacherData = teacherData,
+                                    Subject = subject
+                                }).ToListAsync(); // всі завдання, що були задані групі
+                            homeworks.AddRange(allTasks);
+                        }
+
                     }
                 }
                 if (homeworks.Count > 0)
@@ -69,11 +86,29 @@ namespace DailyDiary.Controllers.APIControllers
                 }
                 return NotFound("No one new homework found");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return StatusCode(500,e.Message);
+                return StatusCode(500, e.Message);
             }
             //return student == null ? NotFound("Student not found") : Ok(student.Id);
+        }
+        [HttpGet("{taskId}")]
+        public async Task<ActionResult<FileViewModel>> Get(int taskId)
+        {
+            var homework = await db.Tasks.Where(x=> x.Id == taskId)
+                .Select(x=> new FileViewModel 
+                {
+                    File = x.TaskInBytes,
+                    FileType = x.FileType,
+                    FileName = x.FileName
+                })
+                .FirstOrDefaultAsync();
+            if (homework != null)
+            {
+                return Ok(homework);
+            }
+            return NotFound("Homework task not found");
+
         }
     }
 }

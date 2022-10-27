@@ -24,6 +24,7 @@ class HomeTasks extends Component {
             comment: "",
             file: "",
             fileName: "",
+            fileType: "",
             deadline: "0001-01-01",
             teacherSubjects: [],
             teacherSubgroups: []
@@ -80,7 +81,8 @@ class HomeTasks extends Component {
         if (e.target.files[0].size <= 104857600) {
             this.setState({
                 file: e.target.files[0],
-                fileName: e.target.files[0].name
+                fileName: e.target.files[0].name,
+                fileType: e.target.files[0].type
             }
                 , () => console.log(this.state)
             )
@@ -94,6 +96,7 @@ class HomeTasks extends Component {
             const formData = new FormData();
             formData.append("formFile", this.state.file);
             formData.append("fileName", this.state.fileName);
+            formData.append("fileType", this.state.fileType);
             formData.append("deadline", this.state.deadline);
             formData.append("theme", this.state.theme);
             formData.append("comment", this.state.comment);
@@ -104,15 +107,24 @@ class HomeTasks extends Component {
             // console.log(formData.values());
 
             const response = await axios.post(`${Host}/api/file/AddNewHomework`, formData);
-                // .then(function (response) {
-                //     console.log(response.data);
-                //     console.log(response.status);
-                //     console.log(response.statusText);
-                //     console.log(response.headers);
-                //     console.log(response.config);
-                // });
+            // .then(function (response) {
+            //     console.log(response.data);
+            //     console.log(response.status);
+            //     console.log(response.statusText);
+            //     console.log(response.headers);
+            //     console.log(response.config);
+            // });
+            // console.log(response)
             let data = response.data;
             console.log(data)
+            if (response.status === 200) {
+                document.getElementById("closeModalWindowButton").click();;
+                window.alert(data);
+            }
+            else {
+                window.alert("Task wasn't added");
+            }
+
 
         }
         catch (e) {
@@ -122,12 +134,12 @@ class HomeTasks extends Component {
             for (var key in data) {
                 // skip loop if the property is from prototype
                 if (!data.hasOwnProperty(key)) continue;
-            
+
                 var obj = data[key];
                 for (var prop in obj) {
                     // skip loop if the property is from prototype
                     if (!obj.hasOwnProperty(prop)) continue;
-            
+
                     // your code
                     alert(obj[prop]);
                 }
@@ -216,7 +228,7 @@ class HomeTasks extends Component {
                                     <div className="modal-content">
                                         <div className="modal-header">
                                             <h1 className="modal-title fs-5" id="exampleModalLabel">Завантажити завдання</h1>
-                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" id="closeModalWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <form onSubmit={e => this.onNewHomeworkSubmit(e)}>
                                             <div className="modal-body modal-body-content">

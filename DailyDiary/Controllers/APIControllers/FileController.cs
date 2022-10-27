@@ -98,6 +98,8 @@ namespace DailyDiary.Controllers.APIControllers
                 var task = new Models.DbModels.Task
                 {
                     TaskTypeId = taskType.Id,
+                    FileName = model.FileName,
+                    FileType = model.FileType,
                     TaskInBytes = taskInBytes,
                     PublishDate = dateToday,
                     Deadline = model.Deadline,

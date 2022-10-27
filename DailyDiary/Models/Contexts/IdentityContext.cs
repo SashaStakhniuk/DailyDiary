@@ -11,7 +11,8 @@ namespace DailyDiary.Models
     {
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureDeleted(); // видаляє бд зі старою схемою
+            Database.EnsureCreated(); // створює бд з новою схемою
         }
     }
 }

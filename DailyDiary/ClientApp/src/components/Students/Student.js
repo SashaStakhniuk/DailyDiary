@@ -75,7 +75,7 @@ class Student extends Component {
                     <div className="generalSide">
                         <div className="d-flex flex-row flex-wrap">
                             {this.state.homeworks.map(homework =>
-                                <HomeworkClassworkView key={"homework_"+homework.id} homework={true} accessLevel="student" task={homework}></HomeworkClassworkView>
+                                <HomeworkClassworkView key={"homework_"+homework.id} homework={true} accessLevel="student" task={homework} homeworksViewStatus="not-passed"></HomeworkClassworkView>
                                 )}
                     </div>
 

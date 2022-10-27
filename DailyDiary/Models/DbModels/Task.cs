@@ -15,7 +15,12 @@ namespace DailyDiary.Models.DbModels
         }
         [Key]
         public int Id { get; set; }
+        //[MaxLength(104857600)] 
         public byte[] TaskInBytes { get; set; }
+        [MaxLength(150)]
+        public string FileName { get; set; }
+        [MaxLength(150)]
+        public string FileType { get; set; }
         public DateTime PublishDate { get; set; }
         public DateTime Deadline { get; set; }
         [MaxLength(240)]

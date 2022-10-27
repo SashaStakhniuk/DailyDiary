@@ -6,6 +6,7 @@ import DownloadIcon from '../../images/Download-Icon1.png'
 import UploadIcon from '../../images/UploadIcon.png'
 import DeleteIcon from '../../images/Delete-Icon1.png'
 import '../../styles/HomeworkClassworkCard.css'
+import { Host } from '../Host'
 
 class HomeworkClassworkView extends React.Component {
     constructor(props) {
@@ -31,7 +32,7 @@ class HomeworkClassworkView extends React.Component {
 
     async loadClasswork(id) {
         try {
-            const response = await fetch(`https://localhost:44364/api/GroupClassworks/Get/${id}`);
+            const response = await fetch(`${Host}/api/GroupClassworks/Get/${id}`);
             const data = await response.json();
             if (response.ok === true) {
                 this.setState({
@@ -74,7 +75,7 @@ class HomeworkClassworkView extends React.Component {
     async DeleteClasswork(id) {
         try {
 
-            const response = await fetch(`https://localhost:44364/api/groupClassworks/delete/${id}`, {
+            const response = await fetch(`${Host}/api/groupClassworks/delete/${id}`, {
                 method: "DELETE"
             })
             const data = await response.json();
@@ -113,53 +114,71 @@ class HomeworkClassworkView extends React.Component {
                 ), 5000)
         }
     }
-    async loadHomework(id) {
+    async loadHomework(taskId) {
         try {
-            const response = await fetch(`https://localhost:44364/api/GroupHomeworks/Get/${id}`);
-            const data = await response.json();
+            const response = await fetch(`${Host}/api/GroupHomeworks/Get/${taskId}`);
             if (response.ok === true) {
+                const data = await response.json();
                 this.setState({
                     homework: data
                 })
+                console.log(data);
+
+                // console.log('File Size:', Math.round(bin.length / 1024), 'KB');
+                // console.log('PDF Version:', bin.match(/^.PDF-([0-9.]+)/)[1]);
+                // console.log('Create Date:', bin.match(/<xmp:CreateDate>(.+?)<\/xmp:CreateDate>/)[1]);
+                // console.log('Modify Date:', bin.match(/<xmp:ModifyDate>(.+?)<\/xmp:ModifyDate>/)[1]);
+                // console.log('Creator Tool:', bin.match(/<xmp:CreatorTool>(.+?)<\/xmp:CreatorTool>/)[1]); console.log(byteCharacters);
             }
             else {
-                console.log(data.error)
+                const data = await response.text();
+                console.log(data)
             }
         }
-        catch {
-            console.log("error")
+        catch (e) {
+            console.log(e)
         }
     }
-    async ViewHomework(id) {
-        await this.loadHomework(id);
+    async ViewHomework(taskId) {
+        await this.loadHomework(taskId);
         if (this.state.homework != null) {
             var obj = document.createElement('object');
-            obj.style.width = '100%';
-            obj.style.height = '842pt';
-            obj.type = `application/${this.state.homework.fileName.split('.').pop()}`;
 
-            obj.data = this.state.homework.homework;
+            obj.style.width = '100%';
+            obj.style.height = '100vh';
+
+            obj.type = this.state.homework.fileType;
+            obj.data = `data:${this.state.homework.fileType};base64,` + this.state.homework.file;
+
             let pdfWindow = window.open('');
             // var container = document.createElement('div');
             // container.appendChild(obj)
             pdfWindow.document.body.appendChild(obj);
         }
     }
-    async DownloadHomework(id) {
-        await this.loadHomework(id);
+    async DownloadHomework(taskId) {
+        await this.loadHomework(taskId);
         if (this.state.homework != null) {
-            const a = document.createElement('a')
-            a.href = this.state.homework.homework
-            // a.download = "file.pdf"
-            a.download = this.state.homework.fileName
-            //document.body.appendChild(a)
-            a.click()
-            // document.body.removeChild(a)
+            const linkSource = `data:application/octet-stream;base64,` + this.state.homework.file;
+            const downloadLink = document.createElement("a");
+            const fileName = this.state.homework.fileName;
+        
+            downloadLink.href = linkSource;
+            downloadLink.download = fileName;
+            downloadLink.click();
+            // const a = document.createElement('a')
+            
+            // // a.href = `data:application/octet-stream;base64,` + this.state.homework.file;
+            // a.href = `data:${this.state.homework.fileType};base64,` + this.state.homework.file;
+            // a.download = this.state.homework.fileName;
+            // //document.body.appendChild(a)
+            // a.click()
+            // // document.body.removeChild(a)
         }
     }
     async DeleteHomework(id) {
         try {
-            const response = await fetch(`https://localhost:44364/api/groupHomeworks/delete/${id}`,
+            const response = await fetch(`${Host}/api/groupHomeworks/delete/${id}`,
                 {
                     method: "DELETE"
                 }
@@ -203,15 +222,15 @@ class HomeworkClassworkView extends React.Component {
     render() {
         const taskLinks = this.props.homework === true ?
             <div className="d-flex justify-content-around">
-                <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download" onClick={() => this.DownloadHomework(this.props.task.groupHomeworkId)}>
+                <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download" onClick={() => this.DownloadHomework(this.props.task.id)}>
                     <img src={DownloadIcon} alt="..." className='view-image'></img>
                 </button>
-                <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" onClick={() => this.ViewHomework(this.props.task.groupHomeworkId)}>
+                <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" onClick={() => this.ViewHomework(this.props.task.id)}>
                     <img src={ViewIcon} alt="..." className='view-image'></img>
                 </button>
                 {this.props.accessLevel === "student" ?
                     <div>
-                        <button className='btn' type="button" data-bs-toggle="modal" data-bs-target="#modal" data-bs-placement="bottom" title="Upload" onClick={() => this.props.setHomeworkToUploadId(this.props.task.groupHomeworkId)}>
+                        <button className='btn' type="button" data-bs-toggle="modal" data-bs-target="#modal" data-bs-placement="bottom" title="Upload" onClick={() => this.props.setHomeworkToUploadId(this.props.task.id)}>
                             <img src={UploadIcon} alt="..." className='view-image'></img>
                         </button>
                     </div> :
@@ -267,35 +286,40 @@ class HomeworkClassworkView extends React.Component {
 
                     <div className="d-flex justify-content-around">
                         <div className="subjectView">
-                            {/* {this.props.accessLevel === "student" ?
+                            {this.props.accessLevel === "student" ?
                                 this.props.task.subject.title
                                 :
-                                <></>
-                            } */}
-                          
-                               Subject.title
+                                "No subject title found"
+                            }
                         </div>
                         <div className="infoicon">
                             <div className="icon">
                                 <span className="tooltip">
                                     <div className="row">
                                         <div className="form-group col-md-6">
-                                            <label htmlFor="theme">Theme:</label>
+                                            <label htmlFor="theme">Тема:</label>
                                         </div>
                                         <div id="theme" className="form-group col-md-6">
                                             <div style={{ color: "black", textAlign: "left" }}>{this.props.task.theme}</div>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="form-group col-md-6">
+                                            <label htmlFor="comment">Завдання:</label>
+                                        </div>
+                                        <div id="comment" className="form-group col-md-6">
+                                            <div style={{ color: "black", textAlign: "left" }}>{this.props.task.comment}</div>
                                         </div>
                                     </div>
                                     {this.props.accessLevel === "student" ?
 
                                         <div className="row">
                                             <div className="form-group col-md-6">
-                                                <label htmlFor="teacher">Teacher:</label>
+                                                <label htmlFor="teacher">Викладач:</label>
                                             </div>
                                             <div id="teacher" className="form-group col-md-6">
                                                 {/* <div style={{ color: "black", textAlign: "left" }}>{this.props.task.teacher.name} {this.props.task.teacher.lastName}</div> */}
-                                                <div style={{ color: "black", textAlign: "left" }}>TeacherName TeacherLastName</div>
-
+                                                <div style={{ color: "black", textAlign: "left" }}>{this.props.task.teacherData.teacherFullName}</div>
                                             </div>
                                         </div>
                                         :
