@@ -3,7 +3,10 @@ import GeneralNavigationBar from "../Navigations/GeneralNavigationBar";
 import { connect } from "react-redux";
 import React, { Component } from "react";
 import { Host } from "../Host";
-import HomeworkClassworkView from "../GeneralComponents/HomeworkClassworkView";
+import { Role } from "../Role";
+import HomeworkCard from "../GeneralComponents/HomeworkCard";
+import '../../styles/Tasks/HomeworkCard.css'
+
 
 class Student extends Component {
     constructor(props) {
@@ -227,13 +230,13 @@ class Student extends Component {
                         <div className="general-pagination-bar">
                             <div className="buttons-inline">
                                 <button className="general-outline-button" onClick={() => this.getGivenStudentHomeworks(this.state.studentId)}>Поточні</button>
-                                <button className="general-outline-button" onClick={() => this.getOverdueStudentHomeworks(this.state.studentId)}>Просрочені</button>
+                                <button className="general-outline-button" onClick={() => this.getOverdueStudentHomeworks(this.state.studentId)}>Прострочені</button>
                                 <button className="general-outline-button" onClick={() => this.getOnCheckingHomeworksByStudentId(this.state.studentId)}>На перевірці</button>
                                 <button className="general-outline-button" onClick={() => this.getCheckedHomeworksByStudentId(this.state.studentId)}>Перевірені</button>
                             </div>
                             <div className="d-flex flex-row align-items-center">
-                                <svg style={{ transform: "rotate(180deg)"}} width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.28448 0L2.19345e-05 1.28446L5.71484 7L2.19345e-05 12.7155L1.28448 14L8.28448 7L1.28448 0Z" fill="#4F4F4F" />
+                                <svg style={{ transform: "rotate(180deg)" }} width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M1.28448 0L2.19345e-05 1.28446L5.71484 7L2.19345e-05 12.7155L1.28448 14L8.28448 7L1.28448 0Z" fill="#4F4F4F" />
                                 </svg>
                                 <ul className="pagination-ul">
                                     <li>1</li>
@@ -244,9 +247,9 @@ class Student extends Component {
                                 </ul>
 
                                 <svg width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.28448 0L2.19345e-05 1.28446L5.71484 7L2.19345e-05 12.7155L1.28448 14L8.28448 7L1.28448 0Z" fill="#4F4F4F" />
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M1.28448 0L2.19345e-05 1.28446L5.71484 7L2.19345e-05 12.7155L1.28448 14L8.28448 7L1.28448 0Z" fill="#4F4F4F" />
                                 </svg>
-                                <div style={{ marginLeft: "14px" }}>
+                                <div style={{ marginLeft: "14px" }} className="d-flex flex-row align-items-center">
                                     <svg width="2" height="34" viewBox="0 0 2 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect width="2" height="34" rx="1" fill="#E9EBED" />
                                     </svg>
@@ -257,37 +260,39 @@ class Student extends Component {
                             </div>
                         </div>
 
-                        <div id="homeworks" className="d-flex flex-row flex-wrap">
+                        <div id="homeworks" className="cards-container">
 
-                            {this.state.givenHomeworks ?
-                                this.state.givenHomeworks.map(homework =>
-                                    <HomeworkClassworkView className="column" key={"homework_" + homework.id} homework={true} accessLevel="student" task={homework} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="not-passed"></HomeworkClassworkView>
-                                )
-                                :
-                                <></>}
-                            {this.state.overdueHomeworks ?
+                            <div className="cards">
+                                {this.state.givenHomeworks ?
+                                    this.state.givenHomeworks.map(homework =>
+                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="not-passed"></HomeworkCard>
+                                    )
+                                    :
+                                    <></>}
+                                {this.state.overdueHomeworks ?
 
-                                this.state.overdueHomeworks.map(homework =>
-                                    <HomeworkClassworkView key={"homework_" + homework.id} homework={true} accessLevel="student" task={homework} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="not-passed"></HomeworkClassworkView>
-                                )
-                                :
-                                <></>
-                            }
-                            {this.state.checkedHomeworks ?
-                                this.state.checkedHomeworks.map(homework =>
-                                    <HomeworkClassworkView key={"homework_" + homework.id} homework={true} accessLevel="student" task={homework} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="passed"></HomeworkClassworkView>
-                                )
-                                :
-                                <></>}
-                            {this.state.onCheckingHomeworks ?
+                                    this.state.overdueHomeworks.map(homework =>
+                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="not-passed"></HomeworkCard>
+                                    )
+                                    :
+                                    <></>
+                                }
 
-                                this.state.onCheckingHomeworks.map(homework =>
-                                    <HomeworkClassworkView key={"homework_" + homework.id} homework={true} accessLevel="student" task={homework} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="on-checking"></HomeworkClassworkView>
-                                )
-                                :
-                                <></>
-                            }
+                                {this.state.onCheckingHomeworks ?
 
+                                    this.state.onCheckingHomeworks.map(homework =>
+                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="on-checking"></HomeworkCard>
+                                    )
+                                    :
+                                    <></>
+                                }
+                                {this.state.checkedHomeworks ?
+                                    this.state.checkedHomeworks.map(homework =>
+                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="passed"></HomeworkCard>
+                                    )
+                                    :
+                                    <></>}
+                            </div>
                         </div>
                         <div className="modal fade" id="modal" tabIndex="-1" aria-labelledby="modal" aria-hidden="true">
                             <div className="modal-dialog">
@@ -307,8 +312,8 @@ class Student extends Component {
                                                 <textarea className="form-control" id="comment" name="comment"></textarea>
                                             </div>
                                         </div>
-                                        <div className="modal-footer">
-                                            <button type="submit" className="btn btn-primary">Відправити</button>
+                                        <div className="modal-footer d-flex justify-content-end">
+                                            <button type="submit" className="general-button">Відправити</button>
                                             {/* <button type="submit" className="btn btn-primary" onClick={() => this.uploadHomework()}>Відправити</button> */}
                                         </div>
                                     </form>

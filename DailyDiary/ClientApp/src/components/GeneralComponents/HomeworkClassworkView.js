@@ -5,7 +5,7 @@ import ViewIcon from '../../images/view1.png'
 import DownloadIcon from '../../images/Download-Icon1.png'
 import UploadIcon from '../../images/UploadIcon.png'
 import DeleteIcon from '../../images/Delete-Icon1.png'
-import '../../styles/HomeworkClassworkCard.css'
+// import '../../styles/HomeworkClassworkCard.css'
 import { Host } from '../Host'
 
 class HomeworkClassworkView extends React.Component {
