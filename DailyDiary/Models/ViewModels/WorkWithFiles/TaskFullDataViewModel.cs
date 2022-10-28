@@ -15,6 +15,7 @@ namespace DailyDiary.Models.ViewModels.WorkWithFiles
         public string Comment { get; set; } // коментар
         public Subject Subject { get; set; }// предмет
         public TeacherData TeacherData { get; set; } // викладач
+        //public ushort Checked { get; set; } // -2 - просрочено, -1 - не відправлено, 0 - на перевірці, 1 - перевірено
     }
     public class TeacherData
     {

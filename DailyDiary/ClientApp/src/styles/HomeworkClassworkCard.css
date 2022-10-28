@@ -43,7 +43,7 @@
   background-color: white;
   box-shadow:    10px 10px 10px rgba(0, 0, 0, 0.1);
 
-  margin: 10px;
+  /* margin: 10px; */
 }
 
 .card:hover {
@@ -72,6 +72,7 @@
   content: "not passed";
   position: absolute;
   padding: 3px 7px;
+  border-radius: 5px;
   background-color: var(--bg-hot);
   z-index: 3;
   bottom: 10px;
@@ -83,6 +84,7 @@
   content: "passed";
   position: absolute;
   padding: 3px 7px;
+  border-radius: 5px;
   background-color: var(--bg-success);
   z-index: 3;
   bottom: 10px;
@@ -94,6 +96,7 @@
   content: "On checking";
   position: absolute;
   padding: 3px 7px;
+  border-radius: 5px;
   background-color: var(--bg-yellow);
   z-index: 3;
   bottom: 10px;

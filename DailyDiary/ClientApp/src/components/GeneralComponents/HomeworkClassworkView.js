@@ -26,6 +26,8 @@ class HomeworkClassworkView extends React.Component {
         this.DownloadHomework = this.DownloadHomework.bind(this);
         this.DeleteClasswork = this.DeleteClasswork.bind(this);
         this.DeleteHomework = this.DeleteHomework.bind(this);
+        this.loadPerformedHomework = this.loadPerformedHomework.bind(this);
+
     }
     // componentDidMount(){
     // }
@@ -123,12 +125,25 @@ class HomeworkClassworkView extends React.Component {
                     homework: data
                 })
                 console.log(data);
-
-                // console.log('File Size:', Math.round(bin.length / 1024), 'KB');
-                // console.log('PDF Version:', bin.match(/^.PDF-([0-9.]+)/)[1]);
-                // console.log('Create Date:', bin.match(/<xmp:CreateDate>(.+?)<\/xmp:CreateDate>/)[1]);
-                // console.log('Modify Date:', bin.match(/<xmp:ModifyDate>(.+?)<\/xmp:ModifyDate>/)[1]);
-                // console.log('Creator Tool:', bin.match(/<xmp:CreatorTool>(.+?)<\/xmp:CreatorTool>/)[1]); console.log(byteCharacters);
+            }
+            else {
+                const data = await response.text();
+                console.log(data)
+            }
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    async loadPerformedHomework(studentWorkId) {
+        try {
+            const response = await fetch(`${Host}/api/studentsHomeworks/getByHomeworkId/${studentWorkId}`);
+            if (response.ok === true) {
+                const data = await response.json();
+                this.setState({
+                    homework: data
+                })
+                console.log(data);
             }
             else {
                 const data = await response.text();
@@ -157,17 +172,22 @@ class HomeworkClassworkView extends React.Component {
         }
     }
     async DownloadHomework(taskId) {
-        await this.loadHomework(taskId);
+        this.props.task.taskId !== undefined ?
+
+            await this.loadPerformedHomework(this.props.task.id)
+            :
+            await this.loadHomework(taskId)
+
         if (this.state.homework != null) {
             const linkSource = `data:application/octet-stream;base64,` + this.state.homework.file;
             const downloadLink = document.createElement("a");
             const fileName = this.state.homework.fileName;
-        
+
             downloadLink.href = linkSource;
             downloadLink.download = fileName;
             downloadLink.click();
             // const a = document.createElement('a')
-            
+
             // // a.href = `data:application/octet-stream;base64,` + this.state.homework.file;
             // a.href = `data:${this.state.homework.fileType};base64,` + this.state.homework.file;
             // a.download = this.state.homework.fileName;
@@ -229,24 +249,31 @@ class HomeworkClassworkView extends React.Component {
                     <img src={ViewIcon} alt="..." className='view-image'></img>
                 </button>
                 {this.props.accessLevel === "student" ?
-                    <div>
-                        <button className='btn' type="button" data-bs-toggle="modal" data-bs-target="#modal" data-bs-placement="bottom" title="Upload" onClick={() => this.props.setHomeworkToUploadId(this.props.task.id)}>
-                            <img src={UploadIcon} alt="..." className='view-image'></img>
+                    this.props.task.taskId !== undefined ?
+                        <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download performed" onClick={() => this.DownloadHomework(this.props.task.id)}>
+                            <img src={DownloadIcon} alt="..." className='view-image'></img>
                         </button>
-                    </div> :
+                        :
+                        <div>
+                            <button className='btn' type="button" data-bs-toggle="modal" data-bs-target="#modal" data-bs-placement="bottom" title="Upload" onClick={() => this.props.setHomeworkToUploadId(this.props.task.id)}>
+                                <img src={UploadIcon} alt="..." className='view-image'></img>
+                            </button>
+                        </div>
+
+                    :
                     <></>
                 }
             </div>
             :
             <div className="d-flex justify-content-around">
-                <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download" onClick={() => this.DownloadClasswork(this.props.task.groupClassworkId)}>
+                <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download" onClick={() => this.DownloadClasswork(this.props.task.id)}>
                     <img src={DownloadIcon} alt="..." className='view-image'></img>
                 </button>
-                <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" onClick={() => this.ViewClasswork(this.props.task.groupClassworkId)}>
+                <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" onClick={() => this.ViewClasswork(this.props.task.id)}>
                     <img src={ViewIcon} alt="..." className='view-image'></img>
                 </button>
                 {this.props.accessLevel === "student" ?
-                    <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Upload" onClick={() => this.props.setHomeworkToUploadId(this.props.task.groupHomeworkId)}>
+                    <button className='btn' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Upload" onClick={() => this.props.setHomeworkToUploadId(this.props.task.id)}>
                         <img src={UploadIcon} alt="..." className='view-image'></img>
                     </button>
                     :
@@ -312,16 +339,59 @@ class HomeworkClassworkView extends React.Component {
                                         </div>
                                     </div>
                                     {this.props.accessLevel === "student" ?
+                                        <>
+                                            {this.props.task.studentComment !== undefined ?
+                                                <div className="row">
+                                                    <div className="form-group col-md-6">
+                                                        <label htmlFor="myComment">Мій коментар:</label>
+                                                    </div>
+                                                    <div id="myComment" className="form-group col-md-6">
+                                                        <div style={{ color: "black", textAlign: "left" }}>{this.props.task.studentComment}</div>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <></>
+                                            }
+                                            {this.props.task.teacherComment !== undefined ?
+                                                <div className="row">
+                                                    <div className="form-group col-md-6">
+                                                        <label htmlFor="teacherComment">Коментар викладача:</label>
+                                                    </div>
+                                                    <div id="teacherComment" className="form-group col-md-6">
+                                                        <div style={{ color: "black", textAlign: "left" }}>{this.props.task.teacherComment}</div>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <></>
+                                            }
+                                            {this.props.task.mark !== undefined ?
+                                                <div className="row">
+                                                    <div className="form-group col-md-6">
+                                                        <label htmlFor="mark">Оцінка:</label>
+                                                    </div>
+                                                    <div id="mark" className="form-group col-md-6">
+                                                        <div style={{ color: "black", textAlign: "left" }}>{this.props.task.mark}</div>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <></>
+                                            }
 
-                                        <div className="row">
-                                            <div className="form-group col-md-6">
-                                                <label htmlFor="teacher">Викладач:</label>
+                                            <div className="row">
+                                                <div className="form-group col-md-6">
+                                                    {this.props.task.teacherComment !== undefined ?
+                                                        <label htmlFor="teacher">Перевірив:</label>
+                                                        :
+                                                        <label htmlFor="teacher">Викладач:</label>
+                                                    }
+                                                </div>
+                                                <div id="teacher" className="form-group col-md-6">
+                                                    {/* <div style={{ color: "black", textAlign: "left" }}>{this.props.task.teacher.name} {this.props.task.teacher.lastName}</div> */}
+                                                    <div style={{ color: "black", textAlign: "left" }}>{this.props.task.teacherData.teacherFullName}</div>
+                                                </div>
                                             </div>
-                                            <div id="teacher" className="form-group col-md-6">
-                                                {/* <div style={{ color: "black", textAlign: "left" }}>{this.props.task.teacher.name} {this.props.task.teacher.lastName}</div> */}
-                                                <div style={{ color: "black", textAlign: "left" }}>{this.props.task.teacherData.teacherFullName}</div>
-                                            </div>
-                                        </div>
+                                        </>
+
                                         :
                                         <></>
                                     }
@@ -335,6 +405,8 @@ class HomeworkClassworkView extends React.Component {
                 </div>
                 <div className="card-content">
                     {taskLinks}
+
+
                     <section className="date-info">
                         <div className="date-item">
                             <span>Published:</span>
@@ -349,6 +421,23 @@ class HomeworkClassworkView extends React.Component {
                             </div>
                         </div>
                     </section>
+                    {this.props.task.checkedDate !== undefined ?
+                        <section className="date-info">
+                            <div className="date-item">
+                                <span>Uploaded:</span>
+                                <div className="date-display">
+                                    <span id="published" style={{ color: "black" }}>{new Date(this.props.task.passedDate).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                            <div className="date-item">
+                                <span>Checked:</span>
+                                <div className="date-display">
+                                    <span id="deadline" style={{ color: "black" }}>{new Date(this.props.task.checkedDate).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        </section>
+                        :
+                        <></>}
                     <section className="bootom-field">
                         {this.props.accessLevel === "teacher" || this.props.accessLevel === "admin" ?
                             <div>

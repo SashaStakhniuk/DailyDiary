@@ -1,10 +1,8 @@
 @import url('Colors.css');
 
 .flex-container {
-    padding: 3%;
     width: 100%;
     display: flex;
-    flex-direction: row;
     flex-wrap: nowrap;
     overflow-x: hidden;
 }
@@ -16,12 +14,118 @@
 .generalSide {
     position: absolute;
     top: 60px;
-    left: 80px;
-    padding-right: 90px;
+    left: 70px;
+    padding-left: 36px;
+    padding-right: 106px;
+    /*106-70*/
     width: 100%;
     height: 100%;
     overflow-x: hidden;
     /* flex-grow: 11; */
+}
+
+/* .main-content{
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+} */
+.general-pagination-bar {
+    /*-60px*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    /* display: grid;
+    align-self: center;
+    justify-self: center;
+    grid-template-columns: 2fr 1fr 1fr; */
+    height: 66px;
+    margin-top: 44px;
+    margin-bottom: 50px;
+    padding: 20px 24px 12px 24px;
+    background-color: var(--white);
+    border-radius: 16px;
+    box-shadow: 0px 0px 4px 0px rgba(65, 77, 92, 0.2);
+    box-shadow: 0px 1px 14px 0px rgba(0, 7, 22, 0.14);
+
+}
+
+.buttons-inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.general-outline-button {
+    transition: all 0.3s ease;
+    outline: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 22px;
+    gap: 8px;
+    width: 144px;
+    height: 34px;
+
+    color: var(--violet);
+    background: var(--white);
+
+    border: 2px solid var(--violet);
+    border-radius: 40px;
+
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 22px;
+    margin: 0px 4px 0px 4px;
+}
+
+.general-outline-button:hover {
+
+    color: var(--white);
+    background: var(--violet);
+}
+
+.pagination-ul {
+
+    margin: 0;
+    padding: 10px 10px;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+}
+
+.pagination-ul>li {
+    transition: all 0.2s ease-out;
+
+    cursor: pointer;
+    width: 9px;
+    height: 22px;
+
+    /* Body/Paragraph Regular */
+
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    /* identical to box height, or 157% */
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: var(--text-gray2);
+    margin: 0px 10px 0px 10px;
+    padding: 0;
+}
+.pagination-ul>li:hover {
+    font-weight: 800;
 }
 
 /*___________________________Select________________________*/
