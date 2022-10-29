@@ -154,6 +154,11 @@
   grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
 }
+.row-cols-3-view {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 5px;
+}
 
 .grid-row-cols-4 {
   position: absolute;

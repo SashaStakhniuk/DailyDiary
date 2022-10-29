@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import { Host } from "../Host";
 import { Role } from "../Role";
-import HomeworkCard from "../GeneralComponents/HomeworkCard";
+import HomeworkCard from "../GeneralComponents/StudentHomeworkCard";
 import '../../styles/Tasks/HomeworkCard.css'
 
 

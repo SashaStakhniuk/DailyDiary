@@ -1,10 +1,4 @@
 import React from 'react'
-// import ViewIcon from '../../images/view.webp'
-// import ViewIcon from '../../images/view1.png'
-// import DownloadIcon from '../../images/Download-Icon.png'
-// import DownloadIcon from '../../images/Download-Icon1.png'
-// import UploadIcon from '../../images/UploadIcon.png'
-// import DeleteIcon from '../../images/Delete-Icon1.png'
 import { Host } from '../Host'
 import { Role } from '../Role'
 
@@ -379,35 +373,6 @@ class HomeworkCard extends React.Component {
                 </div>
 
             </section>
-
-            // <div className="card" style={{ minWidth: "22rem" }}>
-            //     <div className="col">
-            //         <div className="card-body">
-            //             <h5 className="card-title">
-            //                 <div className="row">
-            //                     <div className="form-group col-md-6">
-            //                         <label htmlFor="theme">Theme:</label>
-            //                     </div>
-            //                     <div id="theme" className="form-group col-md-6">
-            //                         <div style={{ color: "black" }}>{this.props.task.theme}</div>
-            //                     </div>
-            //                 </div>
-            //             </h5>
-            //             {taskLinks}
-            //             <div className="row">
-            //                 <div className="form-group col-md-6">
-            //                     <label htmlFor="published">Published:</label>
-            //                     <div id="published" style={{ color: "black" }}>{new Date(this.props.task.published).toLocaleDateString()}</div>
-            //                 </div>
-            //                 <div className="form-group col-md-6">
-            //                     <label htmlFor="deadline">Deadline:</label>
-            //                     <div id="deadline" style={{ color: "black" }}>{new Date(this.props.task.deadline).toLocaleDateString()}</div>
-            //                 </div>
-            //             </div>
-            //             {taskToDelete}
-            //         </div>
-            //     </div>
-            // </div>
         );
     }
 }
