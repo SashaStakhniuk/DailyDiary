@@ -114,12 +114,17 @@ class HomeworkCard extends React.Component {
             pdfWindow.document.body.appendChild(obj);
         }
     }
-    async DownloadHomework(taskId) {
-        this.props.task.taskId !== undefined ?
-            await this.loadPerformedHomework(this.props.task.id)
-            :
-            await this.loadHomework(taskId)
+    downloadPerformedHomework = async (taskId) => {
+        await this.loadPerformedHomework(taskId)
+        this.downloadFile();
+    }
 
+    async DownloadHomework(taskId) {
+        await this.loadHomework(taskId)
+        this.downloadFile();
+
+    }
+    downloadFile = () => {
         if (this.state.homework != null) {
             const linkSource = `data:application/octet-stream;base64,` + this.state.homework.file;
             const downloadLink = document.createElement("a");
@@ -165,29 +170,55 @@ class HomeworkCard extends React.Component {
         }
     }
     render() {
-        const taskLinks =
+        const taskLinks = // якщо не існує taskId, то ід - це ід завдання заданого групі. Якщо taskId існує, то ід це ід зданої роботи студента. taskId - ід завдання заданого групі
             <div className='row-cols-2-view'>
                 {this.props.accessLevel === Role.Student ?
-                    this.props.task.id !== undefined ?
+                    this.props.task.taskId !== undefined ? // якщо студент вже здав роботу
                         <>
+                            <button className='general-outline-button button-static' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download" onClick={() => this.DownloadHomework(this.props.task.taskId)}>
+                                Cкачати
+                            </button>
+                            <button className='general-outline-button' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" onClick={() => this.ViewHomework(this.props.task.taskId)}>
+                                Переглянути
+                            </button>
                             <div>
+                                {/* в даному випадку, тут знаходиться ід домашки студента */}
+                                <button className='general-outline-button button-static' type="button" data-bs-placement="bottom" title="Upload" onClick={() => this.downloadPerformedHomework(this.props.task.id)}>
+                                    Скачати виконане
+                                </button>
+                            </div>
+                            <div>
+                                {/* в даному випадку, тут знаходиться ід домашки групи */}
+                                <button className='general-outline-button' type="button" data-bs-toggle="modal" data-bs-target="#modal" data-bs-placement="bottom" title="Upload" onClick={() => this.props.setHomeworkToUploadId(this.props.task.taskId)}>
+                                    Завантажити
+                                </button>
+                            </div>
+
+
+                        </>
+                        :
+                        <>
+
+
+                            <button className='general-outline-button button-static' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download" onClick={() => this.DownloadHomework(this.props.task.id)}>
+                                Cкачати
+                            </button>
+                            <button className='general-outline-button' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" onClick={() => this.ViewHomework(this.props.task.id)}>
+                                Переглянути
+                            </button>
+                            <div>
+
+                            </div>
+                            <div>
+                                {/* в даному випадку, тут знаходиться ід домашки групи */}
                                 <button className='general-outline-button' type="button" data-bs-toggle="modal" data-bs-target="#modal" data-bs-placement="bottom" title="Upload" onClick={() => this.props.setHomeworkToUploadId(this.props.task.id)}>
                                     Завантажити
                                 </button>
                             </div>
-                            <div></div>
                         </>
-                        :
-                        <></>
                     :
                     <></>
                 }
-                <button className='general-outline-button button-static' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download" onClick={() => this.DownloadHomework(this.props.task.id)}>
-                    Cкачати
-                </button>
-                <button className='general-outline-button' type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" onClick={() => this.ViewHomework(this.props.task.id)}>
-                    Переглянути
-                </button>
             </div>
         const taskToDelete =
             <div>
@@ -300,7 +331,7 @@ class HomeworkCard extends React.Component {
                                         </section>
 
                                         {this.props.task !== undefined && this.props.task.checkedDate !== undefined ?
-                                            <selection className='task-info'>
+                                            <section className='task-info'>
                                                 <div className='task-info-item text-bolder'>
                                                     <div>
                                                         <div>Завантажено:</div>
@@ -319,7 +350,7 @@ class HomeworkCard extends React.Component {
                                                         <div></div>
                                                     }
                                                 </div>
-                                            </selection>
+                                            </section>
                                             :
                                             <></>}
                                     </div>

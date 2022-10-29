@@ -41,6 +41,7 @@
     align-self: center;
     justify-self: center;
     grid-template-columns: 2fr 1fr 1fr; */
+    min-width:300px;
     height: 66px;
     margin-top: 44px;
     margin-bottom: 50px;
@@ -68,7 +69,7 @@
     align-items: center;
     padding: 16px 40px;
     gap: 4px;
-    
+
     width: 92px;
     height: 52px;
 
@@ -116,14 +117,17 @@
     line-height: 22px;
     margin: 0px 4px 0px 4px;
 }
-.button-static{
+
+.button-static {
     color: var(--white);
     background: var(--violet);
 }
-.button-static:hover{
+
+.button-static:hover {
     outline: none;
     border: 2px solid #98A6ED;
 }
+
 .general-outline-button:hover {
 
     color: var(--white);
@@ -344,4 +348,47 @@
 
 .header {
     background-color: var(--violet);
+}
+
+@media only screen and (max-width: 992px) {
+    .general-pagination-bar {
+        /*-60px*/
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100px;
+    }
+}
+
+@media only screen and (max-width: 680px) {
+    .general-pagination-bar {
+        /*-60px*/
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 150px;
+    }
+    .buttons-inline {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 12px;
+        justify-content: center;
+        align-items: center;
+    }
+}
+@media only screen and (max-width: 450px) {
+    .general-pagination-bar {
+        /*-60px*/
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 250px;
+    }
+    .buttons-inline {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 12px;
+        justify-content: center;
+        align-items: center;
+    }
 }
