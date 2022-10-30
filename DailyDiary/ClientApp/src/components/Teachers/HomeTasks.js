@@ -19,9 +19,13 @@ class HomeTasks extends Component {
         this.getTeacherSubjects = this.getTeacherSubjects.bind(this);
         this.getTeacherSubgroupsByTeacherSubject = this.getTeacherSubgroupsByTeacherSubject.bind(this);
         this.getTeacherTasksToCheck = this.getTeacherTasksToCheck.bind(this);
+        this.rateStudentHomework = this.rateStudentHomework.bind(this);
 
         this.state = {
+            studentHomeworkToRateId: 0,
+
             teacherId: 0,
+            studentHomeworksToCheckAmount:0,
             studentHomeworksToCheck: [],
 
             selectedSubjectId: 0,
@@ -70,12 +74,13 @@ class HomeTasks extends Component {
                     <div id="homeworks" className="cards-container">
                         <div className="cards">
                             {data.map(homework =>
-                                <TeacherHomeworkCard key={"cardToCheck_" + homework.id} task={homework}></TeacherHomeworkCard>
+                                <TeacherHomeworkCard key={"cardToCheck_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework}></TeacherHomeworkCard>
                             )}
                         </div>
                     </div>
                 this.setState({
-                    studentHomeworksToCheck: dataToAdd
+                    studentHomeworksToCheck: dataToAdd,
+                    studentHomeworksToCheckAmount:data.length
                 })
 
                 console.log(data);
@@ -231,6 +236,46 @@ class HomeTasks extends Component {
     onCheckingClick = () => {
 
     }
+    rateStudentHomework(studentHomeworkId) {
+        // console.log(studentHomeworkId);
+        this.setState({
+            studentHomeworkToRateId: studentHomeworkId
+        })
+    }
+    onStudentHomeworkRateSubmit = async (e) => {
+        e.preventDefault();
+        const { mark, comment } = e.target;
+        if (+this.state.teacherId === 0 || +this.state.studentHomeworkToRateId === 0) {
+            return 0;
+        }
+        const datasToSend = {
+            id: this.state.studentHomeworkToRateId,
+            checkIfAlreadyRated: true,
+            teacherId: this.state.teacherId,
+            mark: mark.value,
+            comment: comment.value
+        }
+        try {
+            const response = await fetch(`${Host}/api/teacher/rateStudentHomework`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': 'bearer ' + this.props.credentials.tokenKey
+                },
+                body: JSON.stringify(datasToSend)
+            })
+            if (response.ok === true) {
+                document.getElementById("closeModalStudentRatingWindowButton").click();;
+            }
+            const data = await response.text();
+            window.alert(data);
+
+        }
+        catch (e) {
+            window.alert(e)
+        }
+
+    }
     render() {
         let subjects = <select className="form-select" name="subject" id="subject" defaultValue={this.state.selectedSubjectId} onChange={e => this.onSubjectChange(e)}>
             {this.state.teacherSubjects.length > 0 ?
@@ -284,7 +329,14 @@ class HomeTasks extends Component {
                             <div className="buttons-inline">
                                 <button type="button" className="general-outline-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Нове завдання</button>
                                 {/* <button className="general-outline-button" onClick={() => this.getGivenStudentHomeworks(this.state.studentId)}>На перевірці</button> */}
-                                <button className="general-outline-button" onClick={() => this.onCheckingClick()}>На перевірці</button>
+                                <button className="general-outline-button" onClick={() => this.onCheckingClick()}>
+                                    <div className="tip-amount">
+                                        <div className="number">
+                                            {this.state.studentHomeworksToCheckAmount}
+                                        </div>
+                                    </div>
+                                    На перевірці
+                                </button>
                                 <button className="general-outline-button">Перевірені</button>
                             </div>
                             <div className="d-flex flex-row align-items-center">
@@ -376,7 +428,35 @@ class HomeTasks extends Component {
                                             </div>
                                         </form>
                                     </div>
-
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modalRatingStudentHomework">
+                            <div className="modal fade" id="ratingStudentHomework" tabIndex="-1" aria-labelledby="ratingStudentHomeworkLabel" aria-hidden="true">
+                                <div className="modal-dialog">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            {/* <h1 className="modal-title fs-5" id="ratingStudentHomeworkLabel">Оцінка домашнього завдання студента {this.props.task.studentData.studentFullName}</h1> */}
+                                            <h1 className="modal-title fs-5" id="ratingStudentHomeworkLabel">Оцінка домашнього завдання студента</h1>
+                                            <button type="button" id="closeModalStudentRatingWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form onSubmit={e => this.onStudentHomeworkRateSubmit(e)}>
+                                            <div className="modal-body modal-body-content">
+                                                <div>
+                                                    <label htmlFor="mark" style={{ marginRight: "20px" }}>Оцінка:</label>
+                                                    <input type="number" min="0" max="100" step="1" id="mark" name="mark" required></input>
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="comment">Додати коментар</label>
+                                                    <textarea className="form-control" id="comment" name="comment"></textarea>
+                                                </div>
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="submit" className="general-button">Оцінити</button>
+                                                {/* <button type="submit" className="btn btn-primary" onClick={() => this.uploadHomework()}>Відправити</button> */}
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

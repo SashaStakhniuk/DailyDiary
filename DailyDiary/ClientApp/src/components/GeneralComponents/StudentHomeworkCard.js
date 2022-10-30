@@ -116,7 +116,6 @@ class HomeworkCard extends React.Component {
     async DownloadHomework(taskId) {
         await this.loadHomework(taskId)
         this.downloadFile();
-
     }
     downloadFile = () => {
         if (this.state.homework != null) {

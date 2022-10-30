@@ -13,6 +13,7 @@ namespace DailyDiary.Models.DbModels
     {
         public int Id { get; set; } // ід виконаної домашки студента
         public int TaskId { get; set; } // ід заданого завдання
+        //public bool CheckIfAlreadyRated { get; set; } // перевірка чи завдання вже було оцінене
         public DateTime PublishDate { get; set; } // дата публікації завдання
         public DateTime Deadline { get; set; } // дедлайн здачі завдання
         public string Theme { get; set; }
@@ -25,7 +26,7 @@ namespace DailyDiary.Models.DbModels
         public int TeacherId { get; set; }
         //public string TeacherComment { get; set; }
 
-        //public int Mark { get; set; } // оцінка
+        public int Mark { get; set; } // оцінка
         //public DateTime CheckedDate { get; set; } // дата перевірки домашки
 
         public Subject Subject { get; set; }

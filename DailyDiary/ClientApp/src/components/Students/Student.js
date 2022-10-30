@@ -18,6 +18,9 @@ class Student extends Component {
         this.getOverdueStudentHomeworks = this.getOverdueStudentHomeworks.bind(this);
         this.setHomeworkToUploadId = this.setHomeworkToUploadId.bind(this)
         this.uploadStudentHomework = this.uploadStudentHomework.bind(this)
+
+        this.getGeneralAmountOfTasks = this.getGeneralAmountOfTasks.bind(this)
+
         this.state = {
             studentId: 0,
             uploadTaskId: 0,
@@ -28,12 +31,17 @@ class Student extends Component {
             givenHomeworks: [],
             checkedHomeworks: [],
             onCheckingHomeworks: [],
-            overdueHomeworks: []
+            overdueHomeworks: [],
+
+            givenHomeworksAmount: 0,
+            overdueHomeworksAmount: 0,
+            onCheckingHomeworksAmount: 0,
+            checkedHomeworksAmount: 0
         }
 
     }
-    componentDidMount() {
-        this.getStudentIdByUserId();
+    async componentDidMount() {
+        await this.getStudentIdByUserId();
     }
     async getStudentIdByUserId() {
         try {
@@ -44,6 +52,7 @@ class Student extends Component {
                     studentId: data,
                 })
                 this.getGivenStudentHomeworks(data);
+                this.getGeneralAmountOfTasks(data);
                 // this.getCheckedHomeworksByStudentId(data);
             }
             else {
@@ -56,19 +65,19 @@ class Student extends Component {
             window.alert(e);
         }
     }
-    async getGivenStudentHomeworks(studentId) {
+    async getGeneralAmountOfTasks(studentId) {
         try {
             if (studentId == undefined || studentId == 0) {
                 return 0;
             }
-            const response = await fetch(`${Host}/api/studentshomeworks/getHomeworksByStudentId/details?studentId=${studentId}`);
+            const response = await fetch(`${Host}/api/studentshomeworks/getGeneralAmountOfTasks/${studentId}`);
             if (response.ok === true) {
                 const data = await response.json();
                 this.setState({
-                    givenHomeworks: data,
-                    checkedHomeworks: [],
-                    onCheckingHomeworks: [],
-                    overdueHomeworks: []
+                    givenHomeworksAmount: data.givenTasksAmount,
+                    overdueHomeworksAmount: data.overdueTasksAmount,
+                    onCheckingHomeworksAmount: data.onCheckingTasksAmount,
+                    checkedHomeworksAmount: data.passedTasksAmount
                 })
                 console.log(data);
             }
@@ -82,8 +91,47 @@ class Student extends Component {
             window.alert(e);
         }
     }
-    async getOverdueStudentHomeworks(studentId) {
+    async getGivenStudentHomeworks(studentId, e) {
         try {
+            if (e) {
+                this.onButtonTasksClick(e);
+            }
+            if (studentId == undefined || studentId == 0) {
+                return 0;
+            }
+            const response = await fetch(`${Host}/api/studentshomeworks/getHomeworksByStudentId/details?studentId=${studentId}&&overdue=${false}`);
+            if (response.ok === true) {
+                const data = await response.json();
+                this.setState({
+                    givenHomeworks: data,
+                    // givenHomeworksAmount: data.length,
+                    checkedHomeworks: [],
+                    onCheckingHomeworks: [],
+                    overdueHomeworks: []
+                })
+                console.log(data);
+            }
+            else {
+                this.setState({
+                    givenHomeworks: [],
+                    checkedHomeworks: [],
+                    onCheckingHomeworks: [],
+                    overdueHomeworks: []
+                })
+                // const data = await response.text();
+                // window.alert(data);
+            }
+        }
+        catch (e) {
+            console.log(e);
+            window.alert(e);
+        }
+    }
+    async getOverdueStudentHomeworks(studentId,e) {
+        try {
+            if (e) {
+                this.onButtonTasksClick(e);
+            }
             if (studentId == undefined || studentId == 0) {
                 return 0;
             }
@@ -92,6 +140,7 @@ class Student extends Component {
                 const data = await response.json();
                 this.setState({
                     overdueHomeworks: data,
+                    // overdueHomeworksAmount: data.length,
                     checkedHomeworks: [],
                     onCheckingHomeworks: [],
                     givenHomeworks: []
@@ -99,8 +148,14 @@ class Student extends Component {
                 console.log(data);
             }
             else {
-                const data = await response.text();
-                window.alert(data);
+                this.setState({
+                    givenHomeworks: [],
+                    checkedHomeworks: [],
+                    onCheckingHomeworks: [],
+                    overdueHomeworks: []
+                })
+                // const data = await response.text();
+                // window.alert(data);
             }
         }
         catch (e) {
@@ -108,8 +163,11 @@ class Student extends Component {
             window.alert(e);
         }
     }
-    async getCheckedHomeworksByStudentId(studentId) {
+    async getCheckedHomeworksByStudentId(studentId,e) {
         try {
+            if (e) {
+                this.onButtonTasksClick(e);
+            }
             if (studentId == undefined || studentId == 0) {
                 return 0;
             }
@@ -125,8 +183,14 @@ class Student extends Component {
                 console.log(data);
             }
             else {
-                const data = await response.text();
-                window.alert(data);
+                this.setState({
+                    givenHomeworks: [],
+                    checkedHomeworks: [],
+                    onCheckingHomeworks: [],
+                    overdueHomeworks: []
+                })
+                // const data = await response.text();
+                // window.alert(data);
             }
         }
         catch (e) {
@@ -134,8 +198,11 @@ class Student extends Component {
             window.alert(e);
         }
     }
-    async getOnCheckingHomeworksByStudentId(studentId) {
+    async getOnCheckingHomeworksByStudentId(studentId,e) {
         try {
+            if (e) {
+                this.onButtonTasksClick(e);
+            }
             if (studentId == undefined || studentId == 0) {
                 return 0;
             }
@@ -144,6 +211,7 @@ class Student extends Component {
                 const data = await response.json();
                 this.setState({
                     onCheckingHomeworks: data,
+                    // onCheckingHomeworksAmount: data.length,
                     givenHomeworks: [],
                     checkedHomeworks: [],
                     overdueHomeworks: []
@@ -151,8 +219,14 @@ class Student extends Component {
                 console.log(data);
             }
             else {
-                const data = await response.text();
-                window.alert(data);
+                this.setState({
+                    givenHomeworks: [],
+                    checkedHomeworks: [],
+                    onCheckingHomeworks: [],
+                    overdueHomeworks: []
+                })
+                // const data = await response.text();
+                // window.alert(data);
             }
         }
         catch (e) {
@@ -216,7 +290,18 @@ class Student extends Component {
             window.alert("File size should be <= 100Mb");
         }
     }
-
+    onButtonTasksClick = (e) => {
+        console.log(e.currentTarget.parentNode.children);
+        var buttons = Array.from(e.currentTarget.parentNode.children);
+        console.log(buttons)
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].className="general-outline-button"
+            if(buttons[i] === e.currentTarget){
+                console.log("Here");
+                buttons[i].className="general-outline-button button-static"
+            }
+        }
+    }
     render() {
         return (
             <>
@@ -228,11 +313,40 @@ class Student extends Component {
                     </div>
                     <div className="generalSide">
                         <div className="general-pagination-bar">
+                            {/* <div className="buttons-inline" onClick={(e) => this.onButtonTasksClick(e)}> */}
                             <div className="buttons-inline">
-                                <button className="general-outline-button" onClick={() => this.getGivenStudentHomeworks(this.state.studentId)}>Поточні</button>
-                                <button className="general-outline-button" onClick={() => this.getOverdueStudentHomeworks(this.state.studentId)}>Прострочені</button>
-                                <button className="general-outline-button" onClick={() => this.getOnCheckingHomeworksByStudentId(this.state.studentId)}>На перевірці</button>
-                                <button className="general-outline-button" onClick={() => this.getCheckedHomeworksByStudentId(this.state.studentId)}>Перевірені</button>
+                                <button className="general-outline-button button-static" onClick={(e) => this.getGivenStudentHomeworks(this.state.studentId, e)}>
+                                    <div className="tip-amount">
+                                        <div className="number">
+                                            {this.state.givenHomeworksAmount}
+                                        </div>
+                                    </div>
+                                    Поточні
+                                </button>
+                                <button className="general-outline-button" onClick={(e) => this.getOverdueStudentHomeworks(this.state.studentId,e)}>
+                                    <div className="tip-amount" style={{ backgroundColor: "red" }}>
+                                        <div className="number">
+                                            {this.state.overdueHomeworksAmount}
+                                        </div>
+                                    </div>
+                                    Прострочені
+                                </button>
+                                <button className="general-outline-button" onClick={(e) => this.getOnCheckingHomeworksByStudentId(this.state.studentId,e)}>
+                                    <div className="tip-amount">
+                                        <div className="number">
+                                            {this.state.onCheckingHomeworksAmount}
+                                        </div>
+                                    </div>
+                                    На перевірці
+                                </button>
+                                <button className="general-outline-button" onClick={(e) => this.getCheckedHomeworksByStudentId(this.state.studentId,e)}>
+                                    <div className="tip-amount" style={{ backgroundColor: "green" }}>
+                                        <div className="number">
+                                            {this.state.checkedHomeworksAmount}
+                                        </div>
+                                    </div>
+                                    Перевірені
+                                </button>
                             </div>
                             <div className="d-flex flex-row align-items-center">
                                 <svg style={{ transform: "rotate(180deg)" }} width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -265,33 +379,41 @@ class Student extends Component {
                             <div className="cards">
                                 {this.state.givenHomeworks ?
                                     this.state.givenHomeworks.map(homework =>
-                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="not-passed"></HomeworkCard>
+                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId}></HomeworkCard>
                                     )
                                     :
-                                    <></>}
+                                    <div>
+                                        Всі завдання виконані
+                                    </div>}
                                 {this.state.overdueHomeworks ?
 
                                     this.state.overdueHomeworks.map(homework =>
-                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="not-passed"></HomeworkCard>
+                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId}></HomeworkCard>
                                     )
                                     :
-                                    <></>
+                                    <div>
+                                        Всі завдання виконані вчасно
+                                    </div>
                                 }
 
                                 {this.state.onCheckingHomeworks ?
 
                                     this.state.onCheckingHomeworks.map(homework =>
-                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="on-checking"></HomeworkCard>
+                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId}></HomeworkCard>
                                     )
                                     :
-                                    <></>
+                                    <div>
+                                        Немає завдань на перевірці
+                                    </div>
                                 }
                                 {this.state.checkedHomeworks ?
                                     this.state.checkedHomeworks.map(homework =>
-                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId} homeworksViewStatus="passed"></HomeworkCard>
+                                        <HomeworkCard key={"homework_" + homework.id} task={homework} accessLevel={Role.Student} setHomeworkToUploadId={this.setHomeworkToUploadId}></HomeworkCard>
                                     )
                                     :
-                                    <></>}
+                                    <div>
+                                        Перевірених робіт не знайдено
+                                    </div>}
                             </div>
                         </div>
                         <div className="modal fade" id="modal" tabIndex="-1" aria-labelledby="modal" aria-hidden="true">

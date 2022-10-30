@@ -12,7 +12,7 @@
 
     border: 1px solid #DADADA;
     background-color: #ffff;
-    
+
     /* display: flex;
     flex-direction: column; */
     /* align-items: center; */
@@ -30,7 +30,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
-  
+
     position: relative;
     top: 60px;
 
@@ -110,12 +110,61 @@
     visibility: hidden;
 }
 
+
+
+
 /*_________________________________________________Max-width______________________*/
+
+
+#menu-item-active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* position: relative;
+    top: 60px; */
+    /* position: relative;
+    top: 0;
+    left:0; */
+    transition: all 0.4s ease 0s;
+
+    margin: 4px;
+
+    height: 40px;
+
+    width: 60px;    
+    border-radius: 5px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+
+    color: var(--background);
+    cursor: pointer;
+    background-color: var(--violet);
+}
+.general-nav-bar:hover #menu-item-active {
+    width: 226px;
+    border-radius: 16px;
+}
+#menu-item-active>a>svg {
+    fill: var(--background);
+    color: var(--background);
+    width: 32px;
+    height: 32px;
+}
+#menu-item-active>a>span {
+    color: var(--background);
+}
+
+
 /* general-nav-bar hover */
 
 .general-nav-bar:hover {
     width: 274px;
 }
+
 
 .general-nav-bar:hover>.general-menu-ul>li>a {
     padding-left: 1%;
@@ -139,12 +188,12 @@
 
 .general-menu-ul>li:hover {
     background-color: var(--violet);
-    color: #DADADA;
+    color: var(--background);
 }
 
 .general-menu-ul>li:active {
     background-color: var(--orange);
-    color: #DADADA;
+    color: var(--background);
 }
 
 /* .general-menu-ul>li:hover>a {
@@ -166,13 +215,19 @@
 /*_________________________________________________Max-width 600px______________________*/
 @media screen and (max-width: 600px) {
 
+    #menu-item-active{
+        width: 60px;
+        border-radius: 5px;
+    }
     .general-nav-bar:hover {
         width: 70px;
     }
+
     .general-menu-ul>li {
         width: 60px;
         border-radius: 5px;
-     }
+    }
+
     .general-nav-bar:hover>.general-menu-ul>li>a {
         display: flex;
         flex-direction: row;
@@ -185,6 +240,7 @@
         visibility: hidden;
         display: none;
     }
+
     .general-menu-ul>li:hover>a>svg {
         width: 24px;
         height: 24px;

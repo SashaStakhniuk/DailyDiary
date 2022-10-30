@@ -95,6 +95,8 @@
 
 .general-outline-button {
     transition: all 0.3s ease;
+    position: relative;
+
     outline: none;
     display: flex;
     flex-direction: row;
@@ -178,6 +180,23 @@
     font-weight: 800;
 }
 
+.tip-amount{
+    position: absolute;
+    top:-10px;
+    right:-10px;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--orange);
+}
+.tip-amount .number{
+   font-size: 12px;
+   color: var(--white);
+}
 /*___________________________Select________________________*/
 
 /* .general-select select {

@@ -9,7 +9,7 @@ namespace DailyDiary.JWTConfig
 {
     public class AuthOptions
     {
-        public const string ISSURER = "MVCDailyDiary";
+        public const string ISSURER = "MVCDiaryLine";
         public const string AUDIENCE = "SomeClient";
         const string KEY = "MyKeyWith_256_BIT_Information";
         public const int LIFETIME = 65;

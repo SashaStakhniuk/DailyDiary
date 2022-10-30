@@ -136,7 +136,7 @@ class TeacherHomeworkCard extends React.Component {
                 <button className='general-outline-button' type="button" style={{ margin: "0" }} data-bs-toggle="tooltip" title="Download" onClick={() => this.downloadPerformedHomework(this.props.task.id)}>
                     Cкачати
                 </button>
-                <button className='general-outline-button' type="button" style={{ margin: "0" }} title="Rate" onClick={() => this.props.rateStudentHomework(this.props.task.id)}>
+                <button className='general-outline-button' type="button" data-bs-toggle="modal" data-bs-target="#ratingStudentHomework" style={{ margin: "0" }} title="Rate" onClick={() => this.props.rateStudentHomework(this.props.task.id)}>
                     Оцінити
                 </button>
             </div>
@@ -175,8 +175,8 @@ class TeacherHomeworkCard extends React.Component {
                 <div className="infoicon">
                     <div className="icon">
                         <span className="tooltip">
-                                <div className='task-info'>
-                                    {/* <div className='task-info-item text-bolder'>
+                            <div className='task-info'>
+                                {/* <div className='task-info-item text-bolder'>
                                             <div>
                                                 <label htmlFor="myComment">Мій коментар:</label>
                                             </div>
@@ -184,85 +184,85 @@ class TeacherHomeworkCard extends React.Component {
                                                 <div>{this.props.task.studentComment}</div>
                                             </div>
                                         </div> */}
+                                <div className='task-info-item text-bolder'>
+                                    <div>
+                                        <label htmlFor="theme">Тема:</label>
+                                    </div>
+                                    <div id="theme" className='text-thinner'>
+                                        <div>{this.props.task.theme}</div>
+                                    </div>
+                                </div>
+                                {this.props.task.studentComment !== undefined && this.props.task.studentComment !== null && this.props.task.studentComment !== "" ?
                                     <div className='task-info-item text-bolder'>
                                         <div>
-                                            <label htmlFor="theme">Тема:</label>
+                                            <label htmlFor="studentComment" style={{ whiteSpace: "break-spaces" }}>Коментар студента:</label>
                                         </div>
-                                        <div id="theme" className='text-thinner'>
-                                            <div>{this.props.task.theme}</div>
+                                        <div id="studentComment" style={{ marginTop: "10px" }} className="text-thinner">
+                                            <div>{this.props.task.studentComment}</div>
                                         </div>
                                     </div>
-                                    {this.props.task.studentComment !== undefined && this.props.task.studentComment !== null && this.props.task.studentComment !== "" ?
-                                        <div className='task-info-item text-bolder'>
-                                            <div>
-                                                <label htmlFor="studentComment" style={{whiteSpace:"break-spaces"}}>Коментар студента:</label>
-                                            </div>
-                                            <div id="studentComment" style={{marginTop:"10px"}} className="text-thinner">
-                                                <div>{this.props.task.studentComment}</div>
-                                            </div>
+                                    :
+                                    <></>
+                                }
+                                {this.props.task.mark !== undefined && this.props.task.mark > 0 ?
+                                    <div className='task-info-item text-bolder'>
+                                        <div>
+                                            <label htmlFor="mark">Оцінка:</label>
                                         </div>
-                                        :
-                                        <></>
-                                    }
-                                    {this.props.task.mark !== undefined && this.props.task.mark > 0 ?
-                                        <div className='task-info-item text-bolder'>
-                                            <div>
-                                                <label htmlFor="mark">Оцінка:</label>
-                                            </div>
-                                            <div id="mark" className='text-thinner'>
-                                                <div>{this.props.task.mark}</div>
-                                            </div>
+                                        <div id="mark" className='text-thinner'>
+                                            <div>{this.props.task.mark}</div>
                                         </div>
-                                        :
-                                        <></>
-                                    }
-                                    <div className='grid-row-cols-4'>
-                                        <section className='task-info'>
-                                            <div className='task-info-item text-bolder'>
-                                                <div>
-                                                    <div>Опубліковано:</div>
-                                                    <div>
-                                                        <span id="published" className='text-thinner'>{new Date(this.props.task.publishDate).toLocaleDateString()}</span>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div>Дедлайн:</div>
-                                                    <div>
-                                                        <span id="deadline" className='text-thinner'>{new Date(this.props.task.deadline).toLocaleDateString()}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </section>
-
-                                            <section className='task-info'>
-                                                <div className='task-info-item text-bolder'>
-                                                    <div>
-                                                        <div>Здано:</div>
-                                                        <div>
-                                                            <span id="uploadDate" className='text-thinner'>{new Date(this.props.task.passedDate).toLocaleDateString()}</span>
-                                                        </div>
-                                                    </div>
-                                                    {this.props.task.mark !== undefined && this.props.task.mark > 0 ?
-                                                        <div>
-                                                            <div>Перевірено:</div>
-                                                            <div>
-                                                                <span id="checkedDate" className='text-thinner'>{new Date(this.props.task.checkedDate).toLocaleDateString()}</span>
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        <div></div>
-                                                    }
-                                                </div>
-                                            </section>
                                     </div>
+                                    :
+                                    <></>
+                                }
+                                <div className='grid-row-cols-4'>
+                                    <section className='task-info'>
+                                        <div className='task-info-item text-bolder'>
+                                            <div>
+                                                <div>Опубліковано:</div>
+                                                <div>
+                                                    <span id="published" className='text-thinner'>{new Date(this.props.task.publishDate).toLocaleDateString()}</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div>Дедлайн:</div>
+                                                <div>
+                                                    <span id="deadline" className='text-thinner'>{new Date(this.props.task.deadline).toLocaleDateString()}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
 
+                                    <section className='task-info'>
+                                        <div className='task-info-item text-bolder'>
+                                            <div>
+                                                <div>Здано:</div>
+                                                <div>
+                                                    <span id="uploadDate" className='text-thinner'>{new Date(this.props.task.passedDate).toLocaleDateString()}</span>
+                                                </div>
+                                            </div>
+                                            {this.props.task.mark !== undefined && this.props.task.mark > 0 ?
+                                                <div>
+                                                    <div>Перевірено:</div>
+                                                    <div>
+                                                        <span id="checkedDate" className='text-thinner'>{new Date(this.props.task.checkedDate).toLocaleDateString()}</span>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <div></div>
+                                            }
+                                        </div>
+                                    </section>
                                 </div>
+
+                            </div>
                         </span>
                     </div>
                 </div>
                 <div className="card-content">
                     {taskLinks}
-
+{/* 
                     <section className="bootom-field">
                         {this.props.accessLevel === "teacher" || this.props.accessLevel === "admin" ?
                             <div>
@@ -271,8 +271,7 @@ class TeacherHomeworkCard extends React.Component {
                             :
                             <></>
                         }
-
-                    </section>
+                    </section> */}
                 </div>
             </section>
         );

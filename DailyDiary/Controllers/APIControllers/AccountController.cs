@@ -212,8 +212,12 @@ namespace DailyDiary.Controllers.APIControllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType,user.Email),
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, password)
                 };
+                var userRoles = await userManager.GetRolesAsync(user);
+                foreach (var role in userRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role));
+                }
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
                 return claimsIdentity;
             }

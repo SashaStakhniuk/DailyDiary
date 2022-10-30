@@ -36,11 +36,9 @@ namespace DailyDiary.Controllers.APIControllers
         {
             YearOfStudyController yearOfStudyController = new YearOfStudyController(db);
             var allYearsOfStudyOfCurrentStudyYear = await yearOfStudyController.GetYearsOfStudyByCurrentStudyYear(); // всі роки навчання теперішнього навчального року
-            if (allYearsOfStudyOfCurrentStudyYear.Value != null)
+            if (allYearsOfStudyOfCurrentStudyYear!=null && allYearsOfStudyOfCurrentStudyYear.Value.Count() > 0)
             {
                 var currentYearsOfStudy = allYearsOfStudyOfCurrentStudyYear.Value.ToList();
-                if (currentYearsOfStudy.Count > 0)
-                {
                     var studyPlansId = new List<int>();
                     foreach (var currentYearOfStudy in currentYearsOfStudy)
                     {
@@ -51,7 +49,6 @@ namespace DailyDiary.Controllers.APIControllers
                         }
                     }
                     return studyPlansId;
-                }
             }
             return null;
         }

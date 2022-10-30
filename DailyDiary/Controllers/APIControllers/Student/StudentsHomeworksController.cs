@@ -182,6 +182,7 @@ namespace DailyDiary.Controllers.APIControllers
                 return StatusCode(500, e.Message);
             }
         }
+
         [HttpGet("{studentId}")]
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult<IEnumerable<StudentsWorkToDisplayViewModel>>> GetOnCheckingHomeworksByStudentIdAsync(int studentId) // всі домашки студента без оцінки 
@@ -286,7 +287,7 @@ namespace DailyDiary.Controllers.APIControllers
                     }
                 }
 
-                for (int i = 0; i < allTasksIdForGroup.Count; i++) // всі завдання, що були задані групі
+                for (int i = allTasksIdForGroup.Count-1; i >= 0; i--) // всі завдання, що були задані групі
                 {
                     if (await db.StudentsWorks.AsNoTracking().AnyAsync(x => x.TaskId == allTasksIdForGroup[i]))
                     { // якщо задана робота виконана студентом
@@ -306,7 +307,7 @@ namespace DailyDiary.Controllers.APIControllers
                             notPassedHomeworkToAdd = await db.Tasks
                            .Include(x => x.TeacherSubgroupDistribution).ThenInclude(x => x.Teacher)
                            .Include(x => x.TeacherSubgroupDistribution).ThenInclude(x => x.Subject)
-                           .Where(x => x.Id == groupTaskId && x.Deadline < dateNow) // де завдання = завданню із списку заданих і дедлайн > за теперішню дату
+                           .Where(x => x.Id == groupTaskId && x.Deadline < dateNow) // де завдання = завданню із списку заданих і дедлайн < за теперішню дату
                            .Select(x => new TaskFullDataViewModel
                            {
                                Id = x.Id,
@@ -359,6 +360,87 @@ namespace DailyDiary.Controllers.APIControllers
                 else
                 {
                     return NotFound("No one given or overdue homework found");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+        [HttpGet("{studentId}")]
+        public async Task<ActionResult<StudentsGeneralTasksAmountViewModel>> GetGeneralAmountOfTasksAsync(int studentId) // всі домашки студента без оцінки 
+        {
+            try
+            {
+                var student = await db.Students.AsNoTracking().FirstOrDefaultAsync(x => x.Id == studentId);
+                if (student == null)
+                {
+                    return NotFound("Student not found");
+                }
+                var taskType = await db.TaskTypes.AsNoTracking().FirstOrDefaultAsync(x => x.TaskTypeDescription.ToLower() == "homework"); // тип завдання "домашнє"
+                if (taskType == null)
+                {
+                    return NotFound("Can't find 'homework' task type");
+                }
+                GroupController groupController = new GroupController(db);
+                var currentStudyYearGroups = await groupController.GetAllGroupsOfCurrentStudyYear();
+                if (currentStudyYearGroups != null && currentStudyYearGroups.Value.Count() > 0)
+                {
+                    var currentStudyYearGroupsList = currentStudyYearGroups.Value.ToList();
+
+                    List<Models.DbModels.Task> allGivenTasks = new List<Models.DbModels.Task>();
+
+                    foreach (var currentStudyYearGroup in currentStudyYearGroupsList) // перебираю усі групи теперішнього навч.року
+                    {
+                        List<int> subgroupsId = await db.StudentsBySubgroups.Include(x => x.Subgroup)
+                            .Where(x => x.StudentId == studentId && x.Subgroup.GroupId== currentStudyYearGroup.Id)
+                            .Select(x => x.SubgroupId).ToListAsync(); //шукаю уcі підгрупи теперішнього навчального року, де навчається студент
+                        foreach (var subgroupId in subgroupsId)
+                        {
+                            var allGivenSubgroupTasks = await db.Tasks.Include(x => x.TeacherSubgroupDistribution).ThenInclude(x => x.Subgroup)
+                                .Where(x => x.TaskTypeId == taskType.Id && x.TeacherSubgroupDistribution.Subgroup.Id == subgroupId)
+                                .Select(x => new Models.DbModels.Task { Id=x.Id,Deadline=x.Deadline }).ToListAsync(); // знаходжу усі задані домашки підгрупі(групі)
+                            allGivenTasks.AddRange(allGivenSubgroupTasks);//усі задані групам завдання
+                        }
+                    }
+                    if (allGivenTasks.Count == 0)
+                    {
+                        return NotFound("No one given task homework to any groups where student have lessons found");
+                    }
+                    StudentsGeneralTasksAmountViewModel generalTasksAmount = new StudentsGeneralTasksAmountViewModel();
+                    var currentDate = DateTime.Today;
+                    foreach (var task in allGivenTasks)
+                    {
+                        //var studentNotPassedYetHomeworksAmount = await db.StudentsWorks.AsNoTracking().Where(x => x.StudentId == studentId && x.TaskId == taskId && x.UploadDate != null && x.Mark==null && x.TeacherId==null).Select(x => x.Id).ToListAsync();
+                        var studentHomework = await db.StudentsWorks.AsNoTracking().FirstOrDefaultAsync(x => x.StudentId == studentId && x.TaskId == task.Id);
+                        if (studentHomework != null) // якщо робота здана
+                        {
+                                if (studentHomework.UploadDate != null && studentHomework.Mark == null && studentHomework.TeacherId == null) // якщо робота на перевірці
+                                {
+                                    generalTasksAmount.OnCheckingTasksAmount += 1;
+                                }
+                                else if (studentHomework.UploadDate != null && studentHomework.Mark != null && studentHomework.TeacherId != null) //якщо робота перевірена
+                                {
+                                    generalTasksAmount.PassedTasksAmount += 1;
+                                }
+                        }
+                        else//якщо робота не здана
+                        {
+                            if(task.Deadline < currentDate) // якщо дедлайн прострочено
+                            {
+                                generalTasksAmount.OverdueTasksAmount += 1;
+                            }
+                            else
+                            {
+                                generalTasksAmount.GivenTasksAmount += 1;
+                            }
+                        }            
+                    }
+                    return Ok(generalTasksAmount);
+                }
+                else
+                {
+                    return NotFound("No one group of current study year found");
                 }
             }
             catch (Exception e)

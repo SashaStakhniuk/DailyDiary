@@ -32,50 +32,6 @@ class Login extends React.Component {
         }
     }
     async makeRequest(userNameValue, passwordValue) {
-        // try{
-        //     var userName = username
-        //     var password = password
-        //     var returnUrl = ''
-        //     var rememberMe = false;
-        //     const response = await fetch('https://localhost:44364/api/account/Login', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({
-        //             userName, 
-        //             password,
-        //             rememberMe,
-        //             returnUrl
-        //         })
-        //     })
-
-        //     const data = await response.json()
-
-        //     if (response.ok === true) {
-        //         this.setState({loading:""})
-        //         console.log(data)
-        //         sessionStorage.setItem('access_token', data.access_token);
-        //         sessionStorage.setItem('userId', data.userId);
-        //         //  sessionStorage.setItem('userEmail', data.userEmail);
-        //         //this.props.setCredentials(data.access_token,data.userId);
-        //         //this.setState({error:""})
-        //         //window.location = '/'
-        //         // <AuthenticationRegistration authorized={true}></AuthenticationRegistration>
-        //     } else {
-        //         this.setState({loading:""})
-        //         // window.location = '/authorization'
-        //         // this.setState({error:"Invalid email or password",loading:""})
-        //         this.setState({error:data.errorText,loading:""})
-        //         console.log(data);
-        //         console.log(response.status, response.errorText)
-        //     }
-        //     this.setState({loading:""})
-        //     //const data = await response.json()
-        // }
-        // catch{
-
-        // }
         try {
 
             // console.log(userNameValue, passwordValue);
@@ -193,7 +149,7 @@ class Login extends React.Component {
                         <div style={{ color: "red" }}><h3 style={{ fontSize: "1.25em" }}>{this.state.error}</h3></div>
                     </span>
                     <div>
-                        <button type="submit" className="general-button">Вхід</button>
+                        <button type="submit" className="general-button" style={{width:"450px"}}>Вхід</button>
                     </div>
                 </form >
             </div >
