@@ -18,10 +18,9 @@ class TeacherPage extends Component {
         return (
             <>
                 <GeneralHeader></GeneralHeader>
-
                 <div className="flex-container">
                     <div className="navigationSide">
-                        <GeneralNavigationBar role={this.props.credentials.roles} />
+                        <GeneralNavigationBar menuItemToSelect={0} role={this.props.credentials.roles} />
                     </div>
                     <div className="generalSide">
                        TeacherPage

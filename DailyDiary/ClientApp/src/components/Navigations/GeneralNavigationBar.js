@@ -10,11 +10,25 @@ class GeneralNavigationBar extends React.Component {
             selectedMenuItemStyle: undefined
         }
     }
-    // componentDidMount(){
-    //     if(this.props.role!==undefined){
+    componentDidMount(){
+        // if(this.props.role!==undefined){
 
-    //     }
-    // }
+        // }
+        console.log("this.props.menuItemToSelect:",this.props.menuItemToSelect);
+        var menuItemsParent = document.getElementById("general-menu-ul");
+        if(menuItemsParent!==undefined && this.props.menuItemToSelect!==undefined){
+            var items = Array.from(menuItemsParent.children);
+            items[this.props.menuItemToSelect].className="";
+            items[this.props.menuItemToSelect].id="menu-item-active"
+            // console.log(buttons)
+            // for (let i = 0; i < buttons.length; i++) {
+            //     buttons[i].className="general-outline-button"
+            //     if(buttons[i] === e.currentTarget){
+            //         buttons[i].className="general-outline-button button-static"
+            //     }
+            // }
+        }
+    }
     onMenuItemClick = (e) => {
         console.log(e.currentTarget.parentNode.children);
         var buttons = Array.from(e.currentTarget.parentNode.children);
@@ -31,7 +45,7 @@ class GeneralNavigationBar extends React.Component {
     render() {
         return (
             <nav className='general-nav-bar'>
-                <ul className="general-menu-ul">
+                <ul id="general-menu-ul" className="general-menu-ul">
                     <li  onClick={e => this.onMenuItemClick(e)}>
                         {this.props.role === Role.Teacher ?
                             <a href='/teacher-page'>

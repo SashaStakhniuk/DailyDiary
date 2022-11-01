@@ -17,7 +17,7 @@ namespace DailyDiary.Controllers.APIControllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class TeacherController : Controller
+    public class TeacherController : Controller // при призначенні викладача на заміну необхідно вказувати ід основного викладача який веде предмет.
     {
         private readonly DailyDiaryDatasContext db;
         private readonly UserManager<User> userManager;
@@ -402,8 +402,10 @@ namespace DailyDiary.Controllers.APIControllers
                 return StatusCode(500, e.Message);
             }
         }
+        /*________________________________________________________TASKS_______________________________________________________________->*/
+
         [HttpGet("{details}")]
-        public async Task<ActionResult<IEnumerable<StudentsWorkToCheckViewModel>>> GetTeacherTasksToCheckAsync(int teacherId, int subgroupId) // список завдань заданих студентам підгрупи цим викладачем
+        public async Task<ActionResult<StudentsWorkToCheckViewModel>> GetTeacherGivenHomeworksAsync(int teacherId, int subgroupId) // задані групі домашки преодом.
         {
             try
             {
@@ -412,7 +414,73 @@ namespace DailyDiary.Controllers.APIControllers
                 {
                     return NotFound("Teacher not found");
                 }
-                var subgroup = await db.Subgroups.Include(x=> x.Group).FirstOrDefaultAsync(x => x.Id == subgroupId);// перевіряю чи підгрупа(група) існує
+                var subgroup = await db.Subgroups.Include(x => x.Group).FirstOrDefaultAsync(x => x.Id == subgroupId);// перевіряю чи підгрупа(група) існує
+                if (subgroup != null)
+                {
+                    if (subgroup.Id == subgroup.Group.DefSubgroupId)
+                    {
+                        subgroup.Title = subgroup.Group.Title;
+                    }
+                    subgroup.Group = null;
+                }
+                else
+                {
+                    return NotFound("Subgroup not found");
+                }
+                var homeworkTaskType = await db.TaskTypes.AsNoTracking().FirstOrDefaultAsync(x => x.TaskTypeDescription.ToLower() == "homework");
+                if (homeworkTaskType == null)
+                {
+                    return NotFound("Can't find 'homework' task type");
+                }
+
+                GroupController groupController = new GroupController(db);
+                var currentStudyYearGroups = await groupController.GetAllGroupsOfCurrentStudyYear();
+                if (currentStudyYearGroups != null && currentStudyYearGroups.Value.Count() > 0)
+                {
+                    //var subgroupToDisplay = new Subgroup { Id = subgroup.Id, Title = subgroup.Title };
+
+                    var currentStudyYearGroupsList = currentStudyYearGroups.Value.ToList();
+                    var givenTasks = await db.Tasks.Include(x => x.TeacherSubgroupDistribution).ThenInclude(x=> x.Subject)
+                        .Where(x => x.TeacherSubgroupDistribution.TeacherId == teacher.Id && x.TeacherSubgroupDistribution.SubgroupId == subgroup.Id && x.TaskTypeId == homeworkTaskType.Id)
+                        .Select(x => new StudentsWorkToCheckViewModel
+                        {
+                            TaskId = x.Id,
+                            PublishDate=x.PublishDate,
+                            Deadline = x.Deadline,
+                            Theme=x.Theme,
+                            Comment = x.Comment,
+                            Subject=new Subject { Id=x.TeacherSubgroupDistribution.SubjectId, Title= x.TeacherSubgroupDistribution.Subject.Title },
+                            Group = subgroup
+                        })
+                        .ToListAsync(); // список усіх домашок заданих викладачем цій групі
+                    if (givenTasks == null || givenTasks.Count == 0)
+                    {
+                        return NotFound("No one work given by this teacher to selected group found");
+                    }
+                    return Ok(givenTasks);
+                }
+                else
+                {
+                    return NotFound("No one group of current study year found");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("{details}")]
+        public async Task<ActionResult<IEnumerable<StudentsWorkToCheckViewModel>>> GetStudentsHomeworksToCheckAsync(int teacherId, int subgroupId) // список завдань заданих студентам підгрупи цим викладачем
+        {
+            try
+            {
+                var teacher = await db.Teachers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == teacherId); // перевіряю чи викладач існує
+                if (teacher == null)
+                {
+                    return NotFound("Teacher not found");
+                }
+                var subgroup = await db.Subgroups.Include(x => x.Group).FirstOrDefaultAsync(x => x.Id == subgroupId);// перевіряю чи підгрупа(група) існує
                 if (subgroup != null)
                 {
                     if (subgroup.Id == subgroup.Group.DefSubgroupId)
@@ -470,10 +538,10 @@ namespace DailyDiary.Controllers.APIControllers
                                 StudentId = x.StudentId,
                                 StudentFullName = x.Student.Person.Name + " " + x.Student.Person.LastName
                             },
-                            Group=new Subgroup
+                            Group = new Subgroup
                             {
-                                Id=subgroup.Id,
-                                Title=subgroup.Title
+                                Id = subgroup.Id,
+                                Title = subgroup.Title
                             },
                             Subject = task.Subject
                         })
@@ -552,100 +620,198 @@ namespace DailyDiary.Controllers.APIControllers
                 return StatusCode(500, e.Message);
             }
         }
-    //[HttpGet("{teacherId}")]
-    //public async Task<ActionResult<IEnumerable<StudentsWorkToCheckViewModel>>> GetTeacherTasksToCheckAsync(int teacherId) // список завдань заданих студентам цим викладачем
-    //{
-    //    try
-    //    {
-    //        var teacher = await db.Teachers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == teacherId);
-    //        if (teacher == null)
-    //        {
-    //            return NotFound("Teacher not found");
-    //        }
-    //        var homeworkTask = await db.TaskTypes.AsNoTracking().FirstOrDefaultAsync(x => x.TaskTypeDescription.ToLower() == "homework");
-    //        if (homeworkTask == null)
-    //        {
-    //            return NotFound("'Homework' task type not found");
-    //        }
-    //        var teacherGivenTasks = await db.Tasks.OrderByDescending(x => x.Id)
-    //            .Include(x => x.TeacherSubgroupDistribution).ThenInclude(x => x.Subject)
-    //            .Where(x => x.TeacherSubgroupDistribution.TeacherId == teacherId && x.TaskTypeId == homeworkTask.Id)
-    //             .Select(x => new
-    //             {
-    //                 Id = x.Id,
-    //                 Theme = x.Theme,
-    //                 Comment = x.Comment,
-    //                 PublishDate = x.PublishDate,
-    //                 Deadline = x.Deadline,
-    //                 Subject = new Subject
-    //                 {
-    //                     Id = x.TeacherSubgroupDistribution.SubjectId,
-    //                     Title = x.TeacherSubgroupDistribution.Subject.Title
-    //                 },
-    //                 SubgroupId = x.TeacherSubgroupDistribution.SubgroupId
-    //             }).ToListAsync(); // всі домашні завдання, задані цим викладачем
-    //        if (teacherGivenTasks != null)
-    //        {
-    //            List<StudentsWorkToCheckViewModel> notCheckedStudentHomeworksToDisplay = new List<StudentsWorkToCheckViewModel>();
-    //            foreach (var task in teacherGivenTasks) // перебираю усі задані преподом домашки
-    //            {
-    //                var studentNotCheckedHomeworks = await db.StudentsWorks
-    //                .Include(x => x.Student).ThenInclude(x => x.Person)
-    //                .Where(x => x.TeacherId == null && x.Mark == null && x.TaskId == task.Id)
-    //                .Select(x => new StudentsWorkToCheckViewModel
-    //                {
-    //                    Id = x.Id,
-    //                    TaskId = task.Id,
-    //                    Theme = task.Theme,
-    //                    Comment = task.Comment,
-    //                    PublishDate = task.PublishDate,
-    //                    Deadline = task.Deadline,
-    //                    PassedDate = x.UploadDate,
-    //                    StudentComment = x.StudentComment,
-    //                    TeacherId = teacherId,
-    //                    StudentData = new StudentData
-    //                    {
-    //                        StudentId = x.StudentId,
-    //                        StudentFullName = x.Student.Person.Name + " " + x.Student.Person.LastName
-    //                    },
-    //                    Subject = task.Subject
-    //                })
-    //                .ToListAsync();//всі неперевірені домашні роботи студентів, які задав цей викладач
-    //                foreach (var studentHomework in studentNotCheckedHomeworks) // дістаю додаткові дані про групу
-    //                {
-    //                    var subgroup = await db.Subgroups.Include(x => x.Group).FirstOrDefaultAsync(x => x.Id == task.SubgroupId);
-    //                    if (subgroup != null)
-    //                    {
-    //                        if (subgroup.Id == subgroup.Group.DefSubgroupId)
-    //                        {
-    //                            subgroup.Title = subgroup.Group.Title;
-    //                        }
-    //                        studentHomework.Group = new Subgroup { Id = subgroup.Id, Title = subgroup.Title };
-    //                    }
-    //                }
-    //                notCheckedStudentHomeworksToDisplay.AddRange(studentNotCheckedHomeworks);
-    //            }
-    //            if (notCheckedStudentHomeworksToDisplay.Count > 0)
-    //            {
-    //                return Ok(notCheckedStudentHomeworksToDisplay);
-    //            }
-    //            else
-    //            {
-    //                return NotFound("All students passed works is checked");
-    //            }
-    //        }
-    //        else
-    //        {
-    //            return NotFound("No one task given by this teacher found");
-    //        }
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        return StatusCode(500, e.Message);
-    //    }
-    //}
-    //}
-    [HttpPost]
+        [HttpGet("{details}")]
+        public async Task<ActionResult<StudentsWorkToCheckViewModel>> GetCheckedStudentsHomeworksTasksAsync(int teacherId, int subgroupId) //   перевірені домашки преподом домашок.
+        {
+            try
+            {
+                var teacher = await db.Teachers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == teacherId); // перевіряю чи викладач існує
+                if (teacher == null)
+                {
+                    return NotFound("Teacher not found");
+                }
+                var subgroup = await db.Subgroups.Include(x => x.Group).FirstOrDefaultAsync(x => x.Id == subgroupId);// перевіряю чи підгрупа(група) існує
+                if (subgroup != null)
+                {
+                    if (subgroup.Id == subgroup.Group.DefSubgroupId)
+                    {
+                        subgroup.Title = subgroup.Group.Title;
+                    }
+                    subgroup.Group = null;
+                }
+                else
+                {
+                    return NotFound("Subgroup not found");
+                }
+                var homeworkTaskType = await db.TaskTypes.AsNoTracking().FirstOrDefaultAsync(x => x.TaskTypeDescription.ToLower() == "homework");
+                if (homeworkTaskType == null)
+                {
+                    return NotFound("Can't find 'homework' task type");
+                }
+
+                GroupController groupController = new GroupController(db);
+                var currentStudyYearGroups = await groupController.GetAllGroupsOfCurrentStudyYear();
+                if (currentStudyYearGroups != null && currentStudyYearGroups.Value.Count() > 0)
+                {
+                    List<StudentsWorkToCheckViewModel> studentsCheckedHomeworks = new List<StudentsWorkToCheckViewModel>();
+
+                    var currentStudyYearGroupsList = currentStudyYearGroups.Value.ToList();
+                    var givenTasks = await db.Tasks.Include(x => x.TeacherSubgroupDistribution).ThenInclude(x=> x.Subject)
+                        .Where(x => x.TeacherSubgroupDistribution.TeacherId == teacher.Id && x.TeacherSubgroupDistribution.SubgroupId == subgroup.Id && x.TaskTypeId == homeworkTaskType.Id)
+                        .Select(x => new StudentsWorkToCheckViewModel
+                        {
+                            TaskId = x.Id,
+                            PublishDate = x.PublishDate,
+                            Deadline = x.Deadline,
+                            Theme=x.Theme,
+                            Comment=x.Comment,
+                            TeacherId=teacher.Id,
+                            Group=subgroup,
+                            Subject=new Subject { Id=x.TeacherSubgroupDistribution.SubjectId, Title = x.TeacherSubgroupDistribution.Subject.Title}
+                        })
+                        .ToListAsync(); // список усіх домашок заданих викладачем цій групі
+                    if (givenTasks == null || givenTasks.Count == 0)
+                    {
+                        return NotFound("No one work checked by this teacher in selected group found");
+                    }
+
+                    foreach (var task in givenTasks) // перебираю усі задані домашки викладачем групі
+                    {
+                        var studentsHomeworks = await db.StudentsWorks.Include(x=> x.Student).ThenInclude(x=> x.Person)
+                            .Where(x => x.TaskId == task.TaskId && x.TeacherId==teacher.Id && x.Mark!=null)
+                            .Select(x => new StudentsWorkToCheckViewModel
+                            {
+                                TaskId = task.Id,
+                                PublishDate = task.PublishDate,
+                                Deadline = task.Deadline,
+                                Theme = task.Theme,
+                                Comment = task.Comment,
+                                TeacherId = task.TeacherId,
+                                Group = subgroup,
+                                Subject = task.Subject,
+                                Id=x.Id,
+                                PassedDate= x.UploadDate,
+                                CheckedDate= (DateTime)x.CheckDate,
+                                StudentData=new StudentData { StudentId = x.StudentId,StudentFullName = x.Student.Person.Name + " " + x.Student.Person.LastName},
+                                Mark=(int)x.Mark,
+                                TeacherComment=x.TeacherComment,
+                                StudentComment=x.StudentComment
+                            })
+                            .ToListAsync(); // усі виконані роботи студентів по цьому завданню
+                        if (studentsHomeworks != null && studentsHomeworks.Count() > 0)
+                        {
+                            studentsCheckedHomeworks.AddRange(studentsHomeworks);
+                        }
+                            //    foreach (var studentsHomework in studentsHomeworks)
+                            //    {
+
+                            //        task.Id = studentsHomework.Id;
+                            //        task.PassedDate = studentsHomework.UploadDate;
+                            //        task.CheckedDate = (DateTime)studentsHomework.CheckDate;
+                            //        task.StudentData = new StudentData { StudentId = studentsHomework.StudentId, StudentFullName = studentsHomework.StudentFullName};
+                            //        task.Mark = (int)studentsHomework.Mark;
+                            //        task.TeacherComment = studentsHomework.TeacherComment;
+                            //        task.StudentComment = studentsHomework.StudentComment;
+
+                            //        studentsCheckedHomeworks.Add(new StudentsWorkToCheckViewModel 
+                            //        {
+                            //            TaskId = task.Id,
+                            //            PublishDate = task.PublishDate,
+                            //            Deadline = task.Deadline,
+                            //            Theme = task.Theme,
+                            //            Comment = task.Comment,
+                            //            TeacherId = task.TeacherId,
+                            //            Group = subgroup,
+                            //            Subject =
+                            //        });
+                            //    }
+                            //}
+                        }
+                    return Ok(studentsCheckedHomeworks);
+                }
+                else
+                {
+                    return NotFound("No one group of current study year found");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+        [HttpGet("{details}")]
+        public async Task<ActionResult<TeachersGeneralTasksAmountViewModel>> GetTeacherGeneralHomeworkTasksAmount(int teacherId, int subgroupId) // підрахунок кількості домашок.
+        {
+            try
+            {
+                var teacher = await db.Teachers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == teacherId); // перевіряю чи викладач існує
+                if (teacher == null)
+                {
+                    return NotFound("Teacher not found");
+                }
+                var subgroup = await db.Subgroups.AsNoTracking().FirstOrDefaultAsync(x => x.Id == subgroupId);// перевіряю чи підгрупа(група) існує
+                if (subgroup == null)
+                {
+                    return NotFound("Subgroup not found");
+                }
+                var homeworkTaskType = await db.TaskTypes.AsNoTracking().FirstOrDefaultAsync(x => x.TaskTypeDescription.ToLower() == "homework");
+                if (homeworkTaskType == null)
+                {
+                    return NotFound("Can't find 'homework' task type");
+                }
+
+                GroupController groupController = new GroupController(db);
+                var currentStudyYearGroups = await groupController.GetAllGroupsOfCurrentStudyYear();
+                if (currentStudyYearGroups != null && currentStudyYearGroups.Value.Count() > 0)
+                {
+                    var currentStudyYearGroupsList = currentStudyYearGroups.Value.ToList();
+                    var givenTasksId = await db.Tasks.Include(x => x.TeacherSubgroupDistribution)
+                        .Where(x => x.TeacherSubgroupDistribution.TeacherId == teacher.Id && x.TeacherSubgroupDistribution.SubgroupId == subgroup.Id && x.TaskTypeId == homeworkTaskType.Id)
+                        .Select(x => x.Id)
+                        .ToListAsync(); // список усіх домашок заданих викладачем цій групі
+                    if (givenTasksId == null || givenTasksId.Count == 0)
+                    {
+                        return NotFound("No one work given by this teacher to selected group found");
+                    }
+
+                    TeachersGeneralTasksAmountViewModel workAmounts = new TeachersGeneralTasksAmountViewModel
+                    {
+                        GivenTasksAmount = givenTasksId.Count()
+                    };
+
+                    foreach (var taskId in givenTasksId) // перебираю усі задані домашки викладачем групі
+                    {
+                        var studentsHomeworks = await db.StudentsWorks.AsNoTracking()
+                            .Where(x => x.TaskId == taskId)
+                            .Select(x => new { x.Mark, x.TeacherId })
+                            .ToListAsync(); // усі виконані роботи студентів по цьому завданню
+                        if (studentsHomeworks != null && studentsHomeworks.Count > 0)
+                        {
+                            foreach (var studentsHomework in studentsHomeworks)
+                            {
+                                if (studentsHomework.Mark == null && studentsHomework.TeacherId == null)
+                                    workAmounts.ToCheckTasksAmount += 1;
+                                else if (studentsHomework.Mark != null && studentsHomework.TeacherId != null)
+                                    // всі задані завдання цим викладачем. Варто врахувати завдання, які задав цей викладач, а перевірив інший!!!!
+                                    workAmounts.CheckedTasksAmount += 1;
+                            }
+                        }          
+                    }
+                    return Ok(workAmounts);
+                }
+                else
+                {
+                    return NotFound("No one group of current study year found");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+   /*<-________________________________________________________TASKS_______________________________________________________________*/
+    
+        [HttpPost]
         public async Task<ActionResult> CreateLogin(CreateLoginViewModel model)
         {
             GeneratorService generatorService = new GeneratorService(userManager);

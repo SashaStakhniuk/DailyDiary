@@ -18,6 +18,10 @@ class TeacherHomeworkCard extends React.Component {
         // this.downloadHomeworkTaskTask = this.downloadHomeworkTaskTask.bind(this);
     }
 
+    componentDidMount() {
+        console.log("this.props.taskType", this.props.taskType);
+    }
+
     async loadHomeworkTask(taskId) {
         try {
             const response = await fetch(`${Host}/api/GroupHomeworks/Get/${taskId}`);
@@ -127,19 +131,7 @@ class TeacherHomeworkCard extends React.Component {
         }
     }
     render() {
-        const taskLinks =
-            <div className='row-cols-3-view'>
 
-                <button className='general-outline-button button-static' style={{ margin: "0" }} type="button" data-bs-toggle="tooltip" title="View" onClick={() => this.ViewHomework(this.props.task.id)}>
-                    Переглянути
-                </button>
-                <button className='general-outline-button' type="button" style={{ margin: "0" }} data-bs-toggle="tooltip" title="Download" onClick={() => this.downloadPerformedHomework(this.props.task.id)}>
-                    Cкачати
-                </button>
-                <button className='general-outline-button' type="button" data-bs-toggle="modal" data-bs-target="#ratingStudentHomework" style={{ margin: "0" }} title="Rate" onClick={() => this.props.rateStudentHomework(this.props.task.id)}>
-                    Оцінити
-                </button>
-            </div>
         // const taskToDelete =
         //     <div>
         //         <div className="d-flex justify-content-end">
@@ -156,12 +148,26 @@ class TeacherHomeworkCard extends React.Component {
                 </div>
                 <div className='task-info'>
                     <div className='task-info-item text-bolder'>
-                        <div>
-                            <label htmlFor="teacher">Учень:</label>
-                        </div>
-                        <div id="student" className='text-thinner'>
-                            <div>{this.props.task.studentData.studentFullName}</div>
-                        </div>
+                        {this.props.taskType !== "given" ?
+                            <>
+                                <div>
+                                    <label htmlFor="student">Учень:</label>
+                                </div>
+                                <div id="student" className='text-thinner'>
+                                    <div>{this.props.task.studentData.studentFullName}</div>
+                                </div>
+                            </>
+                            :
+                            <div className='task-info-item text-bolder'>
+                                <div>
+                                    <label htmlFor="theme">Тема:</label>
+                                </div>
+                                <div id="theme" className='text-thinner'>
+                                    <div>{this.props.task.theme}</div>
+                                </div>
+                            </div>
+                        }
+
                     </div>
                     <div className='task-info-item text-bolder'>
                         <div>
@@ -184,27 +190,31 @@ class TeacherHomeworkCard extends React.Component {
                                                 <div>{this.props.task.studentComment}</div>
                                             </div>
                                         </div> */}
-                                <div className='task-info-item text-bolder'>
-                                    <div>
-                                        <label htmlFor="theme">Тема:</label>
+                                {this.props.taskType !== "given" ?
+                                    <div className='task-info-item text-bolder'>
+                                        <div>
+                                            <label htmlFor="theme">Тема:</label>
+                                        </div>
+                                        <div id="theme" className='text-thinner'>
+                                            <div>{this.props.task.theme}</div>
+                                        </div>
                                     </div>
-                                    <div id="theme" className='text-thinner'>
-                                        <div>{this.props.task.theme}</div>
-                                    </div>
-                                </div>
+                                    :
+                                    <div></div>
+                                }
                                 {this.props.task.studentComment !== undefined && this.props.task.studentComment !== null && this.props.task.studentComment !== "" ?
                                     <div className='task-info-item text-bolder'>
                                         <div>
                                             <label htmlFor="studentComment" style={{ whiteSpace: "break-spaces" }}>Коментар студента:</label>
                                         </div>
-                                        <div id="studentComment" style={{ marginTop: "10px" }} className="text-thinner">
+                                        <div id="studentComment" style={{whiteSpace: "break-spaces" }} className="text-thinner">
                                             <div>{this.props.task.studentComment}</div>
                                         </div>
                                     </div>
                                     :
                                     <></>
                                 }
-                                {this.props.task.mark !== undefined && this.props.task.mark > 0 ?
+                                {this.props.task.taskType === "checked" && this.props.task.mark > 0 ?
                                     <div className='task-info-item text-bolder'>
                                         <div>
                                             <label htmlFor="mark">Оцінка:</label>
@@ -236,13 +246,18 @@ class TeacherHomeworkCard extends React.Component {
 
                                     <section className='task-info'>
                                         <div className='task-info-item text-bolder'>
-                                            <div>
-                                                <div>Здано:</div>
+                                            {this.props.taskType !== "given" ?
                                                 <div>
-                                                    <span id="uploadDate" className='text-thinner'>{new Date(this.props.task.passedDate).toLocaleDateString()}</span>
+                                                    <div>Здано:</div>
+                                                    <div>
+                                                        <span id="uploadDate" className='text-thinner'>{new Date(this.props.task.passedDate).toLocaleDateString()}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            {this.props.task.mark !== undefined && this.props.task.mark > 0 ?
+                                                :
+                                                <></>
+                                            }
+
+                                            {this.props.taskType === "checked" ?
                                                 <div>
                                                     <div>Перевірено:</div>
                                                     <div>
@@ -261,8 +276,24 @@ class TeacherHomeworkCard extends React.Component {
                     </div>
                 </div>
                 <div className="card-content">
-                    {taskLinks}
-{/* 
+                    <div className='row-cols-3-view'>
+
+                        <button className='general-outline-button button-static' style={{ margin: "0" }} type="button" data-bs-toggle="tooltip" title="View" onClick={() => this.ViewHomework(this.props.task.id)}>
+                            Переглянути
+                        </button>
+                        <button className='general-outline-button' type="button" style={{ margin: "0" }} data-bs-toggle="tooltip" title="Download" onClick={() => this.downloadPerformedHomework(this.props.task.id)}>
+                            Cкачати
+                        </button>
+                        {this.props.taskType !== "given" ?
+                            <button className='general-outline-button' type="button" data-bs-toggle="modal" data-bs-target="#ratingStudentHomework" style={{ margin: "0" }} title="Rate" onClick={() => this.props.rateStudentHomework(this.props.task.id)}>
+                                Оцінити
+                            </button>
+                            :
+                            <div></div>
+                        }
+
+                    </div>
+                    {/* 
                     <section className="bootom-field">
                         {this.props.accessLevel === "teacher" || this.props.accessLevel === "admin" ?
                             <div>

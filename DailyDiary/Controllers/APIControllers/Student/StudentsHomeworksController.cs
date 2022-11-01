@@ -289,7 +289,7 @@ namespace DailyDiary.Controllers.APIControllers
 
                 for (int i = allTasksIdForGroup.Count-1; i >= 0; i--) // всі завдання, що були задані групі
                 {
-                    if (await db.StudentsWorks.AsNoTracking().AnyAsync(x => x.TaskId == allTasksIdForGroup[i]))
+                    if (await db.StudentsWorks.AsNoTracking().AnyAsync(x => x.TaskId == allTasksIdForGroup[i] && x.StudentId==studentId))
                     { // якщо задана робота виконана студентом
                         allTasksIdForGroup.RemoveAt(i);//видаляю із списку
                     }

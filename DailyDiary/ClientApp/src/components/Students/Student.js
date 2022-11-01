@@ -118,8 +118,8 @@ class Student extends Component {
                     onCheckingHomeworks: [],
                     overdueHomeworks: []
                 })
-                // const data = await response.text();
-                // window.alert(data);
+                 const data = await response.text();
+                 window.alert(data);
             }
         }
         catch (e) {
@@ -154,8 +154,8 @@ class Student extends Component {
                     onCheckingHomeworks: [],
                     overdueHomeworks: []
                 })
-                // const data = await response.text();
-                // window.alert(data);
+                 const data = await response.text();
+                 window.alert(data);
             }
         }
         catch (e) {
@@ -291,13 +291,12 @@ class Student extends Component {
         }
     }
     onButtonTasksClick = (e) => {
-        console.log(e.currentTarget.parentNode.children);
+        // console.log(e.currentTarget.parentNode.children);
         var buttons = Array.from(e.currentTarget.parentNode.children);
-        console.log(buttons)
+        // console.log(buttons)
         for (let i = 0; i < buttons.length; i++) {
             buttons[i].className="general-outline-button"
             if(buttons[i] === e.currentTarget){
-                console.log("Here");
                 buttons[i].className="general-outline-button button-static"
             }
         }
@@ -309,12 +308,12 @@ class Student extends Component {
 
                 <div className="flex-container">
                     <div className="navigationSide">
-                        <GeneralNavigationBar role={this.props.credentials.roles} />
+                        <GeneralNavigationBar menuItemToSelect={0} role={this.props.credentials.roles} />
                     </div>
                     <div className="generalSide">
                         <div className="general-pagination-bar">
                             {/* <div className="buttons-inline" onClick={(e) => this.onButtonTasksClick(e)}> */}
-                            <div className="buttons-inline">
+                            <div id="tab-buttons-inline" className="buttons-inline">
                                 <button className="general-outline-button button-static" onClick={(e) => this.getGivenStudentHomeworks(this.state.studentId, e)}>
                                     <div className="tip-amount">
                                         <div className="number">

@@ -18,15 +18,26 @@ class HomeTasks extends Component {
         this.saveFile = this.saveFile.bind(this);
         this.getTeacherSubjects = this.getTeacherSubjects.bind(this);
         this.getTeacherSubgroupsByTeacherSubject = this.getTeacherSubgroupsByTeacherSubject.bind(this);
-        this.getTeacherTasksToCheck = this.getTeacherTasksToCheck.bind(this);
+        this.getTeacherGivenHomeworks = this.getTeacherGivenHomeworks.bind(this);
+        this.getStudentsHomeworksToCheck = this.getStudentsHomeworksToCheck.bind(this);
+        this.getCheckedStudentsHomeworksTasks = this.getCheckedStudentsHomeworksTasks.bind(this);
+        this.getTeacherGeneralTasksAmount = this.getTeacherGeneralTasksAmount.bind(this);
         this.rateStudentHomework = this.rateStudentHomework.bind(this);
 
         this.state = {
             studentHomeworkToRateId: 0,
 
+            tasksToDisplay: <></>,
+
             teacherId: 0,
-            studentHomeworksToCheckAmount:0,
+
+            teacherGivenHomeworks: [],
             studentHomeworksToCheck: [],
+            studentCheckedHomeworks: [],
+
+            givenTasksAmount: 0,
+            toCheckTasksAmount: 0,
+            checkedTasksAmount: 0,
 
             selectedSubjectId: 0,
             selectedSubgroupId: 0,
@@ -64,9 +75,41 @@ class HomeTasks extends Component {
             window.alert(e);
         }
     }
-    async getTeacherTasksToCheck() {
+
+    hideCards = (index) => {
+        var givenHomeworks=document.getElementById("givenHomeworks");
+        var onCheckingHomeworks=document.getElementById("on-checkingHomeworks");
+        var checkedHomeworks=document.getElementById("checkedHomeworks");
+        if(+index===0){
+            givenHomeworks.style.display = "block"
+            onCheckingHomeworks.style.display = "none"
+            checkedHomeworks.style.display = "none"
+        }
+        if(+index===1){
+            givenHomeworks.style.display = "none"
+            onCheckingHomeworks.style.display = "block"
+            checkedHomeworks.style.display = "none"
+        }
+        if(+index===2){
+            givenHomeworks.style.display = "none"
+            onCheckingHomeworks.style.display = "none"
+            checkedHomeworks.style.display = "block"
+        }
+        // var cards = document.getElementById('cards');
+        // for (let i = 0; i < cards.children; i++) {
+        //     if (+index !== i) {
+        //         cards.children[i].style.display = "none";
+        //     }
+        //     else {
+        //         cards.children[i].style.display = "block";
+        //     }
+        // }
+    }
+
+    async getTeacherGivenHomeworks() {
         try {
-            const response = await fetch(`${Host}/api/teacher/getTeacherTasksToCheck/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
+            this.hideCards(0);
+            const response = await fetch(`${Host}/api/teacher/getTeacherGivenHomeworks/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
             if (response.ok === true) {
                 const data = await response.json();
 
@@ -74,17 +117,119 @@ class HomeTasks extends Component {
                     <div id="homeworks" className="cards-container">
                         <div className="cards">
                             {data.map(homework =>
-                                <TeacherHomeworkCard key={"cardToCheck_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework}></TeacherHomeworkCard>
+                                <TeacherHomeworkCard key={"cardGivenTask_" + homework.taskId} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="given"></TeacherHomeworkCard>
                             )}
                         </div>
                     </div>
                 this.setState({
-                    studentHomeworksToCheck: dataToAdd,
-                    studentHomeworksToCheckAmount:data.length
+                    tasksToDisplay: dataToAdd,
+                    teacherGivenHomeworks: data
                 })
 
                 console.log(data);
-                // this.getTeacherTasksToCheck(data);
+                // this.getStudentsHomeworksToCheck(data);
+            }
+            else {
+                const data = await response.text();
+                console.log();
+                window.alert(data);
+            }
+        }
+        catch (e) {
+            console.log(e);
+            window.alert(e);
+        }
+    }
+    async getStudentsHomeworksToCheck() {
+        try {
+            this.hideCards(1);
+            const response = await fetch(`${Host}/api/teacher/getStudentsHomeworksToCheck/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
+            if (response.ok === true) {
+                const data = await response.json();
+
+                const dataToAdd =
+                    <div id="homeworks" className="cards-container">
+                        <div className="cards">
+                            {data.map(homework =>
+                                <TeacherHomeworkCard key={"cardToCheck_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="on-checking"></TeacherHomeworkCard>
+                            )}
+                        </div>
+                    </div>
+                this.setState({
+                    studentHomeworksToCheck: data,
+                    tasksToDisplay: dataToAdd
+                })
+
+                console.log(data);
+                // this.getStudentsHomeworksToCheck(data);
+            }
+            else {
+                const data = await response.text();
+                console.log();
+                window.alert(data);
+            }
+        }
+        catch (e) {
+            console.log(e);
+            window.alert(e);
+        }
+    }
+    async getCheckedStudentsHomeworksTasks() {
+        try {
+            this.hideCards(2);
+            const response = await fetch(`${Host}/api/teacher/getCheckedStudentsHomeworksTasks/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
+            if (response.ok === true) {
+                const data = await response.json();
+
+                const dataToAdd =
+                    <div id="homeworks" className="cards-container">
+                        <div className="cards">
+                            {data.map(homework =>
+                                <TeacherHomeworkCard key={"cardCheckTask_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="checked"></TeacherHomeworkCard>
+                            )}
+                        </div>
+                    </div>
+                this.setState({
+                    tasksToDisplay: dataToAdd,
+                    studentCheckedHomeworks: data
+                })
+
+                console.log(data);
+                // this.getStudentsHomeworksToCheck(data);
+            }
+            else {
+                const data = await response.text();
+                console.log();
+                window.alert(data);
+            }
+        }
+        catch (e) {
+            console.log(e);
+            window.alert(e);
+        }
+    }
+    async getTeacherGeneralTasksAmount() {
+        try {
+            const response = await fetch(`${Host}/api/teacher/getTeacherGeneralHomeworkTasksAmount/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
+            if (response.ok === true) {
+                const data = await response.json();
+
+                // const dataToAdd =
+                //     <div id="homeworks" className="cards-container">
+                //         <div className="cards">
+                //             {data.map(homework =>
+                //                 <TeacherHomeworkCard key={"cardToCheck_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework}></TeacherHomeworkCard>
+                //             )}
+                //         </div>
+                //     </div>
+                this.setState({
+                    givenTasksAmount: data.givenTasksAmount,
+                    toCheckTasksAmount: data.toCheckTasksAmount,
+                    checkedTasksAmount: data.checkedTasksAmount
+                })
+
+                console.log(data);
+                // this.getStudentsHomeworksToCheck(data);
             }
             else {
                 const data = await response.text();
@@ -128,7 +273,8 @@ class HomeTasks extends Component {
                     selectedSubgroupId: data[0].id,
                     teacherSubgroups: data
                 })
-                this.getTeacherTasksToCheck();
+                this.getStudentsHomeworksToCheck();
+                this.getTeacherGeneralTasksAmount();
             }
             else {
                 const data = await response.text();
@@ -233,9 +379,6 @@ class HomeTasks extends Component {
             , () => this.uploadHomework())
 
     }
-    onCheckingClick = () => {
-
-    }
     rateStudentHomework(studentHomeworkId) {
         // console.log(studentHomeworkId);
         this.setState({
@@ -301,7 +444,7 @@ class HomeTasks extends Component {
 
                 <div className="flex-container">
                     <div className="navigationSide">
-                        <GeneralNavigationBar role={this.props.credentials.roles} />
+                        <GeneralNavigationBar menuItemToSelect={1} role={this.props.credentials.roles} />
                     </div>
                     <div className="generalSide">
                         <div className="d-flex flex-row justify-content-between m-2 p-2">
@@ -327,17 +470,34 @@ class HomeTasks extends Component {
                         </div>
                         <div className="general-pagination-bar">
                             <div className="buttons-inline">
-                                <button type="button" className="general-outline-button" data-bs-toggle="modal" data-bs-target="#exampleModal">Нове завдання</button>
+                                <button type="button" className="general-outline-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    Нове завдання
+                                </button>
                                 {/* <button className="general-outline-button" onClick={() => this.getGivenStudentHomeworks(this.state.studentId)}>На перевірці</button> */}
-                                <button className="general-outline-button" onClick={() => this.onCheckingClick()}>
+                                <button className="general-outline-button" onClick={() => this.getTeacherGivenHomeworks()}>
                                     <div className="tip-amount">
                                         <div className="number">
-                                            {this.state.studentHomeworksToCheckAmount}
+                                            {this.state.givenTasksAmount}
+                                        </div>
+                                    </div>
+                                    Задані
+                                </button>
+                                <button className="general-outline-button button-static" onClick={() => this.getStudentsHomeworksToCheck()}>
+                                    <div className="tip-amount">
+                                        <div className="number">
+                                            {this.state.toCheckTasksAmount}
                                         </div>
                                     </div>
                                     На перевірці
                                 </button>
-                                <button className="general-outline-button">Перевірені</button>
+                                <button className="general-outline-button" onClick={() => this.getCheckedStudentsHomeworksTasks()}>
+                                    <div className="tip-amount">
+                                        <div className="number">
+                                            {this.state.checkedTasksAmount}
+                                        </div>
+                                    </div>
+                                    Перевірені
+                                </button>
                             </div>
                             <div className="d-flex flex-row align-items-center">
                                 <svg style={{ transform: "rotate(180deg)" }} width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -366,11 +526,32 @@ class HomeTasks extends Component {
                         </div>
 
                         <div>
-                            {this.state.studentHomeworksToCheck}
+                            <div id="givenHomeworks" className="cards-container">
+                                <div id="cards" className="cards">
+                                        {this.state.teacherGivenHomeworks?.map(homework =>
+                                            <TeacherHomeworkCard key={"given_" + homework.taskId} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="given"></TeacherHomeworkCard>
+                                        )}
+                                </div>
+                            </div>
+                            <div id="on-checkingHomeworks" className="cards-container">
+                                <div id="cards" className="cards">
+                                        {this.state.studentHomeworksToCheck?.map(homework =>
+                                            <TeacherHomeworkCard key={"on-checking_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="on-checking"></TeacherHomeworkCard>
+                                        )}
+                                </div>
+                            </div>
+                            <div id="checkedHomeworks" className="cards-container">
+                                <div id="cards" className="cards">
+                                        {this.state.studentCheckedHomeworks?.map(homework =>
+                                            <TeacherHomeworkCard key={"checked_" + homework.taskId} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="given"></TeacherHomeworkCard>
+                                        )}
+                                </div>
+                            </div>
+                            {/* {this.state.tasksToDisplay} */}
                         </div>
 
                         <div id="modalNewHomeTaskWindow">
-                            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-none="true">
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
@@ -423,7 +604,7 @@ class HomeTasks extends Component {
                                                 </div>
                                             </div>
                                             <div className="modal-footer">
-                                                <button type="submit" className="btn btn-primary">Відправити</button>
+                                                <button type="submit" className="general-button">Відправити</button>
                                                 {/* <button type="submit" className="btn btn-primary" onClick={() => this.uploadHomework()}>Відправити</button> */}
                                             </div>
                                         </form>
@@ -432,7 +613,7 @@ class HomeTasks extends Component {
                             </div>
                         </div>
                         <div id="modalRatingStudentHomework">
-                            <div className="modal fade" id="ratingStudentHomework" tabIndex="-1" aria-labelledby="ratingStudentHomeworkLabel" aria-hidden="true">
+                            <div className="modal fade" id="ratingStudentHomework" tabIndex="-1" aria-labelledby="ratingStudentHomeworkLabel" aria-none="true">
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">

@@ -70,7 +70,7 @@ class Tasks extends Component {
 
                 <div className="flex-container">
                     <div className="navigationSide">
-                        <GeneralNavigationBar role={this.props.credentials.roles} />
+                        <GeneralNavigationBar menuItemToSelect={1} role={this.props.credentials.roles} />
                     </div>
                     <div className="generalSide">
                         <div className="d-flex flex-row justify-content-between m-2 p-2">

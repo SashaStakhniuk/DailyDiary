@@ -24,10 +24,10 @@ namespace DailyDiary.Models.DbModels
         public DateTime PassedDate { get; set; } // дата завантаження домашки
         public string StudentComment { get; set; }
         public int TeacherId { get; set; }
-        //public string TeacherComment { get; set; }
+        public string TeacherComment { get; set; }
 
         public int Mark { get; set; } // оцінка
-        //public DateTime CheckedDate { get; set; } // дата перевірки домашки
+        public DateTime CheckedDate { get; set; } // дата перевірки домашки
 
         public Subject Subject { get; set; }
         public Subgroup Group { get; set; }
