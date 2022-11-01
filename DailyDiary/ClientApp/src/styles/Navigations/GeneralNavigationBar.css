@@ -101,6 +101,16 @@
     fill: var(--violet);
 }
 
+/* .iconsStyle {
+    stroke: var(--violet);
+    fill: var(--violet);
+    color: var(--background);
+} */
+
+/* .general-menu-ul>li>a>svg>path {
+   
+} */
+
 /* текст */
 
 .general-menu-ul>li>a>span {
@@ -132,7 +142,7 @@
 
     height: 40px;
 
-    width: 60px;    
+    width: 60px;
     border-radius: 5px;
 
     font-family: 'Inter';
@@ -144,16 +154,19 @@
     cursor: pointer;
     background-color: var(--violet);
 }
+
 .general-nav-bar:hover #menu-item-active {
     width: 226px;
     border-radius: 16px;
 }
+
 #menu-item-active>a>svg {
     fill: var(--background);
     color: var(--background);
     width: 32px;
     height: 32px;
 }
+
 #menu-item-active>a>span {
     color: var(--background);
 }
@@ -215,10 +228,11 @@
 /*_________________________________________________Max-width 600px______________________*/
 @media screen and (max-width: 600px) {
 
-    #menu-item-active{
+    #menu-item-active {
         width: 60px;
         border-radius: 5px;
     }
+
     .general-nav-bar:hover {
         width: 70px;
     }

@@ -26,6 +26,9 @@ class HomeTasks extends Component {
 
         this.state = {
             studentHomeworkToRateId: 0,
+            studentHomeworkToRateMark:undefined,
+            studentHomeworkToRateTeacherComment:"",
+
 
             tasksToDisplay: <></>,
 
@@ -82,18 +85,21 @@ class HomeTasks extends Component {
         var checkedHomeworks=document.getElementById("checkedHomeworks");
         if(+index===0){
             givenHomeworks.style.display = "block"
+            // givenHomeworks.style.animation = "fade 1s ease-in 1s"
             onCheckingHomeworks.style.display = "none"
             checkedHomeworks.style.display = "none"
         }
         if(+index===1){
             givenHomeworks.style.display = "none"
             onCheckingHomeworks.style.display = "block"
+            // onCheckingHomeworks.style.animation = "fade 1s ease-in 1s"
             checkedHomeworks.style.display = "none"
         }
         if(+index===2){
             givenHomeworks.style.display = "none"
             onCheckingHomeworks.style.display = "none"
             checkedHomeworks.style.display = "block"
+            // checkedHomeworks.style.animation = "fade 1s ease-in 1s"
         }
         // var cards = document.getElementById('cards');
         // for (let i = 0; i < cards.children; i++) {
@@ -106,8 +112,11 @@ class HomeTasks extends Component {
         // }
     }
 
-    async getTeacherGivenHomeworks() {
+    async getTeacherGivenHomeworks(e) {
         try {
+            if(e){
+                this.onButtonTasksClick(e);
+            }
             this.hideCards(0);
             const response = await fetch(`${Host}/api/teacher/getTeacherGivenHomeworks/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
             if (response.ok === true) {
@@ -140,9 +149,12 @@ class HomeTasks extends Component {
             window.alert(e);
         }
     }
-    async getStudentsHomeworksToCheck() {
+    async getStudentsHomeworksToCheck(e) {
         try {
             this.hideCards(1);
+            if(e){
+                this.onButtonTasksClick(e);
+            }
             const response = await fetch(`${Host}/api/teacher/getStudentsHomeworksToCheck/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
             if (response.ok === true) {
                 const data = await response.json();
@@ -174,9 +186,12 @@ class HomeTasks extends Component {
             window.alert(e);
         }
     }
-    async getCheckedStudentsHomeworksTasks() {
+    async getCheckedStudentsHomeworksTasks(e) {
         try {
             this.hideCards(2);
+            if(e){
+                this.onButtonTasksClick(e);
+            }
             const response = await fetch(`${Host}/api/teacher/getCheckedStudentsHomeworksTasks/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
             if (response.ok === true) {
                 const data = await response.json();
@@ -379,11 +394,22 @@ class HomeTasks extends Component {
             , () => this.uploadHomework())
 
     }
-    rateStudentHomework(studentHomeworkId) {
+    rateStudentHomework(studentHomeworkId,mark,teacherComment) {
         // console.log(studentHomeworkId);
-        this.setState({
-            studentHomeworkToRateId: studentHomeworkId
-        })
+        if(mark!==undefined && teacherComment!==undefined ){
+            this.setState({
+                studentHomeworkToRateId: studentHomeworkId,
+                studentHomeworkToRateMark: mark,
+                studentHomeworkToRateTeacherComment: teacherComment
+            })
+        }
+        else{
+            this.setState({
+                studentHomeworkToRateId: studentHomeworkId,
+                studentHomeworkToRateMark: 0,
+                studentHomeworkToRateTeacherComment: ""
+            })
+        }      
     }
     onStudentHomeworkRateSubmit = async (e) => {
         e.preventDefault();
@@ -418,6 +444,17 @@ class HomeTasks extends Component {
             window.alert(e)
         }
 
+    }
+    onButtonTasksClick = (e) => {
+        // console.log(e.currentTarget.parentNode.children);
+        var buttons = Array.from(e.currentTarget.parentNode.children);
+        // console.log(buttons)
+        for (let i = 1; i < buttons.length; i++) {
+            buttons[i].className="general-outline-button"
+            if(buttons[i] === e.currentTarget){
+                buttons[i].className="general-outline-button button-static"
+            }
+        }
     }
     render() {
         let subjects = <select className="form-select" name="subject" id="subject" defaultValue={this.state.selectedSubjectId} onChange={e => this.onSubjectChange(e)}>
@@ -474,7 +511,7 @@ class HomeTasks extends Component {
                                     Нове завдання
                                 </button>
                                 {/* <button className="general-outline-button" onClick={() => this.getGivenStudentHomeworks(this.state.studentId)}>На перевірці</button> */}
-                                <button className="general-outline-button" onClick={() => this.getTeacherGivenHomeworks()}>
+                                <button className="general-outline-button" onClick={(e) => this.getTeacherGivenHomeworks(e)}>
                                     <div className="tip-amount">
                                         <div className="number">
                                             {this.state.givenTasksAmount}
@@ -482,7 +519,7 @@ class HomeTasks extends Component {
                                     </div>
                                     Задані
                                 </button>
-                                <button className="general-outline-button button-static" onClick={() => this.getStudentsHomeworksToCheck()}>
+                                <button className="general-outline-button button-static" onClick={(e) => this.getStudentsHomeworksToCheck(e)}>
                                     <div className="tip-amount">
                                         <div className="number">
                                             {this.state.toCheckTasksAmount}
@@ -490,7 +527,7 @@ class HomeTasks extends Component {
                                     </div>
                                     На перевірці
                                 </button>
-                                <button className="general-outline-button" onClick={() => this.getCheckedStudentsHomeworksTasks()}>
+                                <button className="general-outline-button" onClick={(e) => this.getCheckedStudentsHomeworksTasks(e)}>
                                     <div className="tip-amount">
                                         <div className="number">
                                             {this.state.checkedTasksAmount}
@@ -543,7 +580,7 @@ class HomeTasks extends Component {
                             <div id="checkedHomeworks" className="cards-container">
                                 <div id="cards" className="cards">
                                         {this.state.studentCheckedHomeworks?.map(homework =>
-                                            <TeacherHomeworkCard key={"checked_" + homework.taskId} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="given"></TeacherHomeworkCard>
+                                            <TeacherHomeworkCard key={"checked_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="checked"></TeacherHomeworkCard>
                                         )}
                                 </div>
                             </div>
@@ -551,7 +588,7 @@ class HomeTasks extends Component {
                         </div>
 
                         <div id="modalNewHomeTaskWindow">
-                            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-none="true">
+                            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"  >
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
@@ -613,7 +650,7 @@ class HomeTasks extends Component {
                             </div>
                         </div>
                         <div id="modalRatingStudentHomework">
-                            <div className="modal fade" id="ratingStudentHomework" tabIndex="-1" aria-labelledby="ratingStudentHomeworkLabel" aria-none="true">
+                            <div className="modal fade" id="ratingStudentHomework" tabIndex="-1" aria-labelledby="ratingStudentHomeworkLabel"  >
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
@@ -625,11 +662,11 @@ class HomeTasks extends Component {
                                             <div className="modal-body modal-body-content">
                                                 <div>
                                                     <label htmlFor="mark" style={{ marginRight: "20px" }}>Оцінка:</label>
-                                                    <input type="number" min="0" max="100" step="1" id="mark" name="mark" required></input>
+                                                    <input type="number" min="0" max="100" step="1" id="mark" defaultValue={this.state.studentHomeworkToRateMark} name="mark" required></input>
                                                 </div>
                                                 <div>
                                                     <label htmlFor="comment">Додати коментар</label>
-                                                    <textarea className="form-control" id="comment" name="comment"></textarea>
+                                                    <textarea className="form-control" id="comment" defaultValue={this.state.studentHomeworkToRateTeacherComment} name="comment"></textarea>
                                                 </div>
                                             </div>
                                             <div className="modal-footer">

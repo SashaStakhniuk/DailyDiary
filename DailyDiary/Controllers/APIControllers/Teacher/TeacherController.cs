@@ -571,7 +571,7 @@ namespace DailyDiary.Controllers.APIControllers
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "MainAdmin,Admin,Teacher")]
-        public async Task<IActionResult> RateStudentHomeworkAsync(StudentsWorkToCheckViewModel model)
+        public async Task<IActionResult> RateStudentHomeworkAsync(StudentsWorkToCheckViewModel model) //оцінка роботи студента. При "переоцінці" дані просто перезаписуються
         {
             try
             {
@@ -681,7 +681,7 @@ namespace DailyDiary.Controllers.APIControllers
                             .Where(x => x.TaskId == task.TaskId && x.TeacherId==teacher.Id && x.Mark!=null)
                             .Select(x => new StudentsWorkToCheckViewModel
                             {
-                                TaskId = task.Id,
+                                TaskId = task.TaskId,
                                 PublishDate = task.PublishDate,
                                 Deadline = task.Deadline,
                                 Theme = task.Theme,
@@ -727,6 +727,7 @@ namespace DailyDiary.Controllers.APIControllers
                             //    }
                             //}
                         }
+                    studentsCheckedHomeworks = studentsCheckedHomeworks.OrderByDescending(x => x.CheckedDate).ToList();
                     return Ok(studentsCheckedHomeworks);
                 }
                 else

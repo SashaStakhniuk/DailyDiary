@@ -16,7 +16,7 @@ class Admin extends Component {
 
                 <div className="flex-container">
                     <div className="navigationSide">
-                        <GeneralNavigationBar />
+                        <GeneralNavigationBar role={this.props.credentials.roles} menuItemToSelect={0} />
                     </div>
                     <div className="generalSide">
                         <div className="d-flex justify-content-around">
