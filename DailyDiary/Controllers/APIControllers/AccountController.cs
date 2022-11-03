@@ -105,11 +105,6 @@ namespace DailyDiary.Controllers.APIControllers
             }
             return BadRequest(model);
         }
-        //public IActionResult Register()
-        //{
-        //    RegisterViewModel model = new RegisterViewModel();
-        //    return View(model);
-        //}
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)

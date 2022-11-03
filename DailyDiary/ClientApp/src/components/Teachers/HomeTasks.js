@@ -26,8 +26,8 @@ class HomeTasks extends Component {
 
         this.state = {
             studentHomeworkToRateId: 0,
-            studentHomeworkToRateMark:undefined,
-            studentHomeworkToRateTeacherComment:"",
+            studentHomeworkToRateMark: undefined,
+            studentHomeworkToRateTeacherComment: "",
 
 
             tasksToDisplay: <></>,
@@ -80,22 +80,22 @@ class HomeTasks extends Component {
     }
 
     hideCards = (index) => {
-        var givenHomeworks=document.getElementById("givenHomeworks");
-        var onCheckingHomeworks=document.getElementById("on-checkingHomeworks");
-        var checkedHomeworks=document.getElementById("checkedHomeworks");
-        if(+index===0){
+        var givenHomeworks = document.getElementById("givenHomeworks");
+        var onCheckingHomeworks = document.getElementById("on-checkingHomeworks");
+        var checkedHomeworks = document.getElementById("checkedHomeworks");
+        if (+index === 0) {
             givenHomeworks.style.display = "block"
             // givenHomeworks.style.animation = "fade 1s ease-in 1s"
             onCheckingHomeworks.style.display = "none"
             checkedHomeworks.style.display = "none"
         }
-        if(+index===1){
+        if (+index === 1) {
             givenHomeworks.style.display = "none"
             onCheckingHomeworks.style.display = "block"
             // onCheckingHomeworks.style.animation = "fade 1s ease-in 1s"
             checkedHomeworks.style.display = "none"
         }
-        if(+index===2){
+        if (+index === 2) {
             givenHomeworks.style.display = "none"
             onCheckingHomeworks.style.display = "none"
             checkedHomeworks.style.display = "block"
@@ -114,7 +114,7 @@ class HomeTasks extends Component {
 
     async getTeacherGivenHomeworks(e) {
         try {
-            if(e){
+            if (e) {
                 this.onButtonTasksClick(e);
             }
             this.hideCards(0);
@@ -152,7 +152,7 @@ class HomeTasks extends Component {
     async getStudentsHomeworksToCheck(e) {
         try {
             this.hideCards(1);
-            if(e){
+            if (e) {
                 this.onButtonTasksClick(e);
             }
             const response = await fetch(`${Host}/api/teacher/getStudentsHomeworksToCheck/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
@@ -189,7 +189,7 @@ class HomeTasks extends Component {
     async getCheckedStudentsHomeworksTasks(e) {
         try {
             this.hideCards(2);
-            if(e){
+            if (e) {
                 this.onButtonTasksClick(e);
             }
             const response = await fetch(`${Host}/api/teacher/getCheckedStudentsHomeworksTasks/details?teacherId=${this.state.teacherId}&&subgroupId=${this.state.selectedSubgroupId}`);
@@ -394,22 +394,22 @@ class HomeTasks extends Component {
             , () => this.uploadHomework())
 
     }
-    rateStudentHomework(studentHomeworkId,mark,teacherComment) {
+    rateStudentHomework(studentHomeworkId, mark, teacherComment) {
         // console.log(studentHomeworkId);
-        if(mark!==undefined && teacherComment!==undefined ){
+        if (mark !== undefined && teacherComment !== undefined) {
             this.setState({
                 studentHomeworkToRateId: studentHomeworkId,
                 studentHomeworkToRateMark: mark,
                 studentHomeworkToRateTeacherComment: teacherComment
             })
         }
-        else{
+        else {
             this.setState({
                 studentHomeworkToRateId: studentHomeworkId,
                 studentHomeworkToRateMark: 0,
                 studentHomeworkToRateTeacherComment: ""
             })
-        }      
+        }
     }
     onStudentHomeworkRateSubmit = async (e) => {
         e.preventDefault();
@@ -450,9 +450,9 @@ class HomeTasks extends Component {
         var buttons = Array.from(e.currentTarget.parentNode.children);
         // console.log(buttons)
         for (let i = 1; i < buttons.length; i++) {
-            buttons[i].className="general-outline-button"
-            if(buttons[i] === e.currentTarget){
-                buttons[i].className="general-outline-button button-static"
+            buttons[i].className = "general-outline-button"
+            if (buttons[i] === e.currentTarget) {
+                buttons[i].className = "general-outline-button button-static"
             }
         }
     }
@@ -503,7 +503,6 @@ class HomeTasks extends Component {
                                 </div>
 
                             </div>
-
                         </div>
                         <div className="general-pagination-bar">
                             <div className="buttons-inline">
@@ -565,23 +564,23 @@ class HomeTasks extends Component {
                         <div>
                             <div id="givenHomeworks" className="cards-container">
                                 <div id="cards" className="cards">
-                                        {this.state.teacherGivenHomeworks?.map(homework =>
-                                            <TeacherHomeworkCard key={"given_" + homework.taskId} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="given"></TeacherHomeworkCard>
-                                        )}
+                                    {this.state.teacherGivenHomeworks?.map(homework =>
+                                        <TeacherHomeworkCard key={"given_" + homework.taskId} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="given"></TeacherHomeworkCard>
+                                    )}
                                 </div>
                             </div>
                             <div id="on-checkingHomeworks" className="cards-container">
                                 <div id="cards" className="cards">
-                                        {this.state.studentHomeworksToCheck?.map(homework =>
-                                            <TeacherHomeworkCard key={"on-checking_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="on-checking"></TeacherHomeworkCard>
-                                        )}
+                                    {this.state.studentHomeworksToCheck?.map(homework =>
+                                        <TeacherHomeworkCard key={"on-checking_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="on-checking"></TeacherHomeworkCard>
+                                    )}
                                 </div>
                             </div>
                             <div id="checkedHomeworks" className="cards-container">
                                 <div id="cards" className="cards">
-                                        {this.state.studentCheckedHomeworks?.map(homework =>
-                                            <TeacherHomeworkCard key={"checked_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="checked"></TeacherHomeworkCard>
-                                        )}
+                                    {this.state.studentCheckedHomeworks?.map(homework =>
+                                        <TeacherHomeworkCard key={"checked_" + homework.id} task={homework} rateStudentHomework={this.rateStudentHomework} taskType="checked"></TeacherHomeworkCard>
+                                    )}
                                 </div>
                             </div>
                             {/* {this.state.tasksToDisplay} */}

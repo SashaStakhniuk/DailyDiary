@@ -4,10 +4,16 @@ import { Host } from "../Host"
 import GeneralNavigationBar from "../Navigations/GeneralNavigationBar";
 // import setUserCredentials from '../../redux/action_creators/SetUserCredentials';
  import GeneralHeader from "../Headers/GeneralHeader";
+//  import jwt_decode from "jwt-decode";
 
 class Admin extends Component {
     constructor(props) {
         super(props)
+    }
+    componentDidMount(){
+        //  console.log(JSON.parse(Buffer.from(this.props.credentials.tokenKey.split('.')[1], 'base64').toString()));
+        // var decoded = jwt_decode(this.props?.credentials?.tokenKey);
+        // console.log(decoded);
     }
     render() {
         return (
@@ -30,10 +36,10 @@ class Admin extends Component {
                                 <a href="/admin/new-study-year" className="btn">New study year</a>
                             </div>
                             <div className="m-3">
-                                <a href="/admin/edit-group" className="btn">Find group</a>
+                                <a href="/admin/groups" className="btn">Усі групи</a>
                             </div>
                             <div className="m-3">
-                                <a href="/admin/edit-groups" className="btn">Редагування груп</a>
+                                <a href="/admin/edit-group" className="btn">Редагування груп</a>
                             </div>
                             <div className="m-3">
                                 <a href="/admin/new-study-plan" className="btn">New Study plan</a>

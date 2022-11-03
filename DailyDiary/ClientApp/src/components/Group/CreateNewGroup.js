@@ -9,6 +9,7 @@ class CreateNewGroup extends React.Component {
         this.getFreeAuditories = this.getFreeAuditories.bind(this);
         this.getGroupsAuditories = this.getGroupsAuditories.bind(this);
         this.getYearsOfStudyCurrentStudyYear = this.getYearsOfStudyCurrentStudyYear.bind(this);
+        
         this.onYearOfStudyChange = this.onYearOfStudyChange.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
         this.create = this.create.bind(this);
@@ -29,7 +30,7 @@ class CreateNewGroup extends React.Component {
         }
     };
     componentDidMount() {
-        if (this.props.location.state != undefined) {
+        if (this.props.location.state !== undefined) {
             console.log(this.props.location.state)
             this.setState({
                 groupId: this.props.location.state.group.groupId,

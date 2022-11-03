@@ -96,8 +96,15 @@ class HomeworkCard extends React.Component {
         if (this.state.homework != null) {
             var obj = document.createElement('object');
 
-            obj.style.width = '100%';
-            obj.style.height = '100vh';
+            // obj.style.width = '100%';
+            // obj.style.height = '100vh';
+            obj.style = `
+            width:100%;
+            height:100vh;
+            position:absolute;
+            top:0;
+            left:0;
+            `
 
             obj.type = this.state.homework.fileType;
             obj.data = `data:${this.state.homework.fileType};base64,` + this.state.homework.file;

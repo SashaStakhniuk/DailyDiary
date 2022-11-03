@@ -80,9 +80,9 @@ const Root = () => {
 
 
                     {/* <Route exact path="/admin/groups"><AllGroups/></Route> */}
-                    <Route exact path="/admin/edit-group"><EditGroup/></Route> {/*Список усіх груп із необхідними даними теперішнього навчального року*/}
+                    <Route exact path="/admin/groups"><EditGroup/></Route> {/*Список усіх груп із необхідними даними теперішнього навчального року*/}
 
-                    <Route exact path="/admin/edit-groups"><FullGroupEditing/></Route> {/* додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах */}
+                    <Route exact path="/admin/edit-group" component={FullGroupEditing}></Route> {/* додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах */}
                     
                     <Route exact path="/admin/createoreditshedule"><CreateOdEditShedule/></Route> {/* створення та редагування розкладу */}
 
