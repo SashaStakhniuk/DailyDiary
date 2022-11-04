@@ -47,6 +47,7 @@ class GroupEditing extends React.Component { //розбиття студенті
         this.state = {
             groupId: 0,// ід групи
             subgroupId: 0, // ід підгрупи
+            studentToAddGroupId: 0,// ід підгрупи для додання студентів
 
             isCurrentDisplaySubgroup: false,
 
@@ -81,7 +82,8 @@ class GroupEditing extends React.Component { //розбиття студенті
             console.log("this.props.location.state", this.props.location.state)
 
             this.setState({
-                groupId: recievedGroupId
+                groupId: recievedGroupId,
+                studentToAddGroupId: recievedGroupId
                 // title: this.props.location.state.group.groupTitle,
                 // yearOfStudyId: this.props.location.state.group.yearOfStudyId,
                 // studyPlanId: this.props.location.state.group.studyPlanId,
@@ -229,7 +231,9 @@ class GroupEditing extends React.Component { //розбиття студенті
             alert("Selected students id:  " + this.state.studentsToAddId);
         }
     }
-    onSelectStudentToGroup = (studentId) => {
+    onSelectStudentToGroup = (e) => {
+        const studentId = e.target.value;
+
         const indexOfExistingStudentId = this.state.studentsToGroupAddId.indexOf(studentId);
         if (indexOfExistingStudentId === -1) {
             this.setState(previousState => ({
@@ -258,15 +262,12 @@ class GroupEditing extends React.Component { //розбиття студенті
             alert("No one student selected!");
         }
         else {
-            const groupId = document.getElementById('group');
-            if (groupId == undefined) {
+            // const groupId = document.getElementById('group');
+            if (this.state.studentToAddGroupId === undefined || +this.state.studentToAddGroupId === 0) {
                 alert("Group not found");
                 return 0;
             }
-            this.setState({
-                groupId: groupId.value,
-            },
-                () => this.addStudentsIntoGroup())
+            this.addStudentsIntoGroup()
 
             alert("Selected students id:  " + this.state.studentsToGroupAddId);
         }
@@ -475,7 +476,7 @@ class GroupEditing extends React.Component { //розбиття студенті
     async addStudentsIntoGroup() {
         try {
             const datasToSend = {
-                groupId: this.state.groupId,
+                groupId: this.state.studentToAddGroupId,
                 studentsId: this.state.studentsToGroupAddId
             }
             const response = await fetch(`${Host}/api/student/addStudentsIntoGroup`, {
@@ -594,6 +595,15 @@ class GroupEditing extends React.Component { //розбиття студенті
         this.getGroupSubgroups(e.target.value)
         this.getAllStudentsByGroupId(e.target.value);
     }
+
+    onModalGroupChange(e) {
+        // console.log(e.target.value);
+
+        this.setState({
+            studentToAddGroupId: e.target.value,
+        })
+    }
+
     onSubgroupChange(e) {
         this.setState({
             subgroupId: e.target.value
@@ -763,6 +773,32 @@ class GroupEditing extends React.Component { //розбиття студенті
         //         }
         //     })
         // }
+    }
+    onFindStudentModal = (e) => {
+        // console.log(e.target.value)
+        var studentTitle = e.target.value.toLowerCase();
+
+        const modalStudentsList = document.getElementById('modalStudentsList');
+
+        var items = modalStudentsList?.children;
+        var students = this.state.studentsWithoutGroup.filter(x => x.name.toLowerCase().includes(studentTitle) || x.middleName.toLowerCase().includes(studentTitle) || x.lastName.toLowerCase().includes(studentTitle))
+
+        console.log(students)
+
+        if (modalStudentsList?.children.length > 0) {
+
+            for (let i = 0; i < items.length; i++) {
+                items[i].style.display = "none";
+            }
+            students.forEach(student => {
+                for (let j = 0; j < items.length; j++) {
+                    if (items[j].id == "modalStudent_" + student.studentId) {
+                        items[j].style.display = "flex";
+                        break;
+                    }
+                }
+            })
+        }
     }
     render() {
         return (
@@ -936,9 +972,59 @@ class GroupEditing extends React.Component { //розбиття студенті
                                         </div>
                                         <div>
                                             <div className="modal-body modal-body-content">
+                                                <div>
+                                                    <input type="search" className="form-control" placeholder='Шукати студента' onChange={(e) => this.onFindStudentModal(e)}></input>
+                                                </div>
+                                                <div>
+                                                    <div style={{ margin: "0px 0px 10px 0px" }}>Група:</div>
+
+                                                    <select className="form-control" value={this.state.studentToAddGroupId} onChange={(e) => this.onModalGroupChange(e)}>
+                                                        {this.state.groups.map(group =>
+                                                            <option key={"group_" + group.groupId} value={group.groupId}>{group.groupTitle}</option>
+                                                        )}
+                                                    </select>
+                                                </div>
                                                 {/*________________Список студентів без групи_________________________*/}
-                                                <div style={{ margin: "0px 0px 0px 20px" }}>Список нерозподілених студентів:</div>
-                                                <div id="groupStudents" className="cards-container">
+                                                <div style={{ margin: "0px 0px 10px 0px" }}>Список нерозподілених студентів:</div>
+                                                {this.state.studentsWithoutGroup.length > 0 ?
+                                                    // <select className="form-control" onChange={(e) => this.onSelectStudentToGroup(e)}>
+                                                    //     {this.state?.studentsWithoutGroup?.map(student =>
+                                                    //     (
+                                                    //         // <StudentsTable key={"student_" + student.studentId} onStudentSelect={this.onSelectStudentToGroup} student={student} withoutGroup={true}></StudentsTable>
+                                                    //         <option key={"student_" + student.studentId} value={student.studentId}>
+                                                    //             {student.name + " " + student.middleName + " " + student.lastName + ", дн: " + new Date(student.birthday).toLocaleDateString()}
+                                                    //         </option>
+                                                    //     )
+                                                    //     )}
+
+                                                    // </select>
+
+                                                    <div id="modalStudentsList" className="checkBoxs-container checkBox-text-thinner">
+                                                        {
+                                                            this.state?.studentsWithoutGroup?.map(student =>
+                                                                <label key={"student_" + student.studentId} id={"modalStudent_" + student.studentId} className="check-container">
+                                                                    <div className='checkBox-text-hover'>
+                                                                        {student.name + " " + student.middleName + " " + student.lastName + ", дн: " + new Date(student.birthday).toLocaleDateString()}
+                                                                    </div>
+                                                                    <div style={{ position: "absolute", top: "2px", right: "0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                                        <input type="checkbox" id={"student_" + student.studentId} name="students" value={student.studentId} onClick={(e) => this.onSelectStudentToGroup(e)} />
+                                                                        <span className="check-checkmark"></span>
+                                                                    </div>
+                                                                </label>
+                                                                // <div key={"student_" + student.studentId} className="row-cols-1-3-view">
+                                                                //     <input type="checkbox" id={"student_" + student.studentId} name="students" value={student.studentId} />
+                                                                //     <label htmlFor={"student_" + student.studentId}>
+                                                                //         {student.name + " " + student.middleName + " " + student.lastName + ", дн: " + new Date(student.birthday).toLocaleDateString()}
+                                                                //     </label>
+                                                                // </div>
+                                                            )
+                                                        }
+                                                    </div>
+
+                                                    :
+                                                    <></>
+                                                }
+                                                {/* <div id="groupStudents" className="cards-container">
                                                     <div className="cards">
                                                         {this.state.studentsWithoutGroup.length > 0 ?
                                                             this.state?.studentsWithoutGroup?.map(student =>
@@ -948,7 +1034,7 @@ class GroupEditing extends React.Component { //розбиття студенті
                                                             <></>
                                                         }
                                                     </div>
-                                                </div>
+                                                </div> */}
                                                 {/* <button className='btn btn-primary justify-self-end' onClick={this.getDatasToGroupAdd}>Add selected in group</button> */}
                                                 {/*________________Список студентів без групи_________________________*/}
                                             </div>

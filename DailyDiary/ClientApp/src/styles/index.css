@@ -1,11 +1,91 @@
 @import url('Colors.css');
 
-hr{
-    width:100%;
-    border: 4px solid var(--violet);
-    border-radius: 5px;
-    opacity: 1;
+/*_______________________________________checkbox_______________________________________*/
+.checkBoxs-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--violet);
+    border-radius: 16px;
+    padding: 10px;
 }
+
+.check-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 5px;
+
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.check-container input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    cursor: pointer;
+    /* height: 25px;
+    width: 25px; */
+}
+
+/* Create a custom checkbox */
+.check-checkmark {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 17px;
+    width: 17px;
+    border-radius: 3px;
+    border: 1px solid var(--violet);
+    background-color: var(--white);
+}
+
+/* On mouse-over, add a grey background color */
+/* .check-container:hover input~.check-checkmark {
+    background-color: var();
+} */
+
+/* When the checkbox is checked, add a blue background */
+.check-container input:checked~.check-checkmark {
+    background-color: var(--white);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.check-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.check-container input:checked~.check-checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.check-container .check-checkmark:after {
+    position: absolute;
+    top: 1px;
+    right: 4px;
+    width: 7px;
+    height: 10px;
+
+    border: solid var(--orange);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/*_______________________________________checkbox_______________________________________*/
 .flex-container {
     width: 100%;
     display: flex;
@@ -37,34 +117,36 @@ hr{
     right: 0;
     bottom: 0;
 } */
-.general-info-actions-bar{
+.general-info-actions-bar {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    min-width:300px;
+    min-width: 300px;
     height: 66px;
     /* margin-top: 44px; */
     margin-bottom: 5px;
     padding: 20px 0px 12px 0px;
 }
-.general-info-actions-bar-text-bold{
+
+.general-info-actions-bar-text-bold {
     width: 102px;
     height: 30px;
-    
+
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 800;
     font-size: 32px;
     line-height: 30px;
 }
+
 .general-pagination-bar {
     /*-60px*/
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    min-width:300px;
+    min-width: 300px;
     height: 66px;
     min-height: 66px;
     /* margin-top: 44px; */
@@ -204,10 +286,10 @@ hr{
     font-weight: 800;
 }
 
-.tip-amount{
+.tip-amount {
     position: absolute;
-    top:-10px;
-    right:-10px;
+    top: -10px;
+    right: -10px;
     z-index: 2;
     display: flex;
     justify-content: center;
@@ -217,10 +299,12 @@ hr{
     border-radius: 50%;
     background-color: var(--orange);
 }
-.tip-amount .number{
-   font-size: 12px;
-   color: var(--white);
+
+.tip-amount .number {
+    font-size: 12px;
+    color: var(--white);
 }
+
 /*___________________________Select________________________*/
 
 /* .general-select select {
@@ -394,7 +478,7 @@ hr{
 }
 
 @media only screen and (max-width: 992px) {
-    .general-pagination-bar{
+    .general-pagination-bar {
         /*-60px*/
         display: flex;
         flex-direction: column;
@@ -402,6 +486,7 @@ hr{
         height: 100px;
         min-height: 100px;
     }
+
     /* .general-info-actions-bar {
         display: flex;
         flex-direction: column;
@@ -412,7 +497,7 @@ hr{
 }
 
 @media only screen and (max-width: 680px) {
-    .general-pagination-bar{
+    .general-pagination-bar {
         /*-60px*/
         display: flex;
         flex-direction: column;
@@ -420,6 +505,7 @@ hr{
         height: 150px;
         min-height: 150px;
     }
+
     /* .general-info-actions-bar {
         display: flex;
         flex-direction: column;
@@ -435,8 +521,9 @@ hr{
         align-items: center;
     }
 }
+
 @media only screen and (max-width: 450px) {
-    .general-pagination-bar{
+    .general-pagination-bar {
         /*-60px*/
         display: flex;
         flex-direction: column;
@@ -444,6 +531,7 @@ hr{
         height: 250px;
         min-height: 250px;
     }
+
     /* .general-info-actions-bar {
         display: flex;
         flex-direction: column;
