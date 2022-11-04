@@ -15,6 +15,8 @@ class EditGroup extends React.Component {
         this.getAllStudyPlansByYearOfStudyId = this.getAllStudyPlansByYearOfStudyId.bind(this);
         this.getFreeAuditories = this.getFreeAuditories.bind(this);
         this.createNewGroup = this.createNewGroup.bind(this);
+        this.editGroupData = this.editGroupData.bind(this); // редагування даних групи
+
 
         this.state = {
             groupId: 0,
@@ -22,6 +24,9 @@ class EditGroup extends React.Component {
             yearOfStudyId: 0,
             studyPlanId: 0,
             preferedAuditoryId: 0,
+            auditoryTitle: "",
+
+            edit: false,
 
             studyPlans: [],
             auditories: [],
@@ -42,6 +47,17 @@ class EditGroup extends React.Component {
             if (response.ok === true) {
                 const data = await response.json();
                 console.log("recieved groups: ", data)
+                data.sort((a, b) => {
+                    const titelA = a.groupTitle.toUpperCase(); 
+                    const titelB = b.groupTitle.toUpperCase(); 
+                    if (titelA < titelB) {
+                      return -1;
+                    }
+                    if (titelA > titelB) {
+                      return 1;
+                    }
+                    return 0;
+                  });
                 this.setState({
                     groups: data
                 })
@@ -62,11 +78,19 @@ class EditGroup extends React.Component {
             if (response.ok === true) {
                 const data = await response.json();
                 console.log("recieved yearsofStudy: ", data)
-                this.setState({
-                    yearsOfStudy: data
-                }
-                    , () => this.getAllStudyPlansByYearOfStudyId(data[0].id)
+                this.setState(prevState=>({
+                    yearsOfStudy: data,
+                    yearOfStudyId:prevState.yearOfStudyId>0? prevState.yearOfStudyId:data[0].id
+                    // studyPlanId: data[0].id
+                })
+                       // , () => this.getAllStudyPlansByYearOfStudyId(data[0].id)
                 )
+                // this.setState({
+                //     yearsOfStudy: data
+
+                // }
+                //     // , () => this.getAllStudyPlansByYearOfStudyId(data[0].id)
+                // )
             }
             else {
                 const data = await response.text();
@@ -84,8 +108,8 @@ class EditGroup extends React.Component {
                 const data = await response.json();
                 console.log("recieved studyPlans: ", data)
                 this.setState({
-                    studyPlans: data,
-                    studyPlanId: data[0].id
+                    studyPlans: data
+                    // studyPlanId: data[0].id
                 })
             }
             else {
@@ -112,6 +136,9 @@ class EditGroup extends React.Component {
                 })
             }
             else {
+                this.setState({
+                    auditories: []
+                })
                 const data = await response.text();
                 window.alert(data);
             }
@@ -151,10 +178,45 @@ class EditGroup extends React.Component {
             window.alert(e);
         }
     }
+
+
+    async editGroupData() {
+        try {
+            console.log("editGroupData")
+            const datasToSend = {
+                groupId: this.state.groupId,
+                title: this.state.title,
+                studyPlanId: this.state.studyPlanId,
+                yearOfStudyId: this.state.yearOfStudyId,
+                preferedAuditoryId: this.state.preferedAuditoryId
+            }
+            const response = await fetch(`${Host}/api/group/edit`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datasToSend)
+            });
+            if (response.ok === true) {
+                window.alert("Edited");
+
+                this.getAllGroupsDatasOfCurrentStudyYear();
+                this.getFreeAuditories();
+            }
+            else {
+                const data = await response.text();
+                window.alert(data);
+            }
+        }
+        catch (e) {
+            window.alert(e);
+        }
+    }
+
     onFormSubmit(e) {
         e.preventDefault();
         const { groupTitle, yearOfStudy, studyPlan, auditory } = e.target;
-        // console.log(e.target)
+        console.log("onFormSubmit")
         this.setState({
             title: groupTitle.value,
             yearOfStudyId: yearOfStudy.value,
@@ -162,9 +224,19 @@ class EditGroup extends React.Component {
             preferedAuditoryId: auditory.value
         }
             // , () =>console.log(this.state)
-            , () => this.createNewGroup()
+            , () =>
+                this.state.edit ?
+                    this.editGroupData()
+                    :
+                    this.createNewGroup()
+
         )
 
+    }
+    onGroupTitleChange = (e) => {
+        this.setState({
+            title: e.target.value
+        })
     }
     onYearOfStudyChange = (e) => {
         this.setState({
@@ -203,11 +275,34 @@ class EditGroup extends React.Component {
                 for (let i = 0; i < cards.length; i++) {
                     if (cards[i].id == "group_" + group.groupId) {
                         cards[i].style.display = "flex";
+                        break;
                     }
                 }
             })
         }
-
+    }
+    editGroupDatas = (group) => {
+        if (group == undefined) {
+            return 0;
+        }
+        console.log(group)
+        // var arrayOfAuditories = this.state.auditories;
+        // if(this.state.auditories.indexOf(x=> +x.id === +group.auditoryId)===-1){
+        //     arrayOfAuditories.push({"id":group.auditoryId,"title":group.auditoryTitle});
+        // }
+        // console.log(arrayOfAuditories);
+        this.setState({
+            edit: true,
+            // auditories:arrayOfAuditories,
+            groupId: group.groupId,
+            title: group.groupTitle,
+            yearOfStudyId: group.yearOfStudyId,
+            studyPlanId: group.studyPlanId,
+            preferedAuditoryId: group.auditoryId,
+            auditoryTitle: group.auditoryTitle
+        }
+            , () => document.getElementById("openModalGroupEditButton").click()
+        )
     }
     render() {
         return (
@@ -231,13 +326,32 @@ class EditGroup extends React.Component {
                             <div className="d-flex flex-row" >
                                 <div>
                                     {/* <button className='general-button' style={{width: "60px", height: "46px", lineHeight:"10px" }}>Додати групу</button> */}
-                                    <button type="button" className='general-outline-button button-static' data-bs-toggle="modal" data-bs-target="#newGroupModal"
-                                        onClick={() => {
+                                    <button type="button" id="openModalGroupEditButton" className='general-outline-button button-static' data-bs-toggle="modal" data-bs-target="#newGroupModal"
+                                        onClick={async () => {
+                                            this.setState({
+                                                edit: false
+                                            })
+                                            if (this.state.yearsOfStudy.length <= 0)
+                                                await this.getYearsOfStudyCurrentStudyYear();
+                                            // console.log();
+                                            if (this.state.studyPlans.length <= 0 || this.state.studyPlans.indexOf(x => x.id === +this.state.studyPlanId) === -1)
+                                                this.getAllStudyPlansByYearOfStudyId(this.state.yearOfStudyId)
+
                                             if (this.state.auditories.length <= 0) {
-                                                this.getFreeAuditories();
+                                                await this.getFreeAuditories();
                                             }
-                                            if (this.state.yearsOfStudy.length <= 0 || this.state.studyPlans.length <= 0)
-                                                this.getYearsOfStudyCurrentStudyYear();
+                                            if (this.state.preferedAuditoryId > 0) {
+                                                if (this.state.auditories.indexOf(x => +x.id === +this.state.preferedAuditoryId) === -1) {
+                                                    var arrayOfAuditories = this.state.auditories;
+                                                    arrayOfAuditories.push({ "id": this.state.preferedAuditoryId, "title": this.state.auditoryTitle });
+                                                    // console.log(arrayOfAuditories);
+                                                    this.setState({
+                                                        auditories: arrayOfAuditories
+                                                    })
+                                                }
+                                            }
+
+
                                         }}>
                                         Додати групу
                                     </button>
@@ -259,7 +373,7 @@ class EditGroup extends React.Component {
                         </div>
                         <div className="general-pagination-bar">
                             <div className="">
-                                <input type="search" onChange={this.onSearchChange} id="groupSearching" name="groupSearching" />
+                                <input type="search" onChange={this.onSearchChange} className="form-control" placeholder="Пошук груп" id="groupSearching" name="groupSearching" />
                             </div>
                             <div className="d-flex flex-row align-items-center">
 
@@ -288,11 +402,11 @@ class EditGroup extends React.Component {
                             </div>
                         </div>
 
-                        <div style={{ margin: "10px 0px 10px 0px" }}>Усі групи теперішнього навчального року:</div>
+                        <div style={{ margin: "20px 0px 20px 0px" }}>Усі групи теперішнього навчального року:</div>
                         <div id="currentGroups" className="cards-container">
-                            <div id="cards" className="cards">
+                            <div id="cards" className="cards-group">
                                 {this.state?.groups.map(group =>
-                                    <GroupCard key={"cardGroup_" + group.groupId} group={group}></GroupCard>
+                                    <GroupCard key={"cardGroup_" + group.groupId} editGroupData={this.editGroupDatas} group={group}></GroupCard>
                                 )}
                             </div>
                         </div>
@@ -302,18 +416,18 @@ class EditGroup extends React.Component {
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <h1 className="modal-title fs-5" id="newGroupModalLabel">Створити нову групу</h1>
+                                            <h1 className="modal-title fs-5" id="newGroupModalLabel"> {this.state.edit ? "Редагування даних" : "Створення нової групи"}</h1>
                                             <button type="button" id="closeNewGroupModalWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <form onSubmit={(e) => this.onFormSubmit(e)}>
                                             <div className="modal-body modal-body-content">
                                                 <div>
                                                     <label htmlFor="groupTitle" className="form-label">Назва групи</label>
-                                                    <input type="text" className="form-control" id="groupTitle" name="groupTitle" defaultValue={this.state.title} required />
+                                                    <input type="text" className="form-control" id="groupTitle" name="groupTitle" value={this.state.title} onChange={this.onGroupTitleChange} required />
                                                 </div>
                                                 <div>
                                                     <label htmlFor="yearOfStudy" className="form-label">Рік навчання</label>
-                                                    <select type="text" className="form-control" id="yearOfStudy" name="yearOfStudy" defaultValue={this.state.yearOfStudyId} onChange={this.onYearOfStudyChange} required >
+                                                    <select type="text" className="form-control" id="yearOfStudy" name="yearOfStudy" value={this.state.yearOfStudyId} onChange={this.onYearOfStudyChange} required >
                                                         {this.state.yearsOfStudy.map(yearOfStudy =>
                                                             <option key={"yearOfStudy_" + yearOfStudy.id} value={yearOfStudy.id}>{yearOfStudy.yearStudy}</option>
                                                         )}
@@ -321,7 +435,7 @@ class EditGroup extends React.Component {
                                                 </div>
                                                 <div>
                                                     <label htmlFor="studyPlan" className="form-label">Навчальний план</label>
-                                                    <select type="text" className="form-control" id="studyPlan" name="studyPlan" defaultValue={this.state.studyPlanId} onChange={this.onStudyPlanChange} required >
+                                                    <select type="text" className="form-control" id="studyPlan" name="studyPlan" value={this.state.studyPlanId} onChange={this.onStudyPlanChange} required >
                                                         {this.state.studyPlans.map(studyPlan =>
                                                             <option key={"studyPlan_" + studyPlan.id} value={studyPlan.id}>{studyPlan.title}</option>
                                                             // <option key={"studyPlan_"+studyPlan.id} value={studyPlan.id}>{studyPlan.title+". Lessons per day: "+studyPlan.maxAllowedLessonsPerDay}</option>
@@ -330,7 +444,7 @@ class EditGroup extends React.Component {
                                                 </div>
                                                 <div>
                                                     <label htmlFor="auditory" className="form-label">Аудиторія</label>
-                                                    <select type="text" className="form-control" id="auditory" name="auditory" defaultValue={this.state.preferedAuditoryId} onChange={this.onAuditoryChange} required >
+                                                    <select type="text" className="form-control" id="auditory" name="auditory" value={this.state.preferedAuditoryId} onChange={this.onAuditoryChange} required >
                                                         <option value={0}>Не призначено</option>
                                                         {this.state?.auditories?.map(auditory =>
                                                             <option key={"auditory_" + auditory.id} value={auditory.id}>{auditory.title}</option>
@@ -339,14 +453,33 @@ class EditGroup extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="modal-footer">
-                                                <button type="submit" className="general-button">Створити</button>
+                                                <button type="submit" className="general-button">{this.state.edit ? "Редагувати" : "Створити"}</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {/* <table className='table'>
+
+                    </div>
+                </div>
+            </>
+        )
+    }
+}
+
+function mapStateToProps(state) {
+    console.log("mapStateToProps ")
+    console.log(state)
+
+    return {
+        credentials: state.currentUser.credentials,
+    }
+}
+export default connect(mapStateToProps)(EditGroup);
+// export default EditGroup;
+
+{/* <table className='table'>
                             <thead>
                                 <tr>
                                     <th>Group:</th>
@@ -388,20 +521,3 @@ class EditGroup extends React.Component {
                                 )}
                             </tbody>
                         </table> */}
-                    </div>
-                </div>
-            </>
-        )
-    }
-}
-
-function mapStateToProps(state) {
-    console.log("mapStateToProps ")
-    console.log(state)
-
-    return {
-        credentials: state.currentUser.credentials,
-    }
-}
-export default connect(mapStateToProps)(EditGroup);
-// export default EditGroup;

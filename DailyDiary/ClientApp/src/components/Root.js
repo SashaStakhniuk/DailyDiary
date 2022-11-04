@@ -42,7 +42,8 @@ import CreateNewPerson from './Admin/CreateNewPerson.js';
 import EditPerson from './Admin/EditPerson.js';
 // import StudentsByGroupsDistribution from './Admin/StudentsByGroupsDistribution.js';
 // import StudentsBySubgroupsDistribution from './Admin/StudentsBySubgroupsDistribution.js';
-import FullGroupEditing from './Admin/FullGroupEditing.js';
+// import FullGroupEditing from './Admin/FullGroupEditing.js';
+import FullGroupEditing from './Admin/GroupEditing.js';
 import CreateOdEditShedule from './Admin/CreateOrEditShedule.js';
 import Profil from './Students/Profil.jsx';
 import Review from './Students/Review.jsx';
@@ -50,6 +51,7 @@ import MainPage from './Students/MainPage.jsx';
 import ResetPassword from './Account/ResetPassword.js';
 import Tasks from './Teachers/Tasks';
 import HomeTasks from './Teachers/HomeTasks';
+import DistributeStudentsByGroups from './Admin/DistributeStudentsByGroups.js';
 
 const Root = () => {
     
@@ -82,12 +84,14 @@ const Root = () => {
                     {/* <Route exact path="/admin/groups"><AllGroups/></Route> */}
                     <Route exact path="/admin/groups"><EditGroup/></Route> {/*Список усіх груп із необхідними даними теперішнього навчального року*/}
 
+                    {/* <Route exact path="/admin/edit-group" component={FullGroupEditing}></Route> додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах */}
                     <Route exact path="/admin/edit-group" component={FullGroupEditing}></Route> {/* додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах */}
-                    
+
                     <Route exact path="/admin/createoreditshedule"><CreateOdEditShedule/></Route> {/* створення та редагування розкладу */}
 
                     <Route exact path="/admin/new-group" component={CreateNewGroup}></Route> {/* створення нової/редагування існуючої групи */}
                     <Route exact path="/admin/new-student"><CreateNewStudent/></Route> 
+                    <Route exact path="/admin/distribute-students"><DistributeStudentsByGroups/></Route> 
 
                     <Route exact path="/admin/students"><Students/></Route>
                     {/* <Route exact path="/admin/students-groups-distribution"><StudentsByGroupsDistribution/></Route>
