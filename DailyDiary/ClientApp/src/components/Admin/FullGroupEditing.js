@@ -26,7 +26,7 @@ class FullGroupEditing extends React.Component { //розбиття студен
         this.addSelectedStudentsInSubgroup = this.addSelectedStudentsInSubgroup.bind(this); // додати обраних студентів групи до підгрупи
         this.addSubgroupIntoGroup = this.addSubgroupIntoGroup.bind(this); // додати нову підгрупу в групу
 
-        this.editGroupData = this.editGroupData.bind(this); // редагування даних групи
+        // this.editGroupData = this.editGroupData.bind(this); // редагування даних групи
 
         this.removeStudentFromGroup = this.removeStudentFromGroup.bind(this); // видалення студента з групи
         this.removeStudentFromSubgroup = this.removeStudentFromSubgroup.bind(this); // видалення студента з підгрупи
@@ -46,13 +46,13 @@ class FullGroupEditing extends React.Component { //розбиття студен
             groupId: 0,// ід групи
 
             /*______________________Зміна назви, навч.року, аудиторії, студ.плану__________________*/
-            title: "",
-            yearOfStudyId: 0,
-            studyPlanId: 0,
-            preferedAuditoryId: 0,
-            studyPlans: [],
-            auditories: [],
-            yearsOfStudy: [],
+            // title: "",
+            // yearOfStudyId: 0,
+            // studyPlanId: 0,
+            // preferedAuditoryId: 0,
+            // studyPlans: [],
+            // auditories: [],
+            // yearsOfStudy: [],
             /*______________________Редагування групи__________________*/
 
 
@@ -511,36 +511,36 @@ class FullGroupEditing extends React.Component { //розбиття студен
         }
     }
 
-    async editGroupData() {
-        try {
-            const datasToSend = {
-                title: this.state.title,
-                studyPlanId: this.state.studyPlanId,
-                yearOfStudyId: this.state.yearOfStudyId,
-                preferedAuditoryId: this.state.preferedAuditoryId,
-                groupId: this.state.groupId
+    // async editGroupData() {
+    //     try {
+    //         const datasToSend = {
+    //             title: this.state.title,
+    //             studyPlanId: this.state.studyPlanId,
+    //             yearOfStudyId: this.state.yearOfStudyId,
+    //             preferedAuditoryId: this.state.preferedAuditoryId,
+    //             groupId: this.state.groupId
 
-            }
-            const response = await fetch(`${Host}/api/group/edit`, {
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datasToSend)
-            });
-            if (response.ok === true) {
-                window.alert("Edited");
-                this.getFreeAuditories();
-            }
-            else {
-                const data = await response.text();
-                window.alert(data);
-            }
-        }
-        catch (e) {
-            window.alert(e);
-        }
-    }
+    //         }
+    //         const response = await fetch(`${Host}/api/group/edit`, {
+    //             method: "PUT",
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(datasToSend)
+    //         });
+    //         if (response.ok === true) {
+    //             window.alert("Edited");
+    //             this.getFreeAuditories();
+    //         }
+    //         else {
+    //             const data = await response.text();
+    //             window.alert(data);
+    //         }
+    //     }
+    //     catch (e) {
+    //         window.alert(e);
+    //     }
+    // }
 
 
     async removeStudentFromSubgroup(studentId) {
@@ -666,20 +666,20 @@ class FullGroupEditing extends React.Component { //розбиття студен
     onSubgroupBlockChange(e) {
         console.log(e.target.value)
     }
-    onCreateNewSubgroupFormSubmit = (e) => {
-        e.preventDefault();
+    // onCreateNewSubgroupFormSubmit = (e) => {
+    //     e.preventDefault();
 
-        const { groupTitle, yearOfStudy, studyPlan, auditory } = e.target;
-        this.setState({
-            title: groupTitle.value,
-            yearOfStudyId: yearOfStudy.value,
-            studyPlanId: studyPlan.value,
-            preferedAuditoryId: auditory.value
-        }
-            , () => this.editGroupData()
-        )
+    //     const { groupTitle, yearOfStudy, studyPlan, auditory } = e.target;
+    //     this.setState({
+    //         title: groupTitle.value,
+    //         yearOfStudyId: yearOfStudy.value,
+    //         studyPlanId: studyPlan.value,
+    //         preferedAuditoryId: auditory.value
+    //     }
+    //         , () => this.editGroupData()
+    //     )
 
-    }
+    // }
     onYearOfStudyChange = (e) => {
         this.setState({
             yearOfStudyId: e.target.value
@@ -726,7 +726,7 @@ class FullGroupEditing extends React.Component { //розбиття студен
                         <hr />
                         <div style={{ marginTop: "20px" }}>Редагування даних групи:</div>
                         {/*________________Редагування даних групи_________________________*/}
-                        <form onSubmit={(e) => this.onCreateNewSubgroupFormSubmit(e)}>
+                        {/* <form onSubmit={(e) => this.onCreateNewSubgroupFormSubmit(e)}>
                             <div>
                                 <label htmlFor="groupTitle" className="form-label">Назва групи</label>
                                 <input type="text" className="form-control" id="groupTitle" name="groupTitle" defaultValue={this.state.title} required />
@@ -760,7 +760,7 @@ class FullGroupEditing extends React.Component { //розбиття студен
                             <div className='d-flex justify-content-end'>
                                 <input className='btn btn-warning' value="Редагувати" type="submit"></input>
                             </div>
-                        </form>
+                        </form> */}
                         {/*________________Редагування даних групи_________________________*/}
 
                         {/*________________Список студентів без групи_________________________*/}

@@ -402,11 +402,11 @@ class EditGroup extends React.Component {
                             </div>
                         </div>
 
-                        <div style={{ margin: "20px 0px 20px 0px" }}>Усі групи теперішнього навчального року:</div>
-                        <div id="currentGroups" className="cards-container">
+                        <div style={{ margin: "20px 0px 0px 0px" }}>Усі групи теперішнього навчального року:</div>
+                        <div id="currentGroups" className="cards-container" >
                             <div id="cards" className="cards-group">
                                 {this.state?.groups.map(group =>
-                                    <GroupCard key={"cardGroup_" + group.groupId} editGroupData={this.editGroupDatas} group={group}></GroupCard>
+                                    <GroupCard key={"cardGroup_" + group.groupId} editGroupData={this.editGroupDatas} updateGroupList={this.getAllGroupsDatasOfCurrentStudyYear} group={group}></GroupCard>
                                 )}
                             </div>
                         </div>

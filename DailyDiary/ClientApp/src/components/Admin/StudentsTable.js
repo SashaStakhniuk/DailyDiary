@@ -185,7 +185,7 @@ class StudentsTable extends React.Component { // розподілення сту
                                     </div>
                                 </div>
                                 {this.props.removeStudentFromGroup !== undefined ?
-                                    <button className='btn btn-danger' style={{ position: "absolute", bottom: "5px", right: "5px", borderBottomRightRadius: "16px" }} onClick={() => this.props.removeStudentFromGroup(this.props.student.studentId)}>Remove</button>
+                                    <button className='general-outline-button' style={{ position: "absolute", bottom: "5px", right: "5px" }} onClick={() => this.props.removeStudentFromGroup(this.props.student.studentId)}>Remove</button>
                                     :
                                     <></>
                                 }

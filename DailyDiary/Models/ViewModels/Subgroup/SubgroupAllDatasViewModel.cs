@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace DailyDiary.Models.ViewModels.Subgroup
 {
-    public class SubgroupViewModel
+    public class SubgroupAllDataViewModel
     {
-        [Required]
         public int SubgroupId { get; set; }
-        [MaxLength(45)]
         public string SubgroupTitle { get; set; }
         public int SubgroupBlockId { get; set; }
-        [MaxLength(45)]
         public string SubgroupBlockTitle { get; set; }
-        [Required]
         public int GroupId { get; set; }
+        public string GroupTitle { get; set; }
+        public int StudentsAmount { get; set; }
+        public List<Subject> Subjects { get; set; }
     }
 }

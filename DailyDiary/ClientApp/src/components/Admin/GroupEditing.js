@@ -6,6 +6,7 @@ import GeneralNavigationBar from '../Navigations/GeneralNavigationBar';
 import { connect } from "react-redux";
 import "../../styles/index.css"
 import "../../styles/Tasks/HomeworkCard.css"
+import SubgroupCard from '../GeneralComponents/SubgroupCard';
 
 
 class GroupEditing extends React.Component { //розбиття студентів по підгрупах, створення нової підгрупи для групи, розподілення студентів по групах
@@ -46,6 +47,8 @@ class GroupEditing extends React.Component { //розбиття студенті
 
         this.state = {
             groupId: 0,// ід групи
+            groupIdToSubgroupEdit: 0,//ід групи для редагування підгрупи
+
             subgroupId: 0, // ід підгрупи
             studentToAddGroupId: 0,// ід підгрупи для додання студентів
 
@@ -55,7 +58,8 @@ class GroupEditing extends React.Component { //розбиття студенті
             studentsToGroupAddId: [], // масив ід студентів для додання в групу
 
             studentsWithoutGroup: [], //список студентів без групи
-            subgroupTitle: "", // назва нової підгрупи
+            subgroupTitle: "", // назва нової підгрупи,
+            subgroupBlockId: 0,
             subgroupBlockTitle: "", // назва принципу поділу
             subgroupBlocks: [], // масив вже існуючих принципів поділу
             groups: [], // масив усіх груп теперішнього навчального року
@@ -83,6 +87,7 @@ class GroupEditing extends React.Component { //розбиття студенті
 
             this.setState({
                 groupId: recievedGroupId,
+                groupIdToSubgroupEdit: recievedGroupId,
                 studentToAddGroupId: recievedGroupId
                 // title: this.props.location.state.group.groupTitle,
                 // yearOfStudyId: this.props.location.state.group.yearOfStudyId,
@@ -307,12 +312,7 @@ class GroupEditing extends React.Component { //розбиття студенті
             if (response.ok === true) {
                 const data = await response.json();
                 this.setState({
-                    groups: data
-                }
-                    //    , () => this.getGroupSubgroups(data[0].groupId)
-                )
-                // this.getAllStudentsByGroupId(data[0].groupId);
-                this.setState({
+                    groups: data,
                     groupId: data[0].groupId,
                     title: data[0].groupTitle,
                     studyPlanId: data[0].studyPlanId,
@@ -350,9 +350,9 @@ class GroupEditing extends React.Component { //розбиття студенті
                     // , () => this.getAllStudentsBySubroupId(data[0].id)
                 )
                 if (data.length > 0) {
-                    this.getAllStudentsBySubroupId(data[0].id)
+                    this.getAllStudentsBySubroupId(data[0].subgroupId)
                     this.setState({
-                        subgroupId: data[0].id
+                        subgroupId: data[0].subgroupId
                     })
                 }
                 else {
@@ -487,6 +487,20 @@ class GroupEditing extends React.Component { //розбиття студенті
                 body: JSON.stringify(datasToSend)
             });
             if (response.ok === true) {
+                var studentWithoutGroupArray = this.state.studentsWithoutGroup;
+                console.log(studentWithoutGroupArray)
+
+                this.state.studentsToGroupAddId.forEach(id => {
+                    console.log("studentsToGroupAddId: ", id)
+                    studentWithoutGroupArray = studentWithoutGroupArray.filter(x => { return +x.studentId !== +id })
+                })
+                console.log(studentWithoutGroupArray)
+
+                this.setState({
+                    studentsWithoutGroup: studentWithoutGroupArray
+                })
+
+                this.getAllStudentsByGroupId(this.state.groupId);
                 this.setState({
                     studentsToGroupAddId: []
                 })
@@ -523,6 +537,16 @@ class GroupEditing extends React.Component { //розбиття студенті
             const response = await fetch(`${Host}/api/student/deleteStudentFromGroup/details?studentId=${studentId}&&groupId=${this.state.groupId}`, {
                 method: "DELETE"
             })
+
+            if (response.ok === true) {
+                var filteredArray = this.state.groupStudents;
+                console.log(filteredArray)
+                filteredArray = filteredArray.filter(x => { return x.studentId !== studentId })
+                console.log(filteredArray)
+                this.setState({
+                    groupStudents: filteredArray
+                })
+            }
             const data = await response.text();
             window.alert(data);
         }
@@ -561,6 +585,7 @@ class GroupEditing extends React.Component { //розбиття студенті
                 method: "DELETE"
             })
             if (response.ok === true) {
+                this.getGroupSubgroups(this.state.groupId);
                 const data = await response.text();
                 window.alert(data);
             }
@@ -575,25 +600,25 @@ class GroupEditing extends React.Component { //розбиття студенті
     }
     onGroupChange(e) {
         console.log(e.target.value);
-        const group = this.state.groups.find(x => x.groupId == e.target.value);
-        console.log(group);
-        if (group !== undefined) {
-            if (this.state.yearOfStudyId != group.yearOfStudyId) {
-                this.getAllStudyPlansByYearOfStudyId(group.yearOfStudyId)
-            }
-            this.setState({
-                groupId: group.groupId,
-                title: group.groupTitle,
-                studyPlanId: group.studyPlanId,
-                yearOfStudyId: group.yearOfStudyId,
-                auditoryId: group.auditoryId
-            })
-        }
-        // this.setState({
-        //     groupId: e.target.value
-        // })
-        this.getGroupSubgroups(e.target.value)
-        this.getAllStudentsByGroupId(e.target.value);
+        // const group = this.state.groups.find(x => x.groupId == e.target.value);
+        // // console.log(group);
+        // if (group !== undefined) {
+        //     // if (this.state.yearOfStudyId != group.yearOfStudyId) {
+        //     //     this.getAllStudyPlansByYearOfStudyId(group.yearOfStudyId)
+        //     // }
+        //     this.setState({
+        //         groupId: group.groupId
+        //         // title: group.groupTitle,
+        //         // studyPlanId: group.studyPlanId,
+        //         // yearOfStudyId: group.yearOfStudyId,
+        //         // auditoryId: group.auditoryId
+        //     })
+        // }
+        this.setState({
+            groupId: e.target.value
+        })
+        // this.getGroupSubgroups(e.target.value)
+        // this.getAllStudentsByGroupId(e.target.value);
     }
 
     onModalGroupChange(e) {
@@ -632,8 +657,23 @@ class GroupEditing extends React.Component { //розбиття студенті
         e.target.value = output.join('');
         console.log(e.target.value)
     }
+    onSubgroupTitleChange(e) {
+
+        var output = e.target.value.split('');
+        for (let i = 0; i < output.length; i++) {
+            if (output[i] === ' ') {
+                output[i] = '_'
+            }
+        }
+        // e.target.value = output.join('');
+        this.setState({
+            subgroupTitle: output.join('')
+        });
+    }
     onSubgroupBlockChange(e) {
-        console.log(e.target.value)
+        this.setState({
+            subgroupBlockId: e.target.value
+        });
     }
     // onCreateNewSubgroupFormSubmit = (e) => {
     //     e.preventDefault();
@@ -749,30 +789,31 @@ class GroupEditing extends React.Component { //розбиття студенті
         }
     }
     onSearchSubgroupChange = (e) => {
-        // console.log(e.target.value)
-        // var studentTitle = e.target.value.toLowerCase();
+        console.log(e.target.value)
 
-        // const cardsParrent = document.getElementById('students-cards');
+        var subgroupTitle = e.target.value.toLowerCase();
 
-        // var cards = cardsParrent?.children;
-        // var students = this.state.groupStudents.filter(x => x.name.toLowerCase().includes(studentTitle) || x.middleName.toLowerCase().includes(studentTitle) || x.lastName.toLowerCase().includes(studentTitle))
+        const cardsParrent = document.getElementById('subgroups-cards');
 
-        // console.log(students)
+        var cards = cardsParrent?.children;
+        var subgroups = this.state.subgroups.filter(x => { return x.subgroupTitle.toLowerCase().includes(subgroupTitle) })
+        console.log(subgroups);
+        if (cards.length > 0) {
 
-        // if (cardsParrent?.children.length > 0) {
-
-        //     for (let i = 0; i < cards.length; i++) {
-        //         cards[i].style.display = "none";
-        //     }
-        //     students.forEach(student => {
-        //         for (let j = 0; j < cards.length; j++) {
-        //             if (cards[j].id == "student_" + student.studentId) {
-        //                 cards[j].style.display = "flex";
-        //                 break;
-        //             }
-        //         }
-        //     })
-        // }
+            for (let i = 0; i < cards.length; i++) {
+                cards[i].style.display = "none";
+            }
+            subgroups.forEach(subgroup => {
+                for (let j = 0; j < cards.length; j++) {
+                    // console.log("cards[j].id",cards[j].id)
+                    // console.log("cardSubgroup_${subgroup.subgroupId}",`cardSubgroup_${subgroup.subgroupId}`)
+                    if (cards[j].id == `cardSubgroup_${subgroup.subgroupId}`) {
+                        cards[j].style.display = "flex";
+                        break;
+                    }
+                }
+            })
+        }
     }
     onFindStudentModal = (e) => {
         // console.log(e.target.value)
@@ -800,6 +841,66 @@ class GroupEditing extends React.Component { //розбиття студенті
             })
         }
     }
+    onSubgroupEditButtonClick = (subgroup) => {
+        this.setState({
+            groupId: subgroup.groupId,
+            groupIdToSubgroupEdit: subgroup.groupId,
+            subgroupId: subgroup.subgroupId,
+            subgroupTitle: subgroup.subgroupTitle,
+            subgroupBlockId: subgroup.subgroupBlockId,
+            subgroupBlockTitle: subgroup.subgroupBlockTitle
+        }
+        )
+    }
+    editSubgroupData = async () => {
+        try {
+            const datasToSend = {
+                groupId: this.state.groupId,
+                subgroupId: this.state.subgroupId,
+                subgroupTitle: this.state.subgroupTitle,
+                subgroupBlockId: this.state.subgroupBlockId
+            }
+            const response = await fetch(`${Host}/api/subgroup/edit`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datasToSend)
+            });
+            if (response.ok === true) {
+                window.alert("Edited");
+                this.getGroupSubgroups(this.state.groupId);
+                document.getElementById("closeEditSubgroupModalWindowButton").click();
+                // this.getAllGroupsDatasOfCurrentStudyYear();
+            }
+            else {
+                const data = await response.text();
+                window.alert(data);
+            }
+        }
+        catch (e) {
+            window.alert(e);
+        }
+    }
+    onSubgroupEditFormSubmit(e) {
+        e.preventDefault();
+        const { subgroupTitle, groups, subgroupBlocks } = e.target;
+        this.setState({
+            subgroupTitle: subgroupTitle.value,
+            groupIdToSubgroupEdit: groups.value,
+            subgroupBlockId: subgroupBlocks.value,
+
+        }
+            // , () =>console.log(this.state)
+            , () => this.editSubgroupData()
+        )
+    }
+    onModalSubgroupGroupChange = (e) => {
+        this.setState({
+            groupIdToSubgroupEdit: e.target.value,
+        })
+    }
+
     render() {
         return (
             <>
@@ -821,7 +922,7 @@ class GroupEditing extends React.Component { //розбиття студенті
                             </div>
                             <div>
                                 {this.state.isCurrentDisplaySubgroup ?
-                                    <button type="button" className='general-button'>
+                                    <button type="button" className='general-button' data-bs-toggle="modal" data-bs-target="#addSubgroupModal">
                                         Додати підгрупу
                                     </button>
                                     :
@@ -904,64 +1005,23 @@ class GroupEditing extends React.Component { //розбиття студенті
 
                             {/* <button className='btn btn-primary justify-self-end' onClick={this.getDatasToSubgroupAdd}>Add selected in subgroup</button> */}
                             {/*________________Список студентів групи_________________________*/}
+                            {/*________________Підгрупи групи_________________________*/}
+
                         </div>
                         <div id="subgroups" style={{ display: "none" }}>
-                            {/*________________Створення нової підгрупи_________________________*/}
-                            <div style={{ marginTop: "20px" }}>Створення нової підгрупи:</div>
-
-                            <form onSubmit={this.onSubmitNewSubgroupForm} className='d-flex flex-row'>
-                                <div className='form-group d-flex justify-content-around'>
-                                    <div className="form-floating">
-                                        <input type='text' id='newSubgroup' name='newSubgroup' className="form-control" onChange={(e) => this.onSubgroupTitleChange(e)} />
-                                        <label htmlFor="newSubgroup">Subgroup</label>
-                                    </div>
-                                    <div className="form-floating">
-                                        <datalist id="subgroupBlock">
-                                            {this.state.subgroupBlocks.map(subgroupBlock =>
-                                                <option key={"subgroupBlock_" + subgroupBlock.id} value={subgroupBlock.subgroupBlockTitle} />
-                                                // <option key={"subgroupBlock_" + subgroupBlock.id} value={subgroupBlock.subgroupBlockTitle + subgroupBlock.id}>{subgroupBlock.subgroupBlockTitle}</option>
-                                            )}
-                                            {/* value='{"values":[subgroupBlock.subgroupBlockTitle,subgroupBlock.subgroupBlockTitle]}' */}
-                                        </datalist>
-                                        <input type="text" name="subgroupBlock" autoComplete="on" className="form-control" list="subgroupBlock" onChange={(e) => this.onSubgroupBlockChange(e)} />
-                                        <label htmlFor="subgroupBlock">Subgroup block</label>
-                                    </div>
-                                </div>
-                                <input type="submit" className="btn btn-success" value="Create new subgroup" />
-                            </form>
-                            {/*________________Створення нової підгрупи_________________________*/}
-                            <hr />
-                            <div style={{ marginTop: "20px" }}>Підгрупи:</div>
-                            {/*________________Підгрупи групи_________________________*/}
-                            <div className="d-flex flex-row justify-content-between">
-                                <div className="form-floating col-md">
-                                    <select id="subgroup" name="subgroup" className="form-select" onChange={(e) => this.onSubgroupChange(e)} required>
-                                        {this.state.subgroups.length > 0 ? this.state.subgroups.map(subgroup =>
-                                            <option key={"subgroup" + subgroup.id} value={subgroup.id}>{subgroup.title}</option>
-                                        ) : <></>}
-                                    </select>
-                                    <label htmlFor="subgroup">Subgroups</label>
-                                </div>
-                                <button className='btn btn-danger' style={{ textSize: "1.25em" }} onClick={() => this.deleteSubgroup(this.state.subgroupId)}>Remove subgroup</button>
-                            </div>
-                            {/*________________Підгрупи групи_________________________*/}
-
-                            <div style={{ margin: "20px 0px 20px 0px" }}>Список студентів підгрупи:</div>
-                            {/*________________Список студентів підгрупи_________________________*/}
-                            <div id="groupStudents" className="cards-container">
-                                <div className="cards">
-                                    {this.state.subgroupStudents.length > 0 ?
-                                        this.state?.subgroupStudents?.map(student =>
-                                            <StudentsTable key={"student_" + student.studentId} removeStudentFromGroup={this.removeStudentFromSubgroup} onStudentSelect={undefined} student={student} withoutGroup={false}></StudentsTable>
-                                        )
-
-                                        :
-                                        <></>
-                                    }
+                            <div style={{ margin: "20px 0px 0px 0px" }}>Усі підгрупи групи "{this.props.location.state.group.groupTitle}":</div>
+                            <div id="subgroups" className="cards-container" >
+                                <div id="subgroups-cards" className="cards-group">
+                                    {this.state?.subgroups.map(subgroup =>
+                                        <SubgroupCard key={"cardSubgroup_" + subgroup.subgroupId} editSubgroupData={this.onSubgroupEditButtonClick} removeSubgroup={this.deleteSubgroup} subgroup={subgroup}></SubgroupCard>
+                                    )}
                                 </div>
                             </div>
-                            {/*________________Список студентів підгрупи_________________________*/}
+
+                            {/*________________Підгрупи групи_________________________*/}
+
                         </div>
+
                         <div id="modalAddStudentWindow">
                             <div className="modal fade" id="addStudentModal" tabIndex="-1" aria-labelledby="addStudentModalLabel"  >
                                 <div className="modal-dialog">
@@ -987,18 +1047,6 @@ class GroupEditing extends React.Component { //розбиття студенті
                                                 {/*________________Список студентів без групи_________________________*/}
                                                 <div style={{ margin: "0px 0px 10px 0px" }}>Список нерозподілених студентів:</div>
                                                 {this.state.studentsWithoutGroup.length > 0 ?
-                                                    // <select className="form-control" onChange={(e) => this.onSelectStudentToGroup(e)}>
-                                                    //     {this.state?.studentsWithoutGroup?.map(student =>
-                                                    //     (
-                                                    //         // <StudentsTable key={"student_" + student.studentId} onStudentSelect={this.onSelectStudentToGroup} student={student} withoutGroup={true}></StudentsTable>
-                                                    //         <option key={"student_" + student.studentId} value={student.studentId}>
-                                                    //             {student.name + " " + student.middleName + " " + student.lastName + ", дн: " + new Date(student.birthday).toLocaleDateString()}
-                                                    //         </option>
-                                                    //     )
-                                                    //     )}
-
-                                                    // </select>
-
                                                     <div id="modalStudentsList" className="checkBoxs-container checkBox-text-thinner">
                                                         {
                                                             this.state?.studentsWithoutGroup?.map(student =>
@@ -1011,12 +1059,6 @@ class GroupEditing extends React.Component { //розбиття студенті
                                                                         <span className="check-checkmark"></span>
                                                                     </div>
                                                                 </label>
-                                                                // <div key={"student_" + student.studentId} className="row-cols-1-3-view">
-                                                                //     <input type="checkbox" id={"student_" + student.studentId} name="students" value={student.studentId} />
-                                                                //     <label htmlFor={"student_" + student.studentId}>
-                                                                //         {student.name + " " + student.middleName + " " + student.lastName + ", дн: " + new Date(student.birthday).toLocaleDateString()}
-                                                                //     </label>
-                                                                // </div>
                                                             )
                                                         }
                                                     </div>
@@ -1024,24 +1066,100 @@ class GroupEditing extends React.Component { //розбиття студенті
                                                     :
                                                     <></>
                                                 }
-                                                {/* <div id="groupStudents" className="cards-container">
-                                                    <div className="cards">
-                                                        {this.state.studentsWithoutGroup.length > 0 ?
-                                                            this.state?.studentsWithoutGroup?.map(student =>
-                                                                <StudentsTable key={"student_" + student.studentId} onStudentSelect={this.onSelectStudentToGroup} student={student} withoutGroup={true}></StudentsTable>
-                                                            )
-                                                            :
-                                                            <></>
-                                                        }
-                                                    </div>
-                                                </div> */}
-                                                {/* <button className='btn btn-primary justify-self-end' onClick={this.getDatasToGroupAdd}>Add selected in group</button> */}
                                                 {/*________________Список студентів без групи_________________________*/}
                                             </div>
                                             <div className="modal-footer">
                                                 <button className="general-button" onClick={this.getDatasToGroupAdd}>Додати в групу</button>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="modalAddSubgroupWindow">
+                            <div className="modal fade" id="addSubgroupModal" tabIndex="-1" aria-labelledby="addSubgroupModalLabel"  >
+                                <div className="modal-dialog">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h1 className="modal-title fs-5" id="addSubgroupModalLabel"> Створення нової підгрупи</h1>
+                                            <button type="button" id="closemodalAddSubgroupWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div>
+                                            <form onSubmit={this.onSubmitNewSubgroupForm}>
+                                                <div className="modal-body modal-body-content">
+
+                                                    <div style={{ margin: "0px 0px 10px 0px" }}>Група:</div>
+
+                                                    <select className="form-control" value={this.state.groupId} onChange={(e) => this.onGroupChange(e)}>
+                                                        {this.state.groups.map(group =>
+                                                            <option key={"group_" + group.groupId} value={group.groupId}>{group.groupTitle}</option>
+                                                        )}
+                                                    </select>
+                                                    {/*________________Створення нової підгрупи_________________________*/}
+                                                    <label htmlFor="newSubgroup">Назва підгрупи:</label>
+                                                    <input type='text' id='newSubgroup' name='newSubgroup' className="form-control" onChange={(e) => this.onSubgroupChange(e)} />
+                                                    <label htmlFor="subgroupBlock">Розподілення за:</label>
+
+                                                    <datalist id="subgroupBlock">
+                                                        {this.state.subgroupBlocks.map(subgroupBlock =>
+                                                            <option key={"subgroupBlock_" + subgroupBlock.id} value={subgroupBlock.subgroupBlockTitle} />
+                                                            // <option key={"subgroupBlock_" + subgroupBlock.id} value={subgroupBlock.subgroupBlockTitle + subgroupBlock.id}>{subgroupBlock.subgroupBlockTitle}</option>
+                                                        )}
+                                                        {/* value='{"values":[subgroupBlock.subgroupBlockTitle,subgroupBlock.subgroupBlockTitle]}' */}
+                                                    </datalist>
+                                                    <input type="text" name="subgroupBlock" autoComplete="off" className="form-control" list="subgroupBlock" onChange={(e) => this.onSubgroupBlockChange(e)} />
+                                                    {/*________________Створення нової підгрупи_________________________*/}
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <input type="submit" className="general-button" value="Створити підгрупу" />
+                                                    {/* <button className="general-button" onClick={this.getDatasToGroupAdd}>Додати в групу</button> */}
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="modalEditSubgroupWindow">
+                            <div className="modal fade" id="editSubgroupModal" tabIndex="-1" aria-labelledby="editSubgroupModalLabel"  >
+                                <div className="modal-dialog">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            {/* <h1 className="modal-title fs-5" id="editSubgroupModalLabel">Редагування даних підгрупи "{this.state.subgroupTitle}"</h1> */}
+                                            <h1 className="modal-title fs-5" id="editSubgroupModalLabel">Редагування даних підгрупи</h1>
+                                            <button type="button" id="closeEditSubgroupModalWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form onSubmit={(e) => this.onSubgroupEditFormSubmit(e)}>
+                                            <div className="modal-body modal-body-content">
+                                                <div>
+                                                    <label htmlFor="subgroupTitle" className="form-label">Назва підгрупи</label>
+                                                    <input type="text" className="form-control" id="subgroupTitle" name="subgroupTitle" value={this.state.subgroupTitle} onChange={this.onSubgroupTitleChange} required />
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="subgroupBlocks" className="form-label">Блок розподілення</label>
+                                                    <select type="text" className="form-control" id="subgroupBlocks" name="subgroupBlocks" value={this.state.subgroupBlockId} onChange={this.onSubgroupBlockChange} required >
+                                                        {this.state.subgroupBlocks.map(subgroupBlock =>
+                                                            <option key={"subgroupBlock" + subgroupBlock.id} value={subgroupBlock.id}>{subgroupBlock.subgroupBlockTitle}</option>
+                                                        )}
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="groups" className="form-label">Група</label>
+                                                    <select type="text" className="form-control" id="groups" name="groups" value={this.state.groupIdToSubgroupEdit} onChange={this.onModalSubgroupGroupChange} required >
+                                                        {this.state.groups.map(group =>
+                                                            <option key={"group_" + group.groupId} value={group.groupId}>{group.groupTitle}</option>
+                                                        )}
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="submit" className="general-button">Редагувати</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

@@ -8,12 +8,35 @@ import groupPhoto from "../../images/Photo.png"
 class GroupCard extends React.Component {
     constructor(props) {
         super(props);
+        this.deleteGroup = this.deleteGroup.bind(this); // видалення групи
         this.state = {
 
         }
     }
     componentDidMount() {
-        console.log("this.props.group", this.props.group);
+        // console.log("this.props.group", this.props.group);
+    }
+    async deleteGroup(groupId) {
+        try {
+            if (groupId <= 0) {
+                alert("Group id can't be <= 0");
+                return 0;
+            }
+            const response = await fetch(`${Host}/api/group/delete/${groupId}`, {
+                method: "DELETE"
+            })
+            if (response.ok === true) {
+                this.props.updateGroupList();
+                window.alert("Group include subgroups deleted successfully");
+            }
+            else {
+                const data = await response.text();
+                window.alert(data);
+            }
+        }
+        catch (e) {
+            window.alert(e);
+        }
     }
     render() {
         return (
@@ -56,7 +79,6 @@ class GroupCard extends React.Component {
                     <div className="icon">
                         <span className="tooltip">
                             <div className='task-info'>
-
                                 <div className='task-info-item text-bolder'>
                                     <div>
                                         <label htmlFor="yearOfStudy">Рік навчання:</label>
@@ -65,6 +87,9 @@ class GroupCard extends React.Component {
                                         <div>{this.props.group.yearOfStudy}</div>
                                     </div>
                                 </div>
+                                <button className='edit-group-card-button' type="button" title="Видалити" onClick={() => this.deleteGroup(this.props.group.groupId)}>
+                                    Видалити
+                                </button>
                             </div>
                         </span>
                     </div>

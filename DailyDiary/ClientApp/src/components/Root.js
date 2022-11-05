@@ -52,6 +52,7 @@ import ResetPassword from './Account/ResetPassword.js';
 import Tasks from './Teachers/Tasks';
 import HomeTasks from './Teachers/HomeTasks';
 import DistributeStudentsByGroups from './Admin/DistributeStudentsByGroups.js';
+import SubgroupEditing from './Admin/SubgroupEditing';
 
 const Root = () => {
     
@@ -86,6 +87,7 @@ const Root = () => {
 
                     {/* <Route exact path="/admin/edit-group" component={FullGroupEditing}></Route> додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах */}
                     <Route exact path="/admin/edit-group" component={FullGroupEditing}></Route> {/* додання студентів без групи в групу, створення нових підгруп для групи і розподілення студентів групи по підгрупах */}
+                    <Route exact path="/admin/edit-subgroup" component={SubgroupEditing}></Route> {/* додання студентів групи в підгрупу*/}
 
                     <Route exact path="/admin/createoreditshedule"><CreateOdEditShedule/></Route> {/* створення та редагування розкладу */}
 

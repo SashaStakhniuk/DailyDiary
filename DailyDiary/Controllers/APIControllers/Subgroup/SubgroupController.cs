@@ -88,23 +88,60 @@ namespace DailyDiary.Controllers.APIControllers
             }
         }
 
+        //[HttpGet("{groupId}")]
+        //public async Task<ActionResult<IEnumerable<SubgroupAllDataViewModel>>> GetAllExceptDefaultByGroupId(int groupId)
+        //{
+        //    var group = await db.Groups.Include(x => x.Subgroups).FirstOrDefaultAsync(x => x.Id == groupId);
+        //    if (group == null)
+        //    {
+        //        return NotFound("Group not found");
+        //    }
+        //    //var subgroups = await db.Subgroups.Where(x => x.Id != group.DefSubgroupId && x.GroupId == group.Id).ToListAsync();
+        //    var subgroups = group.Subgroups.Where(x => x.Id != group.DefSubgroupId && x.GroupId == group.Id).ToList();
+        //    if (subgroups != null)
+        //    {
+        //        foreach (var subgroup in subgroups)
+        //        {
+        //            subgroup.Group = null;
+        //        }
+        //        return subgroups;
+        //    }
+        //    return NotFound("No one subgroup found");
+        //}
         [HttpGet("{groupId}")]
-        public async Task<ActionResult<IEnumerable<Subgroup>>> GetAllExceptDefaultByGroupId(int groupId)
+        public async Task<ActionResult<IEnumerable<SubgroupAllDataViewModel>>> GetAllExceptDefaultByGroupId(int groupId)
         {
-            var group = await db.Groups.Include(x => x.Subgroups).FirstOrDefaultAsync(x => x.Id == groupId);
+            var group = await db.Groups.AsNoTracking().FirstOrDefaultAsync(x => x.Id == groupId);
             if (group == null)
             {
                 return NotFound("Group not found");
             }
             //var subgroups = await db.Subgroups.Where(x => x.Id != group.DefSubgroupId && x.GroupId == group.Id).ToListAsync();
-            var subgroups = group.Subgroups.Where(x => x.Id != group.DefSubgroupId && x.GroupId == group.Id).ToList();
+            var subgroups = await db.Subgroups.Include(x => x.StudentsBySubgroups)
+                .Include(x => x.TeacherSubgroupDistributions)
+                .Include(x => x.SubgroupBlock)
+                .Where(x => x.Id != group.DefSubgroupId && x.GroupId == group.Id).ToListAsync();
             if (subgroups != null)
             {
+                List<SubgroupAllDataViewModel> subgroupAllData = new List<SubgroupAllDataViewModel>();
+                SubgroupAllDataViewModel subgroupData = null;
                 foreach (var subgroup in subgroups)
                 {
-                    subgroup.Group = null;
+                    var subjects = await db.TeacherSubgroupDistributions.Include(x => x.Subject).Where(x => x.SubgroupId == subgroup.Id).Select(x => new Subject { Id = x.SubjectId, Title = x.Subject.Title }).ToListAsync();
+                    subgroupData = new SubgroupAllDataViewModel
+                    {
+                        SubgroupId = subgroup.Id,
+                        SubgroupTitle = subgroup.Title,
+                        SubgroupBlockId = subgroup.SubgroupBlockId,
+                        SubgroupBlockTitle = subgroup.SubgroupBlock.SubgroupBlockTitle,
+                        GroupId = group.Id,
+                        GroupTitle = group.Title,
+                        Subjects = subjects,
+                        StudentsAmount = subgroup.StudentsBySubgroups.Count()
+                    };
+                    subgroupAllData.Add(subgroupData);
                 }
-                return subgroups;
+                return subgroupAllData;
             }
             return NotFound("No one subgroup found");
         }
@@ -239,6 +276,69 @@ namespace DailyDiary.Controllers.APIControllers
                 return StatusCode(500, e.Message);
             }
         }
+
+
+
+        [HttpPut]
+        public async Task<IActionResult> Edit(SubgroupViewModel model)
+        {
+            try
+            {
+                if (String.IsNullOrWhiteSpace(model.SubgroupTitle))
+                {
+                    return BadRequest("Subgroup title can't be empty");
+                }
+                if (model.SubgroupBlockId <= 0)
+                {
+                    return BadRequest("Subgroup block title can't be empty");
+                }
+                var group = await db.Groups.AsNoTracking().FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                if (group == null)
+                {
+                    return NotFound("Group not found");
+                }
+                var subgroup = await db.Subgroups.AsNoTracking().FirstOrDefaultAsync(x => x.Id == model.SubgroupId);
+
+                //var subgroup = await db.Subgroups.FirstOrDefaultAsync(x => x.Title.ToLower() == model.SubgroupTitle.ToLower().Replace(" ", "_") && x.GroupId == group.Id);
+                if (subgroup == null)
+                {
+                    return NotFound("Subgroup not found");
+                }
+                else
+                {
+                    var subgroupTitleExist = await db.Subgroups.AsNoTracking().FirstOrDefaultAsync(x=> x.Title.ToLower() == model.SubgroupTitle.ToLower().Replace(" ", "_") && x.GroupId==group.Id) ;
+                    if (subgroupTitleExist != null)
+                    {
+                        return BadRequest("Subgroup with entered name already exist for this group. Enter other title for subgroup.");
+                    }
+                }
+
+                var subgroupBlock = await db.SubgroupBlocks.AsNoTracking().FirstOrDefaultAsync(x => x.Id == model.SubgroupBlockId);
+                if (subgroupBlock == null)
+                {
+                    return NotFound("Subgroup block of distribution not found");
+                }
+                subgroup.Title = model.SubgroupTitle.Replace(" ", "_");
+                subgroup.Group = group;
+                subgroup.SubgroupBlock = subgroupBlock;
+
+                 db.Subgroups.Update(subgroup);
+                var result = await db.SaveChangesAsync();
+                if (result > 0)
+                {
+                    return Ok("Subgroup was edited");
+                }
+                else
+                {
+                    return StatusCode(500, "Subgroup wasn't edited");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
         [HttpDelete("{subgroupId:int}")]
         public async Task<IActionResult> Delete(int subgroupId)
         {
