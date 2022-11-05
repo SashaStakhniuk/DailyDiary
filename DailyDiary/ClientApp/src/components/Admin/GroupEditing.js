@@ -33,7 +33,6 @@ class GroupEditing extends React.Component { //розбиття студенті
 
         this.removeStudentFromGroup = this.removeStudentFromGroup.bind(this); // видалення студента з групи
         this.removeStudentFromSubgroup = this.removeStudentFromSubgroup.bind(this); // видалення студента з підгрупи
-        this.deleteGroup = this.deleteGroup.bind(this); // видалення групи
         this.deleteSubgroup = this.deleteSubgroup.bind(this); // видалення підгрупи
 
         this.onSubmitNewSubgroupForm = this.onSubmitNewSubgroupForm.bind(this); // створення нової групи
@@ -344,10 +343,20 @@ class GroupEditing extends React.Component { //розбиття студенті
             const response = await fetch(`${Host}/api/subgroup/getAllExceptDefaultByGroupId/${groupId}`)
             if (response.ok === true) {
                 const data = await response.json();
+
+                data.sort(function (a, b) {
+                    if (a.subgroupBlockTitle > b.subgroupBlockTitle) {
+                      return 1;
+                    }
+                    if (a.subgroupBlockTitle < b.subgroupBlockTitle) {
+                      return -1;
+                    }
+                    return 0;
+                  });
+
                 this.setState({
                     subgroups: data
                 }
-                    // , () => this.getAllStudentsBySubroupId(data[0].id)
                 )
                 if (data.length > 0) {
                     this.getAllStudentsBySubroupId(data[0].subgroupId)
@@ -554,27 +563,7 @@ class GroupEditing extends React.Component { //розбиття студенті
             window.alert(e);
         }
     }
-    async deleteGroup(groupId) {
-        try {
-            if (groupId <= 0) {
-                alert("Group id can't be <= 0");
-                return 0;
-            }
-            const response = await fetch(`${Host}/api/group/delete/${groupId}`, {
-                method: "DELETE"
-            })
-            if (response.ok === true) {
-                window.alert("Group include subgroups deleted successfully");
-            }
-            else {
-                const data = await response.text();
-                window.alert(data);
-            }
-        }
-        catch (e) {
-            window.alert(e);
-        }
-    }
+
     async deleteSubgroup(subgroupId) {
         try {
             if (subgroupId <= 0) {

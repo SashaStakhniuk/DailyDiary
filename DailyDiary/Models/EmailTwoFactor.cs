@@ -18,12 +18,15 @@ namespace DailyDiary.Models
             const string fromPassword = "gpxwyuybsafwdgdm";
 
             //const string subject = "Confirm your email";//"Two Factor Authorization Code";
+
             string body = $"<div style='text-align:center;'>" +
                           $"<div>" +
                           $"<h1>{messageForUser}</h1>" +
-                          $"<h2 style='text-align: justify;'>{code}</h2>" +
-                          $"</<div>" +
-                          $"</<div>";
+                          $"<h2 style='text-align: justify;'>" +
+                          $"<a style='background: #AEB9F1; color: white; padding: 10px; border-radius: 16px; text-decoration: none;' href={code}>Підтвердити запит на зміну паролю</a>" +
+                          $"</h2>" +
+                          $"</div>" +
+                          $"</div>";
 
             var smtp = new SmtpClient
             {
@@ -42,7 +45,7 @@ namespace DailyDiary.Models
             })
                 try
                 {
-                    
+
                     smtp.SendMailAsync(message).Wait();
                     //smtp.Send(message);     
                     //client.Send(mailMessage);
