@@ -3,33 +3,177 @@ import { connect } from "react-redux";
 import { Host } from "../Host"
 import GeneralNavigationBar from "../Navigations/GeneralNavigationBar";
 // import setUserCredentials from '../../redux/action_creators/SetUserCredentials';
- import GeneralHeader from "../Headers/GeneralHeader";
+import GeneralHeader from "../Headers/GeneralHeader";
 import "../../styles/journal.css"
 import logo from "../../images/Photo.png"
 class TeacherPage extends Component {
     constructor(props) {
         super(props)
-       
+        this.getTeacherIdByUserId = this.getTeacherIdByUserId.bind(this)
         this.state = {
+            teacherId: 0,
+            journalData: []
         }
     }
-    componentDidMount() {
+    async componentDidMount() {
+        await this.getTeacherIdByUserId();
+        this.getLessonData();
     }
-    onLessonBarClick=(e)=>{
-        console.log(e.target)
-        var listsOfLi=e.target?.parentNode?.children;
-        // console.log(listsOfLi.className)
-
-        if(listsOfLi===undefined || e.target.tagName=="UL"){
-            return 0;
-        }
-        for(let i=0;i<listsOfLi.length;i++){
-            listsOfLi[i].className="";
-            if(listsOfLi[i].id==e.target.id){
-                listsOfLi[i].className="selectedLesson";
+    async getTeacherIdByUserId() {
+        try {
+            const response = await fetch(`${Host}/api/teacher/getTeacherIdByUserId/${this.props.credentials.userId}`);
+            if (response.ok === true) {
+                const data = await response.json();
+                this.setState({
+                    teacherId: data
+                })
+                console.log("teacherId:", data)
+            }
+            else {
+                const data = await response.text();
+                window.alert(data);
             }
         }
-        
+        catch (e) {
+            console.log(e);
+            window.alert(e);
+        }
+    }
+    async getLessonData() {
+        try {
+            if (+this.state.teacherId === 0) {
+                return 0;
+            }
+
+            const response = await fetch(`${Host}/api/shedule/GetSheduleDataForSelectedDayByTeacherId/${this.state.teacherId}`);
+
+            if (response.ok === true) {
+                const data = await response.json();
+
+                this.setState({
+                    journalData: data
+                }
+                    , () => this.appendSubjectInShedule())
+                // )
+                console.log(data);
+            }
+            else {
+                const data = await response.text();
+                window.alert(data);
+            }
+            // const data = await response.text();
+            // window.alert(data);
+        }
+        catch (e) {
+            window.alert(e);
+        }
+    }
+    onLessonBarClick = (e) => {
+        // console.log(e.target)
+        var listsOfLi = e.target?.parentNode?.children;
+        // console.log(listsOfLi.className)
+
+        if (listsOfLi === undefined || e.target.tagName == "UL") {
+            return 0;
+        }
+        for (let i = 0; i < listsOfLi.length; i++) {
+            listsOfLi[i].className = "";
+            if (listsOfLi[i].id == e.target.id) {
+                listsOfLi[i].className = "selectedLesson";
+            }
+        }
+
+    }
+    appendSubjectInShedule = async (existingData) => {
+
+        var oTable = document.getElementById('journalTable');
+        if (!oTable) {
+            return 0;
+        }
+
+        var tableBody = oTable.getElementsByTagName('tbody')[0];
+        if (tableBody == undefined) {
+            return 0;
+        }
+        if (this.state.journalData) {
+
+            const journalDataStudent = this.state.journalData.students;
+            for (let i = 0; i < journalDataStudent.length; i++) {
+                let tr = document.createElement("tr");
+                tr.setAttribute('value', journalDataStudent[i].studentId);
+                tr.setAttribute('id', journalDataStudent[i].studentId);
+                tr.setAttribute('class', "shedule-table-body-tr");
+
+                let tdStudent = document.createElement("td");
+                let tdButtonsChecked = document.createElement("td");
+                let tdRate = document.createElement("td");
+                let tdComment = document.createElement("td");
+
+                // <div style="position:absolute; left:10px;">
+
+                tdStudent.innerHTML = `
+                        <div>
+                        <div>
+                        ${i + 1}
+                    </div>
+                    <div>
+                        <img width="70px" src=${logo} alt="..."></img>
+                    </div>
+                    <div>
+                    ${journalDataStudent[i].lastName + " " + journalDataStudent[i].name + " " + journalDataStudent[i].middleName}
+                    </div>
+                    </div>
+
+                    `
+                tdButtonsChecked.setAttribute("class", "td-radios");
+                tdButtonsChecked.innerHTML = `
+                    <label class="table-radio-container">
+                                      <input type="radio" class="table-radio-green" name=${"radio_" + journalDataStudent[i].studentId}/>
+                                      <span class="table-checkmark table-radio-green"></span>
+                                    </label>
+                                    <label class="table-radio-container">
+                                      <input type="radio" class="table-radio-orange" name=${"radio_" + journalDataStudent[i].studentId}/>
+                                      <span class="table-checkmark table-radio-orange"></span>
+                                    </label>
+                                    <label class="table-radio-container">
+                                      <input type="radio" checked class="table-radio-red" name=${"radio_" + journalDataStudent[i].studentId}/>
+                                      <span class="table-checkmark table-radio-red"></span>
+                                    </label>
+                    `;
+
+                let selectRate = document.createElement('select')
+                selectRate.setAttribute('class', 'form-select');
+                selectRate.setAttribute('id', 'rate');
+                selectRate.setAttribute('name', 'rate');
+                selectRate.setAttribute('style', 'width:80px;');
+                selectRate.innerHTML = `
+                        <option selected value="0">-</option>
+
+                                 ${Array.from({ length: 12 }, (_, i) => i + 1).map((element, index) =>
+                    `<option key={"rate_${element}"} value=${element}>${element}</option>`
+                )
+
+                    }`;
+                tdRate.appendChild(selectRate);
+
+                var button = document.createElement('button');
+                button.innerHTML = 'Додати';
+                // button.onclick = (e) => this.deleteItemFromTable(e);
+                button.setAttribute('class', 'general-outline-button');
+
+                tdComment.appendChild(button);
+                tr.appendChild(tdStudent);
+                tr.appendChild(tdButtonsChecked);
+                tr.appendChild(tdRate);
+                tr.appendChild(tdComment);
+                tableBody.appendChild(tr);
+                //     }
+                // }
+                // else {
+                //     tableBody.innerHTML = "No one subject for this day found";
+                // }
+            }
+        }
     }
     render() {
         return (
@@ -40,58 +184,76 @@ class TeacherPage extends Component {
                         <GeneralNavigationBar menuItemToSelect={0} role={this.props.credentials.roles} />
                     </div>
                     <div className="generalSide">
-                        <div className="text-bolder" style={{margin:"10px 0px 10px 0px", fontSize:"20px"}}>
-                        Журнал
+                        <div className="text-bolder" style={{ margin: "10px 0px 10px 0px", fontSize: "20px" }}>
+                            Журнал
                         </div>
-                       <div className="lessons-number-bar">
-                        <ul className="lessons-numer-list" onClick={(e)=>this.onLessonBarClick(e)}>
-                            {Array.from({length: 9}, (_, i) => i + 1).map((element,index)=>
-                            
-                            +index===0?     
-                            <li key={"lesson_"+element} id={"lesson_"+element} className="selectedLesson">
-                               Урок {element}
-                            </li>
-                            :
-                            <li key={"lesson_"+element} id={"lesson_"+element}>
-                               Урок {element}
-                             </li>
-                            )
-                            }
-                        </ul>
-                    </div>
-                    <div className="journal-table-container">
-                        <div className="journal-lesson-info">
-                            <div>
-                                8-А клас
-                            </div>
-                            <div>
-                                Алгебра
-                            </div>
-                            <div>
-                                <input type="text" className="form-control" placeholder="тема уроку"/>
-                            </div>
-                            <div>
-                                <button className="general-outline-button button-static">
-                                    Класна робота
-                                </button>
-                            </div>
-                            <div>
-                                <button className="general-outline-button">
-                                    Домашня робота
-                                </button>
-                            </div>
+                        <div className="lessons-number-bar">
+                            <ul className="lessons-numer-list" onClick={(e) => this.onLessonBarClick(e)}>
+                                {Array.from({ length: 9 }, (_, i) => i + 1).map((element, index) =>
+
+                                    +index === 0 ?
+                                        <li key={"lesson_" + element} id={"lesson_" + element} className="selectedLesson">
+                                            Урок {element}
+                                        </li>
+                                        :
+                                        <li key={"lesson_" + element} id={"lesson_" + element}>
+                                            Урок {element}
+                                        </li>
+                                )
+                                }
+                            </ul>
                         </div>
-                        <table className="journal-table">
-                            <thead className="journal-table-head">
-                                <tr>
-                                    <th>ФІО студента</th>
-                                    <th>Відмітити присутніх</th>
-                                    <th>Робота на уроці</th>
-                                    <th>Коментарі</th>
-                                </tr>
-                            </thead>
-                            <tbody className="journal-table-body">
-                                <tr>
+                        <div className="journal-table-container">
+                            <div className="journal-lesson-info">
+                                <div>
+                                    {this.state.journalData.groupTitle}
+                                    {/* 8-А клас */}
+                                </div>
+                                <div>
+                                    {this.state.journalData.subjectTitle}
+                                    {/* Алгебра */}
+                                </div>
+                                <div>
+                                    <input type="text" className="form-control" placeholder="Тема уроку" />
+                                </div>
+                                <div>
+                                    <button className="general-outline-button upload-button">
+                                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fillRule="evenodd" clipRule="evenodd" d="M2.25 12L2.25 2L12.25 2L12.25 12H10.25V14H13.25C13.8023 14 14.25 13.5523 14.25 13L14.25 1C14.25 0.447715 13.8023 0 13.25 0L1.25 0C0.697715 0 0.25 0.447715 0.25 1L0.25 13C0.25 13.5523 0.697715 14 1.25 14H4.25V12H2.25ZM10.5429 9.70711L11.9571 8.29289L7.25 3.58579L2.54289 8.29289L3.95711 9.70711L6.25 7.41421V14L8.25 14V7.41421L10.5429 9.70711Z" />
+                                        </svg>
+                                        Класна робота
+                                    </button>
+                                </div>
+                                <div>
+                                    <button className="general-outline-button upload-button">
+                                        <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fillRule="evenodd" clipRule="evenodd" d="M2.25 12L2.25 2L12.25 2L12.25 12H10.25V14H13.25C13.8023 14 14.25 13.5523 14.25 13L14.25 1C14.25 0.447715 13.8023 0 13.25 0L1.25 0C0.697715 0 0.25 0.447715 0.25 1L0.25 13C0.25 13.5523 0.697715 14 1.25 14H4.25V12H2.25ZM10.5429 9.70711L11.9571 8.29289L7.25 3.58579L2.54289 8.29289L3.95711 9.70711L6.25 7.41421V14L8.25 14V7.41421L10.5429 9.70711Z" />
+                                        </svg>
+                                        Домашня робота
+                                    </button>
+                                </div>
+                            </div>
+                            <table id="journalTable" className="journal-table">
+                                <thead className="journal-table-head">
+                                    <tr>
+                                        <th>ФІО студента</th>
+                                        <th>
+                                            <div className="makeCheckboxesGreenDiv">
+                                                <div>
+                                                    Відмітити присутніх
+                                                </div>
+                                                <label className="table-radio-container" style={{ position: "relative", top: "-3px", pointerEvents: "none" }}>
+                                                    <input type="radio" defaultChecked disabled className="table-radio-green" name="radio" />
+                                                    <span className="table-checkmark table-radio-green"></span>
+                                                </label>
+                                            </div>
+                                        </th>
+                                        <th>Робота на уроці</th>
+                                        <th>Коментарі</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="journal-table-body">
+                                    {/* <tr>
                                     <td>
                                         <div>
                                             1
@@ -104,6 +266,7 @@ class TeacherPage extends Component {
                                         </div>
                                     </td>
                                     <td className="td-radios">
+
                                     <label className="table-radio-container">
                                       <input type="radio" className="table-radio-green" name="radio"/>
                                       <span className="table-checkmark table-radio-green"></span>
@@ -127,10 +290,10 @@ class TeacherPage extends Component {
                                         Додати
                                         </button>
                                     </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                       </div>
+                                </tr> */}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
@@ -149,265 +312,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(TeacherPage);
-
-// import React from 'react'
-// // import '../../styles/Teachers.css'
-// import NavigationBar from '../NavigationBar';
-//  import GroupEditing from './GroupEditing';
-//  //import {NavLink} from 'react-router-dom';
-// import axios from 'axios'
-// class TeacherPage extends React.Component{
-
-//     constructor(props){
-//         super(props);
-
-//         this.state={
-//             groups:[],
-//             subject: {}, 
-//             subjectTilt: 'Subject',
-//             students: [],
-//             teacherId: 1
-//         }
-//         this.getTeacherGroups = this.getTeacherGroups.bind(this);
-//         this.onClickgroup = this.onClickgroup.bind(this);
-//         this.onClickGroupEdit = this.onClickGroupEdit.bind(this);
-//         this.getSubgect = this.getSubgect.bind(this);
-//         this.onClickRadio1 = this.onClickRadio1.bind(this);
-//         this.onClickRadio2 = this.onClickRadio2.bind(this);
-//         this.onClickRadio3 = this.onClickRadio3.bind(this);
-//         this.getStudents = this.getStudents.bind(this);
-//     }
-
-//     componentDidMount(){
-//         this.getTeacherGroups(1); 
-//     }
-
-//     async getTeacherGroups(Id){
-//         try{
-//             const response= await fetch(`https://localhost:44364/api/teacher/GetTeacherGroupsById/${Id}`)
-
-//              const data = await response.json()
-    
-//              if (response.ok === true) {
-//                  this.setState({
-//                      groups:data
-//                  })
-//                 console.log(data)
-//              } else {
-//                  console.log("error",data)
-//              }
-//             }
-//         catch{}
-//     }
-
-//     async getStudents(groupId){
-//         try{
-//             const response= await fetch(`https://localhost:44364/api/student/GetStudentsByGroupId/${groupId}`)
-
-//              const data = await response.json()
-    
-//              if (response.ok === true) {
-//                  this.setState({
-//                      students: data
-//                  })
-//              } else {
-//              }
-//             }
-//         catch{}
-//     }
-
-//     onClickGroupEdit(e, groupId){
-//         e.preventDefault()
-//         window.location = `teacher/group-editing/${groupId}`
-//     }
-
-//     async onClickgroup(e, group){
-//         e.preventDefault()
-//         var cart_group = document.getElementById(group.id)
-//         var group_subject = document.getElementById('group-subject')
-//         //group_subject.innerText = 'Subject'
-//         var flag = cart_group.classList.contains("active")
-//         var group_title = document.getElementById('group-title')
-//         group_title.innerText = group.title
-//         if(flag === false){
-//             cart_group.classList.add('active')
-//         } else {
-//             cart_group.classList.remove('active')
-//             group_title.innerText = 'Group'
-//             group_subject.innerText = 'Subject'
-//         }
-
-//         this.getStudents(group.id)
-
-//         this.getSubgect(group.id)
-//     }
-
-//     async getSubgect(groupId){
-//         var group_subject = document.getElementById('group-subject')
-//         const response = await fetch(`https://localhost:44364/api/Subject/GetSubjectId/${groupId}`, {method: "GET"})
-//         if(response.ok === true){
-            
-//             const data_subjectID = await response.json()
-//             const responseGetSubjectById = await fetch(`https://localhost:44364/api/Subject/get/${data_subjectID}`, {method: "GET"})
-//             if(responseGetSubjectById.ok === true){
-               
-//                 const dataSubject = await responseGetSubjectById.json()
-//                 group_subject.innerText = dataSubject.title
-//                 this.setState({
-//                     subject: dataSubject
-//                 })
-//             }
-            
-//         } else {
-//             group_subject.innerText = 'Wrong request'
-//         }
-        
-//     }
-
-//     onClickRadio1(e){
-//         var studentId = e.target.value
-//         var radio1 = document.getElementById(`radio1_st${studentId}`)
-//         var radio2 = document.getElementById(`radio2_st${studentId}`)
-//         var radio3 = document.getElementById(`radio3_st${studentId}`)
-//         if(radio2.classList.contains('active') === true){
-//             radio2.classList.remove('active')
-//         }
-//         if(radio3.classList.contains('active') === true){
-//             radio3.classList.remove('active')
-//         }
-//         if(radio1.classList.contains('active') === false) {
-//             radio1.classList.add('active')
-//             radio1.checked = true;             
-//         } else {
-//             radio1.classList.remove('active')
-//             radio1.checked = false;
-//         }
-//     }
-
-//     onClickRadio2(e){
-//         var studentId = e.target.value
-//         var radio1 = document.getElementById(`radio1_st${studentId}`)
-//         var radio2 = document.getElementById(`radio2_st${studentId}`)
-//         var radio3 = document.getElementById(`radio3_st${studentId}`)
-      
-//         if(radio1.classList.contains('active') === true){
-//             radio1.classList.remove('active')
-//         }
-//         if(radio3.classList.contains('active') === true){
-//             radio3.classList.remove('active')
-//         }
-//         if(radio2.classList.contains('active') === false) {
-//             radio2.classList.add('active')  
-//         } else {
-//             radio2.classList.remove('active')
-//             radio2.checked = false;
-//         }
-//     }
-
-//     onClickRadio3(e){
-//         var studentId = e.target.value
-//         var radio1 = document.getElementById(`radio1_st${studentId}`)
-//         var radio2 = document.getElementById(`radio2_st${studentId}`)
-//         var radio3 = document.getElementById(`radio3_st${studentId}`)
-      
-//         if(radio1.classList.contains('active') === true){
-//             radio1.classList.remove('active')
-//         }
-//         if(radio2.classList.contains('active') === true){
-//             radio2.classList.remove('active')
-//         }
-//         if(radio3.classList.contains('active') === false) {
-//             radio3.classList.add('active')  
-//         } else {
-//             radio3.classList.remove('active')
-//             radio3.checked = false;
-//         }
-//     }
-
-//     render()
-//     {
-//         return(
-//             <>
-//                 <div id='all-container' className="all-container">
-                    
-//                     <NavigationBar />
-//                     <div className="teacher-header">
-
-//                     </div>
-
-//                     <div style={{marginTop: '10px'}}>
-//                         <div className='groups_navigation-container'>
-//                             {this.state.groups.map(group =>  
-//                                 <div id={group.id} key={group.id} onClick={e => this.onClickgroup(e, group)} onDoubleClick={e => this.onClickGroupEdit(e, group.id)} className="group-cart">
-//                                     {group.title}
-//                                 </div>      
-//                             )}
-//                         </div>
-//                         <div className='students-container'>
-//                             <div className="title-container">
-//                                 <div id='group-title'>Group</div>
-//                                 <div id='group-subject'> 
-                                    
-//                                 </div>
-//                             </div>
-//                             <div className='main-student-containe'>
-//                                 <div className='header-container-description'>
-//                                     <span className='fio'>FIO</span>
-//                                     <span className='visiting'>Mark
-//                                     <span className="border-green"></span>
-//                                     </span>
-//                                     <span className='online'>Online</span>
-//                                     <span className='feedback'>Feedback</span>
-//                                 </div>
-//                                 {this.state.students.map((student, i) => {
-//                                     return(
-//                                         <>
-//                                             <div className='student-cart'>
-//                                                 <div className='fio-stident-container'>
-//                                                     <span className='id-student'>{student.studentId}</span>
-//                                                     {student.base64URL ?    
-//                                                             <img src={student.base64URL} id='img-student' className='img-student' /> 
-//                                                         :
-//                                                             <img 
-//                                                                 style={{ width: '65px', borderRadius: '50%' }}
-//                                                                 className="img-fluid rounded-start"
-//                                                                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/768px-User_icon_2.svg.png" alt="..." />
-//                                                     }
-//                                                     <div className='fio-student'>
-//                                                         <span>
-//                                                             {student.name} {student.lastName} (SubName)
-//                                                         </span>
-//                                                     </div>
-//                                                 </div>
-//                                                 <div className='visiting-container'>
-//                                                     <input className='radio1' onClick={e => this.onClickRadio1(e)} value={student.studentId} id={`radio1_st${student.studentId}`} type='radio'/>
-//                                                     <input className='radio2' onClick={e => this.onClickRadio2(e)} value={student.studentId} id={`radio2_st${student.studentId}`} type='radio'/>
-//                                                     <input className='radio3' onClick={e => this.onClickRadio3(e)} value={student.studentId} id={`radio3_st${student.studentId}`} type='radio' />
-//                                                 </div>
-//                                                 <div className="active-time-container">
-//                                                     <span className="online">Online</span>
-//                                                     <span className="tile-oneline">31.10.2022</span>
-//                                                     <span className=""></span>
-//                                                 </div>
-//                                                 <div className="send-feedback-container">
-//                                                     <div>
-//                                                         <a href={`/teacher-page/send-feedback/${student.studentId}/${this.state.teacherId}/${this.state.subject.id}/${student.name}`} className="image-ref">
-//                                                             <img src='https://www.veryicon.com/download/png/business/blue-business-icon/send-message-4?s=256' id='img-feedback' className="img-feedback sepia " />
-//                                                         </a>
-//                                                     </div>
-//                                                 </div>
-//                                             </div> 
-//                                         </>
-//                                     )
-//                                 })}
-                                
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </>
-//         )
-//     }
-// }
-
-// export default TeacherPage

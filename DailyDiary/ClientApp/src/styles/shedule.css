@@ -1,0 +1,134 @@
+@import url('./Colors.css');
+.dayOfWeek-bar {
+    position: relative;
+    width: 100%;
+    min-width: 765px;
+    display: flex;
+    height: 56px;
+    animation-iteration-count: 1;
+    animation-name: fade;
+    animation-duration: 1s;
+    animation-play-state: running;
+}
+
+.dayOfWeek-list {
+    text-decoration: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    flex-grow: 1;
+    justify-content: space-around;
+    align-items: center;
+
+    background: var(--white);
+    box-shadow: 0px 1px 14px rgba(0, 7, 22, 0.14), 0px 0px 4px rgba(65, 77, 92, 0.2);
+    border-radius: 16px;
+
+    transition: all 0.3s ease;
+}
+
+.dayOfWeek-list>li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0;
+    width: 100%;
+    height: 56px;
+    color: var(--shedule-not-selected);
+    font-family: 'Inter';
+    font-style: normal;
+    transition: all 0.2s ease;
+}
+
+.dayOfWeek-list>li:hover {
+    box-shadow: 0px 1px 14px rgba(0, 7, 22, 0.14), 0px 0px 4px rgba(65, 77, 92, 0.2);
+    border-radius: 16px;
+    color: var(--white) !important;
+    background: var(--violet) !important;
+}
+
+.selectedDay {
+    box-shadow: 0px 1px 14px rgba(0, 7, 22, 0.14), 0px 0px 4px rgba(65, 77, 92, 0.2);
+    border-radius: 16px;
+    color: var(--white) !important;
+    background: var(--orange) !important;
+
+}
+
+/*_______________________________________table_______________________________________*/
+
+
+.shedule-table-container {
+    box-shadow: 0px 1px 14px rgba(0, 7, 22, 0.14), 0px 0px 4px rgba(65, 77, 92, 0.2);
+    border-radius: 16px;
+    padding: 10px 10px 5px 10px;
+    margin: 20px 0px 20px 0px;
+    min-width: 765px;
+}
+
+.shedule-table {
+    width: 100%;
+    margin: 0px 0px 20px 0px;
+}
+
+.shedule-table-head {
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 1px 14px rgba(0, 7, 22, 0.14), 0px 0px 4px rgba(65, 77, 92, 0.2);
+    border-radius: 16px;
+    height: 56px;
+    /* padding: 0px 5px 0px 5px; */
+}
+
+.shedule-table-body {
+}
+
+ 
+
+.shedule-table-head>tr {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr .5fr;
+    justify-content: center;
+}
+
+.shedule-table-body-tr {
+    padding: 10px 0px 10px 0px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr .5fr;
+    justify-content: center;
+    align-items: center;
+    align-items: center;
+    border-bottom: 3px solid var(--violet);
+    border-radius: 3px;
+}
+
+
+.shedule-table-body-td {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.shedule-table-head>tr>th {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+/*
+.shedule-table-body>tr>td>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 3px;
+} */
+
+/*_______________________________________table_______________________________________*/

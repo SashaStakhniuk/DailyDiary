@@ -1,8 +1,10 @@
+@import url('../Colors.css');
+
 .header {
     padding-left: 20px;
     padding-right: 20px;
     position: fixed;
-    background-color: #AEB9F1;
+    background-color: var(--headerColor);
     width: 100%;
     min-height: 60px;
     display: flex;

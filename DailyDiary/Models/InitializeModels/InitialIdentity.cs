@@ -25,21 +25,23 @@ namespace DailyDiary.Models
             try
             {
                 Subject csSubject = new Subject { Title = "C#", Priority = 1 };
-                Subject mathSubject = new Subject { Title = "Math", Priority = 1 };
-                Subject healthSubject = new Subject { Title = "Health", Priority = 4 };
-                Subject artSubject = new Subject { Title = "Art", Priority = 4 };
-                Subject musicSubject = new Subject { Title = "Music", Priority = 4 };
-                Subject englishSubject = new Subject { Title = "English", Priority = 3 };
-                Subject algebraSubject = new Subject { Title = "Algebra", Priority = 1 };
-                Subject geometrySubject = new Subject { Title = "Geometry", Priority = 1 };
-                Subject physicSubject = new Subject { Title = "Physical Science", Priority = 1 };
-                Subject geographySubject = new Subject { Title = "Geography", Priority = 2 };
-                Subject computerScienceSubject = new Subject { Title = "Computer Science", Priority = 1 };
+                Subject mathSubject = new Subject { Title = "Математика", Priority = 1 };
+                Subject healthSubject = new Subject { Title = "Основи здоров'я", Priority = 4 };
+                Subject artSubject = new Subject { Title = "Мистецтво", Priority = 4 };
+                Subject musicSubject = new Subject { Title = "Музика", Priority = 4 };
+                Subject englishSubject = new Subject { Title = "Англійська мова", Priority = 3 };
+                Subject ukrSubject = new Subject { Title = "Українська мова", Priority = 3 };
+                Subject ukrLitSubject = new Subject { Title = "Українська література", Priority = 3 };
+                Subject algebraSubject = new Subject { Title = "Алгебра", Priority = 1 };
+                Subject geometrySubject = new Subject { Title = "Геометрія", Priority = 1 };
+                Subject physicSubject = new Subject { Title = "Фізика", Priority = 1 };
+                Subject geographySubject = new Subject { Title = "Географія", Priority = 2 };
+                Subject computerScienceSubject = new Subject { Title = "Інформатика", Priority = 1 };
 
                 if (!datasContext.Subjects.Any())
                 {
                     datasContext.Subjects.AddRange(
-                    computerScienceSubject, geographySubject, physicSubject, geometrySubject, algebraSubject, englishSubject, musicSubject, artSubject, healthSubject, mathSubject, csSubject
+                    computerScienceSubject, geographySubject, physicSubject, geometrySubject, algebraSubject, ukrSubject, ukrLitSubject, englishSubject, musicSubject, artSubject, healthSubject, mathSubject, csSubject
                     );
                     await datasContext.SaveChangesAsync();
                 }
@@ -473,26 +475,27 @@ namespace DailyDiary.Models
                         //    new DbModels.DayOfWeek { EngTitle = "Friday" },
                         //    new DbModels.DayOfWeek { EngTitle = "Saturday" }
                         //    );
-                        await datasContext.DaysOfWeek.AddRangeAsync(
-                          new DbModels.DayOfWeek { EngTitle = "Saturday" },
-                          new DbModels.DayOfWeek { EngTitle = "Friday" },
-                          new DbModels.DayOfWeek { EngTitle = "Thursday" },
-                          new DbModels.DayOfWeek { EngTitle = "Wednesday" },
-                          new DbModels.DayOfWeek { EngTitle = "Tuesday" },
-                          new DbModels.DayOfWeek { EngTitle = "Monday" },
-                          new DbModels.DayOfWeek { EngTitle = "Sunday" }
-                          );
-                        await datasContext.SaveChangesAsync();
+
                         //await datasContext.DaysOfWeek.AddRangeAsync(
-                        //  new DbModels.DayOfWeek { EngTitle = "Saturday", EngShortTitle = "Sat", UaTitle = "Субота", UaShortTitle = "Сб" },
-                        //  new DbModels.DayOfWeek { EngTitle = "Friday", EngShortTitle = "Fri", UaTitle = "П'ятниця", UaShortTitle = "Пт" },
-                        //  new DbModels.DayOfWeek { EngTitle = "Thursday", EngShortTitle = "Thu", UaTitle = "Четвер", UaShortTitle = "Чт" },
-                        //  new DbModels.DayOfWeek { EngTitle = "Wednesday", EngShortTitle = "Wed", UaTitle = "Середа", UaShortTitle = "Ср" },
-                        //  new DbModels.DayOfWeek { EngTitle = "Tuesday", EngShortTitle = "Tue", UaTitle = "Вівторок", UaShortTitle = "Вт" },
-                        //  new DbModels.DayOfWeek { EngTitle = "Monday", EngShortTitle = "Mon", UaTitle = "Понеділок", UaShortTitle = "Пн" },
-                        //  new DbModels.DayOfWeek { EngTitle = "Sunday", EngShortTitle = "Sun", UaTitle = "Неділя", UaShortTitle = "Нд" }
+                        //  new DbModels.DayOfWeek { EngTitle = "Saturday" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Friday" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Thursday" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Wednesday" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Tuesday" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Monday" },
+                        //  new DbModels.DayOfWeek { EngTitle = "Sunday" }
                         //  );
-                        //System.DayOfWeek.Thursday;
+                        //await datasContext.SaveChangesAsync();
+
+                        await datasContext.DaysOfWeek.AddRangeAsync(
+                          new DbModels.DayOfWeek { EngTitle = "Saturday", EngShortTitle = "Sat", UaTitle = "Субота", UaShortTitle = "Сб", DayIntValue=0 },
+                          new DbModels.DayOfWeek { EngTitle = "Friday", EngShortTitle = "Fri", UaTitle = "П'ятниця", UaShortTitle = "Пт", DayIntValue=1 },
+                          new DbModels.DayOfWeek { EngTitle = "Thursday", EngShortTitle = "Thu", UaTitle = "Четвер", UaShortTitle = "Чт", DayIntValue=2 },
+                          new DbModels.DayOfWeek { EngTitle = "Wednesday", EngShortTitle = "Wed", UaTitle = "Середа", UaShortTitle = "Ср", DayIntValue=3 },
+                          new DbModels.DayOfWeek { EngTitle = "Tuesday", EngShortTitle = "Tue", UaTitle = "Вівторок", UaShortTitle = "Вт", DayIntValue=4 },
+                          new DbModels.DayOfWeek { EngTitle = "Monday", EngShortTitle = "Mon", UaTitle = "Понеділок", UaShortTitle = "Пн", DayIntValue=5 },
+                          new DbModels.DayOfWeek { EngTitle = "Sunday", EngShortTitle = "Sun", UaTitle = "Неділя", UaShortTitle = "Нд", DayIntValue=6 }
+                          );
                     }
                     if (!datasContext.LessonsShedule.Any())
                     {

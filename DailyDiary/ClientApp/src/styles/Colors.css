@@ -1,12 +1,16 @@
 /* @import url('Colors.css'); */
 :root {
   --white: #ffffff;
-  --background: #F5F5F5;
+  --background: #ffffff;
   --red: #DC2626;
   --orange: #F2982A;
   --error: #F87171;
   --iconsColor: black;
+  /* --violet: #a5b0cc; */
   --violet: #AEB9F1;
+  --headerColor: #AEB9F1;
+  --navMenuColor: #ffffff;
+
   --almostBlack: #333333;
 
   --white-icon-color:#DADADA;

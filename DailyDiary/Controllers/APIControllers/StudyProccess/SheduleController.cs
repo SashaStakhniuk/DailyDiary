@@ -25,6 +25,76 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
         //{
         //    return await db.Shedules.AsNoTracking().Where(x=> x.).ToListAsync();
         //}
+        [HttpGet("{teacherId}")]
+        public async Task<ActionResult<JournalFullDataViewModel>> GetSheduleDataForSelectedDayByTeacherIdAsync(int teacherId)// отримую розклад на сьогодні для викладача
+        {
+            try
+            {
+                if (teacherId <= 0)
+                {
+                    return BadRequest("Teacher id can't be <= 0");
+                }
+                Teacher teacher = await db.Teachers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == teacherId);
+                if (teacher == null)
+                {
+                    return NotFound("Teacher not found");
+                }
+                DateTime today = DateTime.Today;
+                int dayOfWeekId = await db.DaysOfWeek.AsNoTracking().Where(x => x.Id == (int)today.DayOfWeek).Select(x => x.Id).FirstOrDefaultAsync();
+                if (dayOfWeekId <= 0)
+                {
+                    return NotFound("Day of week not found in database");
+                }
+                var sheduleData = await db.Shedules.Include(x => x.TeacherSubgroupDistribution)
+                    .FirstOrDefaultAsync(x => x.DayId == dayOfWeekId && x.LessonId == 1 && x.TeacherSubgroupDistribution.TeacherId == teacherId);// перший урок сьогоднішнього дня для викладача
+
+                var subgroup = await db.Subgroups.Include(x => x.Group).FirstOrDefaultAsync(x => x.Id == sheduleData.TeacherSubgroupDistribution.SubgroupId); // шукаю підгрупу, в якій викладач має вести предмет
+                if (subgroup == null)
+                {
+                    return NotFound("Subgroup not found");
+                }
+                else
+                {
+                    if (subgroup.Id == subgroup.Group.DefSubgroupId)
+                    {
+                        subgroup.Title = subgroup.Group.Title;
+                    }
+                }
+                var subject = await db.Subjects.AsNoTracking().FirstOrDefaultAsync(x => x.Id == sheduleData.TeacherSubgroupDistribution.SubjectId); // шукаю предмет, який викладач має вести в підгрупі
+                if (subject == null)
+                {
+                    return NotFound("Subject not found");
+                }
+                var studentsList = await db.StudentsBySubgroups.Include(x => x.Student).ThenInclude(x => x.Person).Where(x => x.SubgroupId == subgroup.Id)
+                    .Select(x => new StudentJournalData
+                    {
+                        StudentId = x.StudentId,
+                        Name = x.Student.Person.Name,
+                        LastName = x.Student.Person.LastName,
+                        MiddleName = x.Student.Person.MiddleName
+                    }).ToListAsync();
+                if (studentsList == null)
+                {
+                    return NotFound("No one student in group found");
+                }
+
+                JournalFullDataViewModel journalData = new JournalFullDataViewModel
+                {
+                    LessonId = (int)sheduleData.LessonId,
+                    GroupId = subgroup.Id,
+                    GroupTitle = subgroup.Title,
+                    SubjectId = subject.Id,
+                    SubjectTitle = subject.Title,
+                    Students = studentsList
+                };
+
+                return Ok(journalData);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
         [HttpGet("{details}")]
         public async Task<ActionResult<IEnumerable<SheduleFullDataViewModel>>> GetSheduleIfExistByGroupIdAndDayId(int groupId, int dayId)
         {
@@ -150,27 +220,27 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
                                     if (auditory != null)
                                     {
                                         //------------------------------------------Checking datas------------------------------------------------->
-                                       
-                                        var allTeacherSubgroupsDistributionId = await db.TeacherSubgroupDistributions.AsNoTracking().Where(x=> x.TeacherId == teacherSubgroup.TeacherId && x.SubgroupId!=teacherSubgroup.SubgroupId).Select(x=> x.Id).ToListAsync(); // шукаю усі розподілення,окрім розподілення для обраної групи, де є цей викладач
+
+                                        var allTeacherSubgroupsDistributionId = await db.TeacherSubgroupDistributions.AsNoTracking().Where(x => x.TeacherId == teacherSubgroup.TeacherId && x.SubgroupId != teacherSubgroup.SubgroupId).Select(x => x.Id).ToListAsync(); // шукаю усі розподілення,окрім розподілення для обраної групи, де є цей викладач
                                         foreach (var teacherSubgroupsDistributionId in allTeacherSubgroupsDistributionId) // перебираю усі і шукаю чи викладач вже не веде урок у цю годину
                                         {
-                                            var teacherSheduleChecking = await db.Shedules.AsNoTracking().FirstOrDefaultAsync(x=> x.DayId==day.Id && x.LessonId==lesson.Id && x.WeekId==weekId); //якщо препод вже веде заняття в цей же день у цю ж годину. (іншими словами) якщо існує хоча б 1 запис де, викладач веде урок у (необраній) групі, де день = обраному і номер уроку = обраному
+                                            var teacherSheduleChecking = await db.Shedules.AsNoTracking().FirstOrDefaultAsync(x => x.DayId == day.Id && x.LessonId == lesson.Id && x.WeekId == weekId); //якщо препод вже веде заняття в цей же день у цю ж годину. (іншими словами) якщо існує хоча б 1 запис де, викладач веде урок у (необраній) групі, де день = обраному і номер уроку = обраному
                                             if (teacherSheduleChecking != null)
                                             {
                                                 //dataSuccess = false;
-                                                var teacher = await db.Teachers.Include(x => x.Person).FirstOrDefaultAsync(x=> x.Id==teacherSubgroup.TeacherId);
+                                                var teacher = await db.Teachers.Include(x => x.Person).FirstOrDefaultAsync(x => x.Id == teacherSubgroup.TeacherId);
                                                 if (teacher != null)
                                                 {
-                                                    var subgroupId = await db.TeacherSubgroupDistributions.AsNoTracking().Where(x=> x.Id== teacherSubgroupsDistributionId).Select(x=> x.SubgroupId).FirstOrDefaultAsync();
-                                                    var groupTitle = await db.Groups.AsNoTracking().Where(x => x.DefSubgroupId == subgroupId).Select(x=> x.Title).FirstOrDefaultAsync();
-                                                   
+                                                    var subgroupId = await db.TeacherSubgroupDistributions.AsNoTracking().Where(x => x.Id == teacherSubgroupsDistributionId).Select(x => x.SubgroupId).FirstOrDefaultAsync();
+                                                    var groupTitle = await db.Groups.AsNoTracking().Where(x => x.DefSubgroupId == subgroupId).Select(x => x.Title).FirstOrDefaultAsync();
+
                                                     return BadRequest($"Teacher {teacher.Person.Name} {teacher.Person.LastName} already teached subject in group '{groupTitle}' on selected time");
 
                                                 }
                                                 else
                                                 {
                                                     return BadRequest("Teacher already teached subject in group on selected time");
-                                                } 
+                                                }
                                             }
                                         }
                                         var sheduleAuditory = await db.Shedules.AsNoTracking().FirstOrDefaultAsync(x => x.AuditoryId == auditory.Id && x.DayId == day.Id && x.TeacherSubgroupDistributionId != teacherSubgroup.Id && x.LessonId == lesson.Id && x.WeekId == weekId); // якщо аудиторія зайнята іншою групою в цей час
@@ -188,7 +258,7 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
 
 
 
-                                        
+
                                         if (sheduleToAdd.Id > 0)
                                         {
                                             sheduleItem = await db.Shedules.FirstOrDefaultAsync(x => x.Id == sheduleToAdd.Id);

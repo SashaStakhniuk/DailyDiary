@@ -15,9 +15,10 @@ namespace DailyDiary.Models.DbModels
         [Key]
         public int Id { get; set; }
         public string EngTitle { get; set; }
-        //public string EngShortTitle { get; set; }
-        //public string UaTitle { get; set; }
-        //public string UaShortTitle { get; set; }
+        public string EngShortTitle { get; set; }
+        public string UaTitle { get; set; }
+        public string UaShortTitle { get; set; }
+        public int DayIntValue { get; set; }
         public virtual ICollection<Shedule> Shedules { get; set; }
 
     }

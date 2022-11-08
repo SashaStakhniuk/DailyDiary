@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import GeneralHeader from '../Headers/GeneralHeader';
 import { Host } from '../Host'
 import GeneralNavigationBar from '../Navigations/GeneralNavigationBar';
-
+import "../../styles/shedule.css"
 class CreateOdEditShedule extends React.Component {
     constructor(props) {
         super(props);
@@ -298,6 +298,7 @@ class CreateOdEditShedule extends React.Component {
 
                 let tr = document.createElement("tr");
                 tr.setAttribute('value', this.state.groupDistributionData.subgroupDistributionId);
+                tr.setAttribute('class', "shedule-table-body-tr");
 
                 let tdSubject = document.createElement("td");
                 let tdTeacher = document.createElement("td");
@@ -309,7 +310,7 @@ class CreateOdEditShedule extends React.Component {
                 var button = document.createElement('button');
                 button.innerHTML = 'Delete';
                 button.onclick = (e) => this.deleteItemFromTable(e);
-                button.setAttribute('class', 'btn btn-danger');
+                button.setAttribute('class', 'general-outline-button');
                 tdDelete.appendChild(button);
 
                 let selectAuditory = document.createElement('select')
@@ -373,6 +374,7 @@ class CreateOdEditShedule extends React.Component {
                     let tr = document.createElement("tr");
                     tr.setAttribute('value', existingShedule[i].teacherSubgroupDistributionId);
                     tr.setAttribute('sheduleId', existingShedule[i].id);
+                    tr.setAttribute('class', "shedule-table-body-tr");
 
                     let tdSubject = document.createElement("td");
                     let tdTeacher = document.createElement("td");
@@ -382,9 +384,9 @@ class CreateOdEditShedule extends React.Component {
                     let tdDelete = document.createElement("td");
 
                     var button = document.createElement('button');
-                    button.innerHTML = 'Delete';
+                    button.innerHTML = 'Видалити';
                     button.onclick = (e) => this.deleteItemFromTable(e);
-                    button.setAttribute('class', 'btn btn-danger');
+                    button.setAttribute('class', 'general-outline-button');
                     tdDelete.appendChild(button);
 
                     let selectAuditory = document.createElement('select')
@@ -673,12 +675,24 @@ class CreateOdEditShedule extends React.Component {
             weekId: e.target.value
         })
     }
-    onDayChange = async (e) => {
+    onDayClick = async (e) => {
         this.setState({
             dayId: e.target.value,
             subjectIdToAdd: this.state.groupStudyPlan.subjectsToAdd[0].subjectId
         })
+        // console.log(e.target)
+        var listsOfLi = e.target?.parentNode?.children;
+        // console.log(listsOfLi.className)
 
+        if (listsOfLi === undefined || e.target.tagName == "UL") {
+            return 0;
+        }
+        for (let i = 0; i < listsOfLi.length; i++) {
+            listsOfLi[i].className = "";
+            if (listsOfLi[i].id == e.target.id) {
+                listsOfLi[i].className = "selectedDay";
+            }
+        }
         await this.getSheduleIfExistByGroupIdAndDayId(e.target.value)
         // console.log(e.target.value)
     }
@@ -694,28 +708,55 @@ class CreateOdEditShedule extends React.Component {
                     <div className="generalSide">
 
                         <div className="form-floating col-md">
-                            <select id="group" name="group" className="form-select" onChange={(e) => this.onGroupChange(e)} required>
+                            <select id="group" name="group" className="form-select" style={{ marginTop: "10px" }} onChange={(e) => this.onGroupChange(e)} required>
                                 {this.state.groups.map(group =>
                                     <option key={"group" + group.groupId} value={group.groupId}>{group.groupTitle}</option>
                                 )}
                             </select>
-                            <label htmlFor="group">Groups</label>
+                            <label htmlFor="group">Група:</label>
                         </div>
 
-                        <div className="form-floating d-flex flex-row" onChange={(e) => this.onDayChange(e)}>
-                            {this.state.days.map(day =>
-                                <div key={`dayOfWeek_${day.id} `}>
+                        <div className="form-floating d-flex flex-row justify-content-around" style={{ margin: "10px 0px 10px 0px" }} onClick={(e) => this.onDayClick(e)}>
+                            <div className="dayOfWeek-bar">
+                                <ul className="dayOfWeek-list">
+                                    {this.state.days.map(day =>
+                                        day.id == 2 ?
+                                            <li key={`dayOfWeek_${day.id}`} id={"day_" + day.id} name="day" className='selectedDay' value={day.id}>
+                                                {day.uaTitle}
+                                            </li>
+                                            :
+                                            <li key={`dayOfWeek_${day.id}`} id={"day_" + day.id} name="day" value={day.id}>
+                                                {day.uaTitle}
+                                            </li>
+
+                                    )}
+                                    {/* {this.state.days.map(day =>
+                                        <li key={`dayOfWeek_${day.id}`}>
+                                            {day.id == 2 ?
+                                                <input type="radio" checked id="day" name="day" value={day.id} onChange={(e) => this.onDaySelectChange(e)} />
+                                                :
+                                                <input type="radio" id="day" name="day" value={day.id} onChange={(e) => this.onDaySelectChange(e)} />
+                                            }
+                                            <label htmlFor="day">{day.uaTitle}</label>
+                                        </li>
+                                    )} */}
+                                </ul>
+                            </div>
+                            {/* {this.state.days.map(day =>
+                                <div key={`dayOfWeek_${day.id}`}>
                                     {day.id == 2 ?
                                         <input type="radio" defaultChecked id="day" name="day" value={day.id} />
                                         :
                                         <input type="radio" id="day" name="day" value={day.id} />
                                     }
-                                    <label style={{ color: "black" }} htmlFor="day">{day.engTitle}</label>
+                                    <label style={{ color: "black" }} htmlFor="day">{day.uaTitle}</label>
                                 </div>
-                            )}
+                            )} */}
                         </div>
-                        <div className="d-flex flex-row">
-                            <div className="form-floating col-md">
+                        <div style={{ margin: "10px 0px 10px 0px" }}>
+
+                            <div style={{ margin: "0px 0px 10px 0px" }}>Предмети групи</div>
+                            <div className="d-flex flex-row align-items-center">
                                 <select id="groupSubjects" name="groupSubjects" className="form-select" onChange={(e) => this.onGroupSubjectChange(e)} required>
                                     {this.state.groupStudyPlan.subjectsToAdd !== undefined ?
                                         this.state.groupStudyPlan.subjectsToAdd.map((studyPlanSubject) =>
@@ -725,25 +766,24 @@ class CreateOdEditShedule extends React.Component {
                                         <></>
                                     }
                                 </select>
-                                <label htmlFor="groupSubjects">Group's subjects</label>
+                                <button className='general-outline-button' onClick={() => this.appendSubjectInShedule()} >Додати в розклад</button>
                             </div>
-                            <button className='btn btn-primary' onClick={() => this.appendSubjectInShedule()} >Add selected in shedule</button>
                         </div>
 
+                        <div className='shedule-table-container'>
+                            <table className="shedule-table" id="sheduleTable">
+                                <thead className="shedule-table-head">
+                                    <tr>
+                                        <th>Предмет</th>
+                                        <th>Викладач</th>
+                                        <th>Аудиторія</th>
+                                        <th>Тиждень</th>
+                                        <th>Урок</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="shedule-table-body">
 
-                        <table className='table' id="sheduleTable">
-                            <thead>
-                                <tr>
-                                    <th>Subject</th>
-                                    <th>Teacher</th>
-                                    <th>Auditory</th>
-                                    <th>Week</th>
-                                    <th>Lesson</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                {/* <div className="form-floating col-md">
+                                    {/* <div className="form-floating col-md">
                                     {this.state.lessonsShedule.map(lesson =>
                                         <div key={`lesson_number_${ lesson.id } `}>
                                             <input type="radio" id="lesson" name="lesson" value={lesson.id} />
@@ -752,9 +792,13 @@ class CreateOdEditShedule extends React.Component {
                                     )}
                                 </div> */}
 
-                            </tbody>
-                        </table>
-                        <button className='btn btn-success' onClick={() => this.createOrEditShedule()}>Create or edit</button>
+                                </tbody>
+                            </table>
+                            <div className='d-flex flex-row justify-content-end'>
+                                <button className='general-outline-button button-static' onClick={() => this.createOrEditShedule()}>Створити / редагувати</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </>

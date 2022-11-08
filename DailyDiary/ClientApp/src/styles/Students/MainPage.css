@@ -29,7 +29,7 @@
 body {
     /* overflow:auto;
     cursor: auto; */
-    background: var(--white);
+    background: var(--background);
     /* font: bold 400 1.25em -apple-system, BlinkMacSystemFont, , Arial, sans-serif; */
     /* font-weight:bold;
     font-size: 1em;

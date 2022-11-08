@@ -20,27 +20,35 @@ class Admin extends Component {
         const root = document.querySelector(':root');
         if (+theme === 0) {
             root.style.setProperty('--white', '#ffffff');
-            root.style.setProperty('--background', '#F5F5F5');
+            root.style.setProperty('--background', '#ffffff');
+            root.style.setProperty('--headerColor', '#AEB9F1');
+            root.style.setProperty('--navMenuColor', '#ffffff');//меню
+            root.style.setProperty('--violet', '#AEB9F1');
+            root.style.setProperty('--subjectTextColor', '#4F4F4F');
+            root.style.setProperty('--selectText', '#A5B0CC');
+
             root.style.setProperty('--red', '#DC2626');
             root.style.setProperty('--orange', '#F2982A');
             root.style.setProperty('--error', '#F87171');
             root.style.setProperty('--iconsColor', '#black');
-            root.style.setProperty('--violet', '#AEB9F1');
             root.style.setProperty('--almostBlack', '#333333');
             root.style.setProperty('--white-icon-color', '#DADADA');
-            root.style.setProperty('--subjectTextColor', '#4F4F4F');
             root.style.setProperty('--text-gray', '#667080');
             root.style.setProperty('--text-gray2', '#333333');
-            root.style.setProperty('--selectText', '#A5B0CC');
         }
         else {
-            root.style.setProperty('--white', 'black');
-            // root.style.setProperty('--background', '#F5F5F5');
+            root.style.setProperty('--white', '#22253B'); //
+            root.style.setProperty('--background', '#2b2e4a');//фон
+            root.style.setProperty('--headerColor', '#22253B');//хедер
+            root.style.setProperty('--navMenuColor', '#22253B');//меню
+            root.style.setProperty('--violet', '#a5b0cc');//іконки і кнопочки
+            root.style.setProperty('--subjectTextColor', '#AEB9F1');
+            root.style.setProperty('--selectText', '#AEB9F1');
+
             // root.style.setProperty('--red', '#DC2626');
             // root.style.setProperty('--orange', '#F2982A');
             // root.style.setProperty('--error', '#F87171');
             // root.style.setProperty('--iconsColor', '#black');
-            root.style.setProperty('--violet', 'green');
             // root.style.setProperty('--almostBlack', '#333333');
             // root.style.setProperty('--white-icon-color', '#DADADA');
             // root.style.setProperty('--subjectTextColor', '#4F4F4F');
@@ -59,7 +67,7 @@ class Admin extends Component {
                         <GeneralNavigationBar role={this.props.credentials.roles} menuItemToSelect={0} />
                     </div>
                     <div className="generalSide">
-{/* 
+
                         <div id="theme" className="m-2">
                             <div>
                                 <label htmlFor="lightTheme">Light theme</label>
@@ -69,7 +77,7 @@ class Admin extends Component {
                                 <label htmlFor="darkTheme">Dark theme</label>
                                 <input type="radio" id="darkTheme" name="theme" value="1" onClick={(e) => this.setTheme(e)} />
                             </div>
-                        </div> */}
+                        </div>
 
                         <div className="d-flex flex-wrap justify-content-around m-3">
                             <div >
@@ -82,16 +90,19 @@ class Admin extends Component {
                                 <a href="/admin/new-study-year" className="general-outline-button">Навчальні роки</a>
                             </div>
                             <div >
-                                <a href="/admin/groups" className="general-outline-button">Усі групи</a>
-                            </div>
-                            <div >
-                                <a href="/admin/edit-group" className="general-outline-button">Редагування груп</a>
-                            </div>
-                            <div >
                                 <a href="/admin/new-study-plan" className="general-outline-button">Навчальні плани</a>
                             </div>
                             <div >
+                                <a href="/admin/groups" className="general-outline-button">Усі групи</a>
+                            </div>
+                            {/* <div >
+                                <a href="/admin/edit-group" className="general-outline-button">Редагування груп</a>
+                            </div> */}
+                            <div >
                                 <a href="/admin/teachers-distribution" className="general-outline-button">Розподілення викладачів по групах</a>
+                            </div>
+                            <div >
+                                <a href="/admin/createoreditshedule" className="general-outline-button">Створення розкладу</a>
                             </div>
                         </div>
                     </div>
