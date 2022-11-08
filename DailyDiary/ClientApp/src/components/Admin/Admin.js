@@ -3,17 +3,51 @@ import { connect } from "react-redux";
 import { Host } from "../Host"
 import GeneralNavigationBar from "../Navigations/GeneralNavigationBar";
 // import setUserCredentials from '../../redux/action_creators/SetUserCredentials';
- import GeneralHeader from "../Headers/GeneralHeader";
+import GeneralHeader from "../Headers/GeneralHeader";
 //  import jwt_decode from "jwt-decode";
 
 class Admin extends Component {
     constructor(props) {
         super(props)
     }
-    componentDidMount(){
+    componentDidMount() {
         //  console.log(JSON.parse(Buffer.from(this.props.credentials.tokenKey.split('.')[1], 'base64').toString()));
         // var decoded = jwt_decode(this.props?.credentials?.tokenKey);
         // console.log(decoded);
+    }
+    setTheme = (e) => {
+        const theme = e.target.value
+        const root = document.querySelector(':root');
+        if (+theme === 0) {
+            root.style.setProperty('--white', '#ffffff');
+            root.style.setProperty('--background', '#F5F5F5');
+            root.style.setProperty('--red', '#DC2626');
+            root.style.setProperty('--orange', '#F2982A');
+            root.style.setProperty('--error', '#F87171');
+            root.style.setProperty('--iconsColor', '#black');
+            root.style.setProperty('--violet', '#AEB9F1');
+            root.style.setProperty('--almostBlack', '#333333');
+            root.style.setProperty('--white-icon-color', '#DADADA');
+            root.style.setProperty('--subjectTextColor', '#4F4F4F');
+            root.style.setProperty('--text-gray', '#667080');
+            root.style.setProperty('--text-gray2', '#333333');
+            root.style.setProperty('--selectText', '#A5B0CC');
+        }
+        else {
+            root.style.setProperty('--white', 'black');
+            // root.style.setProperty('--background', '#F5F5F5');
+            // root.style.setProperty('--red', '#DC2626');
+            // root.style.setProperty('--orange', '#F2982A');
+            // root.style.setProperty('--error', '#F87171');
+            // root.style.setProperty('--iconsColor', '#black');
+            root.style.setProperty('--violet', 'green');
+            // root.style.setProperty('--almostBlack', '#333333');
+            // root.style.setProperty('--white-icon-color', '#DADADA');
+            // root.style.setProperty('--subjectTextColor', '#4F4F4F');
+            // root.style.setProperty('--text-gray', '#667080');
+            // root.style.setProperty('--text-gray2', '#333333');
+            // root.style.setProperty('--selectText', '#A5B0CC');
+        }
     }
     render() {
         return (
@@ -25,27 +59,39 @@ class Admin extends Component {
                         <GeneralNavigationBar role={this.props.credentials.roles} menuItemToSelect={0} />
                     </div>
                     <div className="generalSide">
-                        <div className="d-flex justify-content-around">
-                            <div className="m-3">
-                                <a href="/admin/new-person" className="btn">Create new user</a>
+{/* 
+                        <div id="theme" className="m-2">
+                            <div>
+                                <label htmlFor="lightTheme">Light theme</label>
+                                <input type="radio" id="lightTheme" name="theme" value="0" onClick={(e) => this.setTheme(e)} />
                             </div>
-                            <div className="m-3">
-                                <a href="/admin/edit-person" className="btn">Find person</a>
+                            <div>
+                                <label htmlFor="darkTheme">Dark theme</label>
+                                <input type="radio" id="darkTheme" name="theme" value="1" onClick={(e) => this.setTheme(e)} />
                             </div>
-                            <div className="m-3">
-                                <a href="/admin/new-study-year" className="btn">New study year</a>
+                        </div> */}
+
+                        <div className="d-flex flex-wrap justify-content-around m-3">
+                            <div >
+                                <a href="/admin/new-person" className="general-outline-button">Створити нового користувача</a>
                             </div>
-                            <div className="m-3">
-                                <a href="/admin/groups" className="btn">Усі групи</a>
+                            <div >
+                                <a href="/admin/edit-person" className="general-outline-button">Знайти користувача</a>
                             </div>
-                            <div className="m-3">
-                                <a href="/admin/edit-group" className="btn">Редагування груп</a>
+                            <div >
+                                <a href="/admin/new-study-year" className="general-outline-button">Навчальні роки</a>
                             </div>
-                            <div className="m-3">
-                                <a href="/admin/new-study-plan" className="btn">New Study plan</a>
+                            <div >
+                                <a href="/admin/groups" className="general-outline-button">Усі групи</a>
                             </div>
-                            <div className="m-3">
-                                <a href="/admin/teachers-distribution" className="btn">Розподілення викладачів по групах</a>
+                            <div >
+                                <a href="/admin/edit-group" className="general-outline-button">Редагування груп</a>
+                            </div>
+                            <div >
+                                <a href="/admin/new-study-plan" className="general-outline-button">Навчальні плани</a>
+                            </div>
+                            <div >
+                                <a href="/admin/teachers-distribution" className="general-outline-button">Розподілення викладачів по групах</a>
                             </div>
                         </div>
                     </div>
@@ -56,6 +102,13 @@ class Admin extends Component {
     }
 }
 
+// function mapDispatchToProps(dispatch){
+//     return{
+//         setCredentials:(userId,tokenKey,roles)=>dispatch(setUserCredentials(userId,tokenKey,roles)),
+//     }
+//   };
+// export default connect(mapStateToProps,mapDispatchToProps)(Admin);
+
 function mapStateToProps(state) {
     console.log("mapStateToProps ")
     console.log(state)
@@ -64,11 +117,5 @@ function mapStateToProps(state) {
         credentials: state.currentUser.credentials,
     }
 }
-// function mapDispatchToProps(dispatch){
-//     return{
-//         setCredentials:(userId,tokenKey,roles)=>dispatch(setUserCredentials(userId,tokenKey,roles)),
-//     }
-//   };
-// export default connect(mapStateToProps,mapDispatchToProps)(Admin);
 export default connect(mapStateToProps)(Admin);
 // export default Admin;

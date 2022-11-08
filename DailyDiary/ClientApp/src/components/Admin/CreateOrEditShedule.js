@@ -1,5 +1,8 @@
 import React from 'react'
+import { connect } from "react-redux";
+import GeneralHeader from '../Headers/GeneralHeader';
 import { Host } from '../Host'
+import GeneralNavigationBar from '../Navigations/GeneralNavigationBar';
 
 class CreateOdEditShedule extends React.Component {
     constructor(props) {
@@ -535,8 +538,8 @@ class CreateOdEditShedule extends React.Component {
             // console.log("dayId: ", dayId)
             // console.log("lessonId: ", lessonId)
 
-            if(sheduleId==undefined){
-                sheduleId=0;
+            if (sheduleId == undefined) {
+                sheduleId = 0;
             }
             if (teacherSubgroupDistributionId == undefined || teacherSubgroupDistributionId <= 0) {
                 alert("teacherSubgroupDistributionId can't be <= 0");
@@ -559,7 +562,7 @@ class CreateOdEditShedule extends React.Component {
             //     return 0;
             // }
 
-            arrayOfKeys.push({ "id":sheduleId, "teacherSubgroupDistributionId": teacherSubgroupDistributionId, "weekId": weekId, "dayId": dayId, "auditoryId": auditoryId, "lessonId": lessonId })
+            arrayOfKeys.push({ "id": sheduleId, "teacherSubgroupDistributionId": teacherSubgroupDistributionId, "weekId": weekId, "dayId": dayId, "auditoryId": auditoryId, "lessonId": lessonId })
         }
         console.log(arrayOfKeys)
         if (arrayOfKeys.length > 0) {
@@ -567,7 +570,7 @@ class CreateOdEditShedule extends React.Component {
         }
         return undefined;
     }
-    createOrEditShedule = async() => {
+    createOrEditShedule = async () => {
         const arrayOfKeys = this.getArrayOfKeysFromTable(); // дістаю усі елементи з таблиці
         console.log(arrayOfKeys);
 
@@ -681,58 +684,66 @@ class CreateOdEditShedule extends React.Component {
     }
     render() {
         return (
-            <div className='container'>
-                <div className="form-floating col-md">
-                    <select id="group" name="group" className="form-select" onChange={(e) => this.onGroupChange(e)} required>
-                        {this.state.groups.map(group =>
-                            <option key={"group" + group.groupId} value={group.groupId}>{group.groupTitle}</option>
-                        )}
-                    </select>
-                    <label htmlFor="group">Groups</label>
-                </div>
+            <>
+                <GeneralHeader></GeneralHeader>
 
-                <div className="form-floating d-flex flex-row" onChange={(e) => this.onDayChange(e)}>
-                    {this.state.days.map(day =>
-                        <div key={`dayOfWeek_${day.id} `}>
-                            {day.id == 2 ?
-                                <input type="radio" defaultChecked id="day" name="day" value={day.id} />
-                                :
-                                <input type="radio" id="day" name="day" value={day.id} />
-                            }
-                            <label style={{ color: "black" }} htmlFor="day">{day.engTitle}</label>
-                        </div>
-                    )}
-                </div>
-                <div className="d-flex flex-row">
-                    <div className="form-floating col-md">
-                        <select id="groupSubjects" name="groupSubjects" className="form-select" onChange={(e) => this.onGroupSubjectChange(e)} required>
-                            {this.state.groupStudyPlan.subjectsToAdd !== undefined ?
-                                this.state.groupStudyPlan.subjectsToAdd.map((studyPlanSubject) =>
-                                    <option key={"subjectToAdd_" + studyPlanSubject.subjectId} value={studyPlanSubject.subjectId}>{this.state.allSubjects.find(x => x.id == studyPlanSubject.subjectId).title}</option>
-                                )
-                                :
-                                <></>
-                            }
-                        </select>
-                        <label htmlFor="groupSubjects">Group's subjects</label>
+                <div className="flex-container">
+                    <div className="navigationSide">
+                        <GeneralNavigationBar role={this.props.credentials.roles} menuItemToSelect={2} />
                     </div>
-                    <button className='btn btn-primary' onClick={() => this.appendSubjectInShedule()} >Add selected in shedule</button>
-                </div>
+                    <div className="generalSide">
+
+                        <div className="form-floating col-md">
+                            <select id="group" name="group" className="form-select" onChange={(e) => this.onGroupChange(e)} required>
+                                {this.state.groups.map(group =>
+                                    <option key={"group" + group.groupId} value={group.groupId}>{group.groupTitle}</option>
+                                )}
+                            </select>
+                            <label htmlFor="group">Groups</label>
+                        </div>
+
+                        <div className="form-floating d-flex flex-row" onChange={(e) => this.onDayChange(e)}>
+                            {this.state.days.map(day =>
+                                <div key={`dayOfWeek_${day.id} `}>
+                                    {day.id == 2 ?
+                                        <input type="radio" defaultChecked id="day" name="day" value={day.id} />
+                                        :
+                                        <input type="radio" id="day" name="day" value={day.id} />
+                                    }
+                                    <label style={{ color: "black" }} htmlFor="day">{day.engTitle}</label>
+                                </div>
+                            )}
+                        </div>
+                        <div className="d-flex flex-row">
+                            <div className="form-floating col-md">
+                                <select id="groupSubjects" name="groupSubjects" className="form-select" onChange={(e) => this.onGroupSubjectChange(e)} required>
+                                    {this.state.groupStudyPlan.subjectsToAdd !== undefined ?
+                                        this.state.groupStudyPlan.subjectsToAdd.map((studyPlanSubject) =>
+                                            <option key={"subjectToAdd_" + studyPlanSubject.subjectId} value={studyPlanSubject.subjectId}>{this.state.allSubjects.find(x => x.id == studyPlanSubject.subjectId).title}</option>
+                                        )
+                                        :
+                                        <></>
+                                    }
+                                </select>
+                                <label htmlFor="groupSubjects">Group's subjects</label>
+                            </div>
+                            <button className='btn btn-primary' onClick={() => this.appendSubjectInShedule()} >Add selected in shedule</button>
+                        </div>
 
 
-                <table className='table' id="sheduleTable">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Teacher</th>
-                            <th>Auditory</th>
-                            <th>Week</th>
-                            <th>Lesson</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                        <table className='table' id="sheduleTable">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Teacher</th>
+                                    <th>Auditory</th>
+                                    <th>Week</th>
+                                    <th>Lesson</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        {/* <div className="form-floating col-md">
+                                {/* <div className="form-floating col-md">
                                     {this.state.lessonsShedule.map(lesson =>
                                         <div key={`lesson_number_${ lesson.id } `}>
                                             <input type="radio" id="lesson" name="lesson" value={lesson.id} />
@@ -741,11 +752,22 @@ class CreateOdEditShedule extends React.Component {
                                     )}
                                 </div> */}
 
-                    </tbody>
-                </table>
-                <button className='btn btn-success' onClick={() => this.createOrEditShedule()}>Create or edit</button>
-            </div>
+                            </tbody>
+                        </table>
+                        <button className='btn btn-success' onClick={() => this.createOrEditShedule()}>Create or edit</button>
+                    </div>
+                </div>
+            </>
         )
     }
 }
-export default CreateOdEditShedule;
+function mapStateToProps(state) {
+    console.log("mapStateToProps ")
+    console.log(state)
+
+    return {
+        credentials: state.currentUser.credentials,
+    }
+}
+export default connect(mapStateToProps)(CreateOdEditShedule);
+// export default CreateOdEditShedule;

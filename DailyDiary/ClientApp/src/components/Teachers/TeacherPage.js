@@ -4,7 +4,8 @@ import { Host } from "../Host"
 import GeneralNavigationBar from "../Navigations/GeneralNavigationBar";
 // import setUserCredentials from '../../redux/action_creators/SetUserCredentials';
  import GeneralHeader from "../Headers/GeneralHeader";
-
+import "../../styles/journal.css"
+import logo from "../../images/Photo.png"
 class TeacherPage extends Component {
     constructor(props) {
         super(props)
@@ -13,6 +14,22 @@ class TeacherPage extends Component {
         }
     }
     componentDidMount() {
+    }
+    onLessonBarClick=(e)=>{
+        console.log(e.target)
+        var listsOfLi=e.target?.parentNode?.children;
+        // console.log(listsOfLi.className)
+
+        if(listsOfLi===undefined || e.target.tagName=="UL"){
+            return 0;
+        }
+        for(let i=0;i<listsOfLi.length;i++){
+            listsOfLi[i].className="";
+            if(listsOfLi[i].id==e.target.id){
+                listsOfLi[i].className="selectedLesson";
+            }
+        }
+        
     }
     render() {
         return (
@@ -23,7 +40,97 @@ class TeacherPage extends Component {
                         <GeneralNavigationBar menuItemToSelect={0} role={this.props.credentials.roles} />
                     </div>
                     <div className="generalSide">
-                       TeacherPage
+                        <div className="text-bolder" style={{margin:"10px 0px 10px 0px", fontSize:"20px"}}>
+                        Журнал
+                        </div>
+                       <div className="lessons-number-bar">
+                        <ul className="lessons-numer-list" onClick={(e)=>this.onLessonBarClick(e)}>
+                            {Array.from({length: 9}, (_, i) => i + 1).map((element,index)=>
+                            
+                            +index===0?     
+                            <li key={"lesson_"+element} id={"lesson_"+element} className="selectedLesson">
+                               Урок {element}
+                            </li>
+                            :
+                            <li key={"lesson_"+element} id={"lesson_"+element}>
+                               Урок {element}
+                             </li>
+                            )
+                            }
+                        </ul>
+                    </div>
+                    <div className="journal-table-container">
+                        <div className="journal-lesson-info">
+                            <div>
+                                8-А клас
+                            </div>
+                            <div>
+                                Алгебра
+                            </div>
+                            <div>
+                                <input type="text" className="form-control" placeholder="тема уроку"/>
+                            </div>
+                            <div>
+                                <button className="general-outline-button button-static">
+                                    Класна робота
+                                </button>
+                            </div>
+                            <div>
+                                <button className="general-outline-button">
+                                    Домашня робота
+                                </button>
+                            </div>
+                        </div>
+                        <table className="journal-table">
+                            <thead className="journal-table-head">
+                                <tr>
+                                    <th>ФІО студента</th>
+                                    <th>Відмітити присутніх</th>
+                                    <th>Робота на уроці</th>
+                                    <th>Коментарі</th>
+                                </tr>
+                            </thead>
+                            <tbody className="journal-table-body">
+                                <tr>
+                                    <td>
+                                        <div>
+                                            1
+                                        </div>
+                                        <div>
+                                            <img width="70px" src={logo} alt="..."></img>
+                                        </div>
+                                        <div>
+                                        Студент студент студент
+                                        </div>
+                                    </td>
+                                    <td className="td-radios">
+                                    <label className="table-radio-container">
+                                      <input type="radio" className="table-radio-green" name="radio"/>
+                                      <span className="table-checkmark table-radio-green"></span>
+                                    </label>
+                                    <label className="table-radio-container">
+                                      <input type="radio" className="table-radio-orange" name="radio"/>
+                                      <span className="table-checkmark table-radio-orange"></span>
+                                    </label>
+                                    <label className="table-radio-container">
+                                      <input type="radio" defaultChecked="checked" className="table-radio-red" name="radio"/>
+                                      <span className="table-checkmark table-radio-red"></span>
+                                    </label>
+                                    </td>
+                                    <td>
+                                        <select className="form-select" style={{width:"80px"}}>
+                                            <option value="11">11</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button className="general-outline-button">
+                                        Додати
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                       </div>
                     </div>
 
                 </div>

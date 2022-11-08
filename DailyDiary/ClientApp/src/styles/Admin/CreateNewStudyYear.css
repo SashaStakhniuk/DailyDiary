@@ -389,7 +389,7 @@ details {
   }
 
   
-
+/* 
   input[type=radio] {
     counter-increment: radios;
     appearance: none;
@@ -405,7 +405,7 @@ details {
     content: attr(title);
     display: inline;
     font-size: 1rem;
-  }
+  } */
 
   .label {
     width: 100%;

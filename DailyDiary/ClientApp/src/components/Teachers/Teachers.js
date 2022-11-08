@@ -4,6 +4,7 @@ import NavigationBar from '../NavigationBar'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import CartTeacher from './CartTeacher'
+import {Host} from "../Host"
 
 function Teachers(){
 
@@ -21,7 +22,7 @@ function Teachers(){
                 loader_container.style.opacity = 1
                 loader_container.style.height = '500px' 
                 setTimeout(() => {
-                    axios.get(`https://localhost:44364/api/teacher/GetRangTeachers/${teachersSkip}`)
+                    axios.get(`${Host}/api/teacher/GetRangTeachers/${teachersSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -50,7 +51,7 @@ function Teachers(){
                 loader_container.style.opacity = 1
                 loader_container.style.height = '200px' 
                 setTimeout(() => {
-                    axios.get(`https://localhost:44364/api/teacher/GetRangTeachers/${teachersSkip}`)
+                    axios.get(`${Host}/api/teacher/GetRangTeachers/${teachersSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -85,7 +86,7 @@ function Teachers(){
 
     async function getAllTeachers(){
         try{
-            const response= await fetch(`https://localhost:44364/api/teacher/get/`)
+            const response= await fetch(`${Host}/api/teacher/get/`)
 
              const data = await response.json()
     
@@ -105,7 +106,7 @@ function Teachers(){
             await getAllTeachers()
         } else {
             try{
-                const response= await fetch(`https://localhost:44364/api/teacher/GetByLastName/${lastName}`)
+                const response= await fetch(`${Host}/api/teacher/GetByLastName/${lastName}`)
     
                  const data = await response.json()
         

@@ -2,6 +2,8 @@ import React from 'react';
 import { Role } from '../Role'
 import { connect } from "react-redux";
 import { Host } from '../Host'
+import GeneralHeader from '../Headers/GeneralHeader';
+import GeneralNavigationBar from '../Navigations/GeneralNavigationBar';
 class CreateNewPerson extends React.Component {
 
     constructor(props) {
@@ -366,187 +368,197 @@ class CreateNewPerson extends React.Component {
     render() {
 
         return (
-            <form onSubmit={this.handleFormSubmit}>
-                <div className="container">
-                    <div>Create as</div>
-                    <hr style={{ minWidth: "100%" }}></hr>
-                    <div>
-                        <fieldset className="d-flex flex-column">
-                            <div>
-                                <input type="checkbox" id="role1" name="roles" checked={this.state.roles.indexOf(Role.Admin) === -1 ? false : true} onChange={this.onCheckBoxChange} value={Role.Admin} />
-                                <label htmlFor="role1">Admin</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" id="role2" name="roles" checked={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} onChange={this.onCheckBoxChange} value={Role.Teacher} />
-                                <label htmlFor="role2">Teacher</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" id="role3" name="roles" checked={this.state.roles.indexOf(Role.Student) === -1 ? false : true} onChange={this.onCheckBoxChange} value={Role.Student} />
-                                <label htmlFor="role3">Student</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" id="role4" name="roles" checked={this.state.roles.indexOf(Role.Parrent) === -1 ? false : true} onChange={this.onCheckBoxChange} value={Role.Parrent} />
-                                <label htmlFor="role4">Parrent</label>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <br></br>
-                    <div>Person info</div>
-                    <hr style={{ minWidth: "100%" }}></hr>
-                    <div className="row g-3">
-                        <div className="col-md">
-                            <div className="form-floating">
-                                <input type="text" className="form-control" id="name" name='name' placeholder="SomePersonName" defaultValue={this.state.name} required />
-                                <label htmlFor="name">Name</label>
-                            </div>
-                        </div>
-                        <div className="col-md">
-                            <div className="form-floating">
-                                <input type="text" className="form-control" id="middleName" name='middleName' placeholder="SomePersonMiddleName" defaultValue={this.state.middleName} required />
-                                <label htmlFor="middleName">MiddleName</label>
-                            </div>
-                        </div>
-                        <div className="col-md">
-                            <div className="form-floating">
-                                <input type="text" className="form-control" id="lastName" name='lastName' placeholder="SomePersonLastName" defaultValue={this.state.lastName} required />
-                                <label htmlFor="lastName">LastName</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row g-2">
-                        <div className="col-md">
-                            <div className="form-floating">
-                                <input type="date" className="form-control" id="birthday" name='birthday' placeholder="Birthday" defaultValue={this.state.birthday} required />
-                                <label htmlFor="birthday">Birthday</label>
-                            </div>
-                        </div>
-                        <div className="col-md">
-                            <div className="form-floating">
-                                <input type="text" className="form-control" id="address" name='address' placeholder="Address" defaultValue={this.state.address} required />
-                                <label htmlFor="address">Address</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div>User info</div>
-                    <hr style={{ minWidth: "100%" }}></hr>
-                    {this.state.edit === true ?
-                        <div className="row g-2">
-                            <div className="col-md">
-                                <div className="form-floating">
-                                    <input type="text" className="form-control" id="login" name='login' placeholder="Login" defaultValue={this.state.login} required />
-                                    <label htmlFor="login">Login</label>
-                                </div>
-                            </div>
-                        </div>
-                        :
-                        <></>
-                    }
-                    <div className="row g-2">
-                        <div className="col-md">
-                            <div className="form-floating">
-                                <input type="email" className="form-control" id="email" name='email' placeholder="Email" defaultValue={this.state.email} required />
-                                <label htmlFor="email">E-Mail</label>
-                            </div>
-                        </div>
-                        <div className="col-md">
-                            <div className="form-floating">
-                                <input type="tel" className="form-control" id="phoneNumber" name='phoneNumber' placeholder="+380973433512" defaultValue={this.state.phoneNumber} required />
-                                <label htmlFor="phoneNumber">Phone number</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="studentInfo">
-                        <div>Student info</div>
-                        <hr style={{ minWidth: "100%" }}></hr>
-                        <div className="row g-2">
-                            <div className="col-md">
-                                <div className="form-floating">
-                                    <input type="date" className="form-control" id="admissionDate" name='admissionDate' placeholder="AdmissionDate" defaultValue={this.state.admissionDate} required={this.state.roles.indexOf(Role.Student) === -1 ? false : true} />
-                                    <label htmlFor="admissionDate">AdmissionDate</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="teacherInfo">
-                        <div>Teacher info</div>
-                        <hr style={{ minWidth: "100%" }}></hr>
-                        <div className="row g-2">
+            <>
+                <GeneralHeader></GeneralHeader>
 
-                            <div className="col-md">
-                                <div className="form-floating">
-                                    {/* <input type="text" className="form-control" id="speciality" name='speciality' placeholder="Speciality" defaultValue={this.state.speciality} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
-                                    <label htmlFor="speciality">Speciality</label> */}
-                                    <select id="speciality" name="speciality" className="form-select" defaultValue={this.state.speciality} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
-                                        {this.state.teacherSpecialities.map(speciality =>
-                                            this.state.speciality != speciality.description ?
-                                                <option key={"speciality" + speciality.id} value={speciality.description}>{speciality.description}</option>
-                                                :
-                                                <option key={"speciality" + speciality.id} selected value={speciality.description}>{speciality.description}</option>
-                                        )}
-                                    </select>
-                                    <label htmlFor="speciality">Speciality</label>
+                <div className="flex-container">
+                    <div className="navigationSide">
+                        <GeneralNavigationBar role={this.props.credentials.roles} menuItemToSelect={3} />
+                    </div>
+                    <div className="generalSide">
+
+                        <form onSubmit={this.handleFormSubmit}>
+                            <div>Create as</div>
+                            <hr style={{ minWidth: "100%" }}></hr>
+                            <div>
+                                <fieldset className="d-flex flex-column">
+                                    <div>
+                                        <input type="checkbox" id="role1" name="roles" checked={this.state.roles.indexOf(Role.Admin) === -1 ? false : true} onChange={this.onCheckBoxChange} value={Role.Admin} />
+                                        <label htmlFor="role1">Admin</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="role2" name="roles" checked={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} onChange={this.onCheckBoxChange} value={Role.Teacher} />
+                                        <label htmlFor="role2">Teacher</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="role3" name="roles" checked={this.state.roles.indexOf(Role.Student) === -1 ? false : true} onChange={this.onCheckBoxChange} value={Role.Student} />
+                                        <label htmlFor="role3">Student</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="role4" name="roles" checked={this.state.roles.indexOf(Role.Parrent) === -1 ? false : true} onChange={this.onCheckBoxChange} value={Role.Parrent} />
+                                        <label htmlFor="role4">Parrent</label>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <br></br>
+                            <div>Person info</div>
+                            <hr style={{ minWidth: "100%" }}></hr>
+                            <div className="row g-3">
+                                <div className="col-md">
+                                    <div className="form-floating">
+                                        <input type="text" className="form-control" id="name" name='name' placeholder="SomePersonName" defaultValue={this.state.name} required />
+                                        <label htmlFor="name">Name</label>
+                                    </div>
+                                </div>
+                                <div className="col-md">
+                                    <div className="form-floating">
+                                        <input type="text" className="form-control" id="middleName" name='middleName' placeholder="SomePersonMiddleName" defaultValue={this.state.middleName} required />
+                                        <label htmlFor="middleName">MiddleName</label>
+                                    </div>
+                                </div>
+                                <div className="col-md">
+                                    <div className="form-floating">
+                                        <input type="text" className="form-control" id="lastName" name='lastName' placeholder="SomePersonLastName" defaultValue={this.state.lastName} required />
+                                        <label htmlFor="lastName">LastName</label>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="col-md">
-                                <div className="form-floating">
-                                    {/* <input type="text" className="form-control" id="education" name='education' placeholder="Education" defaultValue={this.state.education} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                            <div className="row g-2">
+                                <div className="col-md">
+                                    <div className="form-floating">
+                                        <input type="date" className="form-control" id="birthday" name='birthday' placeholder="Birthday" defaultValue={this.state.birthday} required />
+                                        <label htmlFor="birthday">Birthday</label>
+                                    </div>
+                                </div>
+                                <div className="col-md">
+                                    <div className="form-floating">
+                                        <input type="text" className="form-control" id="address" name='address' placeholder="Address" defaultValue={this.state.address} required />
+                                        <label htmlFor="address">Address</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>User info</div>
+                            <hr style={{ minWidth: "100%" }}></hr>
+                            {this.state.edit === true ?
+                                <div className="row g-2">
+                                    <div className="col-md">
+                                        <div className="form-floating">
+                                            <input type="text" className="form-control" id="login" name='login' placeholder="Login" defaultValue={this.state.login} required />
+                                            <label htmlFor="login">Login</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                :
+                                <></>
+                            }
+                            <div className="row g-2">
+                                <div className="col-md">
+                                    <div className="form-floating">
+                                        <input type="email" className="form-control" id="email" name='email' placeholder="Email" defaultValue={this.state.email} required />
+                                        <label htmlFor="email">E-Mail</label>
+                                    </div>
+                                </div>
+                                <div className="col-md">
+                                    <div className="form-floating">
+                                        <input type="tel" className="form-control" id="phoneNumber" name='phoneNumber' placeholder="+380973433512" defaultValue={this.state.phoneNumber} required />
+                                        <label htmlFor="phoneNumber">Phone number</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="studentInfo">
+                                <div>Student info</div>
+                                <hr style={{ minWidth: "100%" }}></hr>
+                                <div className="row g-2">
+                                    <div className="col-md">
+                                        <div className="form-floating">
+                                            <input type="date" className="form-control" id="admissionDate" name='admissionDate' placeholder="AdmissionDate" defaultValue={this.state.admissionDate} required={this.state.roles.indexOf(Role.Student) === -1 ? false : true} />
+                                            <label htmlFor="admissionDate">AdmissionDate</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="teacherInfo">
+                                <div>Teacher info</div>
+                                <hr style={{ minWidth: "100%" }}></hr>
+                                <div className="row g-2">
+
+                                    <div className="col-md">
+                                        <div className="form-floating">
+                                            {/* <input type="text" className="form-control" id="speciality" name='speciality' placeholder="Speciality" defaultValue={this.state.speciality} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                    <label htmlFor="speciality">Speciality</label> */}
+                                            <select id="speciality" name="speciality" className="form-select" defaultValue={this.state.speciality} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
+                                                {this.state.teacherSpecialities.map(speciality =>
+                                                    this.state.speciality != speciality.description ?
+                                                        <option key={"speciality" + speciality.id} value={speciality.description}>{speciality.description}</option>
+                                                        :
+                                                        <option key={"speciality" + speciality.id} selected value={speciality.description}>{speciality.description}</option>
+                                                )}
+                                            </select>
+                                            <label htmlFor="speciality">Speciality</label>
+                                        </div>
+                                    </div>
+                                    <div className="col-md">
+                                        <div className="form-floating">
+                                            {/* <input type="text" className="form-control" id="education" name='education' placeholder="Education" defaultValue={this.state.education} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
                                     <label htmlFor="education">Education</label> */}
 
-                                    <select id="education" name="education" className="form-select" defaultValue={this.state.education} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
-                                        {this.state.teacherEducations.map(education =>
-                                            this.state.education != education.description ?
-                                                <option key={"education" + education.id} value={education.description}>{education.description}</option>
-                                                :
-                                                <option key={"education" + education.id} selected value={education.description}>{education.description}</option>
-                                        )}
-                                    </select>
-                                    <label htmlFor="education">Education</label>
+                                            <select id="education" name="education" className="form-select" defaultValue={this.state.education} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
+                                                {this.state.teacherEducations.map(education =>
+                                                    this.state.education != education.description ?
+                                                        <option key={"education" + education.id} value={education.description}>{education.description}</option>
+                                                        :
+                                                        <option key={"education" + education.id} selected value={education.description}>{education.description}</option>
+                                                )}
+                                            </select>
+                                            <label htmlFor="education">Education</label>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="row g-2">
-                            <div className="col-md">
-                                <div className="form-floating">
-                                    {/* <input type="text" className="form-control" id="category" name='category' placeholder="Category" defaultValue={this.state.category} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                <div className="row g-2">
+                                    <div className="col-md">
+                                        <div className="form-floating">
+                                            {/* <input type="text" className="form-control" id="category" name='category' placeholder="Category" defaultValue={this.state.category} required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
                                     <label htmlFor="category">Category</label> */}
-                                    <select id="category" name="category" className="form-select" required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
-                                        {this.state.teacherCategories.map(category =>
-                                            this.state.category != category.description ?
-                                                <option key={"category" + category.id} value={category.description}>{category.description}</option>
-                                                :
-                                                <option key={"category" + category.id} selected value={category.description}>{category.description}</option>
-                                        )}
-                                    </select>
-                                    <label htmlFor="category">Category</label>
-                                </div>
-                            </div>
-                            <div className="col-md">
-                                <div className="form-floating">
-                                    {/* <input type="text" className="form-control" id="degree" name='degree' placeholder="Degree" required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
+                                            <select id="category" name="category" className="form-select" required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
+                                                {this.state.teacherCategories.map(category =>
+                                                    this.state.category != category.description ?
+                                                        <option key={"category" + category.id} value={category.description}>{category.description}</option>
+                                                        :
+                                                        <option key={"category" + category.id} selected value={category.description}>{category.description}</option>
+                                                )}
+                                            </select>
+                                            <label htmlFor="category">Category</label>
+                                        </div>
+                                    </div>
+                                    <div className="col-md">
+                                        <div className="form-floating">
+                                            {/* <input type="text" className="form-control" id="degree" name='degree' placeholder="Degree" required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true} />
                                     <label htmlFor="degree">Degree</label> */}
-                                    <select id="degree" name="degree" className="form-select" required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
-                                        {this.state.teacherDegrees.map(degree =>
-                                            this.state.degree != degree.description ?
-                                                <option key={"degree" + degree.id} value={degree.description}>{degree.description}</option>
-                                                :
-                                                <option key={"degree" + degree.id} selected value={degree.description}>{degree.description}</option>
-                                        )}
-                                    </select>
-                                    <label htmlFor="degree">Degree</label>
+                                            <select id="degree" name="degree" className="form-select" required={this.state.roles.indexOf(Role.Teacher) === -1 ? false : true}>
+                                                {this.state.teacherDegrees.map(degree =>
+                                                    this.state.degree != degree.description ?
+                                                        <option key={"degree" + degree.id} value={degree.description}>{degree.description}</option>
+                                                        :
+                                                        <option key={"degree" + degree.id} selected value={degree.description}>{degree.description}</option>
+                                                )}
+                                            </select>
+                                            <label htmlFor="degree">Degree</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div className='d-flex justify-content-end'>
-                        {this.state.edit === true ?
-                            <input type="submit" className='btn btn-warning m-1' style={{ minWidth: "40%" }} value="Edit" />
-                            :
-                            <input type="submit" className='btn btn-success m-1' style={{ minWidth: "40%" }} value="Create" />
-                        }
+                            <div className='d-flex justify-content-end'>
+                                {this.state.edit === true ?
+                                    <input type="submit" className='btn btn-warning m-1' style={{ minWidth: "40%" }} value="Edit" />
+                                    :
+                                    <input type="submit" className='btn btn-success m-1' style={{ minWidth: "40%" }} value="Create" />
+                                }
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </form>
+            </>
 
         )
     }
