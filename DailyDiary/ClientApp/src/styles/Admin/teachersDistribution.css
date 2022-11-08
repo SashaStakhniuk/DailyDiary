@@ -1,0 +1,113 @@
+@import url('../Colors.css');
+
+/*_______________________________________table_______________________________________*/
+
+.teacherDistribution-table-container {
+    box-shadow: 0px 1px 14px rgba(0, 7, 22, 0.14), 0px 0px 4px rgba(65, 77, 92, 0.2);
+    border-radius: 16px;
+    padding: 10px 10px 5px 10px;
+    margin: 20px 0px 20px 0px;
+    min-width: 765px;
+}
+
+.teacherDistribution-table {
+    width: 100%;
+    margin: 0px 0px 20px 0px;
+}
+
+.teacherDistribution-table-head {
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 1px 14px rgba(0, 7, 22, 0.14), 0px 0px 4px rgba(65, 77, 92, 0.2);
+    border-radius: 16px;
+    height: 56px;
+    /* padding: 0px 5px 0px 5px; */
+}
+
+.teacherDistribution-subgroup-table-head>tr {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr .5fr;
+    justify-content: center;
+    /* margin:0px 0px 10px 0px; */
+    /* border-bottom: 3px solid var(--violet); */
+}
+
+.teacherDistribution-subgroup-table-body>tr {
+    padding: 10px 0px 10px 0px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr .5fr;
+    justify-content: center;
+    align-items: center;
+    align-items: center;
+    border-bottom: 3px solid var(--violet);
+    border-radius: 3px;
+}
+.teacherDistribution-subgroup-table-body>tr>td {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.teacherDistribution-subgroup-table-head>tr>th {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.teacherDistribution-table-head>tr {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-content: center;
+    /* margin:0px 0px 10px 0px; */
+    /* border-bottom: 3px solid var(--violet); */
+}
+
+.teacherDistribution-table-body>tr {
+    padding: 10px 0px 10px 0px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    align-items: center;
+    border-bottom: 3px solid var(--violet);
+    border-radius: 3px;
+}
+
+.teacherDistribution-table-body>tr>td {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.teacherDistribution-table-head>tr>th {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/*_______________________________________table_______________________________________*/
+
+
+@keyframes fade {
+    0% {
+        opacity: 0.1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

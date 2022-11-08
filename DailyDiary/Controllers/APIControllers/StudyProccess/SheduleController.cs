@@ -77,7 +77,7 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
                 {
                     return NotFound("No one student in group found");
                 }
-
+                studentsList = studentsList.OrderBy(x=> x.LastName).ThenBy(x=> x.Name).ThenBy(x=> x.MiddleName).ToList();
                 JournalFullDataViewModel journalData = new JournalFullDataViewModel
                 {
                     LessonId = (int)sheduleData.LessonId,

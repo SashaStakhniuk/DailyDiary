@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Host } from '../Host'
 import GeneralNavigationBar from '../Navigations/GeneralNavigationBar';
 import SubgroupTeachersSubjectDistribution from './SubgroupTeachersSubjectDistribution';
-
+import "../../styles/Admin/teachersDistribution.css"
 class TeachersDistribution extends React.Component {
     constructor(props) {
         super(props);
@@ -247,17 +247,17 @@ class TeachersDistribution extends React.Component {
     }
     render() {
         let groupTeachersSubjectsDistributionTable = this.state.groupStudyPlan.length > 0 && this.state.allSubjects.length > 0 && this.state.teachers.length > 0 ?
-            <div>
-                <table className='table' id="teacherForSubjectSelectionTable">
-                    <thead>
+            <div className="teacherDistribution-table-container">
+                <table className='teacherDistribution-table' id="teacherForSubjectSelectionTable">
+                    <thead className='teacherDistribution-table-head'>
                         <tr>
-                            <th>Subject</th>
-                            <th>Hours</th>
-                            <th>Teacher</th>
-                            <th>Auditory type</th>
+                            <th>Предмет</th>
+                            <th>К-сть годин</th>
+                            <th>Викладач</th>
+                            <th>Тип аудиторії</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="teacherDistribution-table-body">
                         {this.state.groupStudyPlan.map((subject) => // для кожного предмету з навчального
                             // console.log(this.state.allSubjects.find(x => x.id==subject.subjectId).title)
                             <tr key={`subject_` + subject.subjectId} id={`teacher-subject_` + subject.subjectId}>
@@ -287,7 +287,7 @@ class TeachersDistribution extends React.Component {
                                 </td>
                                 <td id={"auditory_types_" + subject.subjectId}>
                                     <select key={'auditory_for_subject_' + subject.subjectId} defaultValue={this.state.existingGroupTeachersSubjects.find(x => x.subjectId == subject.subjectId) !== undefined ? this.state.existingGroupTeachersSubjects.find(x => x.subjectId == subject.subjectId).auditoryTypeId : 0} id={'auditory_for_subject_' + subject.subjectId} name={'auditory_for_subject_' + subject.subjectId} className="form-select">
-                                        <option key={`auditory_${0}`} value={0}>Any auditory</option>
+                                        <option key={`auditory_${0}`} value={0}>Будь-яка</option>
                                         {this.state.auditoriesTypes.map((auditory) =>
                                             <option key={`auditory_${auditory.id}`} value={auditory.id}>{auditory.auditoryTypeDescription}</option>
                                         )}
@@ -299,14 +299,16 @@ class TeachersDistribution extends React.Component {
 
                     </tbody>
                 </table>
-                {this.state.existingGroupTeachersSubjects.length > 0 ?
-                    <button className='btn btn-warning' onClick={() => this.onDistributionClick()}>Edit</button>
-                    :
-                    <button className='btn btn-success' onClick={() => this.onDistributionClick()}>Distribute</button>
-                }
+                <div className='d-flex flex-row justify-content-end'>
+                    {this.state.existingGroupTeachersSubjects.length > 0 ?
+                        <button className='general-outline-button button-static' onClick={() => this.onDistributionClick()}>Редагувати</button>
+                        :
+                        <button className='general-outline-button button-static' onClick={() => this.onDistributionClick()}>Розподілити</button>
+                    }
+                </div>
             </div>
             :
-            this.state.groupStudyPlan.length == 0 ? <div style={{ color: "red" }}>Study plan not found</div> :
+            this.state.groupStudyPlan.length == 0 ? <div style={{ color: "red" }}>Навчальний план не знайдено</div> :
                 <></>
         return (
             <>
@@ -318,7 +320,7 @@ class TeachersDistribution extends React.Component {
                     </div>
                     <div className="generalSide">
                         <div className="col-md-6">
-                            <label htmlFor="group" className="form-label">Group</label>
+                            <label htmlFor="group" className="form-label">Група</label>
                             <select id='group' name='group' className="form-select" onChange={this.onSelectionChange}>
                                 {this.state.groups.map((group) =>
                                     <option key={`group_${group.groupId}`} value={group.groupId}>{group.groupTitle}</option>
@@ -326,7 +328,7 @@ class TeachersDistribution extends React.Component {
                             </select>
                         </div>
                         {groupTeachersSubjectsDistributionTable}
-                        <div>Subgroups: </div>
+                        <div style={{marginBottom:"10px"}}>Підгрупи: </div>
                         <div id="groupSubgroupsTeachersSubjectDistribution">
                             <SubgroupTeachersSubjectDistribution allSubjects={this.state.allSubjects} auditoriesTypes={this.state.auditoriesTypes} groupId={this.state.selectedGroupId}></SubgroupTeachersSubjectDistribution>
                         </div>

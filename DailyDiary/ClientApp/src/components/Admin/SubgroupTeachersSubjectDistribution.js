@@ -29,7 +29,7 @@ class SubgroupTeachersSubjectDistribution extends React.Component { // розп�
 
     componentDidMount() {
         // console.log(this.props)
-        if (this.props.allSubjects !== undefined && this.props.allSubjects.length>0 ) {
+        if (this.props.allSubjects !== undefined && this.props.allSubjects.length > 0) {
             this.setState({
                 allSubjects: this.props.allSubjects,
             })
@@ -304,8 +304,8 @@ class SubgroupTeachersSubjectDistribution extends React.Component { // розп�
             }
         }
         console.log(this.state.existingSubgroupTeachersSubjects);
-        console.log("Has dublicate: ", hasDublicate +"\n"+ "element in existingSubgroupTeachersSubjects: ",this.state.existingSubgroupTeachersSubjects.find(x => x.subjectId == subjectId) !== undefined)
-       
+        console.log("Has dublicate: ", hasDublicate + "\n" + "element in existingSubgroupTeachersSubjects: ", this.state.existingSubgroupTeachersSubjects.find(x => x.subjectId == subjectId) !== undefined)
+
         if (!hasDublicate && this.state.existingSubgroupTeachersSubjects.find(x => x.subjectId == subjectId) !== undefined) { // якщо предмет один у таблиці (без повторів) і він є у списку вже розподілених
             this.deleteSubjectFromSubgroup(subjectId)
         }
@@ -340,9 +340,9 @@ class SubgroupTeachersSubjectDistribution extends React.Component { // розп�
                 let selectAuditoryType = document.createElement('select')
 
                 var button = document.createElement('button');
-                button.innerHTML = 'Delete';
+                button.innerHTML = 'Видалити';
                 button.onclick = (e) => this.deleteSubjectFromTable(e);
-                button.setAttribute('class', 'btn btn-danger');
+                button.setAttribute('class', 'general-outline-button');
                 tdDelete.appendChild(button);
 
 
@@ -421,9 +421,9 @@ class SubgroupTeachersSubjectDistribution extends React.Component { // розп�
             let selectAuditoryType = document.createElement('select')
 
             var button = document.createElement('button');
-            button.innerHTML = 'Delete';
+            button.innerHTML = 'Видалити';
             button.onclick = (e) => this.deleteSubjectFromTable(e);
-            button.setAttribute('class', 'btn btn-danger');
+            button.setAttribute('class', 'general-outline-button');
             tdDelete.appendChild(button);
 
             selectSubject.onchange = (e) => this.onSubjectChange(e)
@@ -471,7 +471,7 @@ class SubgroupTeachersSubjectDistribution extends React.Component { // розп�
 
         }
     }
-    onDistributionClick = async() => {
+    onDistributionClick = async () => {
         var oTable = document.getElementById('subgroupTeachersSubjectDistribution');
 
         var rowLength = oTable.rows.length;
@@ -541,13 +541,13 @@ class SubgroupTeachersSubjectDistribution extends React.Component { // розп�
             teachersSubjectsId: arrayOfKeys
         }
         const deleted = await this.distributeTeachersBySubgroup(datasToSend);
-        if(deleted){
+        if (deleted) {
             this.setState({
-                existingSubgroupTeachersSubjects:arrayOfKeys
+                existingSubgroupTeachersSubjects: arrayOfKeys
             }
-            ,()=> tr.item(0).firstChild.setAttribute('disabled',true)
+                , () => tr.item(0).firstChild.setAttribute('disabled', true)
             )
-            
+
         }
     }
     onSubgroupBlockChange = (e) => {
@@ -622,46 +622,51 @@ class SubgroupTeachersSubjectDistribution extends React.Component { // розп�
     render() {
         return (
             <div>
-                <div className='d-flex flex-row justify-content-around'>
-                    <div className="form-floating col-md">
+                <div className='d-flex flex-row justify-content-start'>
+                    <div className='col-md-6'>
+                        <label htmlFor="subgroupBlock">Принципи розподілу</label>
                         <select id="subgroupBlock" name="subgroupBlock" className="form-select" onChange={(e) => this.onSubgroupBlockChange(e)} required>
                             {this.state.subgroupBlocks.length > 0 ? this.state.subgroupBlocks.map(subgroupBlock =>
                                 <option key={"subgroupBlock" + subgroupBlock.id} value={subgroupBlock.id}>{subgroupBlock.subgroupBlockTitle}</option>
-                            ) : <option style={{ color: "red" }}>SubgroupsBlocks not found</option>}
+                            ) : <option style={{ color: "red" }}>Принципів розподілу не знайдено</option>}
                         </select>
-                        <label htmlFor="subgroupBlock">subgroupBlocks</label>
                     </div>
-                    <div className="form-floating col-md">
+                    <div className='col-md-6'>
+                        <label htmlFor="subgroup">Підгрупа</label>
                         <select id="subgroup" name="subgroup" className="form-select" onChange={(e) => this.onSubgroupChange(e)} required>
                             {this.state.subgroups.length > 0 ? this.state.subgroups.map(subgroup =>
                                 <option key={"subgroup" + subgroup.id} value={subgroup.id}>{subgroup.title}</option>
-                            ) : <option style={{ color: "red" }}>Subgroups not found</option>}
+                            ) : <option style={{ color: "red" }}>Підгруп не знайдено</option>}
                         </select>
-                        <label htmlFor="subgroup">Subgroups</label>
                     </div>
                 </div>
-                <div id="subjectSelection">
-                    <table id="subgroupTeachersSubjectDistribution" className='table'>
-                        <thead>
+                <div className="teacherDistribution-table-container" id="subjectSelection">
+                    <table id="subgroupTeachersSubjectDistribution" className='teacherDistribution-table'>
+                        <thead className='teacherDistribution-subgroup-table-head'>
                             <tr>
-                                <th>Subject</th>
-                                <th>Hours</th>
-                                <th>Teacher</th>
-                                <th>Auditory type</th>
-                                <th>Delete</th>
+                                <th>Предмет</th>
+                                <th>К-сть годин</th>
+                                <th>Викладач</th>
+                                <th>Тип аудиторії</th>
+                                <th></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className='teacherDistribution-subgroup-table-body'>
 
                         </tbody>
                     </table>
+                    <div className='d-flex justify-content-between'>
+                        <button className='general-outline-button' onClick={() => this.appendRowInTable()}>
+                            Додати ще 1 предмет
+                        </button>
+                        {this.state.edit === true ?
+                            <button className='general-outline-button button-static' type='submit' onClick={() => this.onDistributionClick()}>Редагувати</button>
+                            :
+                            <button className='general-outline-button button-static' type='submit' onClick={() => this.onDistributionClick()}>Створити</button>
+                        }
+                    </div>
                 </div>
-                <div className='btn btn-primary' onClick={() => this.appendRowInTable()}>Add one more subject</div>
-                {this.state.edit === true ?
-                    <button className='btn btn-warning' type='submit' onClick={() => this.onDistributionClick()}>Edit</button>
-                    :
-                    <button className='btn btn-success' type='submit' onClick={() => this.onDistributionClick()}>Create</button>
-                }
+
             </div>
         )
     }
