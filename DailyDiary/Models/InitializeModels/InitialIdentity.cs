@@ -488,13 +488,13 @@ namespace DailyDiary.Models
                         //await datasContext.SaveChangesAsync();
 
                         await datasContext.DaysOfWeek.AddRangeAsync(
-                          new DbModels.DayOfWeek { EngTitle = "Saturday", EngShortTitle = "Sat", UaTitle = "Субота", UaShortTitle = "Сб", DayIntValue=0 },
-                          new DbModels.DayOfWeek { EngTitle = "Friday", EngShortTitle = "Fri", UaTitle = "П'ятниця", UaShortTitle = "Пт", DayIntValue=1 },
-                          new DbModels.DayOfWeek { EngTitle = "Thursday", EngShortTitle = "Thu", UaTitle = "Четвер", UaShortTitle = "Чт", DayIntValue=2 },
+                          new DbModels.DayOfWeek { EngTitle = "Saturday", EngShortTitle = "Sat", UaTitle = "Субота", UaShortTitle = "Сб", DayIntValue=6 },
+                          new DbModels.DayOfWeek { EngTitle = "Friday", EngShortTitle = "Fri", UaTitle = "П'ятниця", UaShortTitle = "Пт", DayIntValue=5 },
+                          new DbModels.DayOfWeek { EngTitle = "Thursday", EngShortTitle = "Thu", UaTitle = "Четвер", UaShortTitle = "Чт", DayIntValue=4 },
                           new DbModels.DayOfWeek { EngTitle = "Wednesday", EngShortTitle = "Wed", UaTitle = "Середа", UaShortTitle = "Ср", DayIntValue=3 },
-                          new DbModels.DayOfWeek { EngTitle = "Tuesday", EngShortTitle = "Tue", UaTitle = "Вівторок", UaShortTitle = "Вт", DayIntValue=4 },
-                          new DbModels.DayOfWeek { EngTitle = "Monday", EngShortTitle = "Mon", UaTitle = "Понеділок", UaShortTitle = "Пн", DayIntValue=5 },
-                          new DbModels.DayOfWeek { EngTitle = "Sunday", EngShortTitle = "Sun", UaTitle = "Неділя", UaShortTitle = "Нд", DayIntValue=6 }
+                          new DbModels.DayOfWeek { EngTitle = "Tuesday", EngShortTitle = "Tue", UaTitle = "Вівторок", UaShortTitle = "Вт", DayIntValue=2 },
+                          new DbModels.DayOfWeek { EngTitle = "Monday", EngShortTitle = "Mon", UaTitle = "Понеділок", UaShortTitle = "Пн", DayIntValue=1 },
+                          new DbModels.DayOfWeek { EngTitle = "Sunday", EngShortTitle = "Sun", UaTitle = "Неділя", UaShortTitle = "Нд", DayIntValue=0 }
                           );
                     }
                     if (!datasContext.LessonsShedule.Any())

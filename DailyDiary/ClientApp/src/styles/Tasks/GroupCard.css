@@ -1,3 +1,4 @@
+@import url('../Colors.css');
 /* container style */
 
 .cards-container {
@@ -86,7 +87,7 @@
   line-height: 22px;
 }
 .checkBox-text-hover:hover{
-  color:var(--iconsColor);
+  color:var(--violet);
   font-weight: 600;
 }
 

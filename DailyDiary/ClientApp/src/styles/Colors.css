@@ -2,14 +2,19 @@
 :root {
   --white: #ffffff;
   --background: #ffffff;
-  --red: #DC2626;
+  --font-color:black;
+  --headerColor: #AEB9F1;
+  --navMenuColor: #ffffff;
+  --violet: #AEB9F1;
+  --buttonBackground: #AEB9F1;
   --orange: #F2982A;
+  --select-color:#ffffff;
+
+
+  --red: #DC2626;
   --error: #F87171;
   --iconsColor: black;
   /* --violet: #a5b0cc; */
-  --violet: #AEB9F1;
-  --headerColor: #AEB9F1;
-  --navMenuColor: #ffffff;
 
   --almostBlack: #333333;
 
@@ -24,5 +29,4 @@
   --journal-not-selected:#969696;
   --radio-success:#497008;
   --radio-red:#CB1E1E;
-  
 }

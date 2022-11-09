@@ -34,7 +34,8 @@ class CreateOdEditShedule extends React.Component {
             lessonsShedule: [], // розклад дзвінків
             dayId: 0,// ід дня, коли буде проведений урок
             days: [], // дні тижня
-            weekId: 0// ід тижня 0-без поділу на тижні 1-непарний 2-парний
+            weekId: 0,// ід тижня 0-без поділу на тижні 1-непарний 2-парний
+            // buttonDisabled:false // якщо викладачі не розподілені, створити розклад неможливо
         }
     }
     async componentDidMount() {
@@ -195,13 +196,13 @@ class CreateOdEditShedule extends React.Component {
                 if (tableBody !== undefined) {
                     tableBody.innerHTML = "";
                 }
-
             }
 
             if (response.ok === true) {
                 const data = await response.json();
                 this.setState({
-                    existingSheduleForGroupByDay: data
+                    existingSheduleForGroupByDay: data,
+                    // buttonDisabled:false
                 })
                 console.log("existingSheduleForGroupByDay: ", data);
                 if (data.length > 0)
@@ -209,7 +210,8 @@ class CreateOdEditShedule extends React.Component {
             }
             else {
                 this.setState({
-                    existingSheduleForGroupByDay: []
+                    existingSheduleForGroupByDay: [],
+                    // buttonDisabled:true
                 })
                 const data = await response.text();
                 window.alert(data);
@@ -231,7 +233,7 @@ class CreateOdEditShedule extends React.Component {
             return 0;
         }
 
-        if (existingData == undefined) {
+        if (existingData === undefined || existingData === null) {
 
             await this.getTeacherSubjectDistributionBySubjectIdAndGroupId(this.state.subjectIdToAdd);
 
@@ -241,7 +243,7 @@ class CreateOdEditShedule extends React.Component {
             else {
                 const arrayOfKeys = this.getArrayOfKeysFromTable(); // дістаю усі елементи з таблиці
                 console.log(arrayOfKeys);
-                if (arrayOfKeys !== undefined) { // якщо існують
+                if (arrayOfKeys !== undefined && arrayOfKeys !== null && arrayOfKeys.length > 0) { // якщо існують
                     if (arrayOfKeys == 0) { // якщо 0
                         return 0;
                     }
@@ -308,7 +310,7 @@ class CreateOdEditShedule extends React.Component {
                 let tdDelete = document.createElement("td");
 
                 var button = document.createElement('button');
-                button.innerHTML = 'Delete';
+                button.innerHTML = 'Видалити';//____________________________________________________________________________________
                 button.onclick = (e) => this.deleteItemFromTable(e);
                 button.setAttribute('class', 'general-outline-button');
                 tdDelete.appendChild(button);
@@ -613,7 +615,7 @@ class CreateOdEditShedule extends React.Component {
                     }
                 }
             }
-            console.log('Ok')
+            // console.log('Ok')
             await this.setGroupShedule(arrayOfKeys);
         }
     }
@@ -655,7 +657,8 @@ class CreateOdEditShedule extends React.Component {
     onGroupChange = async (e) => {
         const groupId = e.target.value;
         this.setState({
-            groupId: groupId
+            groupId: groupId,
+            subjectIdToAdd:0
         })
         await this.getStudyPlanByGroupId(groupId);
         await this.getSheduleIfExistByGroupIdAndDayId(this.state.dayId)
@@ -757,7 +760,7 @@ class CreateOdEditShedule extends React.Component {
 
                             <div style={{ margin: "0px 0px 10px 0px" }}>Предмети групи</div>
                             <div className="d-flex flex-row align-items-center">
-                                <select id="groupSubjects" name="groupSubjects" className="form-select" onChange={(e) => this.onGroupSubjectChange(e)} required>
+                                <select id="groupSubjects" name="groupSubjects" className="form-select" value={this.state.subjectIdToAdd} onChange={(e) => this.onGroupSubjectChange(e)} required>
                                     {this.state.groupStudyPlan.subjectsToAdd !== undefined ?
                                         this.state.groupStudyPlan.subjectsToAdd.map((studyPlanSubject) =>
                                             <option key={"subjectToAdd_" + studyPlanSubject.subjectId} value={studyPlanSubject.subjectId}>{this.state.allSubjects.find(x => x.id == studyPlanSubject.subjectId).title}</option>
@@ -766,6 +769,7 @@ class CreateOdEditShedule extends React.Component {
                                         <></>
                                     }
                                 </select>
+                                {/* <button className='general-outline-button' disabled={this.state.buttonDisabled} onClick={() => this.appendSubjectInShedule()} >Додати в розклад</button> */}
                                 <button className='general-outline-button' onClick={() => this.appendSubjectInShedule()} >Додати в розклад</button>
                             </div>
                         </div>
@@ -795,6 +799,7 @@ class CreateOdEditShedule extends React.Component {
                                 </tbody>
                             </table>
                             <div className='d-flex flex-row justify-content-end'>
+                                {/* <button className='general-outline-button button-static' disabled={this.state.buttonDisabled} onClick={() => this.createOrEditShedule()}>Створити / редагувати</button> */}
                                 <button className='general-outline-button button-static' onClick={() => this.createOrEditShedule()}>Створити / редагувати</button>
                             </div>
                         </div>

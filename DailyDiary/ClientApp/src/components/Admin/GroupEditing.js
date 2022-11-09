@@ -901,11 +901,11 @@ class GroupEditing extends React.Component { //розбиття студенті
                     </div>
                     <div className="generalSide">
                         <div className="general-info-actions-bar">
-                            <div className="d-flex flex-row align-items-center">
-                                <div style={{ margin: "0px 5px 0px 5px", color: "#667080" }}>
+                            <div className="d-flex flex-row align-items-center generalTextColor">
+                                <div style={{ margin: "0px 5px 0px 5px"}}>
                                     Групи
                                 </div>
-                                <div className='general-info-actions-bar-text-bold' style={{ margin: "0px 5px 0px 5px", color: "#333333" }}>
+                                <div className='general-info-actions-bar-text-bold' style={{ margin: "0px 5px 0px 5px"}}>
                                     {this.props.location.state.group.groupTitle}
                                 </div>
                             </div>
@@ -1014,7 +1014,7 @@ class GroupEditing extends React.Component { //розбиття студенті
                         <div id="modalAddStudentWindow">
                             <div className="modal fade" id="addStudentModal" tabIndex="-1" aria-labelledby="addStudentModalLabel"  >
                                 <div className="modal-dialog">
-                                    <div className="modal-content">
+                                    <div className="modal-content generalBackgroundColor">
                                         <div className="modal-header">
                                             <h1 className="modal-title fs-5" id="addStudentModalLabel"> Додання студента</h1>
                                             <button type="button" id="closemodalAddStudentWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -1069,7 +1069,7 @@ class GroupEditing extends React.Component { //розбиття студенті
                         <div id="modalAddSubgroupWindow">
                             <div className="modal fade" id="addSubgroupModal" tabIndex="-1" aria-labelledby="addSubgroupModalLabel"  >
                                 <div className="modal-dialog">
-                                    <div className="modal-content">
+                                    <div className="modal-content generalBackgroundColor">
                                         <div className="modal-header">
                                             <h1 className="modal-title fs-5" id="addSubgroupModalLabel"> Створення нової підгрупи</h1>
                                             <button type="button" id="closemodalAddSubgroupWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -1115,7 +1115,7 @@ class GroupEditing extends React.Component { //розбиття студенті
                         <div id="modalEditSubgroupWindow">
                             <div className="modal fade" id="editSubgroupModal" tabIndex="-1" aria-labelledby="editSubgroupModalLabel"  >
                                 <div className="modal-dialog">
-                                    <div className="modal-content">
+                                    <div className="modal-content generalBackgroundColor">
                                         <div className="modal-header">
                                             {/* <h1 className="modal-title fs-5" id="editSubgroupModalLabel">Редагування даних підгрупи "{this.state.subgroupTitle}"</h1> */}
                                             <h1 className="modal-title fs-5" id="editSubgroupModalLabel">Редагування даних підгрупи</h1>

@@ -319,7 +319,7 @@ class EditGroup extends React.Component {
                                 {/* <div style={{ margin: "0px 5px 0px 5px", color: "#667080" }}>
                                     Завдання
                                 </div> */}
-                                <div className='general-info-actions-bar-text-bold' style={{ margin: "0px 5px 0px 5px", color: "#333333", fontStyle: "bold" }}>
+                                <div className='general-info-actions-bar-text-bold generalTextColor' style={{ margin: "0px 5px 0px 5px", color: "#333333", fontStyle: "bold" }}>
                                     Групи
                                 </div>
                             </div>
@@ -414,7 +414,7 @@ class EditGroup extends React.Component {
                         <div id="modalNewGroupWindow">
                             <div className="modal fade" id="newGroupModal" tabIndex="-1" aria-labelledby="newGroupModalLabel"  >
                                 <div className="modal-dialog">
-                                    <div className="modal-content">
+                                    <div className="modal-content generalBackgroundColor">
                                         <div className="modal-header">
                                             <h1 className="modal-title fs-5" id="newGroupModalLabel"> {this.state.edit ? "Редагування даних" : "Створення нової групи"}</h1>
                                             <button type="button" id="closeNewGroupModalWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

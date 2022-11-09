@@ -21,7 +21,26 @@ class Login extends React.Component {
             loading: ""
         }
     }
+    componentDidMount() {
+        // var colorsObj = localStorage.getItem('colors');
+        // if (colorsObj !== undefined) {
+        //     const colors=JSON.parse(colorsObj);
+        //     console.log('colors: ', colors);
+        //     const root = document.querySelector(':root');
 
+        //     root.style.setProperty('--white', colors['white']);
+        //     root.style.setProperty('--background', colors['background']);
+        //     root.style.setProperty('--headerColor', colors['headerColor']);
+        //     root.style.setProperty('--navMenuColor', colors['navMenuColor']);//меню
+        //     root.style.setProperty('--violet', colors['violet']);
+        //     root.style.setProperty('--subjectTextColor', colors['subjectTextColor']);
+        //     root.style.setProperty('--selectText', colors['selectText']);
+        //     root.style.setProperty('--font-color', colors['font-color']);
+        //     root.style.setProperty('--orange', colors['orange']);
+        //     root.style.setProperty('--buttonBackground', colors['buttonBackground']);
+        //     root.style.setProperty('--select-color', colors['select-color']);
+        // }
+    }
     onClickPasswordVisible(e) {
         e.preventDefault()
         var inp_password = document.getElementById('password')

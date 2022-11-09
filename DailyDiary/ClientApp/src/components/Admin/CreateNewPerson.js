@@ -407,19 +407,19 @@ class CreateNewPerson extends React.Component {
                                 <div className="col-md">
                                     <div className="form-floating">
                                         <input type="text" className="form-control" id="name" name='name' placeholder="SomePersonName" defaultValue={this.state.name} required />
-                                        <label htmlFor="name">Name</label>
+                                        <label htmlFor="name">Ім'я</label>
                                     </div>
                                 </div>
                                 <div className="col-md">
                                     <div className="form-floating">
                                         <input type="text" className="form-control" id="middleName" name='middleName' placeholder="SomePersonMiddleName" defaultValue={this.state.middleName} required />
-                                        <label htmlFor="middleName">MiddleName</label>
+                                        <label htmlFor="middleName">По батькові</label>
                                     </div>
                                 </div>
                                 <div className="col-md">
                                     <div className="form-floating">
                                         <input type="text" className="form-control" id="lastName" name='lastName' placeholder="SomePersonLastName" defaultValue={this.state.lastName} required />
-                                        <label htmlFor="lastName">LastName</label>
+                                        <label htmlFor="lastName">Прізвище</label>
                                     </div>
                                 </div>
                             </div>
@@ -427,13 +427,13 @@ class CreateNewPerson extends React.Component {
                                 <div className="col-md">
                                     <div className="form-floating">
                                         <input type="date" className="form-control" id="birthday" name='birthday' placeholder="Birthday" defaultValue={this.state.birthday} required />
-                                        <label htmlFor="birthday">Birthday</label>
+                                        <label htmlFor="birthday">Дата народження</label>
                                     </div>
                                 </div>
                                 <div className="col-md">
                                     <div className="form-floating">
                                         <input type="text" className="form-control" id="address" name='address' placeholder="Address" defaultValue={this.state.address} required />
-                                        <label htmlFor="address">Address</label>
+                                        <label htmlFor="address">Адреса</label>
                                     </div>
                                 </div>
                             </div>
@@ -444,7 +444,7 @@ class CreateNewPerson extends React.Component {
                                     <div className="col-md">
                                         <div className="form-floating">
                                             <input type="text" className="form-control" id="login" name='login' placeholder="Login" defaultValue={this.state.login} required />
-                                            <label htmlFor="login">Login</label>
+                                            <label htmlFor="login">Логін</label>
                                         </div>
                                     </div>
                                 </div>
@@ -461,7 +461,7 @@ class CreateNewPerson extends React.Component {
                                 <div className="col-md">
                                     <div className="form-floating">
                                         <input type="tel" className="form-control" id="phoneNumber" name='phoneNumber' placeholder="+380973433512" defaultValue={this.state.phoneNumber} required />
-                                        <label htmlFor="phoneNumber">Phone number</label>
+                                        <label htmlFor="phoneNumber">Номер телефону</label>
                                     </div>
                                 </div>
                             </div>
@@ -494,7 +494,7 @@ class CreateNewPerson extends React.Component {
                                                         <option key={"speciality" + speciality.id} selected value={speciality.description}>{speciality.description}</option>
                                                 )}
                                             </select>
-                                            <label htmlFor="speciality">Speciality</label>
+                                            <label htmlFor="speciality">Спеціальність</label>
                                         </div>
                                     </div>
                                     <div className="col-md">
@@ -510,7 +510,7 @@ class CreateNewPerson extends React.Component {
                                                         <option key={"education" + education.id} selected value={education.description}>{education.description}</option>
                                                 )}
                                             </select>
-                                            <label htmlFor="education">Education</label>
+                                            <label htmlFor="education">Освіта</label>
                                         </div>
                                     </div>
                                 </div>
@@ -527,7 +527,7 @@ class CreateNewPerson extends React.Component {
                                                         <option key={"category" + category.id} selected value={category.description}>{category.description}</option>
                                                 )}
                                             </select>
-                                            <label htmlFor="category">Category</label>
+                                            <label htmlFor="category">Категорія</label>
                                         </div>
                                     </div>
                                     <div className="col-md">
@@ -542,7 +542,7 @@ class CreateNewPerson extends React.Component {
                                                         <option key={"degree" + degree.id} selected value={degree.description}>{degree.description}</option>
                                                 )}
                                             </select>
-                                            <label htmlFor="degree">Degree</label>
+                                            <label htmlFor="degree">Ступінь</label>
                                         </div>
                                     </div>
                                 </div>
@@ -550,9 +550,9 @@ class CreateNewPerson extends React.Component {
 
                             <div className='d-flex justify-content-end'>
                                 {this.state.edit === true ?
-                                    <input type="submit" className='btn btn-warning m-1' style={{ minWidth: "40%" }} value="Edit" />
+                                    <input type="submit" className='general-outline-button button-static m-1' value="Редагувати" />
                                     :
-                                    <input type="submit" className='btn btn-success m-1' style={{ minWidth: "40%" }} value="Create" />
+                                    <input type="submit" className='general-outline-button button-static m-1' value="Створити" />
                                 }
                             </div>
                         </form>

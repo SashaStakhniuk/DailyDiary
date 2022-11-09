@@ -101,7 +101,8 @@ class StudentsTable extends React.Component { // розподілення сту
     }
     render() {
         return (
-            <section className="card" id={"student_" + this.props.student.studentId} style={!this.state.selected ? { background: 'none' } : { background: '#FF5733' }} onClick={() => this.onStudentClick(this.props.student.studentId)}>
+            // <section className="card" id={"student_" + this.props.student.studentId} style={!this.state.selected ? { background: 'none' } : { background: '#FF5733' }} onClick={() => this.onStudentClick(this.props.student.studentId)}>
+            <section className="card" id={"student_" + this.props.student.studentId} onClick={() => this.onStudentClick(this.props.student.studentId)}>
 
                 <div className="subjectTitle">
                     <div>

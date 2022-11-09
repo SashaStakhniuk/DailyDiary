@@ -589,7 +589,7 @@ class HomeTasks extends Component {
                         <div id="modalNewHomeTaskWindow">
                             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"  >
                                 <div className="modal-dialog">
-                                    <div className="modal-content">
+                                    <div className="modal-content generalBackgroundColor">
                                         <div className="modal-header">
                                             <h1 className="modal-title fs-5" id="exampleModalLabel">Завантажити завдання</h1>
                                             <button type="button" id="closeModalWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -651,7 +651,7 @@ class HomeTasks extends Component {
                         <div id="modalRatingStudentHomework">
                             <div className="modal fade" id="ratingStudentHomework" tabIndex="-1" aria-labelledby="ratingStudentHomeworkLabel"  >
                                 <div className="modal-dialog">
-                                    <div className="modal-content">
+                                    <div className="modal-content generalBackgroundColor">
                                         <div className="modal-header">
                                             {/* <h1 className="modal-title fs-5" id="ratingStudentHomeworkLabel">Оцінка домашнього завдання студента {this.props.task.studentData.studentFullName}</h1> */}
                                             <h1 className="modal-title fs-5" id="ratingStudentHomeworkLabel">Оцінка домашнього завдання студента</h1>

@@ -25,8 +25,9 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
         //{
         //    return await db.Shedules.AsNoTracking().Where(x=> x.).ToListAsync();
         //}
+
         [HttpGet("{teacherId}")]
-        public async Task<ActionResult<JournalFullDataViewModel>> GetSheduleDataForSelectedDayByTeacherIdAsync(int teacherId)// отримую розклад на сьогодні для викладача
+        public async Task<ActionResult<IEnumerable<Shedule>>> GetAllLessonsForTodayByTeacherIdAsync(int teacherId)// отримую розклад на сьогодні для викладача
         {
             try
             {
@@ -40,14 +41,56 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
                     return NotFound("Teacher not found");
                 }
                 DateTime today = DateTime.Today;
-                int dayOfWeekId = await db.DaysOfWeek.AsNoTracking().Where(x => x.Id == (int)today.DayOfWeek).Select(x => x.Id).FirstOrDefaultAsync();
+                int dayOfWeekId = await db.DaysOfWeek.AsNoTracking().Where(x => x.DayIntValue == (int)today.DayOfWeek).Select(x => x.Id).FirstOrDefaultAsync();
                 if (dayOfWeekId <= 0)
                 {
                     return NotFound("Day of week not found in database");
                 }
+                var sheduleData = await db.Shedules.OrderBy(x=> x.LessonId).Include(x => x.TeacherSubgroupDistribution)
+                    .Where(x => x.DayId == dayOfWeekId && x.TeacherSubgroupDistribution.TeacherId == teacherId)
+                    .Select(x=> new Shedule
+                    {
+                        Id=x.Id,
+                        LessonId=x.LessonId
+                    }).ToListAsync();// усі уроки сьогоднішнього дня для викладача
+                if(sheduleData==null || sheduleData.Count <= 0)
+                {
+                    return NotFound("No one shedule record for today for this teacher found");
+                }
+                return Ok(sheduleData);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+        [HttpGet("{sheduleId}")]
+        public async Task<ActionResult<JournalFullDataViewModel>> GetSheduleDataForSelectedDayByLessonIdAsync(int sheduleId)// отримую розклад на сьогодні для викладача
+        {
+            try
+            {
+                //if (teacherId <= 0)
+                //{
+                //    return BadRequest("Teacher id can't be <= 0");
+                //}
+                //Teacher teacher = await db.Teachers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == teacherId);
+                //if (teacher == null)
+                //{
+                //    return NotFound("Teacher not found");
+                //}
+                //DateTime today = DateTime.Today;
+                //int dayOfWeekId = await db.DaysOfWeek.AsNoTracking().Where(x => x.DayIntValue == (int)today.DayOfWeek).Select(x => x.Id).FirstOrDefaultAsync();
+                //if (dayOfWeekId <= 0)
+                //{
+                //    return NotFound("Day of week not found in database");
+                //}
                 var sheduleData = await db.Shedules.Include(x => x.TeacherSubgroupDistribution)
-                    .FirstOrDefaultAsync(x => x.DayId == dayOfWeekId && x.LessonId == 1 && x.TeacherSubgroupDistribution.TeacherId == teacherId);// перший урок сьогоднішнього дня для викладача
+                    .FirstOrDefaultAsync(x => x.Id == sheduleId);// перший урок сьогоднішнього дня для викладача
 
+                if (sheduleData == null)
+                {
+                    return NotFound("Selected lesson for this teacher not found for current day");
+                }
                 var subgroup = await db.Subgroups.Include(x => x.Group).FirstOrDefaultAsync(x => x.Id == sheduleData.TeacherSubgroupDistribution.SubgroupId); // шукаю підгрупу, в якій викладач має вести предмет
                 if (subgroup == null)
                 {
@@ -77,7 +120,7 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
                 {
                     return NotFound("No one student in group found");
                 }
-                studentsList = studentsList.OrderBy(x=> x.LastName).ThenBy(x=> x.Name).ThenBy(x=> x.MiddleName).ToList();
+                studentsList = studentsList.OrderBy(x => x.LastName).ThenBy(x => x.Name).ThenBy(x => x.MiddleName).ToList();
                 JournalFullDataViewModel journalData = new JournalFullDataViewModel
                 {
                     LessonId = (int)sheduleData.LessonId,
@@ -192,7 +235,7 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
                 {
                     return BadRequest("No one shedule element found");
                 }
-                TeacherSubgroupDistribution teacherSubgroup = null; // перевіряю чи існуэ розподіл викладача по групі
+                TeacherSubgroupDistribution teacherSubgroup = null; // перевіряю чи існує розподіл викладача по групі
                 int weekId = 0; // тиждень 0-без поділу, 1-непарний, 2-парний
                 Models.DbModels.DayOfWeek day = null; // день тижня
                 LessonShedule lesson = null; // урок
@@ -206,11 +249,11 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
                     teacherSubgroup = await db.TeacherSubgroupDistributions.AsNoTracking().FirstOrDefaultAsync(x => x.Id == sheduleToAdd.TeacherSubgroupDistributionId); // звіряю чи існує такий розподіл
                     if (teacherSubgroup != null)
                     {
-                        if (sheduleToAdd.WeekId >= 0 || sheduleToAdd.WeekId <= 2)
+                        if (sheduleToAdd.WeekId >= 0 || sheduleToAdd.WeekId <= 2) // якщо ід тижня в проміжку від 0 до 2
                         {
                             weekId = sheduleToAdd.WeekId;
 
-                            day = await db.DaysOfWeek.AsNoTracking().FirstOrDefaultAsync(x => x.Id == sheduleToAdd.DayId);
+                            day = await db.DaysOfWeek.AsNoTracking().FirstOrDefaultAsync(x => x.Id == sheduleToAdd.DayId); // день=встановленому
                             if (day != null)
                             {
                                 lesson = await db.LessonsShedule.AsNoTracking().FirstOrDefaultAsync(x => x.Id == sheduleToAdd.LessonId);
@@ -224,7 +267,7 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
                                         var allTeacherSubgroupsDistributionId = await db.TeacherSubgroupDistributions.AsNoTracking().Where(x => x.TeacherId == teacherSubgroup.TeacherId && x.SubgroupId != teacherSubgroup.SubgroupId).Select(x => x.Id).ToListAsync(); // шукаю усі розподілення,окрім розподілення для обраної групи, де є цей викладач
                                         foreach (var teacherSubgroupsDistributionId in allTeacherSubgroupsDistributionId) // перебираю усі і шукаю чи викладач вже не веде урок у цю годину
                                         {
-                                            var teacherSheduleChecking = await db.Shedules.AsNoTracking().FirstOrDefaultAsync(x => x.DayId == day.Id && x.LessonId == lesson.Id && x.WeekId == weekId); //якщо препод вже веде заняття в цей же день у цю ж годину. (іншими словами) якщо існує хоча б 1 запис де, викладач веде урок у (необраній) групі, де день = обраному і номер уроку = обраному
+                                            var teacherSheduleChecking = await db.Shedules.AsNoTracking().FirstOrDefaultAsync(x => x.DayId == day.Id && x.LessonId == lesson.Id && x.WeekId == weekId && x.TeacherSubgroupDistributionId== teacherSubgroupsDistributionId); //якщо препод вже веде заняття в цей же день у цю ж годину. (іншими словами) якщо існує хоча б 1 запис де, викладач веде урок у (необраній) групі, де день = обраному і номер уроку = обраному
                                             if (teacherSheduleChecking != null)
                                             {
                                                 //dataSuccess = false;

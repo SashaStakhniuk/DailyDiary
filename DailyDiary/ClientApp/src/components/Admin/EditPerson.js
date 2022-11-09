@@ -51,7 +51,7 @@ class EditPerson extends React.Component {
                         <form onSubmit={this.handleFormSubmit}>
                             {this.state.persons.length > 0 ?
                                 <div>
-                                    <table className="table">
+                                    <table className="table generalTextColor">
                                         <thead>
                                             <tr>
                                                 <th>Role(s)</th>
@@ -78,7 +78,7 @@ class EditPerson extends React.Component {
                                                     <td>{new Date(person.birthday).toLocaleDateString()}</td>
                                                     <td><Link
                                                         className="btn btn-outline-warning m-1"
-                                                        style={{ textDecoration: "none", color: "black" }}
+                                                        style={{ textDecoration: "none"}}
                                                         to={{
                                                             pathname: "/admin/new-person",
                                                             state: { person: person }

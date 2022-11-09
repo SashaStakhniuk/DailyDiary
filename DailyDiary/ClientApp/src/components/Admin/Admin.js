@@ -15,48 +15,69 @@ class Admin extends Component {
         // var decoded = jwt_decode(this.props?.credentials?.tokenKey);
         // console.log(decoded);
     }
-    setTheme = (e) => {
-        const theme = e.target.value
-        const root = document.querySelector(':root');
-        if (+theme === 0) {
-            root.style.setProperty('--white', '#ffffff');
-            root.style.setProperty('--background', '#ffffff');
-            root.style.setProperty('--headerColor', '#AEB9F1');
-            root.style.setProperty('--navMenuColor', '#ffffff');//меню
-            root.style.setProperty('--violet', '#AEB9F1');
-            root.style.setProperty('--subjectTextColor', '#4F4F4F');
-            root.style.setProperty('--selectText', '#A5B0CC');
+    // setTheme = (e) => {
+    //     const theme = e.target.value
+    //      const root = document.querySelector(':root');
+    //     // console.log(root)
+    //     var colors = {};
+    //     // var colorsObj = localStorage.getItem('colors');
+    //     // console.log('colors: ', JSON.parse(colorsObj));
 
-            root.style.setProperty('--red', '#DC2626');
-            root.style.setProperty('--orange', '#F2982A');
-            root.style.setProperty('--error', '#F87171');
-            root.style.setProperty('--iconsColor', '#black');
-            root.style.setProperty('--almostBlack', '#333333');
-            root.style.setProperty('--white-icon-color', '#DADADA');
-            root.style.setProperty('--text-gray', '#667080');
-            root.style.setProperty('--text-gray2', '#333333');
-        }
-        else {
-            root.style.setProperty('--white', '#22253B'); //
-            root.style.setProperty('--background', '#2b2e4a');//фон
-            root.style.setProperty('--headerColor', '#22253B');//хедер
-            root.style.setProperty('--navMenuColor', '#22253B');//меню
-            root.style.setProperty('--violet', '#a5b0cc');//іконки і кнопочки
-            root.style.setProperty('--subjectTextColor', '#AEB9F1');
-            root.style.setProperty('--selectText', '#AEB9F1');
+    //     if (+theme === 0) {
+    //         root.style.setProperty('--white', '#ffffff');
+    //         root.style.setProperty('--background', '#ffffff');
+    //         root.style.setProperty('--headerColor', '#AEB9F1');
+    //         root.style.setProperty('--navMenuColor', '#ffffff');//меню
+    //         root.style.setProperty('--violet', '#AEB9F1');
+    //         root.style.setProperty('--subjectTextColor', '#4F4F4F');
+    //         root.style.setProperty('--selectText', '#A5B0CC');
+    //         root.style.setProperty('--font-color', 'black');
+    //         root.style.setProperty('--orange', '#F2982A');
+    //         root.style.setProperty('--buttonBackground', '#AEB9F1');
+    //         root.style.setProperty('--select-color', '#ffffff');
+    //         colors = {
+    //             'white': '#ffffff',
+    //             'background': '#ffffff',
+    //             'headerColor': '#AEB9F1',
+    //             'navMenuColor': '#ffffff',
+    //             'violet': '#AEB9F1',
+    //             'subjectTextColor': '#4F4F4F',
+    //             'selectText': '#A5B0CC',
+    //             'font-color': 'black',
+    //             'orange': '#F2982A',
+    //             'buttonBackground': '#AEB9F1',
+    //             'select-color': '#ffffff'
+    //         };
+    //     }
+    //     else {
+    //         root.style.setProperty('--white', '#22253B'); //
+    //         root.style.setProperty('--background', '#2b2e4a');//фон
+    //         root.style.setProperty('--headerColor', '#22253B');//хедер
+    //         root.style.setProperty('--navMenuColor', '#22253B');//меню
+    //         root.style.setProperty('--violet', '#a5b0cc');//іконки і кнопочки
+    //         root.style.setProperty('--subjectTextColor', '#AEB9F1');
+    //         root.style.setProperty('--selectText', '#AEB9F1');
+    //         root.style.setProperty('--font-color', '#AEB9F1');
+    //         root.style.setProperty('--orange', '#F765A3');
+    //         root.style.setProperty('--buttonBackground', '#a5b0cc');
+    //         root.style.setProperty('--select-color', '#22253B');
 
-            // root.style.setProperty('--red', '#DC2626');
-            // root.style.setProperty('--orange', '#F2982A');
-            // root.style.setProperty('--error', '#F87171');
-            // root.style.setProperty('--iconsColor', '#black');
-            // root.style.setProperty('--almostBlack', '#333333');
-            // root.style.setProperty('--white-icon-color', '#DADADA');
-            // root.style.setProperty('--subjectTextColor', '#4F4F4F');
-            // root.style.setProperty('--text-gray', '#667080');
-            // root.style.setProperty('--text-gray2', '#333333');
-            // root.style.setProperty('--selectText', '#A5B0CC');
-        }
-    }
+    //         colors = {
+    //             'white': '#22253B',
+    //             'background': '#2b2e4a',
+    //             'headerColor': '#22253B',
+    //             'navMenuColor': '#22253B',
+    //             'violet': '#a5b0cc',
+    //             'subjectTextColor': '#AEB9F1',
+    //             'selectText': '#AEB9F1',
+    //             'font-color': '#AEB9F1',
+    //             'orange': '#F765A3',
+    //             'buttonBackground': '#a5b0cc',
+    //             'select-color': '#22253B'
+    //         };
+    //     }
+    //     localStorage.setItem('colors',JSON.stringify(colors));
+    // }
     render() {
         return (
             <>
@@ -68,7 +89,7 @@ class Admin extends Component {
                     </div>
                     <div className="generalSide">
 
-                        <div id="theme" className="m-2">
+                        {/* <div id="theme" className="m-2">
                             <div>
                                 <label htmlFor="lightTheme">Light theme</label>
                                 <input type="radio" id="lightTheme" name="theme" value="0" onClick={(e) => this.setTheme(e)} />
@@ -77,7 +98,7 @@ class Admin extends Component {
                                 <label htmlFor="darkTheme">Dark theme</label>
                                 <input type="radio" id="darkTheme" name="theme" value="1" onClick={(e) => this.setTheme(e)} />
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="d-flex flex-wrap justify-content-around m-3">
                             <div >

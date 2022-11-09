@@ -384,7 +384,7 @@ class SubgroupEditing extends React.Component { //розбиття студен�
                                 <svg style={{ transform: "rotate(180deg)" }} width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" clipRule="evenodd" d="M1.28448 0L2.19345e-05 1.28446L5.71484 7L2.19345e-05 12.7155L1.28448 14L8.28448 7L1.28448 0Z" fill="#4F4F4F" />
                                 </svg>
-                                <div className='text-bolder' style={{ margin: "0px 5px 0px 5px", fontSize: "15px", color: "#333333" }}>
+                                <div className='text-bolder' style={{ margin: "0px 5px 0px 5px", fontSize: "15px", color: "#667080" }}>
                                     {this.props.location.state.subgroup.subgroupTitle}
                                 </div>
                             </div>
@@ -471,7 +471,7 @@ class SubgroupEditing extends React.Component { //розбиття студен�
                     <div id="modalAddStudentInSubgroupWindow">
                         <div className="modal fade" id="addStudentModal" tabIndex="-1" aria-labelledby="addStudentInSubgroupModal"  >
                             <div className="modal-dialog">
-                                <div className="modal-content">
+                                <div className="modal-content generalBackgroundColor">
                                     <div className="modal-header">
                                         <h1 className="modal-title fs-5" id="addStudentInSubgroupModalLabel"> Додання учнів до підгрупи "{this.state.subgroupTitle}"</h1>
                                         <button type="button" id="closemodalAddStudentInSubgroupWindowButton" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

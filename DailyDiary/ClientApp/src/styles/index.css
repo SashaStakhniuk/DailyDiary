@@ -1,5 +1,44 @@
 @import url('Colors.css');
 
+
+select {
+    background-color: var(--select-color) !important;
+    color: var(--font-color) !important;
+    border: 2px solid var(--buttonBackground) !important;
+    border-radius: 16px !important;
+}
+
+select option {
+    background-color: var(--select-color);
+    color: var(--font-color);
+}
+
+option:not(:checked) {
+    background-color: var(--background);
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="tel"],
+input[type="username"],
+input[type="search"],
+input[type="file"] {
+    background-color: var(--select-color) !important;
+    color: var(--font-color) !important;
+    border: 2px solid var(--buttonBackground) !important;
+    border-radius: 16px !important;
+}
+textarea {
+    background-color: var(--select-color) !important;
+    color: var(--font-color) !important;
+    border: 2px solid var(--buttonBackground) !important;
+    /* border-radius: 16px !important; */
+}
+
+
 /*_______________________________________checkbox_______________________________________*/
 .checkBoxs-container {
     display: flex;
@@ -182,7 +221,7 @@
     white-space: nowrap;
 
     color: var(--white);
-    border: 2px solid var(--violet);
+    border: 2px solid var(--buttonBackground);
 
     border-radius: 16px;
     font-family: 'Inter';
@@ -212,10 +251,10 @@
     gap: 8px;
     height: 34px;
     white-space: nowrap;
-    color: var(--violet);
+    color: var(--buttonBackground);
     background: var(--white);
 
-    border: 2px solid var(--violet);
+    border: 2px solid var(--buttonBackground);
     border-radius: 40px;
 
     font-family: 'Open Sans';
@@ -225,13 +264,14 @@
     line-height: 22px;
     margin: 0px 4px 0px 4px;
 }
+
 .general-outline-button>svg>path {
-    fill:var(--violet)
+    fill: var(--buttonBackground)
 }
 
 .button-static {
     color: var(--white);
-    background: var(--violet);
+    background: var(--buttonBackground);
 }
 
 .button-static:hover {
@@ -242,10 +282,11 @@
 .general-outline-button:hover {
 
     color: var(--white);
-    background: var(--violet);
+    background: var(--buttonBackground);
 }
-.general-outline-button:hover >svg>path {
-    fill:var(--white)
+
+.general-outline-button:hover>svg>path {
+    fill: var(--white)
 }
 
 .general-outline-button:active {
@@ -283,7 +324,7 @@
     align-items: center;
     text-align: center;
 
-    color: var(--text-gray2);
+    color: var(--font-color);
     margin: 0px 10px 0px 10px;
     padding: 0;
 }
@@ -481,6 +522,13 @@
 
 .header {
     background-color: var(--headerColor);
+}
+
+.generalTextColor {
+    color: var(--font-color) !important;
+}
+.generalBackgroundColor {
+    background-color: var(--background) !important;
 }
 
 @media only screen and (max-width: 992px) {
