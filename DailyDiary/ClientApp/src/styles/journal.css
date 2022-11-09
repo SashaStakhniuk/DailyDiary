@@ -141,8 +141,8 @@
 }
 
 .table-radio-orange {
-    border: 1px solid var(--orange) !important;
-    color: var(--orange);
+    border: 1px solid var(--radio-orange) !important;
+    color: var(--radio-orange);
 }
 
 .table-radio-red {

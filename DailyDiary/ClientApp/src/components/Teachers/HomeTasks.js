@@ -489,7 +489,7 @@ class HomeTasks extends Component {
                                 <div style={{ margin: "0px 5px 0px 5px", color: "#667080" }}>
                                     Завдання
                                 </div>
-                                <div style={{ margin: "0px 5px 0px 5px", color: "#333333", fontStyle: "bold" }}>
+                                <div style={{ margin: "0px 5px 0px 5px", color: "#667080", fontStyle: "bold" }}>
                                     Домашні завдання
                                 </div>
                             </div>

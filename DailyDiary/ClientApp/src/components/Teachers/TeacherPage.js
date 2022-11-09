@@ -24,7 +24,7 @@ class TeacherPage extends Component {
     async componentDidMount() {
         await this.getTeacherIdByUserId();
         this.getAllLessonsForTodayByTeacherId();
-        this.getLessonData();
+        // this.getLessonData();
     }
     async getTeacherIdByUserId() {
         try {
@@ -78,11 +78,11 @@ class TeacherPage extends Component {
     }
     async getLessonData() {
         try {
-            if (+this.state.teacherId === 0) {
+            if (+this.state.teacherId === 0 || +this.state.selectedSheduleId===0) {
                 return 0;
             }
-
-            const response = await fetch(`${Host}/api/shedule/GetSheduleDataForSelectedDayByLessonId/${this.state.selectedSheduleId}`);
+            console.log("selectedSheduleId",this.state.selectedSheduleId);
+            const response = await fetch(`${Host}/api/shedule/GetSheduleDataForSelectedDayBySheduleId/${this.state.selectedSheduleId}`);
 
             if (response.ok === true) {
                 const data = await response.json();
@@ -244,7 +244,7 @@ class TeacherPage extends Component {
             formData.append("subjectId", subject.value);
             formData.append("subgroupId", subgroup.value);
             // console.log(formData.values());
-            const response = await fetch(`${Host}/file/AddNewHomework`,
+            const response = await fetch(`${Host}/api/file/AddNewHomework`,
                 {
                     method: "post",
                     body: formData

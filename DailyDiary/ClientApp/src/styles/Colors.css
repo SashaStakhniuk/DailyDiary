@@ -22,11 +22,12 @@
 
   --subjectTextColor: #4F4F4F;
   --text-gray:#667080;
-  --text-gray2: #333333;
+  /* --text-gray2: #333333; */
 
   --selectText:#A5B0CC;
 
   --journal-not-selected:#969696;
   --radio-success:#497008;
+  --radio-orange: #F2982A;
   --radio-red:#CB1E1E;
 }

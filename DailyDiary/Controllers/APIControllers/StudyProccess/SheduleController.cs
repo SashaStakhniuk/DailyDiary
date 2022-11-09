@@ -65,7 +65,7 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
             }
         }
         [HttpGet("{sheduleId}")]
-        public async Task<ActionResult<JournalFullDataViewModel>> GetSheduleDataForSelectedDayByLessonIdAsync(int sheduleId)// отримую розклад на сьогодні для викладача
+        public async Task<ActionResult<JournalFullDataViewModel>> GetSheduleDataForSelectedDayBySheduleIdAsync(int sheduleId)// отримую розклад на сьогодні для викладача
         {
             try
             {
@@ -89,7 +89,7 @@ namespace DailyDiary.Controllers.APIControllers.StudyProccess
 
                 if (sheduleData == null)
                 {
-                    return NotFound("Selected lesson for this teacher not found for current day");
+                    return NotFound("Shedule record not found");
                 }
                 var subgroup = await db.Subgroups.Include(x => x.Group).FirstOrDefaultAsync(x => x.Id == sheduleData.TeacherSubgroupDistribution.SubgroupId); // шукаю підгрупу, в якій викладач має вести предмет
                 if (subgroup == null)
