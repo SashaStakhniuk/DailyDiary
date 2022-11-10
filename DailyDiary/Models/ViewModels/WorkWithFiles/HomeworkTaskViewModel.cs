@@ -20,6 +20,7 @@ namespace DailyDiary.Models.ViewModels.WorkWithFiles
         public int TaskTypeId { get; set; } // тип завдання
         //public int WorkPlanId { get; set; }
         public string TeacherUserId { get; set; } // ід викладача
+        public int TeacherId { get; set; } // ід викладача
         public int SubjectId { get; set; }// ід предмету
         public int SubgroupId { get; set; } // ід підгрупи
 

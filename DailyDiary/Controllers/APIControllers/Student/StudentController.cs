@@ -33,6 +33,49 @@ namespace DailyDiary.Controllers.APIControllers
             //this.signInManager = signInManager;
             //this.roleManager = roleManager;
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StudentToDisplayViewModel>>> GetAllAsync()
+        {
+            try
+            {
+                GroupController gc = new GroupController(db);
+                var allGroupsOfCurrentStudyYear = await gc.GetAllGroupsOfCurrentStudyYear();
+                if (allGroupsOfCurrentStudyYear == null || allGroupsOfCurrentStudyYear.Value.Count() <= 0)
+                {
+                    return NotFound("No one student of current study year found");
+                }
+                var groups = allGroupsOfCurrentStudyYear.Value.ToList();
+                var studentsIdBySubgroup = new List<int>();
+                foreach (var group in groups)
+                {
+                    var studentsId = await db.StudentsBySubgroups.AsNoTracking()
+                   .Where(x=> x.SubgroupId==group.DefSubgroupId).Select(x=> x.StudentId).ToListAsync();// ід студентів із усіх груп теперішнього навчального року
+                    if(studentsId.Count > 0)
+                    {
+                        studentsIdBySubgroup.AddRange(studentsId);
+                    }
+                }
+              
+                if (studentsIdBySubgroup.Count<=0)
+                {
+                    return NotFound("No one student found");
+                }
+                var students = await GetStudentsAllDataByStudentsId(studentsIdBySubgroup);
+
+                if (students != null)
+                {
+                    return students;
+                }
+                else
+                {
+                    return NotFound("Students datas not found");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500,e.Message);
+            }
+        }
         [HttpGet("{userId}")]
         //[ValidateAntiForgeryToken]
         public async Task<ActionResult<int>> GetStudentIdByUserId(string userId)
@@ -68,6 +111,15 @@ namespace DailyDiary.Controllers.APIControllers
             foreach (var studentId in studentsId)
             {
                 var studentToDisplay = new StudentToDisplayViewModel();
+                var subgroup = await db.StudentsBySubgroups.Include(x => x.Subgroup).ThenInclude(x => x.Group).Where(x => x.StudentId == studentId).Select(x=> x.Subgroup).FirstOrDefaultAsync();
+                if (subgroup != null)
+                {
+                    subgroup.Id = subgroup.Group.Id;
+                    subgroup.Title = subgroup.Group.Title;
+                    studentToDisplay.GroupId = subgroup.Group.Id;
+                    studentToDisplay.GroupTitle = subgroup.Group.Title;
+                }
+
                 var student = await db.Students.Include(x => x.Person).FirstOrDefaultAsync(x => x.Id == studentId);
                 if (student != null)
                 {
@@ -102,12 +154,6 @@ namespace DailyDiary.Controllers.APIControllers
                 return studentsToDisplay;
             }
             return null;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetAll() // отримання усіх студентів
-        {
-            return await db.Students.ToListAsync();
         }
 
         [HttpGet]

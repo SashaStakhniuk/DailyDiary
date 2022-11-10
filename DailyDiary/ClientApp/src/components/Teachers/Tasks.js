@@ -17,6 +17,10 @@ class Tasks extends Component {
         }
     }
     componentDidMount() {
+        // const incomingRole = this.props?.location?.state?.role;
+        // if(incomingRole!==undefined){
+
+        // }
         this.setState({
             svg:
                 <svg width="91" height="91" viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg">

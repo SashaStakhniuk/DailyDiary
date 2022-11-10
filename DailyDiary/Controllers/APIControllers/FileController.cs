@@ -54,9 +54,10 @@ namespace DailyDiary.Controllers.APIControllers
                 {
                     ModelState.AddModelError("Deadline error", "Deadline can't be erlier than today");
                 }
-                
 
-                var teacher = await db.Teachers.Include(x => x.Person).FirstOrDefaultAsync(x => x.Person.UserId == model.TeacherUserId);
+                
+                //var teacher = await db.Teachers.Include(x => x.Person).FirstOrDefaultAsync(x => x.Person.UserId == model.TeacherUserId);
+                var teacher = await db.Teachers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == model.TeacherId);
                 if (teacher == null)
                 {
                     ModelState.AddModelError("Teacher not found error", "Teacher not found");
@@ -107,7 +108,7 @@ namespace DailyDiary.Controllers.APIControllers
                     Comment = model.Comment,
                     TeacherSubgroupDistributionId = teacherSubgroup.Id
                 };
-                if (await db.Tasks.FirstOrDefaultAsync(x=> x.TaskInBytes == taskInBytes && x.TeacherSubgroupDistributionId==teacherSubgroup.Id && x.Deadline==task.Deadline && x.TaskTypeId==task.TaskTypeId) == null)
+                if (await db.Tasks.FirstOrDefaultAsync(x => x.TaskInBytes == taskInBytes && x.TeacherSubgroupDistributionId == teacherSubgroup.Id && x.Deadline == task.Deadline && x.TaskTypeId == task.TaskTypeId) == null)
                 {
                     await db.Tasks.AddAsync(task);
                 }
@@ -122,7 +123,7 @@ namespace DailyDiary.Controllers.APIControllers
                 }
                 else
                 {
-                    return StatusCode(500,"Homework wasn't added for some reason");
+                    return StatusCode(500, "Homework wasn't added for some reason");
                 }
             }
             catch (Exception e)

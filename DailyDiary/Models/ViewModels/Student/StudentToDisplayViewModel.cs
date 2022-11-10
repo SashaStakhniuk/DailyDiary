@@ -39,5 +39,8 @@ namespace DailyDiary.Models.ViewModels
         [Phone]
         public string PhoneNumber { get; set; }
         public int YearOfStudy { get; set; }
+        public int GroupId { get; set; }
+        public string GroupTitle { get; set; }
+
     }
 }

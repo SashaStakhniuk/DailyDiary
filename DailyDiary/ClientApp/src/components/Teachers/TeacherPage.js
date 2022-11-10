@@ -240,7 +240,8 @@ class TeacherPage extends Component {
             formData.append("deadline", deadline.value);
             formData.append("theme", theme.value);
             formData.append("comment", comment.value);
-            formData.append("teacherUserId", this.props.credentials.userId);
+            // formData.append("teacherUserId", this.props.credentials.userId);
+            formData.append("teacherId", this.state.teacherId);
             formData.append("subjectId", subject.value);
             formData.append("subgroupId", subgroup.value);
             // console.log(formData.values());

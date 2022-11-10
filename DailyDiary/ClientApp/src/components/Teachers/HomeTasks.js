@@ -9,6 +9,7 @@ import GeneralNavigationBar from "../Navigations/GeneralNavigationBar";
 // import setUserCredentials from '../../redux/action_creators/SetUserCredentials';
 import GeneralHeader from "../Headers/GeneralHeader";
 import TeacherHomeworkCard from "../GeneralComponents/TeacherHomeworkCard";
+import { Role } from "../Role";
 
 class HomeTasks extends Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class HomeTasks extends Component {
 
         this.uploadHomework = this.uploadHomework.bind(this);
         this.saveFile = this.saveFile.bind(this);
+        this.getAllTeachersList = this.getAllTeachersList.bind(this);// якщо в системі адмін отримую список усіх викладачів
         this.getTeacherSubjects = this.getTeacherSubjects.bind(this);
         this.getTeacherSubgroupsByTeacherSubject = this.getTeacherSubgroupsByTeacherSubject.bind(this);
         this.getTeacherGivenHomeworks = this.getTeacherGivenHomeworks.bind(this);
@@ -50,13 +52,58 @@ class HomeTasks extends Component {
             fileType: "",
             deadline: "0001-01-01",
             teacherSubjects: [],
-            teacherSubgroups: []
+            teacherSubgroups: [],
+
+            teachersList: [] // список усіх викладачів якщо в системі адмін
         }
     }
     async componentDidMount() {
-        await this.getTeacherIdByUserId()
-        this.getTeacherSubjects();
-        // this.getTeacherSubgroupsByTeacherSubject();
+        var roles = this.props.credentials.roles
+        if (roles !== undefined) {
+            roles = new Array(roles);
+            console.log(this.props.credentials)
+            if (Object.values(roles).indexOf(Role.Admin) > -1 || Object.values(roles).indexOf(Role.MainAdmin) > -1) {
+                console.log("Admin in system");
+                await this.getAllTeachersList();
+            }
+            // if (roles[Role.Admin] || roles[Role.MainAdmin]) {
+            //     console.log("Admin in system");
+            // }
+            else if (Object.values(roles).indexOf(Role.Teacher) > -1 ) {
+                await this.getTeacherIdByUserId()
+                // this.getTeacherSubgroupsByTeacherSubject();
+            }
+            this.getTeacherSubjects();
+
+        }
+
+    }
+    async getAllTeachersList() {
+        try {
+            const response = await fetch(`${Host}/api/teacher/getAll`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${this.props.credentials.tokenKey}`
+
+                }
+            });
+            if (response.ok === true) {
+                const data = await response.json();
+                this.setState({
+                    teachersList: data,
+                    teacherId: data[0].teacherId
+                })
+                console.log("teachersList:", data)
+            }
+            else {
+                const data = await response.text();
+                window.alert(data);
+            }
+        }
+        catch (e) {
+            console.log(e);
+            window.alert(e);
+        }
     }
     async getTeacherIdByUserId() {
         try {
@@ -247,6 +294,12 @@ class HomeTasks extends Component {
                 // this.getStudentsHomeworksToCheck(data);
             }
             else {
+                this.setState({
+                    givenTasksAmount: 0,
+                    toCheckTasksAmount: 0,
+                    checkedTasksAmount: 0
+                })
+
                 const data = await response.text();
                 console.log();
                 window.alert(data);
@@ -259,7 +312,7 @@ class HomeTasks extends Component {
     }
     async getTeacherSubjects() {
         try {
-            const response = await fetch(`${Host}/api/teacher/getTeacherSubjectsByUserId/${this.props.credentials.userId}`);
+            const response = await fetch(`${Host}/api/teacher/getTeacherSubjectsByTeacherId/${this.state.teacherId}`);
             if (response.ok === true) {
                 const data = await response.json();
                 this.setState({
@@ -279,9 +332,53 @@ class HomeTasks extends Component {
             window.alert(e);
         }
     }
+    // async getTeacherSubjects() {
+    //     try {
+    //         const response = await fetch(`${Host}/api/teacher/getTeacherSubjectsByUserId/${this.props.credentials.userId}`);
+    //         if (response.ok === true) {
+    //             const data = await response.json();
+    //             this.setState({
+    //                 selectedSubjectId: data[0].id,
+    //                 teacherSubjects: data
+    //             })
+    //             console.log(data)
+    //             this.getTeacherSubgroupsByTeacherSubject(data[0].id);
+    //         }
+    //         else {
+    //             const data = await response.text();
+    //             window.alert(data);
+
+    //         }
+    //     }
+    //     catch (e) {
+    //         window.alert(e);
+    //     }
+    // }
+    // async getTeacherSubgroupsByTeacherSubject(subjectId) {
+    //     try {
+    //         const response = await fetch(`${Host}/api/teacher/GetTeacherSubgroupsByTeacherSubject/details?userId=${this.props.credentials.userId}&&subjectId=${subjectId}`);
+    //         if (response.ok === true) {
+    //             const data = await response.json();
+    //             this.setState({
+    //                 selectedSubgroupId: data[0].id,
+    //                 teacherSubgroups: data
+    //             })
+    //             this.getStudentsHomeworksToCheck();
+    //             this.getTeacherGeneralTasksAmount();
+    //         }
+    //         else {
+    //             const data = await response.text();
+    //             window.alert(data);
+
+    //         }
+    //     }
+    //     catch (e) {
+    //         window.alert(e);
+    //     }
+    // }
     async getTeacherSubgroupsByTeacherSubject(subjectId) {
         try {
-            const response = await fetch(`${Host}/api/teacher/GetTeacherSubgroupsByTeacherSubject/details?userId=${this.props.credentials.userId}&&subjectId=${subjectId}`);
+            const response = await fetch(`${Host}/api/teacher/GetTeacherSubgroupsByTeacherSubject/details?teacherId=${this.state.teacherId}&&subjectId=${subjectId}`);
             if (response.ok === true) {
                 const data = await response.json();
                 this.setState({
@@ -325,7 +422,8 @@ class HomeTasks extends Component {
             formData.append("deadline", this.state.deadline);
             formData.append("theme", this.state.theme);
             formData.append("comment", this.state.comment);
-            formData.append("teacherUserId", this.props.credentials.userId);
+            // formData.append("teacherUserId", this.props.credentials.userId);
+            formData.append("teacherId", this.state.teacherId);
             formData.append("subjectId", this.state.selectedSubjectId);
             formData.append("subgroupId", this.state.selectedSubgroupId);
 
@@ -380,7 +478,21 @@ class HomeTasks extends Component {
     onSubgroupChange = (e) => {
         this.setState({
             selectedSubgroupId: e.target.value
-        });
+        }
+        ,()=>this.getCheckedStudentsHomeworksTasks()
+        );
+        var buttonsList = document.getElementById("buttonsList");
+        if(buttonsList!==undefined){
+            var buttons = Array.from(buttonsList.children);
+            // console.log(buttons)
+            for (let i = 1; i < buttons.length; i++) {
+                buttons[i].className = "general-outline-button"
+                if (i === 2) {
+                    buttons[i].className = "general-outline-button button-static"
+                }
+            }
+        }
+       
     }
     onNewHomeworkSubmit = (e) => {
         e.preventDefault();
@@ -456,6 +568,13 @@ class HomeTasks extends Component {
             }
         }
     }
+    onTeacherChange = (e) => {
+        this.setState({
+            teacherId: e.target.value
+        }
+            , () => this.getTeacherSubjects())
+
+    }
     render() {
         let subjects = <select className="form-select" name="subject" id="subject" defaultValue={this.state.selectedSubjectId} onChange={e => this.onSubjectChange(e)}>
             {this.state.teacherSubjects.length > 0 ?
@@ -495,6 +614,23 @@ class HomeTasks extends Component {
                             </div>
 
                             <div className="d-flex flex-row" >
+                                {
+                                    this.props.credentials.roles == Role.Admin || this.props.credentials.roles == Role.MainAdmin ?
+                                        <div style={{ margin: "0px 5px 0px 5px" }}>
+                                            <select className="form-select" value={this.state.teacherId} onChange={(e) => this.onTeacherChange(e)}>
+                                                {this.state.teachersList.length > 0 ?
+                                                    this.state.teachersList.map(teacher =>
+                                                        <option key={"teacher_" + teacher.teacherId} value={teacher.teacherId}>{teacher.lastName + " " + teacher.name + " " + teacher.middleName}</option>
+                                                    )
+                                                    :
+                                                    <option value={0}>No one teacher found</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        :
+                                        <></>
+                                }
+
                                 <div style={{ margin: "0px 5px 0px 5px" }}>
                                     {subjects}
                                 </div>
@@ -505,7 +641,7 @@ class HomeTasks extends Component {
                             </div>
                         </div>
                         <div className="general-pagination-bar">
-                            <div className="buttons-inline">
+                            <div id="buttonsList" className="buttons-inline">
                                 <button type="button" className="general-outline-button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Нове завдання
                                 </button>

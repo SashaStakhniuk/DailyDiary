@@ -53,6 +53,7 @@ import Tasks from './Teachers/Tasks';
 import HomeTasks from './Teachers/HomeTasks';
 import DistributeStudentsByGroups from './Admin/DistributeStudentsByGroups.js';
 import SubgroupEditing from './Admin/SubgroupEditing';
+import ListOfStudents from './Students/ListOfStudents';
 
 const Root = () => {
     
@@ -111,13 +112,14 @@ const Root = () => {
                     <Route exact path="/admin/send-message-for-student/:id"><SendMessageForStudent/></Route>
                              
                     <Route exact path="/teacher-page"><TeacherPage/></Route>
-                    <Route exact path="/teacher-page/tasks"><Tasks/></Route>
+                    <Route exact path="/teacher-page/tasks" component={Tasks}></Route>
                     <Route exact path="/teacher-page/home-tasks"><HomeTasks/></Route>
                     
                     <Route exact path="/teacher-page/send-feedback/:studentId/:teacherId/:subjectId/:studentName"><SandFeedback/></Route>
                     <Route exact path="/teacher/group-editing/:id" component={GroupEditing}></Route>
                     <Route exact path="/teacher/news-page/:id" ><NewsPage /></Route>
 
+                     <Route exact path="/students"><ListOfStudents/></Route>
                      <Route exact path="/student-page" component={Student}></Route>
 					<Route exact path="/about-student/:id" component={AboutStudent}></Route>
 					

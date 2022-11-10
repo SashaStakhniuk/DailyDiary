@@ -154,34 +154,23 @@ class TeacherHomeworkCard extends React.Component {
         try {
             const response = await fetch(`${Host}/api/groupHomeworks/delete/${id}`,
                 {
-                    method: "DELETE"
+                    method: "DELETE",
+                    headers:{
+                        
+                    }
                 }
             )
             const data = await response.json();
             //  console.log(data);
             if (response.ok === true) {
-                this.props.getSomeHomeworks()
+                // this.props.getSomeHomeworks()
             }
             else {
-                this.setState({
-                    homeworkDeleteMessage: <h3 style={{ color: "red" }}>{data.error}</h3>
-                },
-                    () => setTimeout(() =>
-                        this.setState({
-                            homeworkDeleteMessage: ""
-                        }), 5000)
-                )
+                
             }
         }
         catch {
-            this.setState({
-                homeworkDeleteMessage: <h3 style={{ color: "red" }}>Something goes wrong</h3>
-            },
-                () => setTimeout(() =>
-                    this.setState({
-                        homeworkDeleteMessage: ""
-                    }), 5000)
-            )
+
         }
     }
     render() {

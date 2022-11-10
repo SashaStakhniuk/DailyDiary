@@ -37,9 +37,41 @@ namespace DailyDiary.Controllers.APIControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Subgroup>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Subgroup>>> GetAllAsync()
         {
-            return await db.Subgroups.ToListAsync();
+            GroupController gc = new GroupController(db);
+            var allGroupsOfCurrentStudyYear = await gc.GetAllGroupsOfCurrentStudyYear();
+            if (allGroupsOfCurrentStudyYear != null && allGroupsOfCurrentStudyYear.Value.Count() > 0)
+            {
+                var groups = allGroupsOfCurrentStudyYear.Value.ToList();
+                List<Subgroup> subgroupsToView = new List<Subgroup>();
+                foreach (var group in groups)
+                {
+                    var groupSubgroups = await db.Subgroups.AsNoTracking().Where(x => x.GroupId == group.Id).ToListAsync();
+                    //var defSubgroup = groupSubgroups.FirstOrDefault(x => x.Id == group.DefSubgroupId);
+                    foreach (var groupSubgroup in groupSubgroups)
+                    {
+                        if (groupSubgroup.Id == group.DefSubgroupId)
+                        {
+                            groupSubgroup.Title = group.Title;
+                            break;
+                        }
+                    }
+                    subgroupsToView.AddRange(groupSubgroups);
+                }
+                if (subgroupsToView.Count > 0)
+                {
+                    return Ok(subgroupsToView);
+                }
+                else
+                {
+                    return NotFound("No one subgroup of current study year found");
+                }
+            }
+            else
+            {
+                return NotFound("No one group of current study year found");
+            }
         }
         [HttpGet("{groupId}")]
         public async Task<ActionResult<IEnumerable<Subgroup>>> GetAllByGroupId(int groupId)
@@ -306,7 +338,7 @@ namespace DailyDiary.Controllers.APIControllers
                 }
                 else
                 {
-                    var subgroupTitleExist = await db.Subgroups.AsNoTracking().FirstOrDefaultAsync(x=> x.Title.ToLower() == model.SubgroupTitle.ToLower().Replace(" ", "_") && x.GroupId==group.Id) ;
+                    var subgroupTitleExist = await db.Subgroups.AsNoTracking().FirstOrDefaultAsync(x => x.Title.ToLower() == model.SubgroupTitle.ToLower().Replace(" ", "_") && x.GroupId == group.Id);
                     if (subgroupTitleExist != null)
                     {
                         return BadRequest("Subgroup with entered name already exist for this group. Enter other title for subgroup.");
@@ -322,7 +354,7 @@ namespace DailyDiary.Controllers.APIControllers
                 subgroup.Group = group;
                 subgroup.SubgroupBlock = subgroupBlock;
 
-                 db.Subgroups.Update(subgroup);
+                db.Subgroups.Update(subgroup);
                 var result = await db.SaveChangesAsync();
                 if (result > 0)
                 {
