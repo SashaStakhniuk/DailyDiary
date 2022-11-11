@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import NavigationBar from "../NavigationBar"
 import $ from 'jquery'
+import { Host } from "../Host"
 
 function SandFeedback(){
 
@@ -21,7 +22,7 @@ function SandFeedback(){
         var dataPublication = new Date()
         var button = $('.sendButton');
         try{
-            const response = await fetch('https://localhost:44364/api/Teacher/SendFeedback', {
+            const response = await fetch(`${Host}/api/Teacher/SendFeedback`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import setUserCredentials from '../../redux/action_creators/SetUserCredentials';
 import { Role } from '../Role'
 import loadingAnimation from "../../images/Loading_icon.gif"
+import { Host } from '../Host';
 
 class Login extends React.Component {
 
@@ -45,7 +46,7 @@ class Login extends React.Component {
                 password: passwordValue
             }
 
-            const response = await fetch('https://localhost:44364/api/account/Login', {
+            const response = await fetch(`${Host}/api/account/Login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -125,7 +126,12 @@ class Login extends React.Component {
                     <div style={{ marginBottom: "20px" }}>Будь ласка, введіть свою інформацію для входу</div>
                     <div className="form-input">
                         <div>Логін</div>
-                        <input id="username" type="username" className="inputForm" defaultValue={"SashaLogin"} placeholder="JohnDoe_123123" required="required" title="Your username" name="userName" />
+                        <select id="username" type="username" className="inputForm" defaultValue={"SashaLogin"} placeholder="JohnDoe_123123" required="required" title="Your username" name="userName">
+                            <option value="SashaLogin">Admin</option>
+                            <option value="Teacher5Login">Teacher</option>
+                            <option value="Student2Login">Student</option>
+                        </select>
+                        {/* <input id="username" type="username" className="inputForm" defaultValue={"SashaLogin"} placeholder="JohnDoe_123123" required="required" title="Your username" name="userName" /> */}
                     </div>
                     <div className="form-input">
                         <div>Пароль</div>
@@ -150,7 +156,7 @@ class Login extends React.Component {
                         <div style={{ color: "red" }}><h3 style={{ fontSize: "1.25em" }}>{this.state.error}</h3></div>
                     </span>
                     <div>
-                        <button type="submit" className="general-button" style={{ width: "450px" }}>Вхід</button>
+                        <button type="submit" className="enter-button">Вхід</button>
                     </div>
                 </form >
             </div >

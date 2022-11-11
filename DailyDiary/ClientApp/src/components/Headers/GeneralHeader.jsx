@@ -75,6 +75,7 @@ class GeneralHeader extends Component {
             root.style.setProperty('--orange', '#F2982A');
             root.style.setProperty('--buttonBackground', '#AEB9F1');
             root.style.setProperty('--select-color', '#ffffff');
+            root.style.setProperty('--news-items-color', '#f5f5f5');
             colors = {
                 'white': '#ffffff',
                 'background': '#ffffff',
@@ -86,7 +87,8 @@ class GeneralHeader extends Component {
                 'font-color': 'black',
                 'orange': '#F2982A',
                 'buttonBackground': '#AEB9F1',
-                'select-color': '#ffffff'
+                'select-color': '#ffffff',
+                'news-items-color': '#f5f5f5'
             };
         }
         else {
@@ -101,6 +103,8 @@ class GeneralHeader extends Component {
             root.style.setProperty('--orange', '#F765A3');
             root.style.setProperty('--buttonBackground', '#a5b0cc');
             root.style.setProperty('--select-color', '#22253B');
+            root.style.setProperty('--news-items-color', '#2b2e4a');
+            
 
             colors = {
                 'white': '#22253B',
@@ -113,7 +117,8 @@ class GeneralHeader extends Component {
                 'font-color': '#AEB9F1',
                 'orange': '#F765A3',
                 'buttonBackground': '#a5b0cc',
-                'select-color': '#22253B'
+                'select-color': '#22253B',
+                'news-items-color': '#2b2e4a'
             };
         }
         localStorage.setItem('colors', JSON.stringify(colors));

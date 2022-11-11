@@ -1,4 +1,5 @@
 import React from 'react'
+import { Host } from '../Host';
 
 class AddClassworkForm extends React.Component{
     constructor(props) {
@@ -38,7 +39,7 @@ class AddClassworkForm extends React.Component{
     }
     async getTeacherSubjects(){
         try{
-            const response= await fetch(`https://localhost:44364/api/teacher/GetTeacherSubjectsById/${this.state.teacherId}`)
+            const response= await fetch(`${Host}/api/teacher/GetTeacherSubjectsById/${this.state.teacherId}`)
     
              const data = await response.json()
              //console.log(data)
@@ -121,7 +122,7 @@ class AddClassworkForm extends React.Component{
      async AddNewClasswork(){
         try{
 
-            const response= await fetch(`https://localhost:44364/api/GroupClassworks/CreateClasswork`,{
+            const response= await fetch(`${Host}/api/GroupClassworks/CreateClasswork`,{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

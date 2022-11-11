@@ -5,6 +5,7 @@ import React from 'react';
 import HomeworkClassworkView from '../GeneralComponents/HomeworkClassworkView';
 // import { render } from 'pug';
 import NavigationBar from '../NavigationBar'
+import { Host } from '../Host';
 
 
 class AboutStudent extends React.Component {
@@ -35,7 +36,7 @@ class AboutStudent extends React.Component {
     {
         try {
             console.log("Fetching the homeworks")
-            const response = await fetch(`https://localhost:44364/api/GroupHomeworks/GetSomeHomeworksByStudentId/details?studentId=${this.state.studentId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
+            const response = await fetch(`${Host}/api/GroupHomeworks/GetSomeHomeworksByStudentId/details?studentId=${this.state.studentId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
 
             const data = await response.json();
             console.log(data)

@@ -2,6 +2,7 @@ import React from "react"
 // import '../../styles/Students.css'
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
+import { Host } from "../Host";
 //import { moment } from 'moment/moment';
 
 function EditFromStudent(props){
@@ -37,7 +38,7 @@ function EditFromStudent(props){
         console.log("SubgroupId: " + typeof(SubgroupId) + " " + SubgroupId)
         console.log("StudyYear: " + typeof(StudyYear) + " " + StudyYear)
 
-        const request = await fetch('https://localhost:44364/api/student/Edit', {
+        const request = await fetch(`${Host}/api/student/Edit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -64,7 +65,7 @@ function EditFromStudent(props){
 
     async function getStudent(){
         try{
-            const response= await fetch(`https://localhost:44364/api/student/Get/${id}`)
+            const response= await fetch(`${Host}/api/student/Get/${id}`)
 
              const data = await response.json()
     

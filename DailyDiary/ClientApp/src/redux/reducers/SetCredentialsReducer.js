@@ -67,6 +67,7 @@ export default function setCredentialsReducer(state, action) {
           root.style.setProperty('--orange', colors['orange']);
           root.style.setProperty('--buttonBackground', colors['buttonBackground']);
           root.style.setProperty('--select-color', colors['select-color']);
+          root.style.setProperty('--news-items-color', colors['news-items-color']);
         }
       }
 

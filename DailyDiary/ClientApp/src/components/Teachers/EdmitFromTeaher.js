@@ -3,6 +3,7 @@ import React from "react"
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import $ from 'jquery'
+import { Host } from "../Host"
 function EdmitFromTeaher(){
 
     const [dataSpecialty, setDayaSpecialty] = useState(["Teacher", "Pro Teacher"])
@@ -43,7 +44,7 @@ function EdmitFromTeaher(){
     async function getTeacher(){
         try
         {
-            const response = await fetch(`https://localhost:44364/api/Teacher/Get/${id}`)
+            const response = await fetch(`${Host}/api/Teacher/Get/${id}`)
             const data = await response.json()
             if(response.ok === true){
                 setTeacher(data)
@@ -73,7 +74,7 @@ function EdmitFromTeaher(){
     async function GetAllGroups(){
         try
         {
-            const response = await fetch(`https://localhost:44364/api/group/get`)
+            const response = await fetch(`${Host}/api/group/get`)
             const data = await response.json()
             if(response.ok === true){
                 setGroups(data)
@@ -85,7 +86,7 @@ function EdmitFromTeaher(){
 
     async function GetAllSubjects(){
         try{
-            const response = await fetch(`https://localhost:44364/api/Teacher/GetAllSubjects`)
+            const response = await fetch(`${Host}/api/Teacher/GetAllSubjects`)
             const data = await response.json()
             if(response.ok === true){
                 setSubjects(data)
@@ -100,7 +101,7 @@ function EdmitFromTeaher(){
     }
 
     async function edit(){
-        const response = await fetch('https://localhost:44364/api/Teacher/Edit', {
+        const response = await fetch(`${Host}/api/Teacher/Edit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -189,7 +190,7 @@ function EdmitFromTeaher(){
     }
 
     async function onClickCreateLogin(){
-        const response = await fetch(`https://localhost:44364/api/Teacher/CreateLogin`, {
+        const response = await fetch(`${Host}/api/Teacher/CreateLogin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

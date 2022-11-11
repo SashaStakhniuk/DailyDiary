@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import $ from 'jquery'
 // import '../../styles/Students.css'
 import NavigationBar from "../NavigationBar"
+import { Host } from "../Host"
 
 function SendMessageForStudent(){
 
@@ -22,7 +23,7 @@ function SendMessageForStudent(){
         var variatSending = document.getElementById('sendVariant').value
         try
         {
-            const response = await fetch(`https://localhost:44364/api/News/${variatSending}`, {
+            const response = await fetch(`${Host}/api/News/${variatSending}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

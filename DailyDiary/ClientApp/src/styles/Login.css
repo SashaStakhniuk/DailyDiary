@@ -37,6 +37,7 @@
 .inputForm {
     width: 450px;
     line-height: 40px;
+    height: 40px;
     border: 1px solid lightgray;
     box-sizing: border-box;
     border-radius: 15px;
@@ -49,11 +50,13 @@
     outline: none;
     border: 1px solid var(--violet);
 }
-.password-wrapper{
+
+.password-wrapper {
     position: relative;
     display: flex;
     align-items: center;
 }
+
 .eye {
     position: absolute;
     transition: all 0.3s;
@@ -72,7 +75,7 @@
     opacity: 1;
 }
 
-.general-button {
+.enter-button {
     transition: all 0.4s ease 0s;
     display: flex;
     flex-direction: row;
@@ -96,6 +99,23 @@
     line-height: 20px;
 }
 
-.general-button:hover {
+.enter-button:hover {
     background: #92a0e5;
+}
+
+@media screen and (max-width:600px) {
+    .inputForm {
+        width: 300px;
+    }
+    .enter-button{
+        width: 300px;
+    }
+}
+@media screen and (max-width:330px) {
+    .inputForm {
+        width: 200px;
+    }
+    .enter-button{
+        width: 200px;
+    }
 }

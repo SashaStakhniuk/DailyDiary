@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
  import NavigationBar from '../NavigationBar'
+import { Host } from "../Host"
 
 function Feedback(){
 
@@ -30,7 +31,7 @@ function Feedback(){
                 loader_container.style.height = '100px' 
                 var StudentId = id
                 setTimeout(() => {
-                    axios.get(`https://localhost:44364/api/Student/GetRangStudentFeedbackById/${StudentId}/${feedbackSkip}`)
+                    axios.get(`${Host}/api/Student/GetRangStudentFeedbackById/${StudentId}/${feedbackSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -65,7 +66,7 @@ function Feedback(){
                 loader_container.style.height = '100px' 
                 var StudentId = id
                 setTimeout(() => {
-                    axios.get(`https://localhost:44364/api/Student/GetRangStudentFeedbackById/${StudentId}/${feedbackSkip}`)
+                    axios.get(`${Host}/api/Student/GetRangStudentFeedbackById/${StudentId}/${feedbackSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -93,7 +94,7 @@ function Feedback(){
 
     async function isRead(){
 
-        const response = await fetch(`https://localhost:44364/api/Student/IsReadAllStudentFeedbacks`, {
+        const response = await fetch(`${Host}/api/Student/IsReadAllStudentFeedbacks`, {
             method: "POST"
         })
         if(response.ok === true){

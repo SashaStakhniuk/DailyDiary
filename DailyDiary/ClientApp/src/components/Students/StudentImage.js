@@ -2,6 +2,7 @@ import React from "react"
 import NavigationBar from "../NavigationBar"
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { Host } from "../Host";
 // import '../../styles/Students.css'
 
 function StudentImage(){
@@ -16,7 +17,7 @@ function StudentImage(){
 
     async function getStudent(){
         try{
-            const response= await fetch(`https://localhost:44364/api/student/get/${id}`)
+            const response= await fetch(`${Host}/api/student/get/${id}`)
              const data = await response.json()
     
              if (response.ok === true) { 
@@ -36,7 +37,7 @@ function StudentImage(){
     async function FetchBase64(e){
         var Id = Number(id)
         console.log("Id: " + typeof(Id))
-        const result = await fetch(`https://localhost:44364/api/student/AddBase64`, {
+        const result = await fetch(`${Host}/api/student/AddBase64`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'

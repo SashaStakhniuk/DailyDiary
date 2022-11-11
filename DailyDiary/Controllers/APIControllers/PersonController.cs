@@ -30,6 +30,18 @@ namespace DailyDiary.Controllers.APIControllers
             this.roleManager = roleManager;
             this.db = context;
         }
+        [HttpGet]
+        public async Task<ActionResult<int>> GetAmountOfUsersAsync()
+        {
+            try
+            {
+                return Ok(await db.Persons.CountAsync());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
         [HttpGet("{userId}")]
         public async Task<ActionResult<PersonViewModel>> GetByUserId(string userId)
         {
@@ -38,7 +50,7 @@ namespace DailyDiary.Controllers.APIControllers
                 var user = await userManager.FindByIdAsync(userId);
                 if (user != null)
                 {
-                    var person = await db.Persons.AsNoTracking().FirstOrDefaultAsync(x=> x.UserId==user.Id);
+                    var person = await db.Persons.AsNoTracking().FirstOrDefaultAsync(x => x.UserId == user.Id);
                     if (person != null)
                     {
                         PersonViewModel personToView = new PersonViewModel
@@ -257,7 +269,7 @@ namespace DailyDiary.Controllers.APIControllers
                     FileStream? fstream = null;
                     try
                     {
-                        string text = model.Name + " " + model.LastName + "\t" + model.Email + "\t" + login + "\t" + password +"\n";
+                        string text = model.Name + " " + model.LastName + "\t" + model.Email + "\t" + login + "\t" + password + "\n";
                         fstream = new FileStream("userDatas.txt", FileMode.Append);
 
                         byte[] buffer = Encoding.Default.GetBytes(text);

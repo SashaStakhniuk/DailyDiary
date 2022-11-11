@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
 import NavigationBar from '../NavigationBar'
 import $ from 'jquery'
+import { Host } from '../Host'
 function TeacherProfil(){
 
     let { id } = useParams()
@@ -20,7 +21,7 @@ function TeacherProfil(){
     async function getGroups(){
         try
         {
-            const response = await fetch(`https://localhost:44364/api/Teacher/GetTeacherGroupsById/${id}`)
+            const response = await fetch(`${Host}/api/Teacher/GetTeacherGroupsById/${id}`)
             const data = await response.json()
             if(response.ok === true){
                 setGroups(data)
@@ -35,7 +36,7 @@ function TeacherProfil(){
         console.log("ID = " + id)
         try
         {
-            const response = await fetch(`https://localhost:44364/api/Teacher/GetTeacherSubjectsById/${id}`)
+            const response = await fetch(`${Host}/api/Teacher/GetTeacherSubjectsById/${id}`)
             const data = await response.json()
             if(response.ok === true){
                 setSubgects(data)
@@ -49,7 +50,7 @@ function TeacherProfil(){
     async function getTeacher(){
         try
         {
-            const response = await fetch(`https://localhost:44364/api/Teacher/Get/${id}`)
+            const response = await fetch(`${Host}/api/Teacher/Get/${id}`)
             const data = await response.json()
             if(response.ok === true){
                 setTeacher(data)
@@ -62,7 +63,7 @@ function TeacherProfil(){
     async function onClickDelete(e){
         e.preventDefault()
         try{
-            const response = await fetch(`https://localhost:44364/api/Teacher/Delete/${id}`)
+            const response = await fetch(`${Host}/api/Teacher/Delete/${id}`)
             const data = await response.json()
             if(response.ok === true){
                 window.location = '/admin/teachers'

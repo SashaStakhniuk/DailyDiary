@@ -36,7 +36,7 @@
 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  /* align-items: flex-start; */
   gap: 20px;
   isolation: isolate;
   transition: all 0.3s ease;
@@ -45,7 +45,7 @@
   border-radius: 16px;
   width: 100%;
 
-  max-width: 410px;
+  /* max-width: 410px; */
   max-height: 256px;
   min-width: 390px;
   padding: 20px 24px 20px 24px;
@@ -229,6 +229,11 @@
     align-items: center;
     justify-items: center;
   }
+
+  .row-cols-2-view {
+    grid-template-columns: 1fr 3fr;
+  }
+
 }
 
 @media only screen and (max-width: 992px) {
@@ -239,6 +244,11 @@
     align-items: center;
     justify-items: center;
   }
+
+  .row-cols-2-view {
+    grid-template-columns: 1fr 4fr;
+  }
+
 }
 
 /* @media only screen and (max-width: 768px) {

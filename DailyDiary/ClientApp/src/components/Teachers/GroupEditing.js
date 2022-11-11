@@ -2,6 +2,7 @@ import React from 'react'
 import AddClassworkForm from './AddClassworkForm';
 import AddHomeworkForm from './AddHomeworkForm';
 import HomeworkClassworkView from '../GeneralComponents/HomeworkClassworkView';
+import { Host } from '../Host';
 
 class GroupEditing extends React.Component{
     constructor(props) {
@@ -59,7 +60,7 @@ class GroupEditing extends React.Component{
     {
         try{
             console.log("Fetching the homeworks")
-            const response= await fetch(`https://localhost:44364/api/GroupHomeworks/GetSomeHomeworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
+            const response= await fetch(`${Host}/api/GroupHomeworks/GetSomeHomeworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
             const data = await response.json();
             console.log(data)
 
@@ -86,7 +87,7 @@ class GroupEditing extends React.Component{
     {
         try{
             console.log("Fetching the homeworks")
-            const response= await fetch(`https://localhost:44364/api/GroupHomeworks/GetSomeHomeworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
+            const response= await fetch(`${Host}/api/GroupHomeworks/GetSomeHomeworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.homeworksToSkip}&&take=${this.state.homeworksToDisplay}`);
             const data = await response.json();
             console.log(data)
 
@@ -114,7 +115,7 @@ class GroupEditing extends React.Component{
     {
         try{
             console.log("Fetching the classworks")
-            const response= await fetch(`https://localhost:44364/api/GroupClassworks/GetSomeClassworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.classworksToSkip}&&take=${this.state.classworksToDisplay}`);
+            const response= await fetch(`${Host}/api/GroupClassworks/GetSomeClassworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.classworksToSkip}&&take=${this.state.classworksToDisplay}`);
             const data = await response.json();
 
             if (response.ok === true) {
@@ -139,7 +140,7 @@ class GroupEditing extends React.Component{
     {
         try{
             console.log("Fetching the classworks")
-            const response= await fetch(`https://localhost:44364/api/GroupClassworks/GetSomeClassworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.classworksToSkip}&&take=${this.state.classworksToDisplay}`);
+            const response= await fetch(`${Host}/api/GroupClassworks/GetSomeClassworksByGroupIdAndTeacherId/details?groupId=${this.state.groupId}&&teacherId=${this.state.teacherId}&&skip=${this.state.classworksToSkip}&&take=${this.state.classworksToDisplay}`);
             const data = await response.json();
             console.log(data)
 

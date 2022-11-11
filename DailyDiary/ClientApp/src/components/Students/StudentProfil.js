@@ -3,6 +3,7 @@ import { useState } from "react"
 import NavigationBar from '../NavigationBar'
 import { useEffect } from "react"
 import { useParams } from "react-router-dom"
+import { Host } from "../Host"
 // import "../../styles/StudentProfil.css"
 
 function StudentProfil(props){
@@ -17,7 +18,7 @@ function StudentProfil(props){
 
     async function getStudent(){
         try{
-            const response= await fetch(`https://localhost:44364/api/student/get/${id}`)
+            const response= await fetch(`${Host}/api/student/get/${id}`)
 
              const data = await response.json()
     
@@ -32,7 +33,7 @@ function StudentProfil(props){
 
     async function getGroups() {
         try{
-            const response= await fetch("https://localhost:44364/api/group/get")
+            const response= await fetch(`${Host}/api/group/get`)
 
              const data = await response.json()
     
@@ -49,7 +50,7 @@ function StudentProfil(props){
 
     async function Delete() {
         try{
-            const response= await fetch(`https://localhost:44364/api/student/Delete/${id}`, {method: "delete"})
+            const response= await fetch(`${Host}/api/student/Delete/${id}`, {method: "delete"})
 
              const data = await response.json()
     

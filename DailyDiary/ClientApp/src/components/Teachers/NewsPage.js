@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import NavigationBar from '../NavigationBar'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { Host } from '../Host'
 
 function NewsPage(){
 
@@ -24,7 +25,7 @@ function NewsPage(){
                 loader_container.style.opacity = 1
                 loader_container.style.height = '100px' 
                 setTimeout(() => {
-                    axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
+                    axios.get(`${Host}/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -52,7 +53,7 @@ function NewsPage(){
                 loader_container.style.opacity = 1
                 loader_container.style.height = '100px' 
                 setTimeout(() => {
-                    axios.get(`https://localhost:44364/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
+                    axios.get(`${Host}/api/News/GetRangTeacherNewssById/${id}/${newsSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -87,7 +88,7 @@ function NewsPage(){
 
         try
         {
-            const response = await fetch(`https://localhost:44364/api/News/GetTeacherNewssById/${id}`)
+            const response = await fetch(`${Host}/api/News/GetTeacherNewssById/${id}`)
             const data = await response.json()
             if(response.ok === true){
                 setNews(data)
@@ -112,7 +113,7 @@ function NewsPage(){
         document.getElementById('img-news').src = value.base64Url
         var NewsId = value.id
 
-        const response = await fetch(`https://localhost:44364/api/News/NewsIsRead/${NewsId}`)
+        const response = await fetch(`${Host}/api/News/NewsIsRead/${NewsId}`)
     }
 
     async function popupLoginCliseClick(){

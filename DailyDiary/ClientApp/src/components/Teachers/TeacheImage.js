@@ -3,6 +3,7 @@ import NavigationBar from '../NavigationBar'
 // import '../../styles/Students.css'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { Host } from '../Host';
 
 function TeacheImage(){
 
@@ -16,7 +17,7 @@ function TeacheImage(){
 
     async function getTeacer(){
         try{
-            const response= await fetch(`https://localhost:44364/api/teacer/get/${id}`)
+            const response= await fetch(`${Host}/api/teacer/get/${id}`)
 
              const data = await response.json()
     
@@ -37,7 +38,7 @@ function TeacheImage(){
     async function FetchBase64(e){
         var Id = Number(id)
         console.log("Id: " + Id)
-        const result = await fetch(`https://localhost:44364/api/Teacher/AddBase64`, {
+        const result = await fetch(`${Host}/api/Teacher/AddBase64`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'

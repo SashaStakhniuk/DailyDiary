@@ -1,6 +1,5 @@
 import { throws } from 'assert';
 import React from 'react'
-import '../../styles/Admin/EditStudyPlan.css'
 import StudentHeader from '../Headers/StudentHeader';
 import { Host } from '../Host'
 import logon from '../../images/Photo.png'

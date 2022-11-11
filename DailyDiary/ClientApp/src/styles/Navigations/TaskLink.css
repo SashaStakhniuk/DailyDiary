@@ -1,4 +1,13 @@
 @import url('../Colors.css');
+.links-container {
+    /* display: flex;
+    flex-direction: row;
+    justify-content: space-around; */
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px 10px;
+
+}
 
 .task-link {
     background-color: var(--white);
@@ -6,19 +15,20 @@
     position: relative;
     top: 0;
     transition: top ease 0.5s;
+    padding: 20px;
 
     display: flex;
     justify-content: center;
     align-items: center;
-
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+
     color: var(--text-gray);
 
 
-    width: 360px;
-    height: 260px;
+    /* width: 360px;
+    height: 260px; */
+    width:100%;
+    min-width: 200px;
 
     border-radius: 16px;
     box-shadow: 0px 2px 2px 2px var(--text-gray);
@@ -41,26 +51,13 @@
     text-decoration: none;
 }
 
-.links-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
-
-@media screen and (max-width: 600px) {
-    .task-link {
-        width: 260px;
-        height: 160px;
-    }
-
+@media screen and (max-width: 740px) {
     .links-container {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 2%
+        grid-template-columns: 1fr 1fr;
     }
-
-    .links-container>div {
-        margin: 2%;
+}
+@media screen and (max-width: 560px) {
+    .links-container {
+        grid-template-columns: 1fr;
     }
 }

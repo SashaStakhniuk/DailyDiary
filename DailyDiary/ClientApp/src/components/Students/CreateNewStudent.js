@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 // import '../../styles/Students.css'
 import { useSelector } from 'react-redux'
+import { Host } from "../Host"
 
 function CreateNewStudent(){ 
 
@@ -23,7 +24,7 @@ function CreateNewStudent(){
     async function getAllGroups(){
         try
         {
-            const response = await fetch(`https://localhost:44364/api/group/get`)
+            const response = await fetch(`${Host}/api/group/get`)
             const data = await response.json()
             if(response.ok === true){
                 setGroups(data)
@@ -41,7 +42,7 @@ function CreateNewStudent(){
                 groupId = group.id
             }
         })
-        const response  = await fetch('https://localhost:44364/api/student/CreateNew', {
+        const response  = await fetch(`${Host}/api/student/CreateNew`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

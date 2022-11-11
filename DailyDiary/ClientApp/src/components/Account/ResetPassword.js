@@ -234,9 +234,9 @@ class ResetPassword extends React.Component {
 
                     <div>
                         {this.state.emailConfirmed ?
-                            <button type="submit" className="general-button" style={{ width: "450px" }}>Відновити пароль</button>
+                            <button type="submit" className="enter-button" >Відновити пароль</button>
                             :
-                            <button type="submit" className="general-button" style={{ width: "450px" }}>Отримати повідомлення</button>
+                            <button type="submit" className="enter-button" >Отримати повідомлення</button>
 
                         }
                     </div>

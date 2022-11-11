@@ -5,6 +5,7 @@ import NavigationBarForStudent from "../Navigations/NavigationBarForStudent";
 import "../../styles/Admin/CreateNewStudyYear.css"
 
 import logon from '../../images/Photo.png'
+import { Host } from "../Host";
 
 function CreateNewStudyYear() {
 
@@ -32,7 +33,7 @@ function CreateNewStudyYear() {
     const [skipItems, setSkipItems] = useState(0)
 
     async function getAllYears() {
-        const response = await fetch(`https://localhost:44364/api/planEducation/GetRung/${takeItems}/${skipItems}`, {
+        const response = await fetch(`${Host}/api/planEducation/GetRung/${takeItems}/${skipItems}`, {
             method: 'GET'
         })
         if (response.ok === true) {
@@ -46,7 +47,7 @@ function CreateNewStudyYear() {
 
 
     async function NextPage() {
-        const response = await fetch(`https://localhost:44364/api/planEducation/GetRung/${takeItems}/${skipItems}`, {
+        const response = await fetch(`${Host}/api/planEducation/GetRung/${takeItems}/${skipItems}`, {
             method: 'GET'
         })
         if (response.ok === true) {
@@ -59,7 +60,7 @@ function CreateNewStudyYear() {
     }
 
     async function create() {
-        const response = await fetch('https://localhost:44364/api/PlanEducation/NewPlanEducation', {
+        const response = await fetch(`${Host}/api/PlanEducation/NewPlanEducation`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -381,6 +381,15 @@ class HomeTasks extends Component {
             const response = await fetch(`${Host}/api/teacher/GetTeacherSubgroupsByTeacherSubject/details?teacherId=${this.state.teacherId}&&subjectId=${subjectId}`);
             if (response.ok === true) {
                 const data = await response.json();
+                data.sort(function (a, b) {
+                    if (a.title > b.title) {
+                      return 1;
+                    }
+                    if (a.title < b.title) {
+                      return -1;
+                    }
+                    return 0;
+                  });
                 this.setState({
                     selectedSubgroupId: data[0].id,
                     teacherSubgroups: data

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import NavigationBar from "../NavigationBar"
 import $ from 'jquery'
 import { useParams } from 'react-router-dom'
+import { Host } from "../Host"
 
 function SendMessage(){
 
@@ -21,7 +22,7 @@ function SendMessage(){
         var sendVariant = document.getElementById('sendVariant').value
         try
         {
-            const response = await fetch(`https://localhost:44364/api/News/${sendVariant}`, {
+            const response = await fetch(`${Host}/api/News/${sendVariant}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

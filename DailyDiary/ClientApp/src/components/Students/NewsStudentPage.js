@@ -4,6 +4,7 @@ import NavigationBar from '../NavigationBar'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { Host } from "../Host"
 
 function NewsStudentPage(){
 
@@ -24,7 +25,7 @@ function NewsStudentPage(){
                 loader_container.style.opacity = 1
                 loader_container.style.height = '100px' 
                 setTimeout(() => {
-                    axios.get(`https://localhost:44364/api/News/GetRangStudentNewssById/${id}/${newsSkip}`)
+                    axios.get(`${Host}/api/News/GetRangStudentNewssById/${id}/${newsSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -55,7 +56,7 @@ function NewsStudentPage(){
                 loader_container.style.opacity = 1
                 loader_container.style.height = '100px' 
                 setTimeout(() => {
-                    axios.get(`https://localhost:44364/api/News/GetRangStudentNewssById/${id}/${newsSkip}`)
+                    axios.get(`${Host}/api/News/GetRangStudentNewssById/${id}/${newsSkip}`)
                     .then(response => {
                         if(response.data == false){
                             setStateData(false)
@@ -101,7 +102,7 @@ function NewsStudentPage(){
         document.getElementById('img-news').src = value.base64Url
         var NewsId = value.id
         
-        const response = await fetch(`https://localhost:44364/api/News/NewsStudentIsRead/${NewsId}`)
+        const response = await fetch(`${Host}/api/News/NewsStudentIsRead/${NewsId}`)
     }
 
     async function popupLoginCliseClick(){

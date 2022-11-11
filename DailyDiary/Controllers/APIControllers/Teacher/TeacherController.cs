@@ -54,6 +54,33 @@ namespace DailyDiary.Controllers.APIControllers
                 return StatusCode(500, e.Message);
             }
         }
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "MainAdmin,Admin")]
+        public async Task<ActionResult<IEnumerable<TeacherToDisplayViewModel>>> GetAllSortedByRatingAsync()
+        {
+            try
+            {
+                var teachers = await db.Teachers.OrderBy(x=> x.Rate).Include(x => x.Person)
+                    .Select(x => new TeacherToDisplayViewModel
+                    {
+                        TeacherId = x.Id,
+                        Name = x.Person.Name,
+                        LastName = x.Person.LastName,
+                        MiddleName = x.Person.MiddleName
+                    })
+                    .ToListAsync();
+                if (teachers != null && teachers.Count > 0)
+                {
+                    return Ok(teachers);
+                }
+                return NotFound("No one teacher found");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
         [HttpGet("{userId}")]
         public async Task<ActionResult<int>> GetTeacherIdByUserIdAsync(string userId)
         {
